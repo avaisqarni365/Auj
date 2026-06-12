@@ -1,4 +1,7 @@
-// Minimal Prisma schema for payments. Models added by the payments skill.
+// Persistence reference for payments. Runtime default is the in-memory Ledger
+// (src/ledger.ts) + WalletService; a Prisma adapter persists the same structures.
+// The ledger is append-only and is the source of truth.
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -6,4 +9,58 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+enum Direction {
+  DEBIT
+  CREDIT
+}
+
+enum IntentStatus {
+  REQUIRES_CAPTURE
+  CAPTURED
+  REFUNDED
+  PARTIALLY_REFUNDED
+  FAILED
+}
+
+model AgentWallet {
+  agentId     String @id
+  currency    String
+  creditLimit Int // minor units
+}
+
+model JournalEntry {
+  id        String    @id @default(uuid())
+  ref       String
+  memo      String?
+  createdAt DateTime  @default(now())
+  postings  Posting[]
+
+  @@index([ref])
+}
+
+model Posting {
+  id        String       @id @default(uuid())
+  entry     JournalEntry @relation(fields: [entryId], references: [id])
+  entryId   String
+  account   String
+  direction Direction
+  amount    Int // positive minor units
+  currency  String
+
+  @@index([account, currency])
+}
+
+model PaymentIntent {
+  id             String       @id
+  provider       String
+  amount         Int
+  currency       String
+  status         IntentStatus
+  bookingRef     String?
+  method         String
+  capturedAmount Int          @default(0)
+  refundedAmount Int          @default(0)
+  createdAt      DateTime     @default(now())
 }

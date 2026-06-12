@@ -1,6 +1,6 @@
 {
   "name": "@auj/payments",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "main": "./dist/index.js",
@@ -13,10 +13,10 @@
     "dev": "tsx watch src/index.ts"
   },
   "dependencies": {
-    "@auj/contracts": "workspace:*",
-    "@prisma/client": "^6.1.0"
+    "@auj/contracts": "workspace:*"
   },
   "devDependencies": {
-    "prisma": "^6.1.0"
+    "prisma": "^6.1.0",
+    "vitest": "^2.1.8"
   }
 }
