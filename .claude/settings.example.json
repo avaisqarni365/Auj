@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": ["Read", "Edit", "Bash(pnpm *)", "Bash(git *)", "Bash(docker *)"],
+    "deny": ["Bash(rm -rf *)", "WebFetch"]
+  },
+  "env": { "CONNECTOR": "mock", "SUPPLIER": "mock" }
+}
