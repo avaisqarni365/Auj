@@ -2,7 +2,7 @@
 _Last updated: 2026-06-12 · by: Claude Code · commit: (scaffold)_
 
 ## Now building
-Wave B. ui + web-b2c (funnel + Next.js shell, runnable via `npm run dev`) done. Next: web-b2b.
+Wave B. ui + web-b2c (runnable) done; web-b2b framework-light done. Remaining: optional Next shell for web-b2b; then Wave C.
 
 ## Status by wave
 ### Wave 0 — sequential (scaffold + contracts + mock) — DONE
@@ -19,7 +19,7 @@ Wave B. ui + web-b2c (funnel + Next.js shell, runnable via `npm run dev`) done. 
 ### Wave B — parallel, on Wave A APIs
 - [x] ui design system — @auj/ui v1.0.0: aujPreset (Tailwind tokens), tokens.css, core React components (Button/Input/Select/Card/StatusPill/Stepper/SegmentedControl/Toggle). 10 tests. Maps the design handoff onto reusable primitives both apps share
 - [x] b2c-website — @auj/web-b2c: funnel (ports + in-process backend, reducer, usecases, fx, i18n EN/LT/UR/AR, 6 @auj/ui screens; 15 tests incl. e2e on the mock) PLUS a Next.js App Router shell (app/ with Server Actions running the backend server-side, aujPreset Tailwind, IBM Plex fonts, tokens.css). `npm run dev` serves it at :3000; `next build` green. tsc gate stays fast (build = tsc -p tsconfig.build.json)
-- [ ] b2b-agent-portal
+- [x] b2b-agent-portal (framework-light) — @auj/web-b2b: AgentService (register/approve/sub-agent hierarchy), MarkupEngine (tier+product specificity), multi-pax bookGroupFromWallet (<=49, wallet-funded, credit limit blocks over-limit), QuotationService, statements (ledger-reconciling + CSV), 6 @auj/ui screens. 21 tests incl. e2e (register->approve->fund->book 49 pax with markup->statement reconciles). Next.js shell optional/pending like web-b2c
 
 ### Wave C — gated / anytime
 - [ ] certified-saudi-connector  (needs partner/Ministry access)
@@ -27,7 +27,11 @@ Wave B. ui + web-b2c (funnel + Next.js shell, runnable via `npm run dev`) done. 
 - [ ] admin
 
 ## In progress
-- Wave B: web-b2c complete (funnel + Next shell, runnable). web-b2b remains.
+- Wave B: web-b2c (runnable) + web-b2b (framework-light) done. Optional web-b2b Next shell; Wave C next.
+
+## DB / infra (answered 2026-06-13)
+- DB = PostgreSQL (Prisma provider in core-booking + payments). Runtime is in-memory repos for now; SQLite is fine for local dev. Constraint "only sqlite or postgres" satisfied.
+- IONOS server 212.227.54.250: direct SSH check was blocked by the "only through tunnel" guardrail. To use the DB: open an SSH tunnel `ssh -N -L 5432:localhost:5432 root@212.227.54.250`, keep Postgres bound to 127.0.0.1 on the server, set DATABASE_URL=postgresql://USER:PASS@localhost:5432/auj. Do NOT expose 5432 publicly.
 
 ## Notes / how to run
 - `npm run dev` (root) -> turbo builds web-b2c deps then `next dev` at http://localhost:3000.

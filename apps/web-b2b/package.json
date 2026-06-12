@@ -1,6 +1,6 @@
 {
   "name": "@auj/web-b2b",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "main": "./dist/index.js",
@@ -10,9 +10,24 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint src",
     "test": "vitest run",
-    "dev": "tsx watch src/index.ts"
+    "dev": "tsc -p tsconfig.json --watch"
   },
   "dependencies": {
-    "@auj/contracts": "workspace:*"
+    "@auj/contracts": "workspace:*",
+    "@auj/core-booking": "workspace:*",
+    "@auj/payments": "workspace:*",
+    "@auj/connector-mock": "workspace:*",
+    "@auj/ui": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "vitest": "^2.1.8"
   }
 }
