@@ -1,10 +1,20 @@
 {
   "name": "@auj/contracts",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./contract-tests": {
+      "types": "./dist/contract-tests.d.ts",
+      "default": "./dist/contract-tests.js"
+    }
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -14,5 +24,8 @@
   },
   "dependencies": {
     "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.8"
   }
 }

@@ -2,12 +2,12 @@
 _Last updated: 2026-06-12 · by: Claude Code · commit: (scaffold)_
 
 ## Now building
-Wave 0 — contracts next (scaffold done).
+Wave 0 — connector-mock next (scaffold + contracts done).
 
 ## Status by wave
 ### Wave 0 — sequential (scaffold + contracts + mock)
 - [x] 00-getting-started — pnpm+Turborepo monorepo wired; build/typecheck/lint/test all green; CI + docker-compose authored
-- [ ] saudi-connector-interface — contracts + Zod + contract-tests
+- [x] saudi-connector-interface — @auj/contracts v1.0.0: SaudiConnector + TravelSupplier ports, full Zod domain schemas, reusable contract-tests (@auj/contracts/contract-tests). 5 schema tests green
 - [ ] saudi-connector-mock — passes contract-tests offline
 
 ### Wave A — parallel, against the mock
@@ -26,11 +26,11 @@ Wave 0 — contracts next (scaffold done).
 - [ ] admin
 
 ## In progress
-- Wave 0 scaffold landed: packages/{contracts,connector-mock,connector-saudi,connector-travel,core-booking,payments,compliance,ui} + apps/{web-b2c,web-b2b,admin}, each an empty-but-wired TS package. Design handoff added under design_handoff_auj_platform/.
+- packages/contracts is complete (types + Zod + ports + contract-tests). connector-mock + connector-travel mock still empty stubs.
 
 ## Next up (top 3)
-1. Build packages/contracts from saudi-connector-interface/SKILL.md (SaudiConnector + TravelSupplier + Zod + domain types).
-2. Build connector-mock; get the shared contract-tests green offline.
+1. Build connector-mock: in-memory SaudiConnector (+ a mock TravelSupplier) that passes @auj/contracts/contract-tests offline.
+2. Wave A can then start in parallel: booking-crm-documents, payments-wallet, visa-router, general-travel-connectors.
 3. Wave B prep: wire the AUJ design tokens (tailwind.config.js / tokens.css) into the ui package + web-b2c/web-b2b.
 
 ## Blockers / waiting on
