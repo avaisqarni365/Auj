@@ -2,7 +2,7 @@
 _Last updated: 2026-06-12 · by: Claude Code · commit: (scaffold)_
 
 ## Now building
-Wave A nearly done. visa-router + booking-crm-documents + payments-wallet done; general-travel-connectors is the last Wave A module.
+Wave A COMPLETE. The first launchable slice (connector-travel + core-booking + payments) is proven end-to-end against mocks. Wave B (apps) is open.
 
 ## Status by wave
 ### Wave 0 — sequential (scaffold + contracts + mock) — DONE
@@ -14,7 +14,7 @@ Wave A nearly done. visa-router + booking-crm-documents + payments-wallet done; 
 - [x] booking-crm-documents — @auj/core-booking v1.0.0: full booking lifecycle state machine, CRM (customers/pilgrims/mahram), package builder, document service (S3 port + OCR hook), connectors by DI + visa-router wired. 14 tests incl. e2e pilgrimage + travel against the mock
 - [x] payments-wallet — @auj/payments v1.0.0: PaymentProvider port + Stripe(EUR)/PKR sandbox adapters, double-entry Ledger (always balances), agent WalletService with credit limits/holds/settlement, idempotent capture + refunds + webhook reconcile. 19 tests
 - [x] visa-router — @auj/visa-router v1.0.0: pure routeFor()/routeForGroup(), config-driven eligibility (nationality + Schengen/UK/US/GCC residence), dual-national preference, seasonal-suspension warnings. 16 tests, all branches
-- [ ] general-travel-connectors
+- [x] general-travel-connectors — @auj/connector-travel v1.0.0: bedbank (TBO-style) + flight (Amadeus-style) adapters mapping vendor payloads into domain types, composed into a TravelConnector behind TravelSupplier; sandbox clients for offline. 8 tests incl. the shared TravelSupplier contract-tests
 
 ### Wave B — parallel, on Wave A APIs
 - [ ] b2c-website
@@ -26,12 +26,12 @@ Wave A nearly done. visa-router + booking-crm-documents + payments-wallet done; 
 - [ ] admin
 
 ## In progress
-- Wave A: visa-router + core-booking + payments landed. Only general-travel-connectors remains.
+- (nothing in flight — Wave A closed)
 
 ## Next up (top 3)
-1. Wave A (last): general-travel-connectors — bedbank + flight adapters behind TravelSupplier in packages/connector-travel (mock already in connector-mock).
-2. Wire payments into core-booking confirm() at the app edge (PaymentsService.pay -> paymentRef -> booking.confirm).
-3. Wave B: web-b2c then web-b2b on the Wave A APIs; wire the AUJ design tokens into the ui package.
+1. Wave B: web-b2c (public booking funnel) on the Wave A APIs — wire the AUJ design tokens (tailwind.config.js / tokens.css) into the ui package + web-b2c.
+2. Wave B: web-b2b (agent portal) — wallet/credit, multi-pax (<=49), markups, quotations, statements.
+3. App edge wiring: PaymentsService.pay -> paymentRef -> core-booking.confirm; select CONNECTOR/SUPPLIER by env (mock now).
 
 ## Blockers / waiting on
 - Saudi Maqam access: PENDING (partner TBD). Does NOT block Wave A/B — build on the mock.
