@@ -2,7 +2,7 @@
 _Last updated: 2026-06-12 · by: Claude Code · commit: (scaffold)_
 
 ## Now building
-Wave B. ui + web-b2c (framework-light) done. Next: Next.js shell for web-b2c, then web-b2b.
+Wave B. ui + web-b2c (funnel + Next.js shell, runnable via `npm run dev`) done. Next: web-b2b.
 
 ## Status by wave
 ### Wave 0 — sequential (scaffold + contracts + mock) — DONE
@@ -18,7 +18,7 @@ Wave B. ui + web-b2c (framework-light) done. Next: Next.js shell for web-b2c, th
 
 ### Wave B — parallel, on Wave A APIs
 - [x] ui design system — @auj/ui v1.0.0: aujPreset (Tailwind tokens), tokens.css, core React components (Button/Input/Select/Card/StatusPill/Stepper/SegmentedControl/Toggle). 10 tests. Maps the design handoff onto reusable primitives both apps share
-- [~] b2c-website — @auj/web-b2c framework-light DONE: BookingApi/PaymentsApi ports, in-process backend (composition root wiring mock), funnel reducer, usecases (visa preview + placePilgrimageBooking), fx (EUR/PKR), i18n EN/LT/UR/AR + dir(), 6 screens on @auj/ui. 15 tests incl. full e2e funnel on the mock. REMAINING: Next.js App Router shell (routing, fonts, <html dir>, real backend wiring)
+- [x] b2c-website — @auj/web-b2c: funnel (ports + in-process backend, reducer, usecases, fx, i18n EN/LT/UR/AR, 6 @auj/ui screens; 15 tests incl. e2e on the mock) PLUS a Next.js App Router shell (app/ with Server Actions running the backend server-side, aujPreset Tailwind, IBM Plex fonts, tokens.css). `npm run dev` serves it at :3000; `next build` green. tsc gate stays fast (build = tsc -p tsconfig.build.json)
 - [ ] b2b-agent-portal
 
 ### Wave C — gated / anytime
@@ -27,12 +27,17 @@ Wave B. ui + web-b2c (framework-light) done. Next: Next.js shell for web-b2c, th
 - [ ] admin
 
 ## In progress
-- Wave B: web-b2c framework-light (logic + screens + e2e) landed. Next.js shell + web-b2b remain.
+- Wave B: web-b2c complete (funnel + Next shell, runnable). web-b2b remains.
+
+## Notes / how to run
+- `npm run dev` (root) -> turbo builds web-b2c deps then `next dev` at http://localhost:3000.
+- `npm run dev:all` runs every package's dev (needs --concurrency=15, already set).
+- web-b2c gate build is `tsc -p tsconfig.build.json` (fast); the Next app build is `build:next`.
 
 ## Next up (top 3)
-1. Add the Next.js App Router shell over @auj/web-b2c (routes per funnel step, IBM Plex fonts, aujPreset Tailwind, <html dir> from locale, createInProcessBackend for dev).
-2. Wave B: web-b2b — agent portal (wallet/credit, multi-pax <=49, markups, quotations, statements), same framework-light-then-shell approach.
-3. Wave C anytime: compliance-eu; connector-saudi when partner access lands.
+1. Wave B: web-b2b — agent portal (wallet/credit, multi-pax <=49, markups, quotations, statements), same framework-light-then-shell approach.
+2. Wave C anytime: compliance-eu; connector-saudi when partner access lands.
+3. Optional: drive <html lang/dir> from a locale route in web-b2c; add real photography/icons per the design handoff.
 
 ## Blockers / waiting on
 - Saudi Maqam access: PENDING (partner TBD). Does NOT block Wave A/B — build on the mock.

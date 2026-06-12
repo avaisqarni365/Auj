@@ -11,7 +11,8 @@
     "typecheck": "turbo run typecheck",
     "lint": "turbo run lint",
     "test": "turbo run test",
-    "dev": "turbo run dev",
+    "dev": "turbo run dev --filter=@auj/web-b2c",
+    "dev:all": "turbo run dev --concurrency=15",
     "format": "prettier --write \"**/*.{ts,tsx,json,md}\""
   },
   "devDependencies": {

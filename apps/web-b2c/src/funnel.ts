@@ -1,5 +1,13 @@
-import type { Money, SearchCriteria } from '@auj/contracts';
-import { sumByCurrency, type PackageItem } from '@auj/core-booking';
+import type { Currency, Money, SearchCriteria } from '@auj/contracts';
+import type { PackageItem } from '@auj/core-booking';
+
+// Local copy so this module stays free of any value import from core-booking,
+// keeping the funnel safe to bundle into the browser (core-booking pulls node:crypto).
+function sumByCurrency(amounts: Money[]): Money[] {
+  const totals = new Map<Currency, number>();
+  for (const m of amounts) totals.set(m.currency, (totals.get(m.currency) ?? 0) + m.amount);
+  return [...totals.entries()].map(([currency, amount]) => ({ amount, currency }));
+}
 
 export type FunnelStep = 'SEARCH' | 'RESULTS' | 'BUILDER' | 'PILGRIMS' | 'CHECKOUT' | 'CONFIRMED';
 

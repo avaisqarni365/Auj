@@ -4,6 +4,9 @@ dist/
 .turbo/
 coverage/
 *.log
+next-env.d.ts
+tsconfig.tsbuildinfo
+*.tsbuildinfo
 
 # secrets & personal
 .env
