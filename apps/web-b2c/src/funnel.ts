@@ -1,0 +1,72 @@
+import type { Money, SearchCriteria } from '@auj/contracts';
+import { sumByCurrency, type PackageItem } from '@auj/core-booking';
+
+export type FunnelStep = 'SEARCH' | 'RESULTS' | 'BUILDER' | 'PILGRIMS' | 'CHECKOUT' | 'CONFIRMED';
+
+export interface PilgrimDraft {
+  firstName: string;
+  lastName: string;
+  passportNumber: string;
+  nationality: string;
+  dob: string;
+  gender: 'M' | 'F';
+  residenceCountry?: string;
+  residencePermit?: boolean;
+}
+
+export interface FunnelState {
+  step: FunnelStep;
+  channel: 'PILGRIMAGE' | 'TRAVEL';
+  criteria: SearchCriteria;
+  cart: PackageItem[];
+  pilgrims: PilgrimDraft[];
+  currency: 'EUR' | 'PKR';
+  bookingId?: string;
+}
+
+export type FunnelAction =
+  | { type: 'SET_CRITERIA'; criteria: Partial<SearchCriteria> }
+  | { type: 'GO'; step: FunnelStep }
+  | { type: 'ADD_ITEM'; item: PackageItem }
+  | { type: 'REMOVE_ITEM'; offerId: string }
+  | { type: 'SET_PILGRIMS'; pilgrims: PilgrimDraft[] }
+  | { type: 'SET_CURRENCY'; currency: 'EUR' | 'PKR' }
+  | { type: 'SET_BOOKING'; bookingId: string };
+
+export function initialFunnel(): FunnelState {
+  return {
+    step: 'SEARCH',
+    channel: 'PILGRIMAGE',
+    criteria: { city: 'MAKKAH', checkIn: '', checkOut: '', pax: 1 },
+    cart: [],
+    pilgrims: [],
+    currency: 'EUR',
+  };
+}
+
+export function funnelReducer(state: FunnelState, action: FunnelAction): FunnelState {
+  switch (action.type) {
+    case 'SET_CRITERIA':
+      return { ...state, criteria: { ...state.criteria, ...action.criteria } };
+    case 'GO':
+      return { ...state, step: action.step };
+    case 'ADD_ITEM':
+      if (state.cart.some((i) => i.offerId === action.item.offerId)) return state;
+      return { ...state, cart: [...state.cart, action.item] };
+    case 'REMOVE_ITEM':
+      return { ...state, cart: state.cart.filter((i) => i.offerId !== action.offerId) };
+    case 'SET_PILGRIMS':
+      return { ...state, pilgrims: action.pilgrims };
+    case 'SET_CURRENCY':
+      return { ...state, currency: action.currency };
+    case 'SET_BOOKING':
+      return { ...state, bookingId: action.bookingId, step: 'CONFIRMED' };
+    default:
+      return state;
+  }
+}
+
+/** Net subtotal per currency for the current cart. */
+export function cartTotals(state: FunnelState): Money[] {
+  return sumByCurrency(state.cart.map((i) => i.net));
+}

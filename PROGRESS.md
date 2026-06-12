@@ -2,7 +2,7 @@
 _Last updated: 2026-06-12 · by: Claude Code · commit: (scaffold)_
 
 ## Now building
-Wave B started. @auj/ui design system done (tokens + components). Next: web-b2c, then web-b2b.
+Wave B. ui + web-b2c (framework-light) done. Next: Next.js shell for web-b2c, then web-b2b.
 
 ## Status by wave
 ### Wave 0 — sequential (scaffold + contracts + mock) — DONE
@@ -18,7 +18,7 @@ Wave B started. @auj/ui design system done (tokens + components). Next: web-b2c,
 
 ### Wave B — parallel, on Wave A APIs
 - [x] ui design system — @auj/ui v1.0.0: aujPreset (Tailwind tokens), tokens.css, core React components (Button/Input/Select/Card/StatusPill/Stepper/SegmentedControl/Toggle). 10 tests. Maps the design handoff onto reusable primitives both apps share
-- [ ] b2c-website
+- [~] b2c-website — @auj/web-b2c framework-light DONE: BookingApi/PaymentsApi ports, in-process backend (composition root wiring mock), funnel reducer, usecases (visa preview + placePilgrimageBooking), fx (EUR/PKR), i18n EN/LT/UR/AR + dir(), 6 screens on @auj/ui. 15 tests incl. full e2e funnel on the mock. REMAINING: Next.js App Router shell (routing, fonts, <html dir>, real backend wiring)
 - [ ] b2b-agent-portal
 
 ### Wave C — gated / anytime
@@ -27,12 +27,12 @@ Wave B started. @auj/ui design system done (tokens + components). Next: web-b2c,
 - [ ] admin
 
 ## In progress
-- Wave B: @auj/ui design system landed. web-b2c + web-b2b apps still to build.
+- Wave B: web-b2c framework-light (logic + screens + e2e) landed. Next.js shell + web-b2b remain.
 
 ## Next up (top 3)
-1. Wave B: web-b2c — Next.js booking funnel on the Wave A APIs, consuming @auj/ui (preset + components) and createCoreBooking/payments. i18n EN/LT/UR/AR + RTL.
-2. Wave B: web-b2b — agent portal (wallet/credit, multi-pax <=49, markups, quotations, statements).
-3. App edge wiring: PaymentsService.pay -> paymentRef -> core-booking.confirm; select CONNECTOR/SUPPLIER by env (mock now).
+1. Add the Next.js App Router shell over @auj/web-b2c (routes per funnel step, IBM Plex fonts, aujPreset Tailwind, <html dir> from locale, createInProcessBackend for dev).
+2. Wave B: web-b2b — agent portal (wallet/credit, multi-pax <=49, markups, quotations, statements), same framework-light-then-shell approach.
+3. Wave C anytime: compliance-eu; connector-saudi when partner access lands.
 
 ## Blockers / waiting on
 - Saudi Maqam access: PENDING (partner TBD). Does NOT block Wave A/B — build on the mock.
