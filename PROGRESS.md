@@ -2,13 +2,13 @@
 _Last updated: 2026-06-12 · by: Claude Code · commit: (scaffold)_
 
 ## Now building
-Wave 0 — connector-mock next (scaffold + contracts done).
+Wave 0 COMPLETE. Wave A is open — booking, payments, visa-router, general-travel can build in parallel against the mock.
 
 ## Status by wave
-### Wave 0 — sequential (scaffold + contracts + mock)
+### Wave 0 — sequential (scaffold + contracts + mock) — DONE
 - [x] 00-getting-started — pnpm+Turborepo monorepo wired; build/typecheck/lint/test all green; CI + docker-compose authored
 - [x] saudi-connector-interface — @auj/contracts v1.0.0: SaudiConnector + TravelSupplier ports, full Zod domain schemas, reusable contract-tests (@auj/contracts/contract-tests). 5 schema tests green
-- [ ] saudi-connector-mock — passes contract-tests offline
+- [x] saudi-connector-mock — @auj/connector-mock v1.0.0: in-memory SaudiConnector + TravelSupplier, seed catalog, env edge-case toggles, offline demo (search->hold->confirm->BRN->visa->ISSUED). 15 tests incl. shared contract-tests green
 
 ### Wave A — parallel, against the mock
 - [ ] booking-crm-documents
@@ -26,11 +26,11 @@ Wave 0 — connector-mock next (scaffold + contracts done).
 - [ ] admin
 
 ## In progress
-- packages/contracts is complete (types + Zod + ports + contract-tests). connector-mock + connector-travel mock still empty stubs.
+- (nothing in flight — Wave 0 closed)
 
 ## Next up (top 3)
-1. Build connector-mock: in-memory SaudiConnector (+ a mock TravelSupplier) that passes @auj/contracts/contract-tests offline.
-2. Wave A can then start in parallel: booking-crm-documents, payments-wallet, visa-router, general-travel-connectors.
+1. Wave A: build visa-router (pure domain — formalize the e-visa vs agent-channel rule the mock stubs in visa-rule.ts).
+2. Wave A: booking-crm-documents and payments-wallet against connector-mock; general-travel-connectors against the mock TravelSupplier.
 3. Wave B prep: wire the AUJ design tokens (tailwind.config.js / tokens.css) into the ui package + web-b2c/web-b2b.
 
 ## Blockers / waiting on
