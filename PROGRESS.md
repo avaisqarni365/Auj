@@ -2,7 +2,7 @@
 _Last updated: 2026-06-12 · by: Claude Code · commit: (scaffold)_
 
 ## Now building
-Wave A in progress. visa-router done; booking, payments, general-travel next (parallel against the mock).
+Wave A in progress. visa-router + booking-crm-documents done; payments-wallet and general-travel-connectors next.
 
 ## Status by wave
 ### Wave 0 — sequential (scaffold + contracts + mock) — DONE
@@ -11,7 +11,7 @@ Wave A in progress. visa-router done; booking, payments, general-travel next (pa
 - [x] saudi-connector-mock — @auj/connector-mock v1.0.0: in-memory SaudiConnector + TravelSupplier, seed catalog, env edge-case toggles, offline demo (search->hold->confirm->BRN->visa->ISSUED). 15 tests incl. shared contract-tests green
 
 ### Wave A — parallel, against the mock
-- [ ] booking-crm-documents
+- [x] booking-crm-documents — @auj/core-booking v1.0.0: full booking lifecycle state machine, CRM (customers/pilgrims/mahram), package builder, document service (S3 port + OCR hook), connectors by DI + visa-router wired. 14 tests incl. e2e pilgrimage + travel against the mock
 - [ ] payments-wallet
 - [x] visa-router — @auj/visa-router v1.0.0: pure routeFor()/routeForGroup(), config-driven eligibility (nationality + Schengen/UK/US/GCC residence), dual-national preference, seasonal-suspension warnings. 16 tests, all branches
 - [ ] general-travel-connectors
@@ -26,12 +26,12 @@ Wave A in progress. visa-router done; booking, payments, general-travel next (pa
 - [ ] admin
 
 ## In progress
-- Wave A: visa-router landed (@auj/visa-router). booking, payments, general-travel still to do.
+- Wave A: visa-router + core-booking landed. payments-wallet and general-travel-connectors still to do.
 
 ## Next up (top 3)
-1. Wave A: booking-crm-documents — core domain (booking/cart/CRM/documents); orchestrates connector-mock + visa-router.
-2. Wave A: payments-wallet (EUR/PKR, agent wallet, double-entry ledger) and general-travel-connectors (against the mock TravelSupplier).
-3. Wave B prep: wire the AUJ design tokens (tailwind.config.js / tokens.css) into the ui package + web-b2c/web-b2b.
+1. Wave A: payments-wallet — EUR/PKR PaymentProvider port, agent wallet + credit limit, double-entry ledger, webhook reconciliation.
+2. Wave A: general-travel-connectors — real bedbank/flight adapters behind TravelSupplier (mock already exists in connector-mock/connector-travel).
+3. Wave B: web-b2c then web-b2b on the Wave A APIs; wire the AUJ design tokens into the ui package.
 
 ## Blockers / waiting on
 - Saudi Maqam access: PENDING (partner TBD). Does NOT block Wave A/B — build on the mock.

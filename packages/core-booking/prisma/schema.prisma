@@ -1,4 +1,7 @@
-// Minimal Prisma schema for core-booking. Models added by the core-booking skill.
+// Persistence reference for core-booking. The runtime default is the in-memory
+// repository layer (src/in-memory.ts); a Prisma adapter implements the same
+// Repository ports against Postgres. Mirrors src/domain.ts.
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -6,4 +9,129 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+enum BookingChannel {
+  PILGRIMAGE
+  TRAVEL
+}
+
+enum BookingStatus {
+  DRAFT
+  HELD
+  CONFIRMED
+  VISA_IN_PROGRESS
+  TICKETED
+  COMPLETED
+  CANCELLED
+  REFUNDED
+}
+
+enum ItemKind {
+  HOTEL
+  TRANSPORT
+  GROUND
+  FLIGHT
+}
+
+enum DocumentType {
+  PASSPORT
+  PHOTO
+  VISA
+  VOUCHER
+  OTHER
+}
+
+enum VisaRoute {
+  EVISA_DIRECT
+  AGENT_CHANNEL
+}
+
+enum VisaStatus {
+  DRAFT
+  SUBMITTED
+  PAID
+  ISSUED
+  REJECTED
+}
+
+model Customer {
+  id        String    @id @default(uuid())
+  fullName  String
+  email     String    @unique
+  phone     String?
+  createdAt DateTime  @default(now())
+  pilgrims  Pilgrim[]
+  bookings  Booking[]
+}
+
+model Pilgrim {
+  id              String     @id @default(uuid())
+  customer        Customer   @relation(fields: [customerId], references: [id])
+  customerId      String
+  firstName       String
+  lastName        String
+  passportNumber  String
+  nationality     String // ISO-3166
+  residenceCountry String?
+  residencePermit Boolean?
+  dob             String
+  gender          String // M | F
+  // mahram self-relation
+  mahram          Pilgrim?   @relation("Mahram", fields: [mahramPilgrimId], references: [id])
+  mahramPilgrimId String?
+  wards           Pilgrim[]  @relation("Mahram")
+  documents       Document[]
+}
+
+model Booking {
+  id            String        @id @default(uuid())
+  customer      Customer      @relation(fields: [customerId], references: [id])
+  customerId    String
+  channel       BookingChannel
+  status        BookingStatus @default(DRAFT)
+  pilgrimIds    String[]
+  holdId        String?
+  holdExpiresAt DateTime?
+  bookingRef    String?
+  refundAmount  Int?
+  refundCurrency String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  items         BookingItem[]
+  visaCase      VisaCase?
+}
+
+model BookingItem {
+  id        String   @id @default(uuid())
+  booking   Booking  @relation(fields: [bookingId], references: [id])
+  bookingId String
+  kind      ItemKind
+  offerId   String
+  title     String
+  netAmount Int
+  netCurrency String
+  brn       String?
+}
+
+model Document {
+  id         String       @id @default(uuid())
+  pilgrim    Pilgrim      @relation(fields: [pilgrimId], references: [id])
+  pilgrimId  String
+  type       DocumentType
+  fileRef    String
+  verified   Boolean      @default(false)
+  uploadedAt DateTime     @default(now())
+  mrz        String?
+}
+
+model VisaCase {
+  id        String     @id @default(uuid())
+  booking   Booking    @relation(fields: [bookingId], references: [id])
+  bookingId String     @unique
+  visaRef   String
+  route     VisaRoute
+  status    VisaStatus
+  // per-pilgrim routing is stored as JSON (pilgrimId, route, warnings[])
+  perPilgrim Json
 }

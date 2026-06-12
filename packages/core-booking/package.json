@@ -1,6 +1,6 @@
 {
   "name": "@auj/core-booking",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "main": "./dist/index.js",
@@ -14,9 +14,11 @@
   },
   "dependencies": {
     "@auj/contracts": "workspace:*",
-    "@prisma/client": "^6.1.0"
+    "@auj/visa-router": "workspace:*"
   },
   "devDependencies": {
-    "prisma": "^6.1.0"
+    "@auj/connector-mock": "workspace:*",
+    "prisma": "^6.1.0",
+    "vitest": "^2.1.8"
   }
 }

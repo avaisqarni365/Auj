@@ -97,13 +97,19 @@ importers:
       '@auj/contracts':
         specifier: workspace:*
         version: link:../contracts
-      '@prisma/client':
-        specifier: ^6.1.0
-        version: 6.19.3(prisma@6.19.3(typescript@5.9.3))(typescript@5.9.3)
+      '@auj/visa-router':
+        specifier: workspace:*
+        version: link:../visa-router
     devDependencies:
+      '@auj/connector-mock':
+        specifier: workspace:*
+        version: link:../connector-mock
       prisma:
         specifier: ^6.1.0
         version: 6.19.3(typescript@5.9.3)
+      vitest:
+        specifier: ^2.1.8
+        version: 2.1.9(@types/node@22.19.21)
 
   packages/payments:
     dependencies:
