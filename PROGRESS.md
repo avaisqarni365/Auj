@@ -2,7 +2,7 @@
 _Last updated: 2026-06-12 · by: Claude Code · commit: (scaffold)_
 
 ## Now building
-Wave 0 COMPLETE. Wave A is open — booking, payments, visa-router, general-travel can build in parallel against the mock.
+Wave A in progress. visa-router done; booking, payments, general-travel next (parallel against the mock).
 
 ## Status by wave
 ### Wave 0 — sequential (scaffold + contracts + mock) — DONE
@@ -13,7 +13,7 @@ Wave 0 COMPLETE. Wave A is open — booking, payments, visa-router, general-trav
 ### Wave A — parallel, against the mock
 - [ ] booking-crm-documents
 - [ ] payments-wallet
-- [ ] visa-router
+- [x] visa-router — @auj/visa-router v1.0.0: pure routeFor()/routeForGroup(), config-driven eligibility (nationality + Schengen/UK/US/GCC residence), dual-national preference, seasonal-suspension warnings. 16 tests, all branches
 - [ ] general-travel-connectors
 
 ### Wave B — parallel, on Wave A APIs
@@ -26,11 +26,11 @@ Wave 0 COMPLETE. Wave A is open — booking, payments, visa-router, general-trav
 - [ ] admin
 
 ## In progress
-- (nothing in flight — Wave 0 closed)
+- Wave A: visa-router landed (@auj/visa-router). booking, payments, general-travel still to do.
 
 ## Next up (top 3)
-1. Wave A: build visa-router (pure domain — formalize the e-visa vs agent-channel rule the mock stubs in visa-rule.ts).
-2. Wave A: booking-crm-documents and payments-wallet against connector-mock; general-travel-connectors against the mock TravelSupplier.
+1. Wave A: booking-crm-documents — core domain (booking/cart/CRM/documents); orchestrates connector-mock + visa-router.
+2. Wave A: payments-wallet (EUR/PKR, agent wallet, double-entry ledger) and general-travel-connectors (against the mock TravelSupplier).
 3. Wave B prep: wire the AUJ design tokens (tailwind.config.js / tokens.css) into the ui package + web-b2c/web-b2b.
 
 ## Blockers / waiting on

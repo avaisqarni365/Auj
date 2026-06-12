@@ -120,6 +120,16 @@ importers:
 
   packages/ui: {}
 
+  packages/visa-router:
+    dependencies:
+      '@auj/contracts':
+        specifier: workspace:*
+        version: link:../contracts
+    devDependencies:
+      vitest:
+        specifier: ^2.1.8
+        version: 2.1.9(@types/node@22.19.21)
+
 packages:
 
   '@esbuild/aix-ppc64@0.21.5':
