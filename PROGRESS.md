@@ -2,7 +2,7 @@
 _Last updated: 2026-06-12 · by: Claude Code · commit: (scaffold)_
 
 ## Now building
-Wave A COMPLETE. The first launchable slice (connector-travel + core-booking + payments) is proven end-to-end against mocks. Wave B (apps) is open.
+Wave B started. @auj/ui design system done (tokens + components). Next: web-b2c, then web-b2b.
 
 ## Status by wave
 ### Wave 0 — sequential (scaffold + contracts + mock) — DONE
@@ -17,6 +17,7 @@ Wave A COMPLETE. The first launchable slice (connector-travel + core-booking + p
 - [x] general-travel-connectors — @auj/connector-travel v1.0.0: bedbank (TBO-style) + flight (Amadeus-style) adapters mapping vendor payloads into domain types, composed into a TravelConnector behind TravelSupplier; sandbox clients for offline. 8 tests incl. the shared TravelSupplier contract-tests
 
 ### Wave B — parallel, on Wave A APIs
+- [x] ui design system — @auj/ui v1.0.0: aujPreset (Tailwind tokens), tokens.css, core React components (Button/Input/Select/Card/StatusPill/Stepper/SegmentedControl/Toggle). 10 tests. Maps the design handoff onto reusable primitives both apps share
 - [ ] b2c-website
 - [ ] b2b-agent-portal
 
@@ -26,11 +27,11 @@ Wave A COMPLETE. The first launchable slice (connector-travel + core-booking + p
 - [ ] admin
 
 ## In progress
-- (nothing in flight — Wave A closed)
+- Wave B: @auj/ui design system landed. web-b2c + web-b2b apps still to build.
 
 ## Next up (top 3)
-1. Wave B: web-b2c (public booking funnel) on the Wave A APIs — wire the AUJ design tokens (tailwind.config.js / tokens.css) into the ui package + web-b2c.
-2. Wave B: web-b2b (agent portal) — wallet/credit, multi-pax (<=49), markups, quotations, statements.
+1. Wave B: web-b2c — Next.js booking funnel on the Wave A APIs, consuming @auj/ui (preset + components) and createCoreBooking/payments. i18n EN/LT/UR/AR + RTL.
+2. Wave B: web-b2b — agent portal (wallet/credit, multi-pax <=49, markups, quotations, statements).
 3. App edge wiring: PaymentsService.pay -> paymentRef -> core-booking.confirm; select CONNECTOR/SUPPLIER by env (mock now).
 
 ## Blockers / waiting on
