@@ -1,0 +1,53 @@
+/* AUJ — CSS custom properties mirror of the Tailwind tokens.
+   Import once in app/globals.css. Useful for non-Tailwind contexts (charts, emails, PDF).
+   Dark mode: add `.dark` to <html>. RTL: set dir="rtl" on <html> for AR/UR. */
+
+:root {
+  /* Primary — green */
+  --auj-green-50:#EFF6F1; --auj-green-100:#DCEDE4; --auj-green-400:#4FAE86;
+  --auj-green-500:#2A9468; --auj-green-600:#1C7A4F; --auj-green-700:#156440;
+  --auj-green-800:#0F5132; --auj-green-900:#0A3D26; --auj-green-950:#07301E;
+
+  /* Neutral — sand */
+  --auj-sand-ink:#2A2620; --auj-sand-700:#4A4337; --auj-sand-500:#7A7263;
+  --auj-sand-300:#C9BCA6; --auj-sand-200:#E6DDCE; --auj-sand-100:#F1EADD; --auj-sand-50:#FAF6EF;
+
+  /* Accent — teal-blue */
+  --auj-accent-100:#E2EEF3; --auj-accent-500:#3C86A8; --auj-accent-600:#2F6F8F; --auj-accent-700:#265D78;
+
+  /* Status */
+  --auj-success:#1C7A4F; --auj-success-bg:#DCEDE4;
+  --auj-warning:#B5791E; --auj-warning-bg:#F7EBD3;
+  --auj-danger:#B23A2E;  --auj-danger-bg:#F6E0DC;
+  --auj-info:#2F6F8F;    --auj-info-bg:#E2EEF3;
+
+  /* Brand accent gold (logo / small highlights only — never body text) */
+  --auj-gold:#C8A24A;
+
+  /* Semantic surfaces (light) */
+  --auj-bg:var(--auj-sand-50);
+  --auj-surface:#FFFFFF;
+  --auj-surface-alt:var(--auj-sand-100);
+  --auj-border:var(--auj-sand-200);
+  --auj-border-strong:var(--auj-sand-300);
+  --auj-text:var(--auj-sand-ink);
+  --auj-text-muted:var(--auj-sand-500);
+  --auj-primary:var(--auj-green-800);
+
+  /* Radius / shadow */
+  --auj-radius-md:8px; --auj-radius-lg:10px; --auj-radius-xl:14px; --auj-radius-2xl:20px;
+  --auj-shadow-sm:0 1px 2px rgba(42,38,32,.06), 0 2px 8px rgba(42,38,32,.05);
+  --auj-shadow-lg:0 8px 24px rgba(42,38,32,.10), 0 2px 6px rgba(42,38,32,.06);
+  --auj-focus-ring:0 0 0 3px rgba(47,111,143,.14);
+}
+
+.dark {
+  --auj-bg:#11140F;
+  --auj-surface:#181C16;
+  --auj-surface-alt:#20251E;
+  --auj-border:#2E342A;
+  --auj-border-strong:#3A4234;
+  --auj-text:#ECEAE3;
+  --auj-text-muted:#A6A293;
+  --auj-primary:var(--auj-green-500); /* lighter green for AA on dark */
+}

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  table { border-collapse: collapse; }
+</style>
+</helmet>
+
+<div style="background: #ECE7DD; color: #2A2620; font-family: 'IBM Plex Sans', system-ui, sans-serif; min-height: 100vh; -webkit-font-smoothing: antialiased;">
+
+  <header style="position: sticky; top: 0; z-index: 50; background: rgba(236,231,221,0.86); backdrop-filter: blur(12px); border-bottom: 1px solid #DBD0BD;">
+    <div style="max-width: 1320px; margin: 0 auto; padding: 14px 28px; display: flex; align-items: center; justify-content: space-between;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="width: 34px; height: 34px; border-radius: 10px; background: #0F5132; display: flex; align-items: center; justify-content: center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></svg></div>
+        <div><span style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: 18px; letter-spacing: 0.04em;">AUJ</span><span style="font-size: 13px; color: #7A7263; margin-inline-start: 10px;">Agent portal · B2B</span></div>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <a href="AUJ Design System.dc.html" style="text-decoration: none; font-size: 13px; font-weight: 600; color: #4A4337; padding: 8px 14px; border: 1px solid #C9BCA6; border-radius: 9px; background: #fff;">← Design system</a>
+        <a href="AUJ B2C.dc.html" style="text-decoration: none; font-size: 13px; font-weight: 600; color: #4A4337; padding: 8px 14px; border: 1px solid #C9BCA6; border-radius: 9px; background: #fff;">B2C site</a>
+      </div>
+    </div>
+  </header>
+
+  <div style="max-width: 1320px; margin: 0 auto; padding: 40px 28px 80px; display: flex; flex-direction: column; gap: 56px;">
+
+    <!-- ============ LOGIN ============ -->
+    <div>
+      <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #2F6F8F;">B2B-01</span><span style="font-size: 15px; font-weight: 600;">Agent login</span></div>
+      <div style="border-radius: 16px; overflow: hidden; box-shadow: 0 24px 60px -24px rgba(20,23,15,0.45); border: 1px solid #DBD0BD;">
+        <div style="background: #E7E0D4; padding: 11px 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #D6CAB6;"><span style="width: 11px; height: 11px; border-radius: 50%; background: #E0685B;"></span><span style="width: 11px; height: 11px; border-radius: 50%; background: #E6B84F;"></span><span style="width: 11px; height: 11px; border-radius: 50%; background: #6FBF73;"></span><span style="margin-inline-start: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #7A7263; background: #fff; padding: 4px 12px; border-radius: 7px;">🔒 agents.auj.travel/login</span></div>
+        <div data-screen-label="B2B Login" style="display: grid; grid-template-columns: 1fr 1fr; min-height: 540px; background: #fff;">
+          <!-- brand panel -->
+          <div style="background: radial-gradient(120% 100% at 0% 0%, #156440, #0A3D26 60%); color: #EFF6F1; padding: 48px 44px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 12px;"><div style="width: 40px; height: 40px; border-radius: 11px; background: rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></svg></div><span style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: 24px; letter-spacing: 0.05em;">AUJ</span></div>
+            <div>
+              <div style="font-family: 'IBM Plex Serif', serif; font-size: 34px; font-weight: 600; line-height: 1.12; letter-spacing: -0.01em;">The trade portal for pilgrimage travel.</div>
+              <div style="font-size: 15px; color: #BFE0CD; line-height: 1.6; margin-top: 16px; max-width: 360px;">Book up to 49 pilgrims at once, manage wallet &amp; credit, set your own markup, and issue branded quotations — across the EU.</div>
+            </div>
+            <div style="display: flex; gap: 22px;">
+              <div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 600;">1,240+</div><div style="font-size: 12px; color: #9CC6AE;">agencies</div></div>
+              <div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 600;">4 langs</div><div style="font-size: 12px; color: #9CC6AE;">EN · LT · UR · AR</div></div>
+              <div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 600;">24/7</div><div style="font-size: 12px; color: #9CC6AE;">trade desk</div></div>
+            </div>
+          </div>
+          <!-- form -->
+          <div style="padding: 48px 56px; display: flex; flex-direction: column; justify-content: center;">
+            <div style="font-family: 'IBM Plex Serif', serif; font-size: 26px; font-weight: 600; margin-bottom: 6px;">Sign in to your agency</div>
+            <div style="font-size: 14px; color: #7A7263; margin-bottom: 28px;">Welcome back. Enter your agency credentials.</div>
+            <label style="font-size: 13px; font-weight: 500; color: #4A4337; margin-bottom: 7px;">Agency code</label>
+            <div style="border: 1.5px solid #DBD0BD; background: #FAF6EF; border-radius: 10px; padding: 12px 14px; font-size: 15px; margin-bottom: 16px; font-family: 'IBM Plex Mono', monospace;">AUJ-LT-0421</div>
+            <label style="font-size: 13px; font-weight: 500; color: #4A4337; margin-bottom: 7px;">Email</label>
+            <div style="border: 1.5px solid #DBD0BD; background: #fff; border-radius: 10px; padding: 12px 14px; font-size: 15px; margin-bottom: 16px;"><span>desk</span>&#64;<span>safarpilgrim.lt</span></div>
+            <label style="font-size: 13px; font-weight: 500; color: #4A4337; margin-bottom: 7px;">Password</label>
+            <div style="display: flex; align-items: center; justify-content: space-between; border: 1.5px solid #2F6F8F; background: #fff; border-radius: 10px; padding: 12px 14px; box-shadow: 0 0 0 3px rgba(47,111,143,0.12); margin-bottom: 18px;"><span style="font-size: 15px; letter-spacing: 3px;">••••••••••</span><span style="font-size: 13px; color: #2F6F8F; font-weight: 600;">Show</span></div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px;"><span style="display:inline-flex; align-items:center; gap:8px; font-size: 13px; color: #4A4337;"><span style="width:18px;height:18px;border-radius:5px;background:#0F5132;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:12px;">✓</span>Remember device</span><span style="font-size: 13px; color: #2F6F8F; font-weight: 600;">Forgot password?</span></div>
+            <button style="width: 100%; cursor: pointer; background: #0F5132; color: #fff; border: none; font-family: inherit; font-size: 15px; font-weight: 600; padding: 14px; border-radius: 11px; box-shadow: 0 6px 16px rgba(15,81,50,0.22);">Sign in →</button>
+            <div style="font-size: 13px; color: #7A7263; text-align: center; margin-top: 18px;">New partner? <span style="color: #2F6F8F; font-weight: 600;">Apply for an agent account</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ DASHBOARD ============ -->
+    <div>
+      <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #2F6F8F;">B2B-02</span><span style="font-size: 15px; font-weight: 600;">Dashboard</span></div>
+      <div style="border-radius: 16px; overflow: hidden; box-shadow: 0 24px 60px -24px rgba(20,23,15,0.45); border: 1px solid #DBD0BD; display: flex; background: #FAF6EF;" data-screen-label="B2B Dashboard">
+        <!-- RAIL -->
+        <div style="width: 76px; background: #0A3D26; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; padding: 18px 0; gap: 6px;">
+          <div style="width: 40px; height: 40px; border-radius: 11px; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 14px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></svg></div>
+          <div style="width:52px;padding:9px 0;border-radius:12px;background:#fff;display:flex;flex-direction:column;align-items:center;gap:4px;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="#0F5132"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="#0F5132" stroke-width="1.8"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="#0F5132" stroke-width="1.8"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke="#0F5132" stroke-width="1.8"/></svg><span style="font-size:9px;color:#0F5132;font-weight:600;">Home</span></div>
+          <div style="width:52px;padding:9px 0;border-radius:12px;display:flex;flex-direction:column;align-items:center;gap:4px;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="#BFE0CD" stroke-width="1.8"/><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5" stroke="#BFE0CD" stroke-width="1.8"/><circle cx="17" cy="8.5" r="2.6" stroke="#BFE0CD" stroke-width="1.6"/></svg><span style="font-size:9px;color:#BFE0CD;font-weight:600;">Pax</span></div>
+          <div style="width:52px;padding:9px 0;border-radius:12px;display:flex;flex-direction:column;align-items:center;gap:4px;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="13" rx="2.5" stroke="#BFE0CD" stroke-width="1.8"/><path d="M16 12h2" stroke="#BFE0CD" stroke-width="1.8" stroke-linecap="round"/></svg><span style="font-size:9px;color:#BFE0CD;font-weight:600;">Wallet</span></div>
+          <div style="width:52px;padding:9px 0;border-radius:12px;display:flex;flex-direction:column;align-items:center;gap:4px;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M5 19L19 5" stroke="#BFE0CD" stroke-width="1.8" stroke-linecap="round"/><circle cx="7.5" cy="7.5" r="2.2" stroke="#BFE0CD" stroke-width="1.6"/><circle cx="16.5" cy="16.5" r="2.2" stroke="#BFE0CD" stroke-width="1.6"/></svg><span style="font-size:9px;color:#BFE0CD;font-weight:600;">Markup</span></div>
+          <div style="width:52px;padding:9px 0;border-radius:12px;display:flex;flex-direction:column;align-items:center;gap:4px;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="#BFE0CD" stroke-width="1.8"/><path d="M8 8h8M8 12h8M8 16h5" stroke="#BFE0CD" stroke-width="1.6" stroke-linecap="round"/></svg><span style="font-size:9px;color:#BFE0CD;font-weight:600;">Quotes</span></div>
+          <div style="width:52px;padding:9px 0;border-radius:12px;display:flex;flex-direction:column;align-items:center;gap:4px;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M4 20V10M10 20V4M16 20v-7M21 20H3" stroke="#BFE0CD" stroke-width="1.8" stroke-linecap="round"/></svg><span style="font-size:9px;color:#BFE0CD;font-weight:600;">Reports</span></div>
+        </div>
+        <!-- MAIN -->
+        <div style="flex: 1; min-width: 0;">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 18px 28px; border-bottom: 1px solid #E6DDCE; background: #fff;">
+            <div><div style="font-family: 'IBM Plex Serif', serif; font-size: 22px; font-weight: 600;">Salaam, Safar Pilgrim Travel</div><div style="font-size: 13px; color: #7A7263;">Vilnius · AUJ-LT-0421 · IATA 12345678</div></div>
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <div style="display: flex; align-items: center; gap: 8px; background: #DCEDE4; padding: 7px 14px; border-radius: 10px;"><span style="font-size: 12px; color: #156440; font-weight: 600;">Wallet</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 600; color: #0F5132;">€42,180</span></div>
+              <button style="background: #0F5132; color: #fff; border: none; font-family: inherit; font-size: 13px; font-weight: 600; padding: 9px 16px; border-radius: 10px; cursor: pointer;">+ New booking</button>
+              <div style="width: 38px; height: 38px; border-radius: 50%; background: #2F6F8F; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px;">SP</div>
+            </div>
+          </div>
+          <div style="padding: 22px 28px;">
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 18px;">
+              <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4">
+                <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 14px; padding: 16px 18px;">
+                  <div style="font-size: 12.5px; color: #7A7263; font-weight: 500;">{{ k.label }}</div>
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 25px; font-weight: 600; color: #2A2620; margin: 6px 0 4px;">{{ k.value }}</div>
+                  <div style="font-size: 12px; color: {{ k.deltaColor }}; font-weight: 600;">{{ k.delta }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display: grid; grid-template-columns: 1.6fr 1fr; gap: 14px;">
+              <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 14px; overflow: hidden;">
+                <div style="padding: 15px 20px; border-bottom: 1px solid #F1EADD; display: flex; align-items: center; justify-content: space-between;"><span style="font-size: 14px; font-weight: 700;">Recent bookings</span><span style="font-size: 12px; color: #2F6F8F; font-weight: 600;">View all</span></div>
+                <table style="width: 100%; font-size: 13px;">
+                  <thead><tr style="background: #FAF6EF; text-align: left;"><th style="padding: 10px 20px; color: #7A7263; font-weight: 600;">BRN</th><th style="padding: 10px 12px; color: #7A7263; font-weight: 600;">Lead pax</th><th style="padding: 10px 12px; color: #7A7263; font-weight: 600;">Pax</th><th style="padding: 10px 12px; color: #7A7263; font-weight: 600;">Visa</th><th style="padding: 10px 20px; color: #7A7263; font-weight: 600; text-align: right;">Sell</th></tr></thead>
+                  <tbody>
+                    <sc-for list="{{ dashRows }}" as="r" hint-placeholder-count="5">
+                      <tr style="border-top: 1px solid #F1EADD; background: {{ r.zebra }};">
+                        <td style="padding: 11px 20px; font-family: 'IBM Plex Mono', monospace; color: #2F6F8F;">{{ r.brn }}</td>
+                        <td style="padding: 11px 12px; font-weight: 500;">{{ r.name }}</td>
+                        <td style="padding: 11px 12px; color: #4A4337;">{{ r.pax }}</td>
+                        <td style="padding: 11px 12px;"><span style="display:inline-flex;align-items:center;gap:5px;background:{{ r.vbg }};color:{{ r.vfg }};font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:999px;">{{ r.visa }}</span></td>
+                        <td style="padding: 11px 20px; text-align: right; font-family: 'IBM Plex Mono', monospace; font-weight: 500;">{{ r.sell }}</td>
+                      </tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 14px;">
+                <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 14px; padding: 18px;">
+                  <div style="font-size: 14px; font-weight: 700; margin-bottom: 14px;">Visa pipeline</div>
+                  <sc-for list="{{ visaPipe }}" as="v" hint-placeholder-count="4">
+                    <div style="margin-bottom: 12px;">
+                      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px;"><span style="font-size: 12.5px; color: #4A4337;">{{ v.label }}</span><span style="font-size: 12.5px; font-weight: 600; font-family: 'IBM Plex Mono', monospace;">{{ v.count }}</span></div>
+                      <div style="height: 7px; background: #F1EADD; border-radius: 999px; overflow: hidden;"><div style="height: 100%; width: {{ v.pct }}; background: {{ v.color }}; border-radius: 999px;"></div></div>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="background: #0F5132; border-radius: 14px; padding: 18px; color: #EFF6F1;">
+                  <div style="font-size: 13px; color: #9CC6AE;">Credit available</div>
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 26px; font-weight: 600; margin: 4px 0 10px;">€57,820 <span style="font-size: 13px; color: #9CC6AE;">/ €100,000</span></div>
+                  <div style="height: 7px; background: rgba(255,255,255,0.18); border-radius: 999px; overflow: hidden;"><div style="height: 100%; width: 58%; background: #C8A24A; border-radius: 999px;"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ MULTI-PAX BOOKING ============ -->
+    <div>
+      <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #2F6F8F;">B2B-03</span><span style="font-size: 15px; font-weight: 600;">Multi-passenger booking · up to 49 pax</span></div>
+      <div style="border-radius: 16px; overflow: hidden; box-shadow: 0 24px 60px -24px rgba(20,23,15,0.45); border: 1px solid #DBD0BD; background: #FAF6EF;" data-screen-label="B2B Multi-pax">
+        <div style="background: #fff; border-bottom: 1px solid #E6DDCE; padding: 18px 28px; display: flex; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 14px;"><span style="font-size: 18px; color: #4A4337;">←</span><div><div style="font-family: 'IBM Plex Serif', serif; font-size: 21px; font-weight: 600;">Umrah Premium · Group booking</div><div style="font-size: 13px; color: #7A7263;">14 nights · VNO–JED · departs 12 Sep 2026</div></div></div>
+          <div style="display: flex; align-items: center; gap: 10px;"><button style="background: #fff; border: 1.5px solid #C9BCA6; color: #4A4337; font-family: inherit; font-size: 13px; font-weight: 600; padding: 9px 14px; border-radius: 10px; cursor: pointer;">⬆ Import CSV</button><button style="background: #2F6F8F; color: #fff; border: none; font-family: inherit; font-size: 13px; font-weight: 600; padding: 9px 14px; border-radius: 10px; cursor: pointer;">Save draft</button></div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 320px;">
+          <!-- pax table -->
+          <div style="padding: 20px 24px; border-inline-end: 1px solid #E6DDCE;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+              <div style="display: flex; align-items: center; gap: 12px;"><span style="font-size: 14px; font-weight: 700;">Passengers</span><span style="background: #DCEDE4; color: #156440; font-size: 12px; font-weight: 600; padding: 4px 11px; border-radius: 999px;">37 / 49 pax</span></div>
+              <div style="font-size: 12px; color: #7A7263;">Group capacity · 12 seats left</div>
+            </div>
+            <div style="border: 1px solid #E6DDCE; border-radius: 12px; overflow: hidden; background: #fff;">
+              <table style="width: 100%; font-size: 12.5px;">
+                <thead><tr style="background: #FAF6EF; text-align: left;"><th style="padding: 10px 14px; color: #7A7263; font-weight: 600;">#</th><th style="padding: 10px 8px; color: #7A7263; font-weight: 600;">Full name</th><th style="padding: 10px 8px; color: #7A7263; font-weight: 600;">Passport</th><th style="padding: 10px 8px; color: #7A7263; font-weight: 600;">Nat.</th><th style="padding: 10px 8px; color: #7A7263; font-weight: 600;">Visa route</th><th style="padding: 10px 8px; color: #7A7263; font-weight: 600;">Status</th></tr></thead>
+                <tbody>
+                  <sc-for list="{{ paxRows }}" as="p" hint-placeholder-count="7">
+                    <tr style="border-top: 1px solid #F1EADD; background: {{ p.zebra }};">
+                      <td style="padding: 9px 14px; font-family: 'IBM Plex Mono', monospace; color: #7A7263;">{{ p.no }}</td>
+                      <td style="padding: 9px 8px; font-weight: 600;">{{ p.name }}</td>
+                      <td style="padding: 9px 8px; font-family: 'IBM Plex Mono', monospace; color: #4A4337;">{{ p.passport }}</td>
+                      <td style="padding: 9px 8px;">{{ p.nat }}</td>
+                      <td style="padding: 9px 8px;"><span style="display:inline-flex;align-items:center;gap:5px;background:{{ p.rbg }};color:{{ p.rfg }};font-size:11px;font-weight:600;padding:3px 8px;border-radius:999px;"><span style="width:5px;height:5px;border-radius:50%;background:{{ p.rfg }};"></span>{{ p.route }}</span></td>
+                      <td style="padding: 9px 8px; color: {{ p.scolor }}; font-weight: 600;">{{ p.status }}</td>
+                    </tr>
+                  </sc-for>
+                </tbody>
+              </table>
+              <div style="display: flex; gap: 10px; padding: 12px 14px; border-top: 1px solid #F1EADD;"><button style="background: #fff; border: 1.5px dashed #C9BCA6; color: #2F6F8F; font-family: inherit; font-size: 12.5px; font-weight: 600; padding: 8px 14px; border-radius: 9px; cursor: pointer;">+ Add passenger</button><button style="background: #fff; border: 1.5px solid #E6DDCE; color: #4A4337; font-family: inherit; font-size: 12.5px; font-weight: 600; padding: 8px 14px; border-radius: 9px; cursor: pointer;">+ Add 10 rows</button></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; background: #E2EEF3; border-radius: 10px; padding: 10px 14px; margin-top: 12px;"><span style="font-size: 14px;">ℹ️</span><span style="font-size: 12px; color: #265D78; line-height: 1.45;">Pakistani-passport pilgrims are auto-routed to the <strong>agent channel</strong>; EU passports get <strong>e-Visa</strong>. Mixed groups are supported.</span></div>
+          </div>
+          <!-- group summary -->
+          <div style="padding: 20px 22px; background: #FAF6EF;">
+            <div style="font-size: 14px; font-weight: 700; margin-bottom: 14px;">Group summary</div>
+            <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 12px; padding: 16px; margin-bottom: 12px;">
+              <sc-for list="{{ groupLines }}" as="g" hint-placeholder-count="4">
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #F4EEE3;"><span style="font-size: 13px; color: #4A4337;">{{ g.label }}</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 500;">{{ g.value }}</span></div>
+              </sc-for>
+              <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 12px;"><span style="font-size: 14px; font-weight: 700;">Net total</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 19px; font-weight: 700; color: #0F5132;">€78,440</span></div>
+            </div>
+            <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;"><span style="font-size: 13px; color: #4A4337;">Your markup (8%)</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; color: #156440;">+€6,275</span></div>
+              <div style="display: flex; align-items: center; justify-content: space-between;"><span style="font-size: 14px; font-weight: 700;">Client price</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 700;">€84,715</span></div>
+            </div>
+            <button style="width: 100%; background: #0F5132; color: #fff; border: none; font-family: inherit; font-size: 14px; font-weight: 600; padding: 13px; border-radius: 11px; cursor: pointer; margin-bottom: 8px;">Pay from wallet</button>
+            <button style="width: 100%; background: #fff; color: #156440; border: 1.5px solid #C9BCA6; font-family: inherit; font-size: 14px; font-weight: 600; padding: 13px; border-radius: 11px; cursor: pointer;">Hold on credit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ WALLET & CREDIT ============ -->
+    <div>
+      <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #2F6F8F;">B2B-04</span><span style="font-size: 15px; font-weight: 600;">Wallet &amp; credit limit</span></div>
+      <div style="border-radius: 16px; overflow: hidden; box-shadow: 0 24px 60px -24px rgba(20,23,15,0.45); border: 1px solid #DBD0BD; background: #FAF6EF; padding: 24px 28px;" data-screen-label="B2B Wallet">
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 18px;">
+          <div style="background: linear-gradient(135deg, #156440, #0A3D26); border-radius: 16px; padding: 22px; color: #EFF6F1;">
+            <div style="display: flex; align-items: center; justify-content: space-between;"><span style="font-size: 13px; color: #9CC6AE;">Wallet balance</span><span style="font-size: 18px;">💳</span></div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 32px; font-weight: 700; margin: 10px 0 4px;">€42,180.50</div>
+            <div style="font-size: 12px; color: #9CC6AE; font-family: 'IBM Plex Mono', monospace;">≈ ₨13,109,659</div>
+            <button style="margin-top: 16px; background: #C8A24A; color: #2A2010; border: none; font-family: inherit; font-size: 13px; font-weight: 700; padding: 10px 18px; border-radius: 10px; cursor: pointer;">+ Top up wallet</button>
+          </div>
+          <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 22px;">
+            <span style="font-size: 13px; color: #7A7263;">Credit limit</span>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 28px; font-weight: 600; margin: 8px 0 14px;">€100,000</div>
+            <div style="height: 9px; background: #F1EADD; border-radius: 999px; overflow: hidden; margin-bottom: 8px;"><div style="height: 100%; width: 42%; background: #2F6F8F; border-radius: 999px;"></div></div>
+            <div style="display: flex; justify-content: space-between; font-size: 12px;"><span style="color: #7A7263;">Used <strong style="color:#2A2620;">€42,180</strong></span><span style="color: #156440; font-weight: 600;">€57,820 available</span></div>
+          </div>
+          <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 22px;">
+            <span style="font-size: 13px; color: #7A7263;">Payment terms</span>
+            <div style="font-family: 'IBM Plex Serif', serif; font-size: 22px; font-weight: 600; margin: 8px 0 12px;">Net 30 days</div>
+            <div style="display: flex; flex-direction: column; gap: 7px;"><div style="display:flex;align-items:center;justify-content:space-between;font-size:13px;"><span style="color:#4A4337;">Next settlement</span><span style="font-weight:600;">30 Jun 2026</span></div><div style="display:flex;align-items:center;justify-content:space-between;font-size:13px;"><span style="color:#4A4337;">Tier</span><span style="background:#F7EBD3;color:#8A5A12;font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:999px;">Gold partner</span></div></div>
+          </div>
+        </div>
+        <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; overflow: hidden;">
+          <div style="padding: 15px 22px; border-bottom: 1px solid #F1EADD; display: flex; align-items: center; justify-content: space-between;"><span style="font-size: 14px; font-weight: 700;">Wallet transactions</span><div style="display: flex; gap: 8px;"><span style="font-size: 12px; color: #4A4337; border: 1px solid #DBD0BD; padding: 6px 12px; border-radius: 8px;">Last 30 days ▾</span><span style="font-size: 12px; color: #2F6F8F; font-weight: 600; padding: 6px 4px;">Export</span></div></div>
+          <table style="width: 100%; font-size: 13px;">
+            <thead><tr style="background: #FAF6EF; text-align: left;"><th style="padding: 11px 22px; color: #7A7263; font-weight: 600;">Date</th><th style="padding: 11px 12px; color: #7A7263; font-weight: 600;">Description</th><th style="padding: 11px 12px; color: #7A7263; font-weight: 600;">Reference</th><th style="padding: 11px 12px; color: #7A7263; font-weight: 600; text-align: right;">Amount</th><th style="padding: 11px 22px; color: #7A7263; font-weight: 600; text-align: right;">Balance</th></tr></thead>
+            <tbody>
+              <sc-for list="{{ walletTx }}" as="t" hint-placeholder-count="5">
+                <tr style="border-top: 1px solid #F1EADD; background: {{ t.zebra }};">
+                  <td style="padding: 12px 22px; color: #4A4337;">{{ t.date }}</td>
+                  <td style="padding: 12px 12px; font-weight: 500;">{{ t.desc }}</td>
+                  <td style="padding: 12px 12px; font-family: 'IBM Plex Mono', monospace; color: #2F6F8F;">{{ t.ref }}</td>
+                  <td style="padding: 12px 12px; text-align: right; font-family: 'IBM Plex Mono', monospace; font-weight: 600; color: {{ t.amtColor }};">{{ t.amount }}</td>
+                  <td style="padding: 12px 22px; text-align: right; font-family: 'IBM Plex Mono', monospace; color: #4A4337;">{{ t.balance }}</td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ MARKUP CONFIG ============ -->
+    <div>
+      <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #2F6F8F;">B2B-05</span><span style="font-size: 15px; font-weight: 600;">Markup configuration</span></div>
+      <div style="border-radius: 16px; overflow: hidden; box-shadow: 0 24px 60px -24px rgba(20,23,15,0.45); border: 1px solid #DBD0BD; background: #FAF6EF; padding: 24px 28px;" data-screen-label="B2B Markup">
+        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 18px;">
+          <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; overflow: hidden;">
+            <div style="padding: 16px 22px; border-bottom: 1px solid #F1EADD; display: flex; align-items: center; justify-content: space-between;"><div><div style="font-size: 14px; font-weight: 700;">Markup rules</div><div style="font-size: 12px; color: #7A7263;">Applied automatically to net rates before client price</div></div><button style="background: #0F5132; color: #fff; border: none; font-family: inherit; font-size: 13px; font-weight: 600; padding: 9px 14px; border-radius: 9px; cursor: pointer;">+ Add rule</button></div>
+            <table style="width: 100%; font-size: 13px;">
+              <thead><tr style="background: #FAF6EF; text-align: left;"><th style="padding: 11px 22px; color: #7A7263; font-weight: 600;">Applies to</th><th style="padding: 11px 12px; color: #7A7263; font-weight: 600;">Scope</th><th style="padding: 11px 12px; color: #7A7263; font-weight: 600;">Markup</th><th style="padding: 11px 22px; color: #7A7263; font-weight: 600; text-align: right;">Status</th></tr></thead>
+              <tbody>
+                <sc-for list="{{ markupRules }}" as="m" hint-placeholder-count="5">
+                  <tr style="border-top: 1px solid #F1EADD; background: {{ m.zebra }};">
+                    <td style="padding: 13px 22px; font-weight: 600;">{{ m.applies }}</td>
+                    <td style="padding: 13px 12px; color: #4A4337;">{{ m.scope }}</td>
+                    <td style="padding: 13px 12px;"><span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600; color: #156440;">{{ m.markup }}</span></td>
+                    <td style="padding: 13px 22px; text-align: right;"><span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:{{ m.statusColor }};"><span style="width:32px;height:18px;border-radius:999px;background:{{ m.toggleBg }};position:relative;display:inline-block;"><span style="position:absolute;top:2px;{{ m.knobSide }}:2px;width:14px;height:14px;border-radius:50%;background:#fff;"></span></span>{{ m.status }}</span></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+          <!-- editor -->
+          <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 22px;">
+            <div style="font-size: 14px; font-weight: 700; margin-bottom: 16px;">New markup rule</div>
+            <label style="display:block;font-size:12px;font-weight:500;color:#4A4337;margin-bottom:6px;">Applies to</label>
+            <div style="display:flex;align-items:center;justify-content:space-between;border:1.5px solid #DBD0BD;background:#fff;border-radius:10px;padding:11px 13px;font-size:14px;margin-bottom:14px;">Hotel · Umrah packages <span style="color:#7A7263;">▾</span></div>
+            <label style="display:block;font-size:12px;font-weight:500;color:#4A4337;margin-bottom:6px;">Markup type</label>
+            <div style="display:flex;gap:5px;background:#F1EADD;padding:4px;border-radius:10px;margin-bottom:14px;"><span style="flex:1;text-align:center;background:#fff;color:#0F5132;font-size:13px;font-weight:600;padding:8px;border-radius:7px;box-shadow:0 1px 2px rgba(42,38,32,0.08);">Percentage</span><span style="flex:1;text-align:center;color:#7A7263;font-size:13px;font-weight:600;padding:8px;">Fixed €</span></div>
+            <label style="display:block;font-size:12px;font-weight:500;color:#4A4337;margin-bottom:6px;">Value</label>
+            <div style="display:flex;align-items:center;border:1.5px solid #2F6F8F;background:#fff;border-radius:10px;padding:11px 13px;box-shadow:0 0 0 3px rgba(47,111,143,0.12);margin-bottom:18px;"><span style="font-size:16px;font-weight:600;font-family:'IBM Plex Mono',monospace;">8.0</span><span style="margin-inline-start:auto;color:#7A7263;font-weight:600;">%</span></div>
+            <div style="background:#FAF6EF;border-radius:12px;padding:14px;margin-bottom:16px;">
+              <div style="font-size:12px;color:#7A7263;font-weight:600;margin-bottom:10px;">PREVIEW</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;"><span style="font-size:13px;color:#4A4337;">Net rate</span><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;">€6,200</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;"><span style="font-size:13px;color:#4A4337;">Markup +8%</span><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#156440;">+€496</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid #E6DDCE;"><span style="font-size:13px;font-weight:700;">Sell price</span><span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:700;color:#0F5132;">€6,696</span></div>
+            </div>
+            <button style="width:100%;background:#0F5132;color:#fff;border:none;font-family:inherit;font-size:14px;font-weight:600;padding:13px;border-radius:11px;cursor:pointer;">Save rule</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ QUOTATION BUILDER ============ -->
+    <div>
+      <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #2F6F8F;">B2B-06</span><span style="font-size: 15px; font-weight: 600;">Quotation builder</span></div>
+      <div style="border-radius: 16px; overflow: hidden; box-shadow: 0 24px 60px -24px rgba(20,23,15,0.45); border: 1px solid #DBD0BD; background: #FAF6EF; padding: 24px 28px;" data-screen-label="B2B Quotation">
+        <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 18px; align-items: start;">
+          <!-- builder -->
+          <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 22px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;"><div style="font-size: 15px; font-weight: 700;">Quotation #Q-26-0337</div><span style="background: #F1EADD; color: #7A7263; font-size: 12px; font-weight: 600; padding: 4px 11px; border-radius: 999px;">Draft</span></div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px;">
+              <div><label style="display:block;font-size:12px;font-weight:500;color:#4A4337;margin-bottom:6px;">Client name</label><div style="border:1.5px solid #DBD0BD;background:#FAF6EF;border-radius:10px;padding:11px 13px;font-size:14px;">Khan family group</div></div>
+              <div><label style="display:block;font-size:12px;font-weight:500;color:#4A4337;margin-bottom:6px;">Valid until</label><div style="border:1.5px solid #DBD0BD;background:#FAF6EF;border-radius:10px;padding:11px 13px;font-size:14px;">26 Jun 2026</div></div>
+            </div>
+            <div style="font-size: 13px; font-weight: 700; margin-bottom: 10px;">Line items</div>
+            <div style="border: 1px solid #E6DDCE; border-radius: 12px; overflow: hidden; margin-bottom: 14px;">
+              <table style="width: 100%; font-size: 13px;">
+                <thead><tr style="background: #FAF6EF; text-align: left;"><th style="padding: 9px 14px; color: #7A7263; font-weight: 600;">Item</th><th style="padding: 9px 8px; color: #7A7263; font-weight: 600; text-align: center;">Qty</th><th style="padding: 9px 8px; color: #7A7263; font-weight: 600; text-align: right;">Net</th><th style="padding: 9px 14px; color: #7A7263; font-weight: 600; text-align: right;">Sell</th></tr></thead>
+                <tbody>
+                  <sc-for list="{{ quoteLines }}" as="q" hint-placeholder-count="4">
+                    <tr style="border-top: 1px solid #F1EADD;">
+                      <td style="padding: 10px 14px;"><div style="font-weight: 600;">{{ q.item }}</div><div style="font-size: 11.5px; color: #7A7263;">{{ q.sub }}</div></td>
+                      <td style="padding: 10px 8px; text-align: center; font-family: 'IBM Plex Mono', monospace;">{{ q.qty }}</td>
+                      <td style="padding: 10px 8px; text-align: right; font-family: 'IBM Plex Mono', monospace; color: #7A7263;">{{ q.net }}</td>
+                      <td style="padding: 10px 14px; text-align: right; font-family: 'IBM Plex Mono', monospace; font-weight: 600;">{{ q.sell }}</td>
+                    </tr>
+                  </sc-for>
+                </tbody>
+              </table>
+            </div>
+            <button style="background: #fff; border: 1.5px dashed #C9BCA6; color: #2F6F8F; font-family: inherit; font-size: 13px; font-weight: 600; padding: 9px 14px; border-radius: 9px; cursor: pointer;">+ Add line item</button>
+          </div>
+          <!-- preview / totals -->
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 20px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;"><span style="font-size: 14px; font-weight: 700;">Totals</span><div style="display: flex; gap: 4px; background: #F1EADD; padding: 3px; border-radius: 8px;"><span style="background: #fff; color: #0F5132; font-size: 11.5px; font-weight: 600; padding: 4px 10px; border-radius: 6px;">€ EUR</span><span style="color: #7A7263; font-size: 11.5px; font-weight: 600; padding: 4px 10px;">₨ PKR</span></div></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;"><span style="font-size:13px;color:#4A4337;">Net subtotal</span><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;">€18,520</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;"><span style="font-size:13px;color:#4A4337;">Markup (8%)</span><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#156440;">+€1,482</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid #F1EADD;"><span style="font-size:13px;color:#4A4337;">Visa &amp; service</span><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;">€640</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding-top:12px;"><div><div style="font-size:15px;font-weight:700;">Client total</div><div style="font-size:11px;color:#7A7263;font-family:'IBM Plex Mono',monospace;">≈ ₨6,415,790</div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:700;color:#0F5132;">€20,642</span></div>
+            </div>
+            <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 18px; display: flex; gap: 12px; align-items: center;">
+              <div style="width: 46px; height: 60px; border-radius: 6px; background: linear-gradient(160deg,#156440,#0A3D26); display: flex; align-items: flex-end; padding: 6px; box-shadow: 0 4px 10px rgba(15,81,50,0.25);"><span style="font-family: 'IBM Plex Serif', serif; color: #C8A24A; font-size: 11px; font-weight: 600;">AUJ</span></div>
+              <div style="flex: 1;"><div style="font-size: 13px; font-weight: 600;">Branded PDF ready</div><div style="font-size: 12px; color: #7A7263;">Your agency logo &amp; terms applied</div></div>
+            </div>
+            <button style="width: 100%; background: #0F5132; color: #fff; border: none; font-family: inherit; font-size: 14px; font-weight: 600; padding: 13px; border-radius: 11px; cursor: pointer;">Send quote to client</button>
+            <button style="width: 100%; background: #2F6F8F; color: #fff; border: none; font-family: inherit; font-size: 14px; font-weight: 600; padding: 13px; border-radius: 11px; cursor: pointer;">Convert to booking</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ STATEMENTS / EXPORTS ============ -->
+    <div>
+      <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #2F6F8F;">B2B-07</span><span style="font-size: 15px; font-weight: 600;">Statements &amp; exports</span></div>
+      <div style="border-radius: 16px; overflow: hidden; box-shadow: 0 24px 60px -24px rgba(20,23,15,0.45); border: 1px solid #DBD0BD; background: #FAF6EF; padding: 24px 28px;" data-screen-label="B2B Statements">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 18px;">
+          <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <div style="display:flex;align-items:center;gap:8px;border:1.5px solid #DBD0BD;background:#fff;border-radius:10px;padding:9px 13px;font-size:13px;font-weight:500;"><span style="color:#2F6F8F;">📅</span> 01 May – 31 May 2026</div>
+            <span style="border:1.5px solid #DBD0BD;background:#fff;border-radius:10px;padding:9px 13px;font-size:13px;font-weight:500;">All products ▾</span>
+            <span style="border:1.5px solid #DBD0BD;background:#fff;border-radius:10px;padding:9px 13px;font-size:13px;font-weight:500;">All status ▾</span>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button style="background:#fff;border:1.5px solid #C9BCA6;color:#4A4337;font-family:inherit;font-size:13px;font-weight:600;padding:9px 14px;border-radius:10px;cursor:pointer;">⬇ CSV</button>
+            <button style="background:#fff;border:1.5px solid #C9BCA6;color:#4A4337;font-family:inherit;font-size:13px;font-weight:600;padding:9px 14px;border-radius:10px;cursor:pointer;">⬇ XLSX</button>
+            <button style="background:#0F5132;color:#fff;border:none;font-family:inherit;font-size:13px;font-weight:600;padding:9px 14px;border-radius:10px;cursor:pointer;">⬇ Statement PDF</button>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 18px;">
+          <sc-for list="{{ stmtKpis }}" as="s" hint-placeholder-count="4">
+            <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 14px; padding: 15px 18px;"><div style="font-size: 12.5px; color: #7A7263;">{{ s.label }}</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 600; margin-top: 5px; color: {{ s.color }};">{{ s.value }}</div></div>
+          </sc-for>
+        </div>
+        <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; overflow: hidden;">
+          <table style="width: 100%; font-size: 13px;">
+            <thead><tr style="background: #FAF6EF; text-align: left;"><th style="padding: 12px 22px; color: #7A7263; font-weight: 600;">Date</th><th style="padding: 12px 12px; color: #7A7263; font-weight: 600;">Reference</th><th style="padding: 12px 12px; color: #7A7263; font-weight: 600;">Description</th><th style="padding: 12px 12px; color: #7A7263; font-weight: 600; text-align: right;">Debit</th><th style="padding: 12px 12px; color: #7A7263; font-weight: 600; text-align: right;">Credit</th><th style="padding: 12px 22px; color: #7A7263; font-weight: 600; text-align: right;">Balance</th></tr></thead>
+            <tbody>
+              <sc-for list="{{ stmtRows }}" as="r" hint-placeholder-count="6">
+                <tr style="border-top: 1px solid #F1EADD; background: {{ r.zebra }};">
+                  <td style="padding: 12px 22px; color: #4A4337; white-space: nowrap;">{{ r.date }}</td>
+                  <td style="padding: 12px 12px; font-family: 'IBM Plex Mono', monospace; color: #2F6F8F;">{{ r.ref }}</td>
+                  <td style="padding: 12px 12px; font-weight: 500;">{{ r.desc }}</td>
+                  <td style="padding: 12px 12px; text-align: right; font-family: 'IBM Plex Mono', monospace; color: #B23A2E;">{{ r.debit }}</td>
+                  <td style="padding: 12px 12px; text-align: right; font-family: 'IBM Plex Mono', monospace; color: #156440;">{{ r.credit }}</td>
+                  <td style="padding: 12px 22px; text-align: right; font-family: 'IBM Plex Mono', monospace; font-weight: 600;">{{ r.balance }}</td>
+                </tr>
+              </sc-for>
+            </tbody>
+            <tfoot><tr style="background: #DCEDE4; border-top: 2px solid #BBD9C6;"><td colspan="5" style="padding: 13px 22px; font-weight: 700; color: #0A3D26;">Closing balance · 31 May 2026</td><td style="padding: 13px 22px; text-align: right; font-family: 'IBM Plex Mono', monospace; font-weight: 700; color: #0A3D26; font-size: 14px;">€42,180.50</td></tr></tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1320, &quot;height&quot;: 980}}">
+class Component extends DCLogic {
+  renderVals() {
+    const z = '#fff', zb = '#FBF8F2';
+    return {
+      kpis: [
+        {label:'Bookings · MTD',value:'48',delta:'▲ 12% vs last',deltaColor:'#156440'},
+        {label:'GMV · MTD',value:'€312k',delta:'▲ 8% vs last',deltaColor:'#156440'},
+        {label:'Pilgrims booked',value:'604',delta:'▲ 21% vs last',deltaColor:'#156440'},
+        {label:'Avg. margin',value:'7.8%',delta:'▼ 0.3pts',deltaColor:'#B23A2E'}
+      ],
+      dashRows: [
+        {brn:'BRN-26-00481',name:'Ayesha Khan',pax:'4',visa:'e-Visa',vbg:'#DCEDE4',vfg:'#156440',sell:'€9,920',zebra:z},
+        {brn:'BRN-26-00478',name:'M. Rized',pax:'37',visa:'Mixed',vbg:'#E2EEF3',vfg:'#265D78',sell:'€84,715',zebra:zb},
+        {brn:'BRN-26-00475',name:'Saleem Group',pax:'12',visa:'Agent',vbg:'#E2EEF3',vfg:'#265D78',sell:'€26,400',zebra:z},
+        {brn:'BRN-26-00471',name:'F. Noor',pax:'2',visa:'Issued',vbg:'#DCEDE4',vfg:'#156440',sell:'€4,240',zebra:zb},
+        {brn:'BRN-26-00468',name:'Hajj Group A',pax:'24',visa:'Pending',vbg:'#F7EBD3',vfg:'#8A5A12',sell:'€153,600',zebra:z}
+      ],
+      visaPipe: [
+        {label:'e-Visa issued',count:'182',pct:'74%',color:'#1C7A4F'},
+        {label:'Agent channel · in review',count:'96',pct:'42%',color:'#2F6F8F'},
+        {label:'Action needed',count:'14',pct:'18%',color:'#B5791E'},
+        {label:'Rejected · re-apply',count:'3',pct:'6%',color:'#B23A2E'}
+      ],
+      paxRows: [
+        {no:'01',name:'Ayesha Khan',passport:'LT 1234567',nat:'🇱🇹 LT',route:'e-Visa',rbg:'#DCEDE4',rfg:'#156440',status:'Verified',scolor:'#156440',zebra:z},
+        {no:'02',name:'Bilal Ahmed',passport:'AB 1234567',nat:'🇵🇰 PK',route:'Agent',rbg:'#E2EEF3',rfg:'#265D78',status:'Docs needed',scolor:'#8A5A12',zebra:zb},
+        {no:'03',name:'Fatima Noor',passport:'LT 7654321',nat:'🇱🇹 LT',route:'e-Visa',rbg:'#DCEDE4',rfg:'#156440',status:'Verified',scolor:'#156440',zebra:z},
+        {no:'04',name:'Imran Yousuf',passport:'CD 9988776',nat:'🇵🇰 PK',route:'Agent',rbg:'#E2EEF3',rfg:'#265D78',status:'Verified',scolor:'#156440',zebra:zb},
+        {no:'05',name:'Sana Malik',passport:'LV 4567123',nat:'🇱🇻 LV',route:'e-Visa',rbg:'#DCEDE4',rfg:'#156440',status:'Verified',scolor:'#156440',zebra:z},
+        {no:'06',name:'Yusuf Raza',passport:'PK 3344556',nat:'🇵🇰 PK',route:'Agent',rbg:'#E2EEF3',rfg:'#265D78',status:'Submitted',scolor:'#265D78',zebra:zb},
+        {no:'07',name:'Hira Shah',passport:'EE 1122334',nat:'🇪🇪 EE',route:'e-Visa',rbg:'#DCEDE4',rfg:'#156440',status:'Verified',scolor:'#156440',zebra:z}
+      ],
+      groupLines: [
+        {label:'Hotel · 14 nts × 19 rms',value:'€42,840'},
+        {label:'Flights · 37 pax',value:'€23,680'},
+        {label:'Ground & transfers',value:'€8,920'},
+        {label:'Visa fees · 37 pax',value:'€3,000'}
+      ],
+      walletTx: [
+        {date:'31 May 2026',desc:'Booking · Hajj Group A',ref:'BRN-26-00468',amount:'−€153,600',amtColor:'#B23A2E',balance:'€42,180',zebra:z},
+        {date:'28 May 2026',desc:'Wallet top-up · SEPA',ref:'TOP-26-0091',amount:'+€100,000',amtColor:'#156440',balance:'€195,780',zebra:zb},
+        {date:'24 May 2026',desc:'Booking · Saleem Group',ref:'BRN-26-00475',amount:'−€24,200',amtColor:'#B23A2E',balance:'€95,780',zebra:z},
+        {date:'19 May 2026',desc:'Refund · cancelled pax',ref:'REF-26-0044',amount:'+€2,120',amtColor:'#156440',balance:'€119,980',zebra:zb},
+        {date:'12 May 2026',desc:'Booking · Khan family',ref:'BRN-26-00481',amount:'−€9,180',amtColor:'#B23A2E',balance:'€117,860',zebra:z}
+      ],
+      markupRules: [
+        {applies:'All hotels',scope:'Default · all packages',markup:'+6.0%',status:'On',statusColor:'#156440',toggleBg:'#1C7A4F',knobSide:'right',zebra:z},
+        {applies:'Umrah packages',scope:'Hotel + ground',markup:'+8.0%',status:'On',statusColor:'#156440',toggleBg:'#1C7A4F',knobSide:'right',zebra:zb},
+        {applies:'Flights',scope:'All carriers',markup:'+€45 / pax',status:'On',statusColor:'#156440',toggleBg:'#1C7A4F',knobSide:'right',zebra:z},
+        {applies:'Hajj 2026',scope:'Premium tier',markup:'+12.0%',status:'On',statusColor:'#156440',toggleBg:'#1C7A4F',knobSide:'right',zebra:zb},
+        {applies:'Ziyarat Iraq',scope:'Ground only',markup:'+5.0%',status:'Off',statusColor:'#A6A293',toggleBg:'#D6C9B4',knobSide:'left',zebra:z}
+      ],
+      quoteLines: [
+        {item:'Swissôtel Makkah · 5★',sub:'14 nights · twin · 4 rooms',qty:'×4',net:'€6,200',sell:'€6,696'},
+        {item:'Flights VNO–JED',sub:'Saudia · direct',qty:'×8',net:'€2,560',sell:'€2,920'},
+        {item:'Madinah transfer + Ziyarat',sub:'Private GMC',qty:'×1',net:'€760',sell:'€821'},
+        {item:'Guided Ziyarat Makkah',sub:'Urdu guide · half day',qty:'×1',net:'€400',sell:'€432'}
+      ],
+      stmtKpis: [
+        {label:'Opening balance',value:'€117,860',color:'#2A2620'},
+        {label:'Total debits',value:'−€177,800',color:'#B23A2E'},
+        {label:'Total credits',value:'+€102,120',color:'#156440'},
+        {label:'Closing balance',value:'€42,180',color:'#0F5132'}
+      ],
+      stmtRows: [
+        {date:'31 May 2026',ref:'BRN-26-00468',desc:'Hajj Group A · 24 pax',debit:'€153,600',credit:'—',balance:'€42,180',zebra:z},
+        {date:'28 May 2026',ref:'TOP-26-0091',desc:'Wallet top-up · SEPA',debit:'—',credit:'€100,000',balance:'€195,780',zebra:zb},
+        {date:'24 May 2026',ref:'BRN-26-00475',desc:'Saleem Group · 12 pax',debit:'€24,200',credit:'—',balance:'€95,780',zebra:z},
+        {date:'19 May 2026',ref:'REF-26-0044',desc:'Refund · cancelled pax',debit:'—',credit:'€2,120',balance:'€119,980',zebra:zb},
+        {date:'12 May 2026',ref:'BRN-26-00481',desc:'Khan family · 4 pax',debit:'€9,180',credit:'—',balance:'€117,860',zebra:z},
+        {date:'01 May 2026',ref:'OPEN-26-05',desc:'Opening balance',debit:'—',credit:'—',balance:'€117,860',zebra:zb}
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

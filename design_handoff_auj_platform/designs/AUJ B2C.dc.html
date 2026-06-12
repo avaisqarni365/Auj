@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  .auj-screen::-webkit-scrollbar { display: none; }
+</style>
+</helmet>
+
+<div style="background: #ECE7DD; color: #2A2620; font-family: 'IBM Plex Sans', system-ui, sans-serif; min-height: 100vh; -webkit-font-smoothing: antialiased;">
+
+  <!-- Page header -->
+  <header style="position: sticky; top: 0; z-index: 50; background: rgba(236,231,221,0.86); backdrop-filter: blur(12px); border-bottom: 1px solid #DBD0BD;">
+    <div style="max-width: 1400px; margin: 0 auto; padding: 14px 28px; display: flex; align-items: center; justify-content: space-between;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="width: 34px; height: 34px; border-radius: 10px; background: #0F5132; display: flex; align-items: center; justify-content: center;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></svg>
+        </div>
+        <div>
+          <span style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: 18px; letter-spacing: 0.04em;">AUJ</span>
+          <span style="font-size: 13px; color: #7A7263; margin-inline-start: 10px;">B2C booking site · mobile-first</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <a href="AUJ Design System.dc.html" style="text-decoration: none; font-size: 13px; font-weight: 600; color: #4A4337; padding: 8px 14px; border: 1px solid #C9BCA6; border-radius: 9px; background: #fff;">← Design system</a>
+        <a href="AUJ B2B.dc.html" style="text-decoration: none; font-size: 13px; font-weight: 600; color: #fff; padding: 8px 14px; background: #0F5132; border-radius: 9px;">Agent portal →</a>
+      </div>
+    </div>
+  </header>
+
+  <div style="max-width: 1400px; margin: 0 auto; padding: 40px 28px 80px;">
+    <div style="display: flex; flex-wrap: wrap; gap: 48px 40px; align-items: flex-start; justify-content: center;">
+
+      <!-- ============ 1. HOME ============ -->
+      <div>
+        <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #2F6F8F;">B2C-01</span>
+          <span style="font-size: 15px; font-weight: 600;">Home &amp; search</span>
+        </div>
+        <div style="width: 392px; background: #14170F; border-radius: 44px; padding: 10px; box-shadow: 0 30px 60px -20px rgba(20,23,15,0.5);">
+          <div class="auj-screen" data-screen-label="B2C Home" style="width: 372px; height: 808px; background: #FAF6EF; border-radius: 36px; overflow-y: auto;">
+            <!-- status bar -->
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 24px 6px; font-size: 13px; font-weight: 600;">
+              <span>9:41</span>
+              <span style="display: flex; gap: 5px; align-items: center;"><span style="font-size:11px;">EN</span> ▮▮▮ ⌁ ▦</span>
+            </div>
+            <!-- app bar -->
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 20px 4px;">
+              <div style="display: flex; align-items: center; gap: 9px;">
+                <div style="width: 30px; height: 30px; border-radius: 9px; background: #0F5132; display: flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></svg></div>
+                <span style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: 17px; letter-spacing: 0.04em;">AUJ</span>
+              </div>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 600; color: #4A4337; border: 1px solid #DBD0BD; padding: 5px 10px; border-radius: 8px; background: #fff;">🌐 EN</span>
+                <span style="font-size: 22px; line-height: 1; color: #4A4337;">☰</span>
+              </div>
+            </div>
+            <!-- hero -->
+            <div style="padding: 18px 20px 4px;">
+              <div style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: 30px; line-height: 1.08; letter-spacing: -0.02em;">Begin a sacred journey, with calm.</div>
+              <div style="font-size: 14px; color: #7A7263; margin-top: 8px; line-height: 1.5;">Umrah, Hajj &amp; Ziyarat from across the EU — hotel, transport, ground &amp; flights in one place.</div>
+            </div>
+            <!-- search card -->
+            <div style="margin: 16px 16px 0; background: #fff; border: 1px solid #E6DDCE; border-radius: 20px; padding: 16px; box-shadow: 0 8px 24px rgba(42,38,32,0.07);">
+              <div style="display: flex; gap: 5px; background: #F1EADD; padding: 4px; border-radius: 11px; margin-bottom: 14px;">
+                <span style="flex:1; text-align:center; background: #fff; color: #0F5132; font-size: 13px; font-weight: 600; padding: 8px; border-radius: 8px; box-shadow: 0 1px 2px rgba(42,38,32,0.08);">Umrah</span>
+                <span style="flex:1; text-align:center; color: #7A7263; font-size: 13px; font-weight: 600; padding: 8px;">Hajj</span>
+                <span style="flex:1; text-align:center; color: #7A7263; font-size: 13px; font-weight: 600; padding: 8px;">Ziyarat</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                <div><div style="font-size: 11px; color: #7A7263; font-weight: 500; margin-bottom: 5px;">FROM</div><div style="display:flex; align-items:center; justify-content:space-between; border: 1.5px solid #DBD0BD; border-radius: 10px; padding: 10px 12px; font-size: 14px; font-weight: 500;">Vilnius<span style="color:#7A7263;">▾</span></div></div>
+                <div><div style="font-size: 11px; color: #7A7263; font-weight: 500; margin-bottom: 5px;">DESTINATION</div><div style="display:flex; align-items:center; justify-content:space-between; border: 1.5px solid #DBD0BD; border-radius: 10px; padding: 10px 12px; font-size: 14px; font-weight: 500;">Makkah<span style="color:#7A7263;">▾</span></div></div>
+              </div>
+              <div style="margin-bottom: 10px;"><div style="font-size: 11px; color: #7A7263; font-weight: 500; margin-bottom: 5px;">DATES</div><div style="display:flex; align-items:center; gap: 8px; border: 1.5px solid #DBD0BD; border-radius: 10px; padding: 10px 12px; font-size: 14px; font-weight: 500;"><span style="color:#2F6F8F;">📅</span> 12 – 26 Sep 2026 · 14 nights</div></div>
+              <div style="margin-bottom: 14px;"><div style="font-size: 11px; color: #7A7263; font-weight: 500; margin-bottom: 5px;">PILGRIMS</div>
+                <div style="display:flex; align-items:center; justify-content:space-between; border: 1.5px solid #DBD0BD; border-radius: 10px; padding: 6px 8px;">
+                  <button style="width:30px;height:30px;border-radius:8px;border:1px solid #E6DDCE;background:#FAF6EF;color:#156440;font-size:17px;cursor:pointer;">−</button>
+                  <span style="font-size: 14px; font-weight: 600;">4 adults · 0 children</span>
+                  <button style="width:30px;height:30px;border-radius:8px;border:none;background:#0F5132;color:#fff;font-size:17px;cursor:pointer;">+</button>
+                </div>
+              </div>
+              <button style="width: 100%; cursor: pointer; background: #0F5132; color: #fff; border: none; font-family: inherit; font-size: 15px; font-weight: 600; padding: 14px; border-radius: 12px; box-shadow: 0 6px 16px rgba(15,81,50,0.25);">Search 38 packages</button>
+            </div>
+            <!-- popular -->
+            <div style="padding: 22px 20px 6px; display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 15px; font-weight: 600;">Popular from Vilnius</span>
+              <span style="font-size: 13px; color: #2F6F8F; font-weight: 600;">See all</span>
+            </div>
+            <div style="display: flex; gap: 12px; padding: 4px 20px 16px; overflow-x: auto;">
+              <sc-for list="{{ popular }}" as="p" hint-placeholder-count="2">
+                <div style="flex: 0 0 200px; background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; overflow: hidden;">
+                  <div style="height: 104px; background: {{ p.img }}; position: relative;"><span style="position:absolute; top:8px; inset-inline-start:8px; background: rgba(255,255,255,0.92); font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 999px; color: {{ p.vfg }};">{{ p.visa }}</span></div>
+                  <div style="padding: 11px 12px;">
+                    <div style="font-size: 14px; font-weight: 600;">{{ p.name }}</div>
+                    <div style="font-size: 12px; color: #7A7263; margin: 2px 0 8px;">{{ p.meta }}</div>
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; color: #0F5132;">{{ p.price }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <!-- trust -->
+            <div style="margin: 4px 16px 20px; background: #DCEDE4; border-radius: 14px; padding: 13px 16px; display: flex; gap: 16px; justify-content: space-between;">
+              <div style="text-align: center;"><div style="font-size: 16px;">🛡️</div><div style="font-size: 11px; color: #156440; font-weight: 600; margin-top: 3px;">Licensed<br>operator</div></div>
+              <div style="text-align: center;"><div style="font-size: 16px;">🪪</div><div style="font-size: 11px; color: #156440; font-weight: 600; margin-top: 3px;">e-Visa<br>guidance</div></div>
+              <div style="text-align: center;"><div style="font-size: 16px;">☎️</div><div style="font-size: 11px; color: #156440; font-weight: 600; margin-top: 3px;">24/7<br>support</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ 2. RESULTS ============ -->
+      <div>
+        <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #2F6F8F;">B2C-02</span>
+          <span style="font-size: 15px; font-weight: 600;">Results</span>
+        </div>
+        <div style="width: 392px; background: #14170F; border-radius: 44px; padding: 10px; box-shadow: 0 30px 60px -20px rgba(20,23,15,0.5);">
+          <div class="auj-screen" data-screen-label="B2C Results" style="width: 372px; height: 808px; background: #FAF6EF; border-radius: 36px; overflow-y: auto;">
+            <div style="position: sticky; top: 0; background: #FAF6EF; z-index: 5; padding: 12px 20px 0;">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 10px;">
+                <span style="font-size: 20px; color: #4A4337;">←</span>
+                <div style="text-align: center;"><div style="font-size: 14px; font-weight: 600;">Umrah · Makkah</div><div style="font-size: 12px; color: #7A7263;">14 nights · 4 pilgrims</div></div>
+                <span style="font-size: 13px; color: #2F6F8F; font-weight: 600;">Edit</span>
+              </div>
+              <div style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px;">
+                <span style="flex:0 0 auto; background: #0F5132; color: #fff; font-size: 12px; font-weight: 600; padding: 7px 12px; border-radius: 999px;">⚙ Filters · 2</span>
+                <span style="flex:0 0 auto; background: #fff; border: 1px solid #DBD0BD; color: #4A4337; font-size: 12px; font-weight: 600; padding: 7px 12px; border-radius: 999px;">≤ €2,500</span>
+                <span style="flex:0 0 auto; background: #fff; border: 1px solid #DBD0BD; color: #4A4337; font-size: 12px; font-weight: 600; padding: 7px 12px; border-radius: 999px;">5★ hotels</span>
+                <span style="flex:0 0 auto; background: #fff; border: 1px solid #DBD0BD; color: #4A4337; font-size: 12px; font-weight: 600; padding: 7px 12px; border-radius: 999px;">Near Haram</span>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 4px 20px 8px;">
+              <span style="font-size: 13px; color: #7A7263;"><strong style="color:#2A2620;">38 packages</strong> found</span>
+              <span style="font-size: 13px; font-weight: 600; color: #4A4337;">Sort: Recommended ▾</span>
+            </div>
+            <div style="padding: 0 16px 20px; display: flex; flex-direction: column; gap: 14px;">
+              <sc-for list="{{ results }}" as="r" hint-placeholder-count="3">
+                <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 18px; overflow: hidden; box-shadow: 0 4px 14px rgba(42,38,32,0.05);">
+                  <div style="height: 130px; background: {{ r.img }}; position: relative;">
+                    <span style="position:absolute; top:10px; inset-inline-start:10px; display:inline-flex; align-items:center; gap:5px; background: {{ r.vbg }}; color: {{ r.vfg }}; font-size: 12px; font-weight: 600; padding: 5px 11px; border-radius: 999px;"><span style="width:6px;height:6px;border-radius:50%;background:{{ r.vfg }};"></span>{{ r.visa }}</span>
+                    <span style="position:absolute; top:10px; inset-inline-end:10px; background: rgba(255,255,255,0.92); font-size: 18px; padding: 4px 7px; border-radius: 10px;">♡</span>
+                  </div>
+                  <div style="padding: 14px 16px 16px;">
+                    <div style="display: flex; align-items: start; justify-content: space-between; gap: 10px;">
+                      <div>
+                        <div style="font-size: 16px; font-weight: 600; line-height: 1.2;">{{ r.name }}</div>
+                        <div style="font-size: 12px; color: #B5791E; margin-top: 3px;">{{ r.stars }}</div>
+                      </div>
+                      <div style="text-align: end; flex-shrink: 0;"><div style="font-family: 'IBM Plex Mono', monospace; font-size: 18px; font-weight: 600; color: #0F5132;">{{ r.price }}</div><div style="font-size: 11px; color: #7A7263;">per pilgrim</div></div>
+                    </div>
+                    <div style="display: flex; gap: 6px; flex-wrap: wrap; margin: 11px 0 14px;">
+                      <span style="font-size: 11.5px; color: #4A4337; background: #F1EADD; padding: 4px 9px; border-radius: 7px;">🕋 {{ r.dist }}</span>
+                      <span style="font-size: 11.5px; color: #4A4337; background: #F1EADD; padding: 4px 9px; border-radius: 7px;">✈ {{ r.flight }}</span>
+                      <span style="font-size: 11.5px; color: #4A4337; background: #F1EADD; padding: 4px 9px; border-radius: 7px;">🚌 Transfers</span>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                      <button style="flex: 1; cursor: pointer; background: #fff; color: #156440; border: 1.5px solid #C9BCA6; font-family: inherit; font-size: 13px; font-weight: 600; padding: 11px; border-radius: 10px;">Details</button>
+                      <button style="flex: 1.4; cursor: pointer; background: #0F5132; color: #fff; border: none; font-family: inherit; font-size: 13px; font-weight: 600; padding: 11px; border-radius: 10px;">Build package</button>
+                    </div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ 3. PACKAGE BUILDER ============ -->
+      <div>
+        <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #2F6F8F;">B2C-03</span>
+          <span style="font-size: 15px; font-weight: 600;">Package builder · one cart</span>
+        </div>
+        <div style="width: 392px; background: #14170F; border-radius: 44px; padding: 10px; box-shadow: 0 30px 60px -20px rgba(20,23,15,0.5);">
+          <div class="auj-screen" data-screen-label="B2C Builder" style="width: 372px; height: 808px; background: #FAF6EF; border-radius: 36px; overflow-y: auto; position: relative;">
+            <div style="position: sticky; top: 0; background: #FAF6EF; z-index: 5; padding: 14px 20px 12px; border-bottom: 1px solid #E6DDCE;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 20px; color: #4A4337;">←</span>
+                <span style="font-size: 15px; font-weight: 600;">Build your package</span>
+                <span style="font-size: 13px; color: #2F6F8F; font-weight: 600;">Reset</span>
+              </div>
+              <div style="display: flex; gap: 6px; margin-top: 12px;">
+                <sc-for list="{{ builderSteps }}" as="s" hint-placeholder-count="4">
+                  <div style="flex: 1; text-align: center;">
+                    <div style="height: 4px; border-radius: 999px; background: {{ s.bar }};"></div>
+                    <div style="font-size: 11px; font-weight: 600; color: {{ s.fg }}; margin-top: 6px;">{{ s.label }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="padding: 16px; display: flex; flex-direction: column; gap: 12px; padding-bottom: 130px;">
+              <sc-for list="{{ cartItems }}" as="c" hint-placeholder-count="4">
+                <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 14px; display: flex; gap: 13px;">
+                  <div style="width: 48px; height: 48px; border-radius: 12px; background: {{ c.iconBg }}; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;">{{ c.icon }}</div>
+                  <div style="flex: 1; min-width: 0;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                      <span style="font-size: 11px; font-weight: 600; color: #7A7263; letter-spacing: 0.08em;">{{ c.kind }}</span>
+                      <span style="font-size: 12px; color: #2F6F8F; font-weight: 600;">Swap</span>
+                    </div>
+                    <div style="font-size: 15px; font-weight: 600; margin: 2px 0 3px;">{{ c.title }}</div>
+                    <div style="font-size: 12.5px; color: #7A7263; line-height: 1.45;">{{ c.detail }}</div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 9px;">
+                      <span style="display:inline-flex; align-items:center; gap:5px; font-size: 12px; color: #156440; font-weight: 600;">✓ {{ c.included }}</span>
+                      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 600;">{{ c.price }}</span>
+                    </div>
+                  </div>
+                </div>
+              </sc-for>
+              <div style="border: 1.5px dashed #C9BCA6; border-radius: 16px; padding: 14px; text-align: center; font-size: 13px; font-weight: 600; color: #2F6F8F;">+ Add ground transport or excursions</div>
+            </div>
+            <!-- sticky cart -->
+            <div style="position: sticky; bottom: 0; background: #fff; border-top: 1px solid #E6DDCE; padding: 14px 18px 18px; box-shadow: 0 -8px 24px rgba(42,38,32,0.08);">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                <span style="font-size: 13px; color: #7A7263;">4 pilgrims · 14 nights</span>
+                <span style="font-size: 12px; color: #2F6F8F; font-weight: 600;">View breakdown</span>
+              </div>
+              <div style="display: flex; align-items: end; justify-content: space-between; margin-bottom: 12px;">
+                <span style="font-size: 15px; font-weight: 600;">Total</span>
+                <span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 24px; font-weight: 700; color: #0F5132;">€9,920</span> <span style="font-size: 12px; color: #7A7263;">≈ ₨3.08M</span></span>
+              </div>
+              <button style="width: 100%; cursor: pointer; background: #0F5132; color: #fff; border: none; font-family: inherit; font-size: 15px; font-weight: 600; padding: 14px; border-radius: 12px;">Continue to pilgrims</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ 4. PILGRIM & DOCS / VISA ROUTE ============ -->
+      <div>
+        <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #2F6F8F;">B2C-04</span>
+          <span style="font-size: 15px; font-weight: 600;">Pilgrim &amp; documents · visa-route</span>
+        </div>
+        <div style="width: 392px; background: #14170F; border-radius: 44px; padding: 10px; box-shadow: 0 30px 60px -20px rgba(20,23,15,0.5);">
+          <div class="auj-screen" data-screen-label="B2C Documents" style="width: 372px; height: 808px; background: #FAF6EF; border-radius: 36px; overflow-y: auto;">
+            <div style="position: sticky; top: 0; background: #FAF6EF; z-index: 5; padding: 14px 20px 12px; border-bottom: 1px solid #E6DDCE;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 20px; color: #4A4337;">←</span>
+                <span style="font-size: 15px; font-weight: 600;">Pilgrim 1 of 4</span>
+                <span style="font-size: 13px; color: #7A7263;">Save</span>
+              </div>
+              <div style="display: flex; gap: 5px; margin-top: 12px;">
+                <span style="flex:1; height: 4px; background: #0F5132; border-radius: 999px;"></span>
+                <span style="flex:1; height: 4px; background: #E6DDCE; border-radius: 999px;"></span>
+                <span style="flex:1; height: 4px; background: #E6DDCE; border-radius: 999px;"></span>
+                <span style="flex:1; height: 4px; background: #E6DDCE; border-radius: 999px;"></span>
+              </div>
+            </div>
+            <div style="padding: 16px;">
+              <!-- VISA ROUTE INDICATOR -->
+              <div style="background: linear-gradient(135deg, #DCEDE4, #EFF6F1); border: 1px solid #BBD9C6; border-radius: 16px; padding: 15px; margin-bottom: 16px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                  <span style="font-size: 11px; font-weight: 700; color: #156440; letter-spacing: 0.1em;">VISA ROUTE</span>
+                  <span style="font-size: 11px; color: #7A7263;">· auto-detected from nationality</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <div style="width: 42px; height: 42px; border-radius: 12px; background: #1C7A4F; display: flex; align-items: center; justify-content: center; font-size: 20px;">🪪</div>
+                  <div style="flex: 1;">
+                    <div style="font-size: 15px; font-weight: 700; color: #0A3D26;">e-Visa route</div>
+                    <div style="font-size: 12.5px; color: #156440; line-height: 1.4;">Lithuanian passport — issued online in ~3 days. No agent appointment needed.</div>
+                  </div>
+                </div>
+                <div style="display: flex; gap: 6px; margin-top: 12px; background: rgba(255,255,255,0.6); padding: 4px; border-radius: 10px;">
+                  <span style="flex:1; text-align:center; background: #1C7A4F; color: #fff; font-size: 12px; font-weight: 600; padding: 7px; border-radius: 7px;">● e-Visa</span>
+                  <span style="flex:1; text-align:center; color: #265D78; font-size: 12px; font-weight: 600; padding: 7px;">Agent channel</span>
+                </div>
+              </div>
+
+              <div style="font-size: 13px; font-weight: 700; color: #4A4337; margin-bottom: 12px;">Pilgrim details</div>
+              <label style="display:block; font-size: 12px; font-weight: 500; color: #4A4337; margin-bottom: 6px;">Full name (as in passport)</label>
+              <div style="border: 1.5px solid #DBD0BD; background: #fff; border-radius: 10px; padding: 12px 13px; font-size: 14px; margin-bottom: 12px;">Ayesha Khan</div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+                <div><label style="display:block; font-size: 12px; font-weight: 500; color: #4A4337; margin-bottom: 6px;">Nationality</label><div style="display:flex; align-items:center; justify-content:space-between; border: 1.5px solid #DBD0BD; background: #fff; border-radius: 10px; padding: 12px 13px; font-size: 14px;">🇱🇹 Lithuania <span style="color:#7A7263;">▾</span></div></div>
+                <div><label style="display:block; font-size: 12px; font-weight: 500; color: #4A4337; margin-bottom: 6px;">Date of birth</label><div style="border: 1.5px solid #DBD0BD; background: #fff; border-radius: 10px; padding: 12px 13px; font-size: 14px;">04 / 11 / 1990</div></div>
+              </div>
+              <label style="display:block; font-size: 12px; font-weight: 500; color: #4A4337; margin-bottom: 6px;">Passport number</label>
+              <div style="border: 1.5px solid #DBD0BD; background: #fff; border-radius: 10px; padding: 12px 13px; font-size: 14px; margin-bottom: 16px; font-family: 'IBM Plex Mono', monospace;">LT 1234567</div>
+
+              <div style="font-size: 13px; font-weight: 700; color: #4A4337; margin-bottom: 10px;">Documents</div>
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 12px; border: 1.5px solid #BBD9C6; background: #EFF6F1; border-radius: 12px; padding: 12px 14px;">
+                  <div style="width: 38px; height: 38px; border-radius: 9px; background: #DCEDE4; display: flex; align-items: center; justify-content: center; font-size: 17px;">📄</div>
+                  <div style="flex: 1;"><div style="font-size: 13.5px; font-weight: 600;">Passport scan</div><div style="font-size: 11.5px; color: #156440;">passport_khan.jpg · uploaded</div></div>
+                  <span style="color: #1C7A4F; font-size: 18px;">✓</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px; border: 1.5px dashed #C9BCA6; background: #fff; border-radius: 12px; padding: 12px 14px;">
+                  <div style="width: 38px; height: 38px; border-radius: 9px; background: #F1EADD; display: flex; align-items: center; justify-content: center; font-size: 17px;">📷</div>
+                  <div style="flex: 1;"><div style="font-size: 13.5px; font-weight: 600;">Visa photo</div><div style="font-size: 11.5px; color: #7A7263;">White background · 45×35mm</div></div>
+                  <span style="font-size: 12px; color: #2F6F8F; font-weight: 600;">Upload</span>
+                </div>
+              </div>
+              <button style="width: 100%; margin-top: 18px; cursor: pointer; background: #0F5132; color: #fff; border: none; font-family: inherit; font-size: 15px; font-weight: 600; padding: 14px; border-radius: 12px;">Next pilgrim →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ 5. CHECKOUT ============ -->
+      <div>
+        <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #2F6F8F;">B2C-05</span>
+          <span style="font-size: 15px; font-weight: 600;">Checkout · EUR / PKR</span>
+        </div>
+        <div style="width: 392px; background: #14170F; border-radius: 44px; padding: 10px; box-shadow: 0 30px 60px -20px rgba(20,23,15,0.5);">
+          <div class="auj-screen" data-screen-label="B2C Checkout" style="width: 372px; height: 808px; background: #FAF6EF; border-radius: 36px; overflow-y: auto;">
+            <div style="position: sticky; top: 0; background: #FAF6EF; z-index: 5; padding: 14px 20px 12px; border-bottom: 1px solid #E6DDCE;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 20px; color: #4A4337;">←</span>
+                <span style="font-size: 15px; font-weight: 600;">Checkout</span>
+                <span style="display:inline-flex; align-items:center; gap:5px; font-size: 12px; color: #156440; font-weight: 600;">🔒 Secure</span>
+              </div>
+            </div>
+            <div style="padding: 16px;">
+              <!-- currency switch -->
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                <span style="font-size: 13px; font-weight: 600; color: #4A4337;">Pay in</span>
+                <div style="display: flex; gap: 4px; background: #F1EADD; padding: 4px; border-radius: 10px;">
+                  <span style="background: #0F5132; color: #fff; font-size: 13px; font-weight: 600; padding: 7px 16px; border-radius: 7px;">€ EUR</span>
+                  <span style="color: #7A7263; font-size: 13px; font-weight: 600; padding: 7px 16px;">₨ PKR</span>
+                </div>
+              </div>
+              <!-- summary -->
+              <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 16px; margin-bottom: 14px;">
+                <div style="font-size: 13px; font-weight: 700; margin-bottom: 12px;">Order summary</div>
+                <sc-for list="{{ checkoutLines }}" as="l" hint-placeholder-count="4">
+                  <div style="display: flex; align-items: center; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid #F4EEE3;">
+                    <span style="font-size: 13.5px; color: #4A4337;">{{ l.label }}</span>
+                    <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; font-weight: 500;">{{ l.eur }}</span>
+                  </div>
+                </sc-for>
+                <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 12px;">
+                  <div><div style="font-size: 15px; font-weight: 700;">Total</div><div style="font-size: 11px; color: #7A7263;">incl. taxes &amp; visa fees</div></div>
+                  <div style="text-align: end;"><div style="font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 700; color: #0F5132;">€9,920</div><div style="font-size: 12px; color: #7A7263; font-family: 'IBM Plex Mono', monospace;">≈ ₨3,083,120</div></div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; background: #E2EEF3; border-radius: 10px; padding: 10px 12px; margin-bottom: 16px;">
+                <span style="font-size: 14px;">ℹ️</span><span style="font-size: 12px; color: #265D78; line-height: 1.4;">PKR shown at today's rate (1 € = ₨310.8). Card is charged in EUR.</span>
+              </div>
+              <!-- payment methods -->
+              <div style="font-size: 13px; font-weight: 700; margin-bottom: 10px;">Payment method</div>
+              <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
+                <div style="display: flex; align-items: center; gap: 12px; border: 1.5px solid #2F6F8F; background: #fff; border-radius: 12px; padding: 13px 14px; box-shadow: 0 0 0 3px rgba(47,111,143,0.12);">
+                  <span style="width: 18px; height: 18px; border-radius: 50%; border: 5px solid #2F6F8F;"></span>
+                  <span style="font-size: 14px; font-weight: 600; flex: 1;">Card · Visa / Mastercard</span>
+                  <span style="font-size: 17px;">💳</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px; border: 1.5px solid #DBD0BD; background: #fff; border-radius: 12px; padding: 13px 14px;">
+                  <span style="width: 18px; height: 18px; border-radius: 50%; border: 2px solid #C9BCA6;"></span>
+                  <span style="font-size: 14px; font-weight: 600; flex: 1;">SEPA bank transfer</span>
+                  <span style="font-size: 17px;">🏦</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px; border: 1.5px solid #DBD0BD; background: #fff; border-radius: 12px; padding: 13px 14px;">
+                  <span style="width: 18px; height: 18px; border-radius: 50%; border: 2px solid #C9BCA6;"></span>
+                  <span style="font-size: 14px; font-weight: 600; flex: 1;">Pay deposit · €1,984 now</span>
+                  <span style="font-size: 12px; color: #B5791E; font-weight: 600;">20%</span>
+                </div>
+              </div>
+              <button style="width: 100%; cursor: pointer; background: #0F5132; color: #fff; border: none; font-family: inherit; font-size: 15px; font-weight: 700; padding: 15px; border-radius: 12px; box-shadow: 0 6px 16px rgba(15,81,50,0.25);">Pay €9,920 securely</button>
+              <div style="text-align: center; font-size: 11.5px; color: #7A7263; margin-top: 12px;">By paying you accept AUJ's terms &amp; the pilgrimage conditions.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ 6. MY BOOKING ============ -->
+      <div>
+        <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #2F6F8F;">B2C-06</span>
+          <span style="font-size: 15px; font-weight: 600;">My booking · BRN &amp; live visa</span>
+        </div>
+        <div style="width: 392px; background: #14170F; border-radius: 44px; padding: 10px; box-shadow: 0 30px 60px -20px rgba(20,23,15,0.5);">
+          <div class="auj-screen" data-screen-label="B2C My booking" style="width: 372px; height: 808px; background: #0F5132; border-radius: 36px; overflow-y: auto;">
+            <!-- green header -->
+            <div style="background: #0F5132; padding: 16px 20px 22px; color: #EFF6F1;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+                <span style="font-size: 20px;">←</span>
+                <span style="font-size: 15px; font-weight: 600;">My booking</span>
+                <span style="font-size: 19px;">⋯</span>
+              </div>
+              <div style="font-size: 12px; color: #9CC6AE; letter-spacing: 0.04em;">BOOKING REFERENCE</div>
+              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 24px; font-weight: 600; letter-spacing: 0.02em; margin: 4px 0 6px;">BRN-26-VNO-00481</div>
+              <div style="font-family: 'IBM Plex Serif', serif; font-size: 19px; font-weight: 500;">Umrah Premium · 14 nights</div>
+              <div style="font-size: 13px; color: #BFE0CD;">12 – 26 Sep 2026 · 4 pilgrims</div>
+            </div>
+            <div style="background: #FAF6EF; border-radius: 28px 28px 0 0; margin-top: -10px; padding: 20px 16px 24px; min-height: 540px;">
+              <!-- live visa tracker -->
+              <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 16px; margin-bottom: 14px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                  <span style="font-size: 14px; font-weight: 700;">Live visa status</span>
+                  <span style="display:inline-flex; align-items:center; gap:5px; background: #F7EBD3; color: #8A5A12; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px;"><span style="width:6px;height:6px;border-radius:50%;background:#B5791E;"></span>In progress</span>
+                </div>
+                <sc-for list="{{ visaSteps }}" as="v" hint-placeholder-count="4">
+                  <div style="display: flex; gap: 12px;">
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                      <div style="width: 22px; height: 22px; border-radius: 50%; background: {{ v.dotBg }}; border: 2px solid {{ v.dotBorder }}; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #fff;">{{ v.mark }}</div>
+                      <div style="width: 2px; flex: 1; background: {{ v.line }}; min-height: 18px;"></div>
+                    </div>
+                    <div style="padding-bottom: 14px;">
+                      <div style="font-size: 13.5px; font-weight: 600; color: {{ v.titleColor }};">{{ v.title }}</div>
+                      <div style="font-size: 12px; color: #7A7263;">{{ v.sub }}</div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+              <!-- pilgrims -->
+              <div style="font-size: 13px; font-weight: 700; margin: 4px 4px 10px;">Pilgrims &amp; visas</div>
+              <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+                <sc-for list="{{ pilgrims }}" as="p" hint-placeholder-count="4">
+                  <div style="display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid #E6DDCE; border-radius: 12px; padding: 11px 13px;">
+                    <div style="width: 34px; height: 34px; border-radius: 50%; background: {{ p.av }}; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600;">{{ p.initials }}</div>
+                    <div style="flex: 1; min-width: 0;"><div style="font-size: 13.5px; font-weight: 600;">{{ p.name }}</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7A7263;">{{ p.brn }}</div></div>
+                    <span style="display:inline-flex; align-items:center; gap:5px; background: {{ p.vbg }}; color: {{ p.vfg }}; font-size: 11.5px; font-weight: 600; padding: 4px 9px; border-radius: 999px;">{{ p.visa }}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <button style="flex: 1; cursor: pointer; background: #fff; color: #156440; border: 1.5px solid #C9BCA6; font-family: inherit; font-size: 13px; font-weight: 600; padding: 12px; border-radius: 11px;">Itinerary</button>
+                <button style="flex: 1; cursor: pointer; background: #fff; color: #156440; border: 1.5px solid #C9BCA6; font-family: inherit; font-size: 13px; font-weight: 600; padding: 12px; border-radius: 11px;">Documents</button>
+                <button style="flex: 1; cursor: pointer; background: #2F6F8F; color: #fff; border: none; font-family: inherit; font-size: 13px; font-weight: 600; padding: 12px; border-radius: 11px;">Support</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ 7. ARABIC RTL HOME ============ -->
+      <div>
+        <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #2F6F8F;">B2C-AR</span>
+          <span style="font-size: 15px; font-weight: 600;">RTL — Arabic home (mirrored)</span>
+        </div>
+        <div style="width: 392px; background: #14170F; border-radius: 44px; padding: 10px; box-shadow: 0 30px 60px -20px rgba(20,23,15,0.5);">
+          <div class="auj-screen" dir="rtl" data-screen-label="B2C Home Arabic" style="width: 372px; height: 808px; background: #FAF6EF; border-radius: 36px; overflow-y: auto; font-family: 'IBM Plex Sans Arabic', sans-serif;">
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 24px 6px; font-size: 13px; font-weight: 600;" dir="ltr"><span>9:41</span><span>EN AR ▮▮▮ ⌁ ▦</span></div>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 20px 4px;">
+              <div style="display: flex; align-items: center; gap: 9px;">
+                <div style="width: 30px; height: 30px; border-radius: 9px; background: #0F5132; display: flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></svg></div>
+                <span style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: 17px;">AUJ</span>
+              </div>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <span style="font-size: 13px; font-weight: 600; color: #4A4337; border: 1px solid #DBD0BD; padding: 5px 10px; border-radius: 8px; background: #fff;">🌐 العربية</span>
+                <span style="font-size: 22px; color: #4A4337;">☰</span>
+              </div>
+            </div>
+            <div style="padding: 18px 20px 4px;">
+              <div style="font-weight: 700; font-size: 29px; line-height: 1.25;">ابدأ رحلتك المقدّسة بسكينة</div>
+              <div style="font-size: 14px; color: #7A7263; margin-top: 8px; line-height: 1.7;">عُمرة وحج وزيارات من جميع أنحاء الاتحاد الأوروبي — الفندق والنقل والرحلات في سلة واحدة.</div>
+            </div>
+            <div style="margin: 16px 16px 0; background: #fff; border: 1px solid #E6DDCE; border-radius: 20px; padding: 16px; box-shadow: 0 8px 24px rgba(42,38,32,0.07);">
+              <div style="display: flex; gap: 5px; background: #F1EADD; padding: 4px; border-radius: 11px; margin-bottom: 14px;">
+                <span style="flex:1; text-align:center; background: #fff; color: #0F5132; font-size: 13px; font-weight: 600; padding: 8px; border-radius: 8px;">عُمرة</span>
+                <span style="flex:1; text-align:center; color: #7A7263; font-size: 13px; font-weight: 600; padding: 8px;">حج</span>
+                <span style="flex:1; text-align:center; color: #7A7263; font-size: 13px; font-weight: 600; padding: 8px;">زيارات</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                <div><div style="font-size: 11px; color: #7A7263; margin-bottom: 5px;">من</div><div style="display:flex; align-items:center; justify-content:space-between; border: 1.5px solid #DBD0BD; border-radius: 10px; padding: 10px 12px; font-size: 14px; font-weight: 500;">فيلنيوس<span style="color:#7A7263;">▾</span></div></div>
+                <div><div style="font-size: 11px; color: #7A7263; margin-bottom: 5px;">الوجهة</div><div style="display:flex; align-items:center; justify-content:space-between; border: 1.5px solid #DBD0BD; border-radius: 10px; padding: 10px 12px; font-size: 14px; font-weight: 500;">مكة<span style="color:#7A7263;">▾</span></div></div>
+              </div>
+              <div style="margin-bottom: 14px;"><div style="font-size: 11px; color: #7A7263; margin-bottom: 5px;">التواريخ</div><div style="display:flex; align-items:center; gap: 8px; border: 1.5px solid #DBD0BD; border-radius: 10px; padding: 10px 12px; font-size: 14px; font-weight: 500;"><span style="color:#2F6F8F;">📅</span> ١٢ – ٢٦ سبتمبر · ١٤ ليلة</div></div>
+              <button style="width: 100%; cursor: pointer; background: #0F5132; color: #fff; border: none; font-family: inherit; font-size: 15px; font-weight: 600; padding: 14px; border-radius: 12px;">ابحث في ٣٨ باقة</button>
+            </div>
+            <div style="padding: 22px 20px 6px; font-size: 15px; font-weight: 600;">الأكثر طلبًا من فيلنيوس</div>
+            <div style="display: flex; gap: 12px; padding: 4px 20px 16px; overflow-x: auto;">
+              <div style="flex: 0 0 200px; background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; overflow: hidden;">
+                <div style="height: 104px; background: linear-gradient(135deg,#1C7A4F,#0A3D26);"></div>
+                <div style="padding: 11px 12px;"><div style="font-size: 14px; font-weight: 600;">عُمرة بريميَم</div><div style="font-size: 12px; color: #7A7263; margin: 2px 0 8px;">فندق ٥ نجوم · قرب الحرم</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; color: #0F5132;">€2,480</div></div>
+              </div>
+              <div style="flex: 0 0 200px; background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; overflow: hidden;">
+                <div style="height: 104px; background: linear-gradient(135deg,#2F6F8F,#265D78);"></div>
+                <div style="padding: 11px 12px;"><div style="font-size: 14px; font-weight: 600;">زيارة العراق</div><div style="font-size: 12px; color: #7A7263; margin: 2px 0 8px;">النجف وكربلاء</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; color: #0F5132;">€2,120</div></div>
+              </div>
+            </div>
+            <div style="margin: 4px 16px 20px; background: #DCEDE4; border-radius: 14px; padding: 13px 16px; display: flex; gap: 16px; justify-content: space-between;">
+              <div style="text-align: center;"><div style="font-size: 16px;">🛡️</div><div style="font-size: 11px; color: #156440; font-weight: 600; margin-top: 3px;">مشغّل<br>مرخّص</div></div>
+              <div style="text-align: center;"><div style="font-size: 16px;">🪪</div><div style="font-size: 11px; color: #156440; font-weight: 600; margin-top: 3px;">إرشاد<br>التأشيرة</div></div>
+              <div style="text-align: center;"><div style="font-size: 16px;">☎️</div><div style="font-size: 11px; color: #156440; font-weight: 600; margin-top: 3px;">دعم<br>٢٤/٧</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1400, &quot;height&quot;: 940}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      popular: [
+        {name:'Umrah Premium',meta:'5★ · 250m to Haram',price:'€2,480',img:'linear-gradient(135deg,#1C7A4F,#0A3D26)',visa:'e-Visa',vfg:'#156440'},
+        {name:'Ziyarat Iraq',meta:'Najaf & Karbala',price:'€2,120',img:'linear-gradient(135deg,#2F6F8F,#265D78)',visa:'Agent',vfg:'#265D78'}
+      ],
+      results: [
+        {name:'Umrah Premium · Swissôtel',stars:'★★★★★ · 9.4 Exceptional',price:'€2,480',dist:'250m to Haram',flight:'Direct VNO–JED',img:'linear-gradient(135deg,#1C7A4F,#0A3D26)',visa:'e-Visa route',vbg:'#DCEDE4',vfg:'#156440'},
+        {name:'Umrah Standard · Anjum',stars:'★★★★ · 8.9 Very good',price:'€1,950',dist:'600m to Haram',flight:'1 stop · IST',img:'linear-gradient(135deg,#3C86A8,#265D78)',visa:'e-Visa route',vbg:'#DCEDE4',vfg:'#156440'},
+        {name:'Ziyarat Iraq · Best of',stars:'★★★★ · 9.1 Excellent',price:'€2,120',dist:'Najaf & Karbala',flight:'Direct VNO–NJF',img:'linear-gradient(135deg,#7A7263,#4A4337)',visa:'Agent channel',vbg:'#E2EEF3',vfg:'#265D78'}
+      ],
+      builderSteps: [
+        {label:'Hotel',bar:'#0F5132',fg:'#0F5132'},
+        {label:'Transport',bar:'#0F5132',fg:'#0F5132'},
+        {label:'Ground',bar:'#2F6F8F',fg:'#2F6F8F'},
+        {label:'Flight',bar:'#E6DDCE',fg:'#A6A293'}
+      ],
+      cartItems: [
+        {kind:'HOTEL',icon:'🏨',iconBg:'#DCEDE4',title:'Swissôtel Makkah · 5★',detail:'14 nights · Twin sharing · Breakfast',included:'Free cancellation',price:'€6,200'},
+        {kind:'TRANSPORT',icon:'✈️',iconBg:'#E2EEF3',title:'Direct VNO → JED → VNO',detail:'Saudia · 23kg + Zamzam allowance',included:'Seats together',price:'€2,560'},
+        {kind:'GROUND',icon:'🚌',iconBg:'#F7EBD3',title:'Makkah ⇄ Madinah transfer',detail:'Private GMC · Ziyarat city tour incl.',included:'Meet & greet',price:'€760'},
+        {kind:'GROUND',icon:'🕋',iconBg:'#F1EADD',title:'Guided Ziyarat (Makkah)',detail:'Half day · English/Urdu guide',included:'Group of 4',price:'€400'}
+      ],
+      checkoutLines: [
+        {label:'Hotel · 14 nights × 4',eur:'€6,200'},
+        {label:'Flights · 4 pilgrims',eur:'€2,560'},
+        {label:'Ground & transfers',eur:'€1,160'},
+        {label:'Visa & service fees',eur:'€0'}
+      ],
+      visaSteps: [
+        {title:'Booking confirmed',sub:'9 Jun 2026 · payment received',mark:'✓',dotBg:'#1C7A4F',dotBorder:'#1C7A4F',line:'#1C7A4F',titleColor:'#2A2620'},
+        {title:'Documents verified',sub:'10 Jun 2026 · 4 of 4 passports',mark:'✓',dotBg:'#1C7A4F',dotBorder:'#1C7A4F',line:'#1C7A4F',titleColor:'#2A2620'},
+        {title:'e-Visa submitted to MOFA',sub:'In progress · est. 2–3 days',mark:'',dotBg:'#B5791E',dotBorder:'#B5791E',line:'#E6DDCE',titleColor:'#2A2620'},
+        {title:'Visas issued',sub:'Pending',mark:'',dotBg:'#fff',dotBorder:'#C9BCA6',line:'transparent',titleColor:'#A6A293'}
+      ],
+      pilgrims: [
+        {name:'Ayesha Khan',brn:'BRN-26-00481-1',initials:'AK',av:'#0F5132',visa:'Issued',vbg:'#DCEDE4',vfg:'#156440'},
+        {name:'Bilal Ahmed',brn:'BRN-26-00481-2',initials:'BA',av:'#2F6F8F',visa:'Issued',vbg:'#DCEDE4',vfg:'#156440'},
+        {name:'Fatima Noor',brn:'BRN-26-00481-3',initials:'FN',av:'#B5791E',visa:'Submitted',vbg:'#F7EBD3',vfg:'#8A5A12'},
+        {name:'Imran Yousuf',brn:'BRN-26-00481-4',initials:'IY',av:'#265D78',visa:'Submitted',vbg:'#F7EBD3',vfg:'#8A5A12'}
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
