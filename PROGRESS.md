@@ -4,7 +4,15 @@ _Last updated: 2026-06-12 · by: Claude Code · commit: (scaffold)_
 ## Now building
 ALL MODULES BUILT. web-b2b now has a Next.js shell too (runnable). Remaining: real partner SaudiPartnerClient (gated), real payment-gateway SDKs, optional admin Next shell, run the deploy pipeline.
 
+## Frontend handoff (design_handoff_auj_platform, expanded 2026-06-13)
+- New bundle adds Brand/Logo, Landing (responsive web /), Admin (Web) console, Traveller portal (web /journey + mobile). CLAUDE_CODE.md = kickoff prompt + route map; README = full spec.
+- [x] @auj/ui <Logo/> — official zenith mark (4 colourways) + bilingual Wordmark.
+- [x] apps/web (NEW Next app @auj/web) — Landing page at /: announcement, nav, hero (+floating cards), overlapping search (tabs/stepper), trust, journey types, one-cart, how-it-works, visa-route panel (real routeFor demo), featured packages, EN/LT/UR/AR switcher w/ RTL, track-booking timeline, testimonials, FAQ accordion, CTA, footer. Responsive (clamp/auto-fit). 6 tests. `npm run dev:web` (:3000).
+- [ ] Admin (Web) console at /admin (sidebar + CRM + CMS + users) — next.
+- [ ] Traveller web portal /journey (+ mobile app); PDF travel-plan/Umrah-guide route (flagged "still to build").
+
 ## How to run
+- `npm run dev:web` -> marketing landing (:3000).
 - `npm run dev` -> web-b2c booking funnel (:3000), now HI-FI per design_handoff (app bar + gold-star logo, serif hero, search card, popular rail, trust strip; sticky sub-screen headers; visa-route gradient card; green My-Booking header + live visa timeline).
 - `npm run dev:b2b` -> web-b2b agent portal (:3000): HI-FI desktop design (dark-green rail + topbar, KPI dashboard + visa pipeline + credit card, multi-pax passenger table + group summary, wallet 3-card + transactions, markup rules+editor, quotation, statements). Auto-onboards a GOLD agent, funds wallet, multi-pax book (<=49).
 - `npm run dev:all` -> every app (needs --concurrency, already set).
