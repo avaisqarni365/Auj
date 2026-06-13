@@ -17,6 +17,8 @@ function wire(core: CoreBooking, saudi: MockSaudiConnector, travel: MockTravelSu
   const booking: BookingApi = {
     searchHotels: (c) => saudi.searchHotels(c),
     searchFlights: (c) => travel.searchFlights(c),
+    searchZiyarah: (c) => saudi.searchZiyarah(c),
+    searchCatering: (c) => saudi.searchCatering(c),
     createCustomer: (input) => core.crm.createCustomer(input),
     addPilgrim: (input) => core.crm.addPilgrim(input),
     createBooking: (input) => core.bookings.createDraft(input),

@@ -1,5 +1,5 @@
-import type { Currency, GroundOffer, HotelOffer, RawdahSlot, RawdahStatus, TransportOffer, VisaRoute, VisaStatus } from '@auj/contracts';
-import type { MaqamCity, MaqamGround, MaqamHotel, MaqamRawdahSlot, MaqamTransport } from './client';
+import type { CateringOffer, CateringPlan, Currency, GroundOffer, HotelOffer, RawdahSlot, RawdahStatus, TransportOffer, VisaRoute, VisaStatus } from '@auj/contracts';
+import type { MaqamCatering, MaqamCity, MaqamGround, MaqamHotel, MaqamRawdahSlot, MaqamTransport, MaqamZiyarah } from './client';
 
 const CITY: Record<MaqamCity, string> = { MAK: 'MAKKAH', MAD: 'MADINAH', JED: 'JEDDAH' };
 
@@ -25,6 +25,22 @@ export function mapTransport(t: MaqamTransport): TransportOffer {
 
 export function mapGround(g: MaqamGround): GroundOffer {
   return { id: `maqam:${g.serviceId}`, name: g.title, net: { amount: g.priceMinor, currency: g.priceCurrency as Currency } };
+}
+
+export function mapZiyarah(z: MaqamZiyarah): GroundOffer {
+  return { id: `maqam:${z.tourId}`, name: z.title, net: { amount: z.priceMinor, currency: z.priceCurrency as Currency } };
+}
+
+const CATERING_PLAN: Record<MaqamCatering['planCode'], CateringPlan> = { HB: 'HALF_BOARD', FB: 'FULL_BOARD', IS: 'IFTAR_SUHOOR' };
+
+export function mapCatering(m: MaqamCatering): CateringOffer {
+  return {
+    id: `maqam:${m.mealId}`,
+    plan: CATERING_PLAN[m.planCode],
+    name: m.label,
+    city: CITY[m.cityCode],
+    net: { amount: m.priceMinor, currency: m.priceCurrency as Currency },
+  };
 }
 
 export function mapBookingState(state: 'OK' | 'PENDING' | 'FAIL'): 'CONFIRMED' | 'PENDING' | 'FAILED' {

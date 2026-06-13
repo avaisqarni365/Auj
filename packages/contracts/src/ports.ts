@@ -12,6 +12,7 @@ import type {
   Cancellation,
   RawdahSlot,
   RawdahPermit,
+  CateringOffer,
 } from './domain';
 
 /**
@@ -23,6 +24,10 @@ export interface SaudiConnector {
   searchHotels(c: SearchCriteria): Promise<HotelOffer[]>;
   searchTransport(c: SearchCriteria): Promise<TransportOffer[]>;
   searchGroundServices(c: SearchCriteria): Promise<GroundOffer[]>;
+  /** Curated ziyarah (heritage-visit) bundles for the city (Nusuk parity). */
+  searchZiyarah(c: SearchCriteria): Promise<GroundOffer[]>;
+  /** Meal/catering plans for the city (Nusuk parity). */
+  searchCatering(c: SearchCriteria): Promise<CateringOffer[]>;
   hold(offerIds: string[], pilgrims: Pilgrim[]): Promise<HoldRef>;
   /** Confirms a hold against a payment reference and returns BRNs. */
   confirm(holdId: string, payment: { ref: string }): Promise<BookingResult>;

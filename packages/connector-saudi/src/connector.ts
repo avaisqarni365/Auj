@@ -1,6 +1,7 @@
 import type {
   BookingResult,
   Cancellation,
+  CateringOffer,
   Currency,
   GroundOffer,
   HoldRef,
@@ -16,7 +17,7 @@ import type {
 } from '@auj/contracts';
 import type { SaudiPartnerClient } from './client';
 import { SandboxSaudiPartnerClient } from './client';
-import { mapBookingState, mapGround, mapHotel, mapRawdahSlot, mapRawdahState, mapRoute, mapTransport, mapVisaState, toCityCode } from './mappers';
+import { mapBookingState, mapCatering, mapGround, mapHotel, mapRawdahSlot, mapRawdahState, mapRoute, mapTransport, mapVisaState, mapZiyarah, toCityCode } from './mappers';
 
 /** Partner connection config (token auth, per-agent codes). The sandbox ignores it. */
 export interface SaudiPartnerConfig {
@@ -80,6 +81,16 @@ export class SaudiPartnerConnector implements SaudiConnector {
   async searchGroundServices(c: SearchCriteria): Promise<GroundOffer[]> {
     const raw = await withRetry(() => this.client.searchGround({ cityCode: toCityCode(c.city), checkIn: c.checkIn, checkOut: c.checkOut, pax: c.pax }));
     return raw.map(mapGround);
+  }
+
+  async searchZiyarah(c: SearchCriteria): Promise<GroundOffer[]> {
+    const raw = await withRetry(() => this.client.searchZiyarah({ cityCode: toCityCode(c.city), checkIn: c.checkIn, checkOut: c.checkOut, pax: c.pax }));
+    return raw.map(mapZiyarah);
+  }
+
+  async searchCatering(c: SearchCriteria): Promise<CateringOffer[]> {
+    const raw = await withRetry(() => this.client.searchCatering({ cityCode: toCityCode(c.city), checkIn: c.checkIn, checkOut: c.checkOut, pax: c.pax }));
+    return raw.map(mapCatering);
   }
 
   async hold(offerIds: string[], pilgrims: Pilgrim[]): Promise<HoldRef> {

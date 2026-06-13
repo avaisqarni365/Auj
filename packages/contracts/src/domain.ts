@@ -113,6 +113,19 @@ export const RawdahPermitSchema = z.object({
 });
 export type RawdahPermit = z.infer<typeof RawdahPermitSchema>;
 
+/** Meal/catering plan (Nusuk parity): an add-on line on a pilgrimage package. */
+export const CateringPlanSchema = z.enum(['HALF_BOARD', 'FULL_BOARD', 'IFTAR_SUHOOR']);
+export type CateringPlan = z.infer<typeof CateringPlanSchema>;
+
+export const CateringOfferSchema = z.object({
+  id: z.string(),
+  plan: CateringPlanSchema,
+  name: z.string(),
+  city: z.string(),
+  net: MoneySchema, // per pilgrim, per stay
+});
+export type CateringOffer = z.infer<typeof CateringOfferSchema>;
+
 export const CancellationSchema = z.object({
   cancelled: z.boolean(),
   refund: MoneySchema.optional(),

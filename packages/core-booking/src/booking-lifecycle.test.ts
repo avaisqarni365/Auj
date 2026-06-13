@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { MockSaudiConnector, MockTravelSupplier } from '@auj/connector-mock';
 import { createCoreBooking, type CoreBooking } from './core';
-import { hotelItem } from './package-builder';
+import { cateringItem, groundItem, hotelItem } from './package-builder';
 
 const now = (): string => '2026-06-12T00:00:00.000Z';
 
@@ -84,6 +84,25 @@ describe('pilgrimage booking lifecycle (end-to-end against connector-mock)', () 
     expect(permit.status).toBe('CONFIRMED');
     expect(permit.pilgrimIds).toEqual([pilgrim.id]);
     expect(booking.rawdah?.permitRef).toBe(permit.permitRef); // attached to the booking
+  });
+
+  it('builds a package with a ziyarah bundle and a catering plan (Nusuk add-ons)', async () => {
+    const core = setup();
+    const hotels = await core.saudi.searchHotels({ city: 'MAKKAH', checkIn: '2026-09-01', checkOut: '2026-09-05', pax: 1 });
+    const ziyarah = await core.saudi.searchZiyarah({ city: 'MAKKAH', checkIn: '2026-09-01', checkOut: '2026-09-05', pax: 1 });
+    const meals = await core.saudi.searchCatering({ city: 'MAKKAH', checkIn: '2026-09-01', checkOut: '2026-09-05', pax: 1 });
+    expect(ziyarah.length).toBeGreaterThan(0);
+    expect(meals.length).toBeGreaterThan(0);
+
+    const pkg = core.buildPackage({
+      name: 'Umrah + ziyarah + meals',
+      channel: 'PILGRIMAGE',
+      items: [hotelItem(hotels[0]!), groundItem(ziyarah[0]!), cateringItem(meals[0]!)],
+    });
+    const kinds = pkg.items.map((i) => i.kind);
+    expect(kinds).toContain('CATERING');
+    expect(kinds).toContain('GROUND'); // ziyarah maps to a ground item
+    expect(pkg.totals.length).toBeGreaterThan(0);
   });
 
   it('rejects Rawdah for travel bookings', async () => {

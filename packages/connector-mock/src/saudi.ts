@@ -13,8 +13,9 @@ import type {
   Cancellation,
   RawdahSlot,
   RawdahPermit,
+  CateringOffer,
 } from '@auj/contracts';
-import { HOTELS, TRANSPORT, GROUND } from './catalog';
+import { HOTELS, TRANSPORT, GROUND, ZIYARAH, CATERING } from './catalog';
 import { resolveVisaRoute } from './visa-rule';
 
 const HOLD_TTL_MS = 15 * 60 * 1000; // 15 minutes
@@ -68,6 +69,17 @@ export class MockSaudiConnector implements SaudiConnector {
     if (c.city === 'JEDDAH') return GROUND;
     const tag = c.city === 'MAKKAH' ? 'mak' : 'mad';
     return GROUND.filter((g) => g.id.includes(tag));
+  }
+
+  async searchZiyarah(c: SearchCriteria): Promise<GroundOffer[]> {
+    if (c.city === 'JEDDAH') return ZIYARAH;
+    const tag = c.city === 'MAKKAH' ? 'mak' : 'mad';
+    return ZIYARAH.filter((z) => z.id.includes(tag));
+  }
+
+  async searchCatering(c: SearchCriteria): Promise<CateringOffer[]> {
+    if (c.city === 'JEDDAH') return CATERING;
+    return CATERING.filter((m) => m.city === c.city);
   }
 
   async hold(offerIds: string[], pilgrims: Pilgrim[]): Promise<HoldRef> {

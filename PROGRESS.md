@@ -1,5 +1,5 @@
 # PROGRESS — single source of truth for "where are we"
-_Last updated: 2026-06-13 · by: Claude Code · commit: Rawdah permit + package modes_
+_Last updated: 2026-06-13 · by: Claude Code · commit: ziyarah + catering + distance sort_
 
 ## Now building
 ALL MODULES BUILT. web-b2b now has a Next.js shell too (runnable). Remaining: real partner SaudiPartnerClient (gated), real payment-gateway SDKs, optional admin Next shell, run the deploy pipeline.
@@ -35,8 +35,17 @@ ALL MODULES BUILT. web-b2b now has a Next.js shell too (runnable). Remaining: re
   - web-b2c: PackageBuilder mode selector + Rawdah add-on toggle → funnel state → placeBookingAction
     (mode + optional rawdahDate books first slot); MyBooking shows mode badge + Rawdah permit card.
   - apps/web /journey: package-mode badge on hero + Rawdah permit card in the Journey tab.
-- TODO (Nusuk features not yet built): catering, gift Umrah, support tickets,
-  distance-to-Haram filter, real Nusuk Masar via connector-saudi (gated).
+- [x] Ziyarah bundles + Meals/catering + distance-to-Haram sort (2026-06-13), contracts v1.2.0:
+  - contracts: CateringOffer + CateringPlan (HALF_BOARD|FULL_BOARD|IFTAR_SUHOOR) (+Zod);
+    SaudiConnector.searchZiyarah (curated GroundOffers) + searchCatering; contract-tests cover both.
+  - connector-mock: ZIYARAH + CATERING catalog (city-filtered). connector-saudi: Maqam ziyarah/catering
+    client types + sandbox + mappers (mapZiyarah, mapCatering w/ plan-code map) + connector methods.
+  - core-booking: ItemKind += 'CATERING'; cateringItem() builder (ziyarah reuses groundItem→GROUND);
+    lifecycle test builds hotel+ziyarah+catering package.
+  - web-b2c: PackageBuilder ziyarah + catering add-on groups (toggle into cart via ADD/REMOVE_ITEM),
+    backend+ports wired, searchAddonsAction; Results has a working distance-to-Haram sort + Near-Haram chip.
+- TODO (Nusuk features not yet built): gift Umrah, support tickets,
+  real Nusuk Masar via connector-saudi (gated).
 
 ## Design quality as a workflow (added 2026-06-13)
 - [x] .claude/skills/design-taste/SKILL.md — Emil-Kowalski-grade motion + impeccable design + typography + taste, with a finish checklist. Auto-surfaces on UI work (description match); invoke as /design-taste. THE workflow to apply on every frontend change.

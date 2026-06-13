@@ -1,4 +1,5 @@
 import type {
+  CateringOffer,
   FlightOffer,
   GroundOffer,
   HotelOffer,
@@ -32,6 +33,13 @@ export const flightItem = (o: FlightOffer): PackageItem => ({
   kind: 'FLIGHT',
   offerId: o.id,
   title: `${o.carrier} ${o.depart} → ${o.arrive}`,
+  net: o.net,
+});
+// Ziyarah bundles come back as GroundOffers — reuse groundItem (kind GROUND).
+export const cateringItem = (o: CateringOffer): PackageItem => ({
+  kind: 'CATERING',
+  offerId: o.id,
+  title: o.name,
   net: o.net,
 });
 

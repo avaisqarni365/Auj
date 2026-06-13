@@ -1,4 +1,4 @@
-import type { FlightOffer, HotelOffer, Money, PackageMode, RawdahPermit, RawdahSlot, SearchCriteria } from '@auj/contracts';
+import type { CateringOffer, FlightOffer, GroundOffer, HotelOffer, Money, PackageMode, RawdahPermit, RawdahSlot, SearchCriteria } from '@auj/contracts';
 import type { Booking, CrmPilgrim, Customer, PackageItem, VisaCase } from '@auj/core-booking';
 
 /**
@@ -9,6 +9,8 @@ import type { Booking, CrmPilgrim, Customer, PackageItem, VisaCase } from '@auj/
 export interface BookingApi {
   searchHotels(c: SearchCriteria): Promise<HotelOffer[]>;
   searchFlights(c: { from: string; to: string; date: string; pax: number }): Promise<FlightOffer[]>;
+  searchZiyarah(c: SearchCriteria): Promise<GroundOffer[]>;
+  searchCatering(c: SearchCriteria): Promise<CateringOffer[]>;
   createCustomer(input: { fullName: string; email: string; phone?: string }): Promise<Customer>;
   addPilgrim(input: Omit<CrmPilgrim, 'id'>): Promise<CrmPilgrim>;
   createBooking(input: {

@@ -18,6 +18,7 @@ import {
   VisaStatusSchema,
   RawdahSlotSchema,
   RawdahPermitSchema,
+  CateringOfferSchema,
 } from './domain';
 
 const samplePilgrims: Pilgrim[] = [
@@ -51,6 +52,12 @@ export function runSaudiConnectorContractTests(name: string, make: () => SaudiCo
       const c = make();
       for (const o of await c.searchTransport(sampleCriteria)) TransportOfferSchema.parse(o);
       for (const o of await c.searchGroundServices(sampleCriteria)) GroundOfferSchema.parse(o);
+    });
+
+    it('searchZiyarah returns ground-shaped offers and searchCatering returns catering offers', async () => {
+      const c = make();
+      for (const o of await c.searchZiyarah(sampleCriteria)) GroundOfferSchema.parse(o);
+      for (const o of await c.searchCatering(sampleCriteria)) CateringOfferSchema.parse(o);
     });
 
     it('hold then confirm yields a CONFIRMED booking with at least one BRN', async () => {

@@ -48,6 +48,21 @@ export interface MaqamCancelResponse {
   refundMinor?: number;
   refundCurrency?: string;
 }
+export interface MaqamZiyarah {
+  tourId: string;
+  title: string;
+  cityCode: MaqamCity;
+  priceMinor: number;
+  priceCurrency: string;
+}
+export interface MaqamCatering {
+  mealId: string;
+  planCode: 'HB' | 'FB' | 'IS';
+  label: string;
+  cityCode: MaqamCity;
+  priceMinor: number;
+  priceCurrency: string;
+}
 export interface MaqamRawdahSlot {
   slot: string;
   at: string;
@@ -74,6 +89,8 @@ export interface SaudiPartnerClient {
   searchHotels(req: SearchReq): Promise<MaqamHotel[]>;
   searchTransport(req: SearchReq): Promise<MaqamTransport[]>;
   searchGround(req: SearchReq): Promise<MaqamGround[]>;
+  searchZiyarah(req: SearchReq): Promise<MaqamZiyarah[]>;
+  searchCatering(req: SearchReq): Promise<MaqamCatering[]>;
   hold(req: { offerIds: string[]; paxCount: number }): Promise<MaqamHoldResponse>;
   confirm(req: { reservationId: string; paymentRef: string }): Promise<MaqamConfirmResponse>;
   createVisa(req: { reference: string; paxCount: number }): Promise<MaqamVisaResponse>;
@@ -109,6 +126,23 @@ export class SandboxSaudiPartnerClient implements SaudiPartnerClient {
 
   async searchGround(_req: SearchReq): Promise<MaqamGround[]> {
     return [{ serviceId: 'GRD-ZIY-MAK', title: 'Makkah ziyarah', priceMinor: 12000, priceCurrency: 'SAR' }];
+  }
+
+  async searchZiyarah(req: SearchReq): Promise<MaqamZiyarah[]> {
+    const all: MaqamZiyarah[] = [
+      { tourId: 'ZIY-MAK-01', title: 'Makkah heritage tour', cityCode: 'MAK', priceMinor: 18000, priceCurrency: 'SAR' },
+      { tourId: 'ZIY-MAD-01', title: 'Madinah heritage tour', cityCode: 'MAD', priceMinor: 16000, priceCurrency: 'SAR' },
+    ];
+    return all.filter((z) => req.cityCode === 'JED' || z.cityCode === req.cityCode);
+  }
+
+  async searchCatering(req: SearchReq): Promise<MaqamCatering[]> {
+    const all: MaqamCatering[] = [
+      { mealId: 'CAT-MAK-HB', planCode: 'HB', label: 'Half board', cityCode: 'MAK', priceMinor: 6000, priceCurrency: 'SAR' },
+      { mealId: 'CAT-MAK-FB', planCode: 'FB', label: 'Full board', cityCode: 'MAK', priceMinor: 9000, priceCurrency: 'SAR' },
+      { mealId: 'CAT-MAD-IS', planCode: 'IS', label: 'Iftar & Suhoor', cityCode: 'MAD', priceMinor: 7000, priceCurrency: 'SAR' },
+    ];
+    return all.filter((m) => req.cityCode === 'JED' || m.cityCode === req.cityCode);
   }
 
   async hold(req: { offerIds: string[]; paxCount: number }): Promise<MaqamHoldResponse> {

@@ -1,4 +1,4 @@
-import type { Money, PackageMode } from '@auj/contracts';
+import type { CateringOffer, GroundOffer, Money, PackageMode } from '@auj/contracts';
 import type { ItemKind, PackageItem } from '@auj/core-booking';
 import { Button } from '@auj/ui';
 import { formatMoney, formatWithPkr } from '../fx';
@@ -12,11 +12,17 @@ export interface PackageBuilderProps {
   onMode?: (mode: PackageMode) => void;
   rawdahRequested?: boolean;
   onToggleRawdah?: () => void;
+  /** Optional add-ons fetched from the connector (ziyarah bundles + meal plans). */
+  ziyarah?: GroundOffer[];
+  catering?: CateringOffer[];
+  /** offerIds currently in the cart, so add-on chips can show selected state. */
+  selectedOfferIds?: string[];
+  onToggleAddon?: (item: PackageItem) => void;
   onContinue: () => void;
   onBack?: () => void;
 }
 
-const ICON: Record<ItemKind, string> = { HOTEL: '🏨', TRANSPORT: '🚌', GROUND: '🕌', FLIGHT: '✈' };
+const ICON: Record<ItemKind, string> = { HOTEL: '🏨', TRANSPORT: '🚌', GROUND: '🕌', FLIGHT: '✈', CATERING: '🍽' };
 const STEPS = ['Hotel', 'Transport', 'Ground', 'Flight'];
 
 // Nusuk-parity package modes (see nusuk-umrah-services skill).
@@ -26,7 +32,8 @@ const MODES: ReadonlyArray<{ value: PackageMode; label: string; hint: string }> 
   { value: 'CUSTOM', label: 'Custom', hint: 'Pick exactly what you need' },
 ];
 
-export function PackageBuilder({ locale, items, totals, mode = 'COMPREHENSIVE', onMode, rawdahRequested = false, onToggleRawdah, onContinue, onBack }: PackageBuilderProps) {
+export function PackageBuilder({ locale, items, totals, mode = 'COMPREHENSIVE', onMode, rawdahRequested = false, onToggleRawdah, ziyarah = [], catering = [], selectedOfferIds = [], onToggleAddon, onContinue, onBack }: PackageBuilderProps) {
+  const selected = new Set(selectedOfferIds);
   const eur = totals.find((m) => m.currency === 'EUR');
   const kinds = new Set(items.map((i) => i.kind));
   return (
@@ -120,6 +127,26 @@ export function PackageBuilder({ locale, items, totals, mode = 'COMPREHENSIVE', 
             ✓
           </span>
         </button>
+
+        {ziyarah.length > 0 ? (
+          <AddonGroup
+            title="Ziyarah bundles"
+            hint="Curated guided heritage visits."
+            offers={ziyarah.map((z) => ({ icon: '🕌', item: { kind: 'GROUND' as ItemKind, offerId: z.id, title: z.name, net: z.net } }))}
+            selected={selected}
+            onToggle={onToggleAddon}
+          />
+        ) : null}
+
+        {catering.length > 0 ? (
+          <AddonGroup
+            title="Meals & catering"
+            hint="Per pilgrim, for the stay."
+            offers={catering.map((m) => ({ icon: '🍽', item: { kind: 'CATERING' as ItemKind, offerId: m.id, title: m.name, net: m.net } }))}
+            selected={selected}
+            onToggle={onToggleAddon}
+          />
+        ) : null}
       </div>
 
       {/* sticky cart */}
@@ -134,6 +161,62 @@ export function PackageBuilder({ locale, items, totals, mode = 'COMPREHENSIVE', 
         <Button className="w-full !py-3.5 text-[15px]" onClick={onContinue}>
           Continue to pilgrims
         </Button>
+      </div>
+    </div>
+  );
+}
+
+interface AddonOption {
+  icon: string;
+  item: PackageItem;
+}
+
+function AddonGroup({
+  title,
+  hint,
+  offers,
+  selected,
+  onToggle,
+}: {
+  title: string;
+  hint: string;
+  offers: AddonOption[];
+  selected: Set<string>;
+  onToggle?: (item: PackageItem) => void;
+}) {
+  return (
+    <div className="rounded-2xl border border-sand-200 bg-white p-3.5">
+      <div className="flex items-baseline justify-between">
+        <span className="text-[13px] font-bold">{title}</span>
+        <span className="text-[11.5px] text-sand-500">{hint}</span>
+      </div>
+      <div className="mt-2.5 flex flex-col gap-2">
+        {offers.map(({ icon, item }) => {
+          const on = selected.has(item.offerId);
+          return (
+            <button
+              key={item.offerId}
+              type="button"
+              aria-pressed={on}
+              onClick={() => onToggle?.(item)}
+              className={`flex items-center gap-3 rounded-xl border px-3 py-2.5 text-start transition-colors ${
+                on ? 'border-green-800 bg-green-800/5' : 'border-sand-200 bg-white'
+              }`}
+            >
+              <span className="text-[18px]">{icon}</span>
+              <span className="min-w-0 flex-1 text-[13.5px] font-semibold">{item.title}</span>
+              <span className="font-mono text-[13px] font-semibold text-green-800">{formatMoney(item.net)}</span>
+              <span
+                className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[11px] font-bold ${
+                  on ? 'border-green-800 bg-green-800 text-white' : 'border-sand-300 text-transparent'
+                }`}
+                aria-hidden
+              >
+                ✓
+              </span>
+            </button>
+          );
+        })}
       </div>
     </div>
   );

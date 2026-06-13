@@ -15,7 +15,7 @@ export type BookingStatus =
   | 'CANCELLED'
   | 'REFUNDED';
 
-export type ItemKind = 'HOTEL' | 'TRANSPORT' | 'GROUND' | 'FLIGHT';
+export type ItemKind = 'HOTEL' | 'TRANSPORT' | 'GROUND' | 'FLIGHT' | 'CATERING';
 
 export interface Customer {
   id: string;

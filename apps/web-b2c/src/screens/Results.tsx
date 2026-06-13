@@ -1,8 +1,20 @@
-import type { ReactNode } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import type { HotelOffer, SearchCriteria } from '@auj/contracts';
 import { Button, StatusPill } from '@auj/ui';
 import { formatMoney } from '../fx';
 import { t, type Locale } from '../i18n';
+
+type Sort = 'recommended' | 'distance' | 'price';
+const SORT_LABEL: Record<Sort, string> = { recommended: 'Recommended', distance: 'Distance to Haram', price: 'Price' };
+
+function sortOffers(offers: HotelOffer[], sort: Sort): HotelOffer[] {
+  if (sort === 'recommended') return offers;
+  const copy = [...offers];
+  if (sort === 'distance') {
+    return copy.sort((a, b) => (a.distanceToHaramM ?? Infinity) - (b.distanceToHaramM ?? Infinity));
+  }
+  return copy.sort((a, b) => a.nightlyNet.amount - b.nightlyNet.amount);
+}
 
 export interface ResultsProps {
   locale: Locale;
@@ -15,6 +27,8 @@ export interface ResultsProps {
 const GRADIENTS = ['from-green-600 to-green-900', 'from-accent-500 to-accent-700', 'from-green-700 to-green-950'];
 
 export function Results({ locale, criteria, offers, onBuild, onBack }: ResultsProps) {
+  const [sort, setSort] = useState<Sort>('recommended');
+  const sorted = useMemo(() => sortOffers(offers, sort), [offers, sort]);
   return (
     <div className="min-h-screen bg-sand-50">
       <div className="sticky top-0 z-10 bg-sand-50/90 px-5 pt-3 backdrop-blur">
@@ -30,7 +44,15 @@ export function Results({ locale, criteria, offers, onBuild, onBack }: ResultsPr
         </div>
         <div className="flex gap-2 overflow-x-auto pb-3">
           <span className="shrink-0 rounded-full bg-green-800 px-3 py-1.5 text-xs font-semibold text-white">⚙ Filters · 2</span>
-          {['≤ €2,500', '5★ hotels', 'Near Haram'].map((f) => (
+          <button
+            type="button"
+            aria-pressed={sort === 'distance'}
+            onClick={() => setSort((s) => (s === 'distance' ? 'recommended' : 'distance'))}
+            className={`shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold ${sort === 'distance' ? 'border-green-800 bg-green-800 text-white' : 'border-sand-300 bg-white text-sand-700'}`}
+          >
+            🕋 Near Haram
+          </button>
+          {['≤ €2,500', '5★ hotels'].map((f) => (
             <span key={f} className="shrink-0 rounded-full border border-sand-300 bg-white px-3 py-1.5 text-xs font-semibold text-sand-700">
               {f}
             </span>
@@ -42,11 +64,22 @@ export function Results({ locale, criteria, offers, onBuild, onBack }: ResultsPr
         <span className="text-[13px] text-sand-500">
           <strong className="text-sand-ink">{offers.length} packages</strong> found
         </span>
-        <span className="text-[13px] font-semibold text-sand-700">Sort: Recommended ▾</span>
+        <label className="flex items-center gap-1.5 text-[13px] font-semibold text-sand-700">
+          Sort:
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value as Sort)}
+            className="rounded-md border border-sand-300 bg-white px-1.5 py-1 text-[13px] font-semibold text-sand-700"
+          >
+            {(Object.keys(SORT_LABEL) as Sort[]).map((s) => (
+              <option key={s} value={s}>{SORT_LABEL[s]}</option>
+            ))}
+          </select>
+        </label>
       </div>
 
       <div className="flex flex-col gap-3.5 px-4 pb-6">
-        {offers.map((o, i) => (
+        {sorted.map((o, i) => (
           <div key={o.id} className="overflow-hidden rounded-[18px] border border-sand-200 bg-white shadow-sm">
             <div className={`relative h-[130px] bg-gradient-to-br ${GRADIENTS[i % GRADIENTS.length]}`}>
               {o.nusukApproved ? (

@@ -1,4 +1,4 @@
-import type { HotelOffer, TransportOffer, GroundOffer, FlightOffer } from '@auj/contracts';
+import type { CateringOffer, HotelOffer, TransportOffer, GroundOffer, FlightOffer } from '@auj/contracts';
 
 // Deterministic, in-memory seed data. Net prices in SAR for Saudi supply,
 // EUR for general-travel supply. Some hotels are nusukApproved, some not
@@ -21,6 +21,21 @@ export const TRANSPORT: TransportOffer[] = [
 export const GROUND: GroundOffer[] = [
   { id: 'grd_ziyarah_mak', name: 'Makkah ziyarah (guided)', net: { amount: 12000, currency: 'SAR' } },
   { id: 'grd_ziyarah_mad', name: 'Madinah ziyarah (guided)', net: { amount: 10000, currency: 'SAR' } },
+];
+
+// Curated multi-site ziyarah bundles (heritage visits), returned as GroundOffers.
+export const ZIYARAH: GroundOffer[] = [
+  { id: 'ziy_mak_classic', name: 'Makkah heritage — Jabal al-Nour, Mina, Arafat, Muzdalifah', net: { amount: 18000, currency: 'SAR' } },
+  { id: 'ziy_mad_classic', name: 'Madinah heritage — Quba, Uhud, Qiblatain, Trench', net: { amount: 16000, currency: 'SAR' } },
+  { id: 'ziy_mad_extended', name: 'Madinah extended — heritage + Date farms & museum', net: { amount: 22000, currency: 'SAR' } },
+];
+
+// Meal/catering plans (per pilgrim, per stay), some near each Haram.
+export const CATERING: CateringOffer[] = [
+  { id: 'cat_mak_half', plan: 'HALF_BOARD', name: 'Half board — breakfast & dinner', city: 'MAKKAH', net: { amount: 6000, currency: 'SAR' } },
+  { id: 'cat_mak_full', plan: 'FULL_BOARD', name: 'Full board — three meals', city: 'MAKKAH', net: { amount: 9000, currency: 'SAR' } },
+  { id: 'cat_mad_half', plan: 'HALF_BOARD', name: 'Half board — breakfast & dinner', city: 'MADINAH', net: { amount: 5500, currency: 'SAR' } },
+  { id: 'cat_mad_iftar', plan: 'IFTAR_SUHOOR', name: 'Iftar & Suhoor (Ramadan)', city: 'MADINAH', net: { amount: 7000, currency: 'SAR' } },
 ];
 
 export const FLIGHTS: FlightOffer[] = [

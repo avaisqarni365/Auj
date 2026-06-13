@@ -59,6 +59,32 @@ describe('B2C screens', () => {
     expect(html).toContain('Bring your own visa'); // active mode hint
   });
 
+  it('PackageBuilder lists ziyarah bundles and catering plans as add-ons', () => {
+    const html = renderToStaticMarkup(
+      <PackageBuilder
+        locale="en"
+        items={[]}
+        totals={[]}
+        ziyarah={[{ id: 'z1', name: 'Makkah heritage tour', net: { amount: 18000, currency: 'SAR' } }]}
+        catering={[{ id: 'c1', plan: 'FULL_BOARD', name: 'Full board', city: 'MAKKAH', net: { amount: 9000, currency: 'SAR' } }]}
+        selectedOfferIds={['z1']}
+        onContinue={noop}
+      />,
+    );
+    expect(html).toContain('Ziyarah bundles');
+    expect(html).toContain('Makkah heritage tour');
+    expect(html).toContain('Meals &amp; catering');
+    expect(html).toContain('Full board');
+  });
+
+  it('Results offers a distance-to-Haram sort control', () => {
+    const html = renderToStaticMarkup(
+      <Results locale="en" criteria={{ city: 'MAKKAH', checkIn: '', checkOut: '', pax: 2 }} offers={[offer]} onBuild={noop} />,
+    );
+    expect(html).toContain('Distance to Haram');
+    expect(html).toContain('Near Haram');
+  });
+
   it('MyBooking renders a confirmed Rawdah permit and the package mode', () => {
     const booking: Booking = {
       id: 'bk1', customerId: 'c1', channel: 'PILGRIMAGE', mode: 'COMPREHENSIVE', status: 'CONFIRMED',

@@ -7,6 +7,7 @@ import {
   VisaApplicationSchema,
   PackageModeSchema,
   RawdahPermitSchema,
+  CateringOfferSchema,
   CONTRACTS_VERSION,
 } from './index';
 
@@ -55,6 +56,15 @@ describe('@auj/contracts schemas', () => {
     expect(
       RawdahPermitSchema.safeParse({ permitRef: 'R1', slotId: 's1', startsAt: '2026-09-10T03:00:00Z', pilgrimIds: ['p1'], status: 'CONFIRMED' }).success,
     ).toBe(true);
+  });
+
+  it('CateringOffer validates its plan enum + nested Money', () => {
+    expect(
+      CateringOfferSchema.safeParse({ id: 'cat1', plan: 'FULL_BOARD', name: 'Full board', city: 'MAKKAH', net: { amount: 9000, currency: 'SAR' } }).success,
+    ).toBe(true);
+    expect(
+      CateringOfferSchema.safeParse({ id: 'cat1', plan: 'BRUNCH', name: 'x', city: 'MAKKAH', net: { amount: 9000, currency: 'SAR' } }).success,
+    ).toBe(false);
   });
 
   it('BookingResult and VisaApplication enforce their enums', () => {

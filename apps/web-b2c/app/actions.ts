@@ -3,7 +3,7 @@
 // Server Actions: the booking backend runs server-side (node:crypto + DB). It is
 // Postgres-backed when DATABASE_URL is set, in-memory otherwise. A lazily-created
 // singleton (with migrate() applied once) is reused across actions.
-import type { Money, PackageMode, SearchCriteria } from '@auj/contracts';
+import type { CateringOffer, GroundOffer, Money, PackageMode, SearchCriteria } from '@auj/contracts';
 import type { PackageItem, VisaCase } from '@auj/core-booking';
 import type { PlacedBooking } from '../src/usecases';
 import { createBackend } from '../src/backend/in-process';
@@ -20,6 +20,17 @@ function getBackend(): Promise<Backend> {
 export async function searchHotelsAction(criteria: SearchCriteria) {
   const backend = await getBackend();
   return backend.booking.searchHotels(criteria);
+}
+
+export async function searchAddonsAction(
+  criteria: SearchCriteria,
+): Promise<{ ziyarah: GroundOffer[]; catering: CateringOffer[] }> {
+  const backend = await getBackend();
+  const [ziyarah, catering] = await Promise.all([
+    backend.booking.searchZiyarah(criteria),
+    backend.booking.searchCatering(criteria),
+  ]);
+  return { ziyarah, catering };
 }
 
 export async function placeBookingAction(input: {

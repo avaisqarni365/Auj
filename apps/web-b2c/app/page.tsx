@@ -1,14 +1,14 @@
 'use client';
 
 import { useReducer, useState, useTransition } from 'react';
-import type { HotelOffer, SearchCriteria } from '@auj/contracts';
+import type { CateringOffer, GroundOffer, HotelOffer, SearchCriteria } from '@auj/contracts';
 import type { Booking, PackageItem, VisaCase } from '@auj/core-booking';
 // Import from specific modules (not the barrel) so the client bundle never pulls
 // in the in-process backend, which depends on node:crypto via core-booking.
 import { Checkout, HomeSearch, MyBooking, PackageBuilder, PilgrimCapture, Results } from '../src/screens';
 import { cartTotals, funnelReducer, initialFunnel, type PilgrimDraft } from '../src/funnel';
 import { previewVisaRoute } from '../src/usecases';
-import { placeBookingAction, pollVisaAction, searchHotelsAction } from './actions';
+import { placeBookingAction, pollVisaAction, searchAddonsAction, searchHotelsAction } from './actions';
 
 const SELL_PRICE = { amount: 120000, currency: 'EUR' as const }; // demo sell price, charged in EUR
 
@@ -24,6 +24,7 @@ const DEFAULT_PILGRIM: PilgrimDraft = {
 export default function Page() {
   const [state, dispatch] = useReducer(funnelReducer, undefined, initialFunnel);
   const [offers, setOffers] = useState<HotelOffer[]>([]);
+  const [addons, setAddons] = useState<{ ziyarah: GroundOffer[]; catering: CateringOffer[] }>({ ziyarah: [], catering: [] });
   const [pilgrim, setPilgrim] = useState<PilgrimDraft>(DEFAULT_PILGRIM);
   const [booking, setBooking] = useState<Booking>();
   const [visaCase, setVisaCase] = useState<VisaCase>();
@@ -39,6 +40,15 @@ export default function Page() {
     const item: PackageItem = { kind: 'HOTEL', offerId: offer.id, title: offer.name, net: offer.nightlyNet };
     dispatch({ type: 'ADD_ITEM', item });
     dispatch({ type: 'GO', step: 'BUILDER' });
+    start(async () => setAddons(await searchAddonsAction(state.criteria)));
+  };
+
+  const toggleAddon = (item: PackageItem): void => {
+    if (state.cart.some((i) => i.offerId === item.offerId)) {
+      dispatch({ type: 'REMOVE_ITEM', offerId: item.offerId });
+    } else {
+      dispatch({ type: 'ADD_ITEM', item });
+    }
   };
 
   const pay = (): void =>
@@ -90,6 +100,10 @@ export default function Page() {
           onMode={(mode) => dispatch({ type: 'SET_MODE', mode })}
           rawdahRequested={state.rawdahRequested}
           onToggleRawdah={() => dispatch({ type: 'TOGGLE_RAWDAH' })}
+          ziyarah={addons.ziyarah}
+          catering={addons.catering}
+          selectedOfferIds={state.cart.map((i) => i.offerId)}
+          onToggleAddon={toggleAddon}
           onContinue={() => dispatch({ type: 'GO', step: 'PILGRIMS' })}
           onBack={back('RESULTS')}
         />
