@@ -43,7 +43,7 @@ jobs:
       - uses: docker/build-push-action@v6
         with:
           context: .
-          file: apps/web-b2c/Dockerfile
+          file: apps/web/Dockerfile
           push: false
           cache-from: type=gha
           cache-to: type=gha,mode=max

@@ -1,8 +1,25 @@
 # PROGRESS — single source of truth for "where are we"
-_Last updated: 2026-06-13 · by: Claude Code · commit: ziyarah + catering + distance sort_
+_Last updated: 2026-06-13 · by: Claude Code · commit: unify apps + auth/RBAC_
 
-## Now building
-ALL MODULES BUILT. web-b2b now has a Next.js shell too (runnable). Remaining: real partner SaudiPartnerClient (gated), real payment-gateway SDKs, optional admin Next shell, run the deploy pipeline.
+## ARCHITECTURE CHANGE — unified single app (2026-06-13)
+Per user decision, the three separate Next apps were UNIFIED into one app at `apps/web` (:3000).
+`apps/web-b2c` and `apps/web-b2b` were DELETED; their funnel/portal source was relocated into
+`apps/web/src/book` and `apps/web/src/agent` and mounted as routes. One server, one login.
+- Routes: `/` (landing) · `/login` `/signup` (auth) · `/book` (B2C funnel, any signed-in user) ·
+  `/agent` (B2B portal, AGENT/SUB_AGENT, ADMIN) · `/admin` (back office, ADMIN) · `/journey`.
+- Real auth + RBAC via NEW `@auj/auth` package: email+password (scrypt), opaque server sessions
+  (httpOnly cookie), roles PILGRIM|AGENT|SUB_AGENT|ADMIN, agent register→PENDING→admin-approve→ACTIVE.
+  In-memory + Postgres adapters (pg-mem tested). Seeded admin via ADMIN_EMAIL/ADMIN_PASSWORD
+  (default admin@auj.example / admin12345 — CHANGE in prod).
+- Route guards: `requireRole()` server-side; /book /agent /admin 307→/login?next=… when unauthed.
+- Admin → Users & roles now has a live "Agent approvals" panel (lists agents, approve button).
+- Deploy: single image `…-web` (apps/web/Dockerfile); infra/compose service renamed web; env WEB_IMAGE.
+- Note: `next build` standalone output fails on THIS Windows host with EPERM (symlink) — Developer
+  Mode/admin needed for symlinks; does NOT affect `next dev` or the CI gate (tsc). Linux CI is fine.
+
+## Build status
+ALL MODULES BUILT + unified app. Gate: build 12/12, lint 12/12, test 21/21. Remaining: real partner
+SaudiPartnerClient (gated), real payment-gateway SDKs, run the deploy pipeline against the unified image.
 
 ## Frontend handoff (design_handoff_auj_platform, expanded 2026-06-13)
 - New bundle adds Brand/Logo, Landing (responsive web /), Admin (Web) console, Traveller portal (web /journey + mobile). CLAUDE_CODE.md = kickoff prompt + route map; README = full spec.

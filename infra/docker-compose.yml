@@ -3,10 +3,10 @@
 # tunnel (see infra/README.md), never expose 5432 publicly.
 
 services:
-  web-b2c:
-    image: ${WEB_B2C_IMAGE:-ghcr.io/avaisqarni365/auj-web-b2c:latest}
+  web:
+    image: ${WEB_IMAGE:-ghcr.io/avaisqarni365/auj-web:latest}
     # For a local build instead of a pulled image, uncomment:
-    # build: { context: .., dockerfile: apps/web-b2c/Dockerfile }
+    # build: { context: .., dockerfile: apps/web/Dockerfile }
     environment:
       CONNECTOR: ${CONNECTOR:-mock}
       SUPPLIER: ${SUPPLIER:-mock}

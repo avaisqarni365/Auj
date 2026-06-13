@@ -1,11 +1,11 @@
 # Deployment
 
-AUJ ships as a Docker image (the `web-b2c` Next.js app) plus a Postgres/Redis/MinIO stack.
+AUJ ships as a single Docker image (the unified `web` Next.js app — landing, `/book`, `/agent`, `/admin`, auth) plus a Postgres/Redis/MinIO stack.
 
 ## Pipeline overview
 - **CI** (`.github/workflows/ci.yml`) on every push/PR: install → lint → typecheck → test → build, then a Docker build of the app image (not pushed).
 - **Deploy** (`.github/workflows/deploy.yml`) on a `v*` tag (or manual run):
-  1. Builds + pushes `ghcr.io/<owner>/<repo>-web-b2c` to GHCR.
+  1. Builds + pushes `ghcr.io/<owner>/<repo>-web` to GHCR.
   2. If deploy secrets are set, SSHes to the server, copies `infra/`, and runs `deploy.sh`.
 
 ## DB choice
@@ -43,12 +43,12 @@ git tag v0.1.0 && git push origin v0.1.0   # triggers build → push → deploy
 ```
 
 ## Rollback
-On the server, set `WEB_B2C_IMAGE` to a previous tag (e.g. `...-web-b2c:<sha>`) in `infra/.env` and re-run `bash deploy.sh`.
+On the server, set `WEB_IMAGE` to a previous tag (e.g. `...-web:<sha>`) in `infra/.env` and re-run `bash deploy.sh`.
 
 ## Local production build (no registry)
 ```bash
-docker build -f apps/web-b2c/Dockerfile -t auj-web-b2c .
-docker run --rm -p 3000:3000 auj-web-b2c
+docker build -f apps/web/Dockerfile -t auj-web .
+docker run --rm -p 3000:3000 auj-web
 ```
 
 ## Security notes

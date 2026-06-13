@@ -75,9 +75,24 @@ importers:
 
   apps/web:
     dependencies:
+      '@auj/auth':
+        specifier: workspace:*
+        version: link:../../packages/auth
+      '@auj/connector-mock':
+        specifier: workspace:*
+        version: link:../../packages/connector-mock
+      '@auj/connector-travel':
+        specifier: workspace:*
+        version: link:../../packages/connector-travel
       '@auj/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
+      '@auj/core-booking':
+        specifier: workspace:*
+        version: link:../../packages/core-booking
+      '@auj/payments':
+        specifier: workspace:*
+        version: link:../../packages/payments
       '@auj/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -87,6 +102,9 @@ importers:
       next:
         specifier: ^14.2.15
         version: 14.2.35(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      pg:
+        specifier: ^8.13.1
+        version: 8.21.0
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -113,97 +131,21 @@ importers:
         specifier: ^2.1.8
         version: 2.1.9(@types/node@22.19.21)
 
-  apps/web-b2b:
+  packages/auth:
     dependencies:
-      '@auj/connector-mock':
-        specifier: workspace:*
-        version: link:../../packages/connector-mock
-      '@auj/contracts':
-        specifier: workspace:*
-        version: link:../../packages/contracts
-      '@auj/core-booking':
-        specifier: workspace:*
-        version: link:../../packages/core-booking
-      '@auj/payments':
-        specifier: workspace:*
-        version: link:../../packages/payments
-      '@auj/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
-      next:
-        specifier: ^14.2.15
-        version: 14.2.35(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react:
-        specifier: ^18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: ^18.3.1
-        version: 18.3.1(react@18.3.1)
+      pg:
+        specifier: ^8.13.1
+        version: 8.21.0
+      zod:
+        specifier: ^3.23.8
+        version: 3.25.76
     devDependencies:
-      '@types/react':
-        specifier: ^18.3.12
-        version: 18.3.31
-      '@types/react-dom':
-        specifier: ^18.3.1
-        version: 18.3.7(@types/react@18.3.31)
-      autoprefixer:
-        specifier: ^10.4.20
-        version: 10.5.0(postcss@8.5.15)
-      postcss:
-        specifier: ^8.4.49
-        version: 8.5.15
-      tailwindcss:
-        specifier: ^3.4.15
-        version: 3.4.19(tsx@4.22.4)
-      vitest:
-        specifier: ^2.1.8
-        version: 2.1.9(@types/node@22.19.21)
-
-  apps/web-b2c:
-    dependencies:
-      '@auj/connector-mock':
-        specifier: workspace:*
-        version: link:../../packages/connector-mock
-      '@auj/contracts':
-        specifier: workspace:*
-        version: link:../../packages/contracts
-      '@auj/core-booking':
-        specifier: workspace:*
-        version: link:../../packages/core-booking
-      '@auj/payments':
-        specifier: workspace:*
-        version: link:../../packages/payments
-      '@auj/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
-      '@auj/visa-router':
-        specifier: workspace:*
-        version: link:../../packages/visa-router
-      next:
-        specifier: ^14.2.15
-        version: 14.2.35(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react:
-        specifier: ^18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: ^18.3.1
-        version: 18.3.1(react@18.3.1)
-    devDependencies:
-      '@types/react':
-        specifier: ^18.3.12
-        version: 18.3.31
-      '@types/react-dom':
-        specifier: ^18.3.1
-        version: 18.3.7(@types/react@18.3.31)
-      autoprefixer:
-        specifier: ^10.4.20
-        version: 10.5.0(postcss@8.5.15)
-      postcss:
-        specifier: ^8.4.49
-        version: 8.5.15
-      tailwindcss:
-        specifier: ^3.4.15
-        version: 3.4.19(tsx@4.22.4)
+      '@types/pg':
+        specifier: ^8.11.10
+        version: 8.20.0
+      pg-mem:
+        specifier: ^3.0.14
+        version: 3.0.14
       vitest:
         specifier: ^2.1.8
         version: 2.1.9(@types/node@22.19.21)

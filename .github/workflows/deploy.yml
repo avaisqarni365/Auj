@@ -1,6 +1,6 @@
 name: Deploy
 
-# Build + push the web-b2c image to GHCR on a version tag, then (if deploy secrets
+# Build + push the unified web image to GHCR on a version tag, then (if deploy secrets
 # are configured) SSH to the server and roll the compose stack.
 on:
   push:
@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE: ghcr.io/${{ github.repository }}-web-b2c
+  IMAGE: ghcr.io/${{ github.repository }}-web
 
 jobs:
   image:
@@ -35,7 +35,7 @@ jobs:
       - uses: docker/build-push-action@v6
         with:
           context: .
-          file: apps/web-b2c/Dockerfile
+          file: apps/web/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -76,4 +76,4 @@ jobs:
         if: steps.guard.outputs.ready == 'true'
         run: |
           ssh -i ~/.ssh/id_ed25519 "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" \
-            "cd ~/auj/infra && export WEB_B2C_IMAGE='${{ env.IMAGE }}:latest' && bash deploy.sh"
+            "cd ~/auj/infra && export WEB_IMAGE='${{ env.IMAGE }}:latest' && bash deploy.sh"
