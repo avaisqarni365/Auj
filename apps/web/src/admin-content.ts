@@ -60,6 +60,28 @@ export const USERS: Array<{ name: string; email: string; role: 'Admin' | 'Agent'
   { name: 'New Ops Hire', email: 'ops2@auj.travel', role: 'Admin', status: 'Invited', lastActive: '—' },
 ];
 
+// Partner / supplier API integrations behind the connector seam (see the
+// partner-service-providers skill). Mirrors Nusuk's licensed-provider directory.
+export type ProviderStatus = 'connected' | 'sandbox' | 'gated' | 'not-configured';
+export interface ServiceProvider {
+  name: string;
+  kind: string;
+  adapter: string;
+  binding: string;
+  status: ProviderStatus;
+  capabilities: string[];
+  lastChecked: string;
+}
+export const PROVIDERS: ServiceProvider[] = [
+  { name: 'Nusuk Masar / Maqam GDS', kind: 'Saudi pilgrimage', adapter: 'connector-saudi', binding: 'CONNECTOR=saudi', status: 'gated', capabilities: ['Hotels (Makkah/Madinah)', 'Transport (Naqaba)', 'Ground & ziyarah', 'e-Visa', 'Rawdah permit', 'BRN'], lastChecked: '—' },
+  { name: 'TBO / Hotelbeds', kind: 'General hotels (bedbank)', adapter: 'connector-travel', binding: 'SUPPLIER=live', status: 'sandbox', capabilities: ['Hotels worldwide', 'Net rates'], lastChecked: '2 h ago' },
+  { name: 'Amadeus / Sabre', kind: 'Flights (GDS)', adapter: 'connector-travel', binding: 'SUPPLIER=live', status: 'sandbox', capabilities: ['Flight search', 'Ticketing'], lastChecked: '2 h ago' },
+  { name: 'Stripe', kind: 'Payments · EUR', adapter: 'payments', binding: 'STRIPE_*', status: 'sandbox', capabilities: ['Card', 'SEPA', 'Refunds', 'Webhooks'], lastChecked: '1 h ago' },
+  { name: 'Safepay / PayFast', kind: 'Payments · PKR', adapter: 'payments', binding: 'PKR_GATEWAY_*', status: 'sandbox', capabilities: ['Card', 'Refunds'], lastChecked: '1 h ago' },
+  { name: 'S3 / MinIO', kind: 'Document store', adapter: 'core-booking · DocumentStore', binding: 'OBJECT_STORE_*', status: 'not-configured', capabilities: ['Presigned upload', 'Blob storage'], lastChecked: '—' },
+  { name: 'Passport OCR', kind: 'Documents', adapter: 'core-booking · PassportOcr', binding: 'OCR_*', status: 'not-configured', capabilities: ['MRZ read'], lastChecked: '—' },
+];
+
 export const CMS_SECTIONS: Array<{ name: string; status: 'Published' | 'Draft'; edited: string }> = [
   { name: 'Hero', status: 'Published', edited: '2 days ago' },
   { name: 'Journey types', status: 'Published', edited: '1 week ago' },

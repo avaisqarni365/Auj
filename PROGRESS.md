@@ -13,6 +13,20 @@ ALL MODULES BUILT. web-b2b now has a Next.js shell too (runnable). Remaining: re
 - [x] PDF travel-plan + Umrah guide — print-optimised /journey/plan (rituals, day-by-day, document checklist, tips; Print/Save-PDF; print:hidden toolbar, break-inside-avoid). Linked from portal + admin profile.
 - [ ] Traveller MOBILE app screens (separate RN/PWA track).
 
+## Nusuk parity + partner APIs (added 2026-06-13)
+- Analysed umrah.nusuk.sa (we'll be a Nusuk-approved external agent). Features captured as skills:
+  - .claude/skills/nusuk-umrah-services/SKILL.md — feature parity (packages visa-included/optional/custom,
+    Rawdah permit, ziyarah, meals, gift Umrah, personalization, e-services) mapped onto the hybrid
+    SaudiConnector seam (build on mock, swap connector-saudi). NEW domain bits to add: RawdahPermit,
+    package mode, catering, gift.
+  - .claude/skills/partner-service-providers/SKILL.md — admin management of partner/supplier APIs.
+- [x] Admin → Service providers view (apps/web /admin): registry of integrations (Nusuk Masar/Maqam=gated,
+  TBO/Hotelbeds, Amadeus/Sabre, Stripe, Safepay/PayFast, S3/MinIO, OCR) with status pill
+  (connected/sandbox/gated/not-configured), capabilities, adapter+env binding, Test-connection, Add-provider.
+  PROVIDERS registry in src/admin-content.ts (test). Mirrors Nusuk's licensed-provider directory.
+- TODO (Nusuk features not yet built): Rawdah permit, package modes, catering, gift Umrah, support tickets,
+  distance-to-Haram filter, real Nusuk Masar via connector-saudi (gated).
+
 ## Design quality as a workflow (added 2026-06-13)
 - [x] .claude/skills/design-taste/SKILL.md — Emil-Kowalski-grade motion + impeccable design + typography + taste, with a finish checklist. Auto-surfaces on UI work (description match); invoke as /design-taste. THE workflow to apply on every frontend change.
 - [x] @auj/ui motion — preset keyframes (fade-in/rise/pop), ease-out-soft, duration-fast; @auj/ui/motion.css (prefers-reduced-motion guard, imported in all 3 app globals); Button press (active:scale .98), Card hover transition. Purposeful, fast, transform/opacity-only.

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, type ReactNode } from 'react';
-import { Logo } from '@auj/ui';
+import { Logo, StatusPill, type PillTone } from '@auj/ui';
 import { routeFor } from '@auj/visa-router';
 import { formatMoney } from '../../src/currency';
 import {
@@ -10,17 +10,20 @@ import {
   DEPARTURES,
   PILGRIMS,
   PIPELINE,
+  PROVIDERS,
   RECENT_BOOKINGS,
   STAGES,
   USERS,
   type AdminPilgrim,
+  type ProviderStatus,
 } from '../../src/admin-content';
 
-type View = 'overview' | 'pilgrims' | 'content' | 'users';
+type View = 'overview' | 'pilgrims' | 'providers' | 'content' | 'users';
 
 const NAV: Array<{ key: View; label: string; icon: string; badge?: string }> = [
   { key: 'overview', label: 'Overview', icon: '▦' },
   { key: 'pilgrims', label: 'Pilgrims · CRM', icon: '👥', badge: '1.3k' },
+  { key: 'providers', label: 'Service providers', icon: '🔌' },
   { key: 'content', label: 'Landing content', icon: '📝' },
   { key: 'users', label: 'Users & roles', icon: '🛡' },
 ];
@@ -99,6 +102,8 @@ export default function AdminPage() {
               <Overview onViewAll={() => go('pilgrims')} />
             ) : view === 'pilgrims' ? (
               <Pilgrims onSelect={setSelected} />
+            ) : view === 'providers' ? (
+              <ServiceProviders />
             ) : view === 'content' ? (
               <Content />
             ) : (
@@ -366,6 +371,53 @@ function PayRow({ label, value, tone = '' }: { label: string; value: string; ton
       <span className="text-[13px] text-sand-700">{label}</span>
       <span className={`font-mono text-[13px] ${tone}`}>{value}</span>
     </div>
+  );
+}
+
+function providerTone(status: ProviderStatus): PillTone {
+  if (status === 'connected') return 'success';
+  if (status === 'sandbox') return 'info';
+  if (status === 'gated') return 'warning';
+  return 'draft';
+}
+
+function ServiceProviders() {
+  return (
+    <>
+      <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+        <PageHead kicker="INTEGRATIONS" title="Service providers" />
+        <button type="button" className="rounded-[10px] bg-green-800 px-4 py-2 text-[13px] font-semibold text-white">+ Add provider</button>
+      </div>
+      <p className="mb-4 max-w-2xl text-[13px] text-sand-500">
+        Every external integration behind the connector seam — Saudi pilgrimage (Nusuk Masar / Maqam),
+        general-travel supply, payment gateways and storage. Only licensed/approved partners are listed.
+      </p>
+      <div className="grid gap-3.5 lg:grid-cols-2">
+        {PROVIDERS.map((p) => (
+          <Card key={p.name} className="p-5">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <div className="font-semibold">{p.name}</div>
+                <div className="text-[12.5px] text-sand-500">{p.kind}</div>
+              </div>
+              <StatusPill tone={providerTone(p.status)}>{p.status}</StatusPill>
+            </div>
+            <div className="mt-3 flex flex-wrap gap-1.5">
+              {p.capabilities.map((c) => (
+                <span key={c} className="rounded-[7px] bg-sand-100 px-2.5 py-1 text-[11.5px] text-sand-700">{c}</span>
+              ))}
+            </div>
+            <div className="mt-3 border-t border-sand-100 pt-3 text-[12.5px] text-sand-500">
+              Adapter <span className="font-mono text-sand-700">{p.adapter}</span> · selector <span className="font-mono text-sand-700">{p.binding}</span>
+            </div>
+            <div className="mt-3 flex items-center justify-between">
+              <span className="text-[12px] text-sand-500">Last checked {p.lastChecked}</span>
+              <button type="button" className="rounded-[9px] border-[1.5px] border-sand-300 bg-white px-3 py-1.5 text-[12.5px] font-semibold text-sand-700">Test connection</button>
+            </div>
+          </Card>
+        ))}
+      </div>
+    </>
   );
 }
 

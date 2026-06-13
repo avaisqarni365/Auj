@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { routeFor } from '@auj/visa-router';
-import { ADMIN_KPIS, PILGRIMS, STAGES, USERS } from './admin-content';
+import { ADMIN_KPIS, PILGRIMS, PROVIDERS, STAGES, USERS } from './admin-content';
 
 describe('admin content', () => {
   it('has KPIs and a CRM list', () => {
@@ -25,5 +25,13 @@ describe('admin content', () => {
   it('has users with roles', () => {
     expect(USERS.some((u) => u.role === 'Admin')).toBe(true);
     expect(USERS.some((u) => u.role === 'Agent')).toBe(true);
+  });
+
+  it('lists partner service providers incl. the gated Nusuk/Maqam connector', () => {
+    const nusuk = PROVIDERS.find((p) => p.adapter === 'connector-saudi');
+    expect(nusuk?.status).toBe('gated');
+    expect(nusuk?.capabilities).toContain('Rawdah permit');
+    expect(PROVIDERS.some((p) => p.kind.startsWith('Payments'))).toBe(true);
+    expect(PROVIDERS.every((p) => ['connected', 'sandbox', 'gated', 'not-configured'].includes(p.status))).toBe(true);
   });
 });
