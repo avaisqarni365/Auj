@@ -1,5 +1,5 @@
 import type { CateringOffer, FlightOffer, GroundOffer, HotelOffer, Money, PackageMode, RawdahPermit, RawdahSlot, SearchCriteria } from '@auj/contracts';
-import type { Booking, CrmPilgrim, Customer, PackageItem, VisaCase } from '@auj/core-booking';
+import type { Booking, CrmPilgrim, Customer, PackageItem, SpecialRequestCategory, VisaCase } from '@auj/core-booking';
 
 /**
  * The booking surface the B2C app talks to. The app NEVER imports a connector —
@@ -20,6 +20,7 @@ export interface BookingApi {
     pilgrimIds: string[];
     items: PackageItem[];
     gift?: { recipientName: string; recipientEmail?: string; message?: string };
+    specialRequests?: Array<{ category: SpecialRequestCategory; note?: string }>;
   }): Promise<Booking>;
   hold(bookingId: string): Promise<Booking>;
   confirm(bookingId: string, paymentRef: string): Promise<Booking>;

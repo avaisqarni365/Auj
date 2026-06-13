@@ -1,4 +1,4 @@
-import type { Booking, VisaCase } from '@auj/core-booking';
+import type { Booking, SpecialRequestCategory, VisaCase } from '@auj/core-booking';
 import { Button } from '@auj/ui';
 import { t, type Locale } from '../i18n';
 
@@ -6,6 +6,14 @@ const MODE_LABEL: Record<NonNullable<Booking['mode']>, string> = {
   COMPREHENSIVE: 'Comprehensive package',
   VISA_OPTIONAL: 'Visa-optional package',
   CUSTOM: 'Custom package',
+};
+
+const REQUEST_LABEL: Record<SpecialRequestCategory, string> = {
+  WHEELCHAIR: '♿ Wheelchair access',
+  DIETARY: '🍽 Dietary needs',
+  ROOM_NEAR_HARAM: '🕋 Room near Haram',
+  LATE_CHECKOUT: '🕔 Late checkout',
+  OTHER: '📝 Note',
 };
 
 const FLOW: Array<{ key: VisaCase['status']; title: string; sub: string }> = [
@@ -123,6 +131,21 @@ export function MyBooking({ locale, booking, visaCase }: MyBookingProps) {
               <div className="font-mono text-[15px] font-bold tracking-[0.06em] text-green-800">{booking.gift.voucherCode}</div>
             </div>
             {booking.gift.message ? <p className="mt-2 text-center text-[12.5px] italic text-sand-700">“{booking.gift.message}”</p> : null}
+          </div>
+        ) : null}
+
+        {/* Special requests */}
+        {booking.specialRequests && booking.specialRequests.length > 0 ? (
+          <div className="mb-3.5 rounded-2xl border border-sand-200 bg-white p-4">
+            <div className="mb-2 text-sm font-bold">Special requests</div>
+            <div className="grid gap-2">
+              {booking.specialRequests.map((r) => (
+                <div key={r.id} className="flex items-center justify-between gap-2 rounded-xl bg-sand-50 px-3 py-2">
+                  <span className="text-[13px] text-sand-700">{REQUEST_LABEL[r.category]}{r.note ? ` — ${r.note}` : ''}</span>
+                  <span className="shrink-0 rounded-full bg-info-bg px-2 py-0.5 text-[10.5px] font-semibold text-info-fg">{r.status}</span>
+                </div>
+              ))}
+            </div>
           </div>
         ) : null}
 

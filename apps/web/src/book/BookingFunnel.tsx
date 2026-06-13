@@ -77,6 +77,13 @@ export function BookingFunnel({ initialCity, initialPax }: { initialCity: Search
               },
             }
           : {}),
+        ...(() => {
+          const reqs = [
+            ...state.requests.categories.map((category) => ({ category })),
+            ...(state.requests.note.trim() ? [{ category: 'OTHER' as const, note: state.requests.note.trim() }] : []),
+          ];
+          return reqs.length > 0 ? { specialRequests: reqs } : {};
+        })(),
       });
       setBooking(placed.booking);
       setVisaCase(placed.visaCase);
@@ -157,6 +164,9 @@ export function BookingFunnel({ initialCity, initialPax }: { initialCity: Search
           onBack={back('PILGRIMS')}
           gift={state.gift}
           onGift={(patch) => dispatch({ type: 'SET_GIFT', gift: patch })}
+          requests={state.requests}
+          onToggleRequest={(category) => dispatch({ type: 'TOGGLE_REQUEST', category })}
+          onRequestNote={(note) => dispatch({ type: 'SET_REQUEST_NOTE', note })}
         />
       )}
 

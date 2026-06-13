@@ -121,6 +121,29 @@ describe('B2C screens', () => {
     expect(on).toContain('Recipient name');
   });
 
+  it('Checkout renders the special-requests chips + note', () => {
+    const html = renderToStaticMarkup(
+      <Checkout locale="en" currency="EUR" totalEur={{ amount: 120000, currency: 'EUR' }} onCurrency={noop} onPay={noop}
+        requests={{ categories: ['WHEELCHAIR'], note: '' }} onToggleRequest={noop} onRequestNote={noop} />,
+    );
+    expect(html).toContain('Special requests');
+    expect(html).toContain('Wheelchair access');
+    expect(html).toContain('Room near Haram');
+  });
+
+  it('MyBooking renders special requests with status', () => {
+    const booking: Booking = {
+      id: 'sr1', customerId: 'c1', channel: 'PILGRIMAGE', status: 'CONFIRMED',
+      pilgrimIds: [], items: [], createdAt: 't0', updatedAt: 't1',
+      specialRequests: [{ id: 'r1', category: 'DIETARY', note: 'No nuts', status: 'REQUESTED' }],
+    };
+    const html = renderToStaticMarkup(<MyBooking locale="en" booking={booking} />);
+    expect(html).toContain('Special requests');
+    expect(html).toContain('Dietary needs');
+    expect(html).toContain('No nuts');
+    expect(html).toContain('REQUESTED');
+  });
+
   it('MyBooking renders a gift voucher card', () => {
     const booking: Booking = {
       id: 'g1', customerId: 'c1', channel: 'PILGRIMAGE', status: 'CONFIRMED',

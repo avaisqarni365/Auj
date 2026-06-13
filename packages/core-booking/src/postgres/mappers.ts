@@ -13,6 +13,7 @@ import type {
   Package,
   PackageMode,
   RawdahPermit,
+  SpecialRequest,
   VisaCase,
 } from '../domain';
 
@@ -71,6 +72,7 @@ export interface BookingRow {
   visa_case_id: string | null;
   rawdah: RawdahPermit | null; // jsonb
   gift: Gift | null; // jsonb
+  special_requests: SpecialRequest[] | null; // jsonb
   refund_amount: number | null;
   refund_currency: string | null;
   created_at: string;
@@ -112,6 +114,7 @@ export function rowToBooking(b: BookingRow, itemRows: BookingItemRow[]): Booking
     ...(b.visa_case_id != null ? { visaCaseId: b.visa_case_id } : {}),
     ...(b.rawdah != null ? { rawdah: b.rawdah } : {}),
     ...(b.gift != null ? { gift: b.gift } : {}),
+    ...(b.special_requests != null ? { specialRequests: b.special_requests } : {}),
     ...(b.refund_amount != null && b.refund_currency != null
       ? { refund: { amount: b.refund_amount, currency: b.refund_currency as Currency } }
       : {}),

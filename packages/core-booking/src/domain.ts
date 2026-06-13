@@ -77,6 +77,18 @@ export interface Gift {
   redeemed: boolean;
 }
 
+/** Personalization (Nusuk parity): structured + free-text special requests on a booking,
+ * routed to the approved provider, each with a status the provider can update. */
+export type SpecialRequestCategory = 'WHEELCHAIR' | 'DIETARY' | 'ROOM_NEAR_HARAM' | 'LATE_CHECKOUT' | 'OTHER';
+export type SpecialRequestStatus = 'REQUESTED' | 'ACKNOWLEDGED' | 'FULFILLED' | 'DECLINED';
+
+export interface SpecialRequest {
+  id: string;
+  category: SpecialRequestCategory;
+  note?: string;
+  status: SpecialRequestStatus;
+}
+
 export type DocumentType = 'PASSPORT' | 'PHOTO' | 'VISA' | 'VOUCHER' | 'OTHER';
 
 export interface Document {
@@ -112,6 +124,7 @@ export interface Booking {
   visaCaseId?: string;
   rawdah?: RawdahPermit;
   gift?: Gift;
+  specialRequests?: SpecialRequest[];
   refund?: Money;
   createdAt: string;
   updatedAt: string;

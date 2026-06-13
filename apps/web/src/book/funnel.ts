@@ -1,5 +1,5 @@
 import type { Currency, Money, PackageMode, SearchCriteria } from '@auj/contracts';
-import type { PackageItem } from '@auj/core-booking';
+import type { PackageItem, SpecialRequestCategory } from '@auj/core-booking';
 
 // Local copy so this module stays free of any value import from core-booking,
 // keeping the funnel safe to bundle into the browser (core-booking pulls node:crypto).
@@ -31,6 +31,8 @@ export interface FunnelState {
   rawdahRequested: boolean;
   /** Gift Umrah: when enabled, the booking is bought for a recipient (voucher issued). */
   gift: { enabled: boolean; recipientName: string; recipientEmail: string; message: string };
+  /** Personalization: selected special-request categories + a free-text note. */
+  requests: { categories: SpecialRequestCategory[]; note: string };
   criteria: SearchCriteria;
   cart: PackageItem[];
   pilgrims: PilgrimDraft[];
@@ -44,6 +46,8 @@ export type FunnelAction =
   | { type: 'SET_MODE'; mode: PackageMode }
   | { type: 'TOGGLE_RAWDAH' }
   | { type: 'SET_GIFT'; gift: Partial<FunnelState['gift']> }
+  | { type: 'TOGGLE_REQUEST'; category: SpecialRequestCategory }
+  | { type: 'SET_REQUEST_NOTE'; note: string }
   | { type: 'ADD_ITEM'; item: PackageItem }
   | { type: 'REMOVE_ITEM'; offerId: string }
   | { type: 'SET_PILGRIMS'; pilgrims: PilgrimDraft[] }
@@ -57,6 +61,7 @@ export function initialFunnel(): FunnelState {
     mode: 'COMPREHENSIVE',
     rawdahRequested: false,
     gift: { enabled: false, recipientName: '', recipientEmail: '', message: '' },
+    requests: { categories: [], note: '' },
     criteria: { city: 'MAKKAH', checkIn: '', checkOut: '', pax: 1 },
     cart: [],
     pilgrims: [],
@@ -76,6 +81,18 @@ export function funnelReducer(state: FunnelState, action: FunnelAction): FunnelS
       return { ...state, rawdahRequested: !state.rawdahRequested };
     case 'SET_GIFT':
       return { ...state, gift: { ...state.gift, ...action.gift } };
+    case 'TOGGLE_REQUEST':
+      return {
+        ...state,
+        requests: {
+          ...state.requests,
+          categories: state.requests.categories.includes(action.category)
+            ? state.requests.categories.filter((c) => c !== action.category)
+            : [...state.requests.categories, action.category],
+        },
+      };
+    case 'SET_REQUEST_NOTE':
+      return { ...state, requests: { ...state.requests, note: action.note } };
     case 'ADD_ITEM':
       if (state.cart.some((i) => i.offerId === action.item.offerId)) return state;
       return { ...state, cart: [...state.cart, action.item] };

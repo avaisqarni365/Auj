@@ -1,5 +1,5 @@
 import type { Money, PackageMode, RawdahPermit } from '@auj/contracts';
-import type { Booking, PackageItem, VisaCase } from '@auj/core-booking';
+import type { Booking, PackageItem, SpecialRequestCategory, VisaCase } from '@auj/core-booking';
 import { routeFor, type VisaRouting } from '@auj/visa-router';
 import type { Backend, PaymentMethod } from './ports';
 import type { PilgrimDraft } from './funnel';
@@ -30,6 +30,8 @@ export interface PlaceBookingInput {
   rawdahDate?: string;
   /** When set, this booking is a gift for the named recipient (generates a voucher). */
   gift?: { recipientName: string; recipientEmail?: string; message?: string };
+  /** Personalization: special requests captured at booking time. */
+  specialRequests?: Array<{ category: SpecialRequestCategory; note?: string }>;
 }
 
 export interface PlacedBooking {
@@ -61,6 +63,7 @@ export async function placePilgrimageBooking(
     items: input.items,
     ...(input.mode ? { mode: input.mode } : {}),
     ...(input.gift ? { gift: input.gift } : {}),
+    ...(input.specialRequests && input.specialRequests.length > 0 ? { specialRequests: input.specialRequests } : {}),
   });
 
   await api.hold(draft.id);

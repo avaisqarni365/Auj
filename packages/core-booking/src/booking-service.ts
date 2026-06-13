@@ -1,6 +1,6 @@
 import type { PackageMode, Pilgrim as ContractsPilgrim, RawdahPermit, RawdahSlot, SaudiConnector, TravelSupplier } from '@auj/contracts';
 import { routeForGroup, type VisaConfig } from '@auj/visa-router';
-import type { Booking, BookingChannel, CrmPilgrim, Gift, PackageItem, VisaCase } from './domain';
+import type { Booking, BookingChannel, CrmPilgrim, Gift, PackageItem, SpecialRequest, SpecialRequestCategory, SpecialRequestStatus, VisaCase } from './domain';
 import { toContractsPilgrim } from './domain';
 import { assertTransition } from './state-machine';
 import type { BookingRepository, Clock, PilgrimRepository, VisaCaseRepository } from './ports';
@@ -23,6 +23,8 @@ export interface CreateBookingInput {
   items: PackageItem[];
   /** When present, this booking is a gift — a voucher is generated for the recipient. */
   gift?: { recipientName: string; recipientEmail?: string; message?: string };
+  /** Personalization: special requests captured at booking time. */
+  specialRequests?: Array<{ category: SpecialRequestCategory; note?: string }>;
 }
 
 export interface BookingServiceDeps {
@@ -94,7 +96,36 @@ export class BookingService {
             } satisfies Gift,
           }
         : {}),
+      ...(input.specialRequests && input.specialRequests.length > 0
+        ? {
+            specialRequests: input.specialRequests.map(
+              (r): SpecialRequest => ({
+                id: uuidv7(),
+                category: r.category,
+                status: 'REQUESTED',
+                ...(r.note ? { note: r.note } : {}),
+              }),
+            ),
+          }
+        : {}),
     });
+  }
+
+  /** Add a special request to an existing booking (e.g. from the traveller portal). */
+  async addSpecialRequest(bookingId: string, req: { category: SpecialRequestCategory; note?: string }): Promise<Booking> {
+    const b = await this.require(bookingId);
+    const request: SpecialRequest = { id: uuidv7(), category: req.category, status: 'REQUESTED', ...(req.note ? { note: req.note } : {}) };
+    b.specialRequests = [...(b.specialRequests ?? []), request];
+    return this.persist(b);
+  }
+
+  /** Provider/staff: update the status of a special request. */
+  async setRequestStatus(bookingId: string, requestId: string, status: SpecialRequestStatus): Promise<Booking> {
+    const b = await this.require(bookingId);
+    const req = b.specialRequests?.find((r) => r.id === requestId);
+    if (!req) throw new BookingError('Unknown special request');
+    req.status = status;
+    return this.persist(b);
   }
 
   /** Redeem a gift voucher (recipient claims it). Returns the booking, or throws if unknown/used. */

@@ -90,6 +90,24 @@ describe('Postgres adapter against pg-mem', () => {
     expect((await createPostgresStores(pool).bookings.get(draft.id))?.gift?.redeemed).toBe(true);
   });
 
+  it('persists special requests (jsonb) and status updates across fresh stores', async () => {
+    const pool = await freshPool();
+    const core = createCoreBooking({ saudi: new MockSaudiConnector(), travel: new MockTravelSupplier(), stores: createPostgresStores(pool) });
+    const customer = await core.crm.createCustomer({ fullName: 'Sara', email: 's4@x.example' });
+    const draft = await core.bookings.createDraft({
+      customerId: customer.id, channel: 'PILGRIMAGE', pilgrimIds: [], items: [],
+      specialRequests: [{ category: 'ROOM_NEAR_HARAM', note: 'High floor' }],
+    });
+    const reqId = draft.specialRequests![0]!.id;
+    await core.bookings.setRequestStatus(draft.id, reqId, 'FULFILLED');
+
+    const reloaded = await createPostgresStores(pool).bookings.get(draft.id);
+    expect(reloaded?.specialRequests).toHaveLength(1);
+    expect(reloaded?.specialRequests?.[0]?.category).toBe('ROOM_NEAR_HARAM');
+    expect(reloaded?.specialRequests?.[0]?.note).toBe('High floor');
+    expect(reloaded?.specialRequests?.[0]?.status).toBe('FULFILLED');
+  });
+
   it('updates a booking in place (upsert) rather than duplicating', async () => {
     const pool = await freshPool();
     const stores = createPostgresStores(pool);

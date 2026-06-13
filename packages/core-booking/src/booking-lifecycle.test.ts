@@ -125,6 +125,31 @@ describe('pilgrimage booking lifecycle (end-to-end against connector-mock)', () 
     await expect(core.bookings.redeemGift('AUJ-GIFT-NOPE')).rejects.toThrow(/Unknown gift voucher/);
   });
 
+  it('captures special requests at booking and lets the provider update their status', async () => {
+    const core = setup();
+    const customer = await core.crm.createCustomer({ fullName: 'Sara', email: 'sara@example.com' });
+    const booking = await core.bookings.createDraft({
+      customerId: customer.id,
+      channel: 'PILGRIMAGE',
+      pilgrimIds: [],
+      items: [],
+      specialRequests: [
+        { category: 'WHEELCHAIR' },
+        { category: 'DIETARY', note: 'No nuts' },
+      ],
+    });
+    expect(booking.specialRequests).toHaveLength(2);
+    expect(booking.specialRequests?.every((r) => r.status === 'REQUESTED')).toBe(true);
+    const wheelchair = booking.specialRequests!.find((r) => r.category === 'WHEELCHAIR')!;
+
+    const acked = await core.bookings.setRequestStatus(booking.id, wheelchair.id, 'ACKNOWLEDGED');
+    expect(acked.specialRequests?.find((r) => r.id === wheelchair.id)?.status).toBe('ACKNOWLEDGED');
+
+    const added = await core.bookings.addSpecialRequest(booking.id, { category: 'LATE_CHECKOUT', note: 'Flight at 22:00' });
+    expect(added.specialRequests).toHaveLength(3);
+    await expect(core.bookings.setRequestStatus(booking.id, 'nope', 'FULFILLED')).rejects.toThrow(/Unknown special request/);
+  });
+
   it('rejects Rawdah for travel bookings', async () => {
     const core = setup();
     const customer = await core.crm.createCustomer({ fullName: 'T', email: 't2@example.com' });

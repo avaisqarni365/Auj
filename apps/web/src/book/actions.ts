@@ -4,7 +4,7 @@
 // Postgres-backed when DATABASE_URL is set, in-memory otherwise. Bookings are attached to
 // the logged-in user (their account is the customer).
 import type { CateringOffer, GroundOffer, Money, PackageMode, SearchCriteria } from '@auj/contracts';
-import type { PackageItem, VisaCase } from '@auj/core-booking';
+import type { PackageItem, SpecialRequestCategory, VisaCase } from '@auj/core-booking';
 import { createBackend } from './backend/in-process';
 import type { Backend } from './ports';
 import { placePilgrimageBooking, pollVisaUntilIssued, type PlacedBooking } from './usecases';
@@ -40,6 +40,7 @@ export async function placeBookingAction(input: {
   mode?: PackageMode;
   rawdahDate?: string;
   gift?: { recipientName: string; recipientEmail?: string; message?: string };
+  specialRequests?: Array<{ category: SpecialRequestCategory; note?: string }>;
 }): Promise<PlacedBooking> {
   const user = await getCurrentUser();
   const lead = input.pilgrims[0];

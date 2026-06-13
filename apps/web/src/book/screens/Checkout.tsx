@@ -1,4 +1,5 @@
 import type { Money } from '@auj/contracts';
+import type { SpecialRequestCategory } from '@auj/core-booking';
 import { Button } from '@auj/ui';
 import { formatMoney, formatWithPkr } from '../fx';
 import { t, type Locale } from '../i18n';
@@ -21,9 +22,19 @@ export interface CheckoutProps {
   onBack?: () => void;
   gift?: GiftDraft;
   onGift?: (patch: Partial<GiftDraft>) => void;
+  requests?: { categories: SpecialRequestCategory[]; note: string };
+  onToggleRequest?: (category: SpecialRequestCategory) => void;
+  onRequestNote?: (note: string) => void;
 }
 
-export function Checkout({ locale, currency, totalEur, onCurrency, onPay, paying, onBack, gift, onGift }: CheckoutProps) {
+const REQUEST_OPTIONS: ReadonlyArray<{ value: SpecialRequestCategory; label: string; icon: string }> = [
+  { value: 'WHEELCHAIR', label: 'Wheelchair access', icon: '♿' },
+  { value: 'DIETARY', label: 'Dietary needs', icon: '🍽' },
+  { value: 'ROOM_NEAR_HARAM', label: 'Room near Haram', icon: '🕋' },
+  { value: 'LATE_CHECKOUT', label: 'Late checkout', icon: '🕔' },
+];
+
+export function Checkout({ locale, currency, totalEur, onCurrency, onPay, paying, onBack, gift, onGift, requests, onToggleRequest, onRequestNote }: CheckoutProps) {
   const pkr = formatWithPkr(totalEur).split('≈')[1]?.trim();
   return (
     <div className="min-h-screen bg-sand-50">
@@ -121,6 +132,39 @@ export function Checkout({ locale, currency, totalEur, onCurrency, onPay, paying
                 />
               </div>
             ) : null}
+          </div>
+        ) : null}
+
+        {/* Special requests (personalization) */}
+        {requests ? (
+          <div className="mb-4 rounded-2xl border border-sand-200 bg-white p-4">
+            <div className="text-[14.5px] font-semibold">Special requests</div>
+            <div className="mt-0.5 text-[12px] text-sand-500">We’ll pass these to your provider.</div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {REQUEST_OPTIONS.map((o) => {
+                const on = requests.categories.includes(o.value);
+                return (
+                  <button
+                    key={o.value}
+                    type="button"
+                    aria-pressed={on}
+                    onClick={() => onToggleRequest?.(o.value)}
+                    className={`rounded-full border px-3 py-1.5 text-[12.5px] font-semibold transition-colors ${
+                      on ? 'border-green-800 bg-green-800/5 text-green-800' : 'border-sand-300 bg-white text-sand-600'
+                    }`}
+                  >
+                    {o.icon} {o.label}
+                  </button>
+                );
+              })}
+            </div>
+            <textarea
+              value={requests.note}
+              onChange={(e) => onRequestNote?.(e.target.value)}
+              rows={2}
+              placeholder="Anything else we should know? (optional)"
+              className="mt-3 w-full rounded-[10px] border-[1.5px] border-sand-300 px-3 py-2.5 text-[14px] focus:border-green-700 focus:outline-none"
+            />
           </div>
         ) : null}
 

@@ -28,9 +28,9 @@ Per user decision, the three separate Next apps were UNIFIED into one app at `ap
   partner/ERP or the future Maqam integration builds against.
 
 ## Build status
-ALL MODULES BUILT + unified app + env-selected seam + Gift Umrah + Support tickets.
-Gate: build 13/13, lint 13/13, test 24/24. Remaining: real partner SaudiPartnerClient (gated),
-real payment-gateway SDKs, deploy the unified image.
+ALL MODULES BUILT + unified app + env-selected seam + Gift Umrah + Support tickets + Personalization.
+Gate: build 13/13, lint 13/13, test 24/24 (apps/web 61, core-booking 29). Remaining: real partner
+SaudiPartnerClient (gated), real payment-gateway SDKs, deploy the unified image.
 
 ## Frontend handoff (design_handoff_auj_platform, expanded 2026-06-13)
 - New bundle adds Brand/Logo, Landing (responsive web /), Admin (Web) console, Traveller portal (web /journey + mobile). CLAUDE_CODE.md = kickoff prompt + route map; README = full spec.
@@ -86,8 +86,16 @@ real payment-gateway SDKs, deploy the unified image.
     backend singleton (globalThis, Postgres when DATABASE_URL); account-menu "Help & support" link.
   - admin: Support view (list all, reply as staff, set status) via admin-guarded actions.
   - Verified e2e: open ticket -> persists -> lists; route 307-guards when unauthed.
-- TODO (Nusuk features not yet built): personalization/special requests,
-  gift-voucher redemption UI, real Nusuk Masar via connector-saudi (gated).
+- [x] Personalization / special requests (2026-06-13) — Nusuk feature #10:
+  - core-booking: SpecialRequest { id, category (WHEELCHAIR|DIETARY|ROOM_NEAR_HARAM|LATE_CHECKOUT|OTHER),
+    note?, status REQUESTED|ACKNOWLEDGED|FULFILLED|DECLINED }; Booking.specialRequests?;
+    createDraft accepts them; addSpecialRequest + setRequestStatus (provider/staff). Postgres jsonb.
+    Lifecycle + pg-mem tests.
+  - web-b2c: Checkout "Special requests" chips (wheelchair/dietary/room-near-Haram/late-checkout) +
+    free-text note → funnel TOGGLE_REQUEST/SET_REQUEST_NOTE → placeBookingAction; MyBooking lists
+    requests with status.
+- TODO (Nusuk features not yet built): gift-voucher redemption UI, admin/provider special-request
+  status UI, real Nusuk Masar via connector-saudi (gated).
 
 ## Design quality as a workflow (added 2026-06-13)
 - [x] .claude/skills/design-taste/SKILL.md — Emil-Kowalski-grade motion + impeccable design + typography + taste, with a finish checklist. Auto-surfaces on UI work (description match); invoke as /design-taste. THE workflow to apply on every frontend change.
