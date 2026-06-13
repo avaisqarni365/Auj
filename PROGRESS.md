@@ -2,7 +2,12 @@
 _Last updated: 2026-06-12 · by: Claude Code · commit: (scaffold)_
 
 ## Now building
-ALL MODULES BUILT (Waves 0/A/B/C). Remaining work is real-integration + polish: real partner SaudiPartnerClient (when access lands), real payment-gateway SDKs, Next shells for web-b2b + admin, wire app backends to Postgres in prod, run the deploy pipeline.
+ALL MODULES BUILT. web-b2b now has a Next.js shell too (runnable). Remaining: real partner SaudiPartnerClient (gated), real payment-gateway SDKs, optional admin Next shell, run the deploy pipeline.
+
+## How to run
+- `npm run dev` -> web-b2c booking funnel (:3000).
+- `npm run dev:b2b` -> web-b2b agent portal (:3000): auto-onboards a GOLD agent, funds the wallet, multi-pax book (<=49) from wallet, live balance + ledger.
+- `npm run dev:all` -> every app (needs --concurrency, already set).
 
 ## Status by wave
 ### Wave 0 — sequential (scaffold + contracts + mock) — DONE
