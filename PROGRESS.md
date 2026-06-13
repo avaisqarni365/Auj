@@ -5,7 +5,7 @@ _Last updated: 2026-06-12 · by: Claude Code · commit: (scaffold)_
 ALL MODULES BUILT. web-b2b now has a Next.js shell too (runnable). Remaining: real partner SaudiPartnerClient (gated), real payment-gateway SDKs, optional admin Next shell, run the deploy pipeline.
 
 ## How to run
-- `npm run dev` -> web-b2c booking funnel (:3000).
+- `npm run dev` -> web-b2c booking funnel (:3000), now HI-FI per design_handoff (app bar + gold-star logo, serif hero, search card, popular rail, trust strip; sticky sub-screen headers; visa-route gradient card; green My-Booking header + live visa timeline).
 - `npm run dev:b2b` -> web-b2b agent portal (:3000): auto-onboards a GOLD agent, funds the wallet, multi-pax book (<=49) from wallet, live balance + ledger.
 - `npm run dev:all` -> every app (needs --concurrency, already set).
 

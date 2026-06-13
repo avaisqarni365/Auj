@@ -14,7 +14,9 @@ const offer: HotelOffer = {
 
 describe('B2C screens', () => {
   it('Results lists offers with a Nusuk pill and price', () => {
-    const html = renderToStaticMarkup(<Results locale="en" offers={[offer]} onBuild={noop} />);
+    const html = renderToStaticMarkup(
+      <Results locale="en" criteria={{ city: 'MAKKAH', checkIn: '', checkOut: '', pax: 4 }} offers={[offer]} onBuild={noop} />,
+    );
     expect(html).toContain('Swissotel Makkah');
     expect(html).toContain('Nusuk');
     expect(html).toContain('SAR');

@@ -59,13 +59,11 @@ export default function Page() {
       if (booking) setVisaCase(await pollVisaAction(booking.id));
     });
 
-  return (
-    <main className="mx-auto max-w-md p-4">
-      <header className="mb-4 flex items-center justify-between">
-        <span className="font-serif text-xl font-semibold text-green-800">AUJ</span>
-        <span className="text-xs text-sand-500">{state.step.toLowerCase()}</span>
-      </header>
+  const back = (step: 'SEARCH' | 'RESULTS' | 'BUILDER' | 'PILGRIMS'): (() => void) => () =>
+    dispatch({ type: 'GO', step });
 
+  return (
+    <main className="mx-auto min-h-screen max-w-md bg-sand-50 shadow-sm">
       {state.step === 'SEARCH' && (
         <HomeSearch
           locale="en"
@@ -76,7 +74,9 @@ export default function Page() {
         />
       )}
 
-      {state.step === 'RESULTS' && <Results locale="en" offers={offers} onBuild={build} />}
+      {state.step === 'RESULTS' && (
+        <Results locale="en" criteria={state.criteria} offers={offers} onBuild={build} onBack={back('SEARCH')} />
+      )}
 
       {state.step === 'BUILDER' && (
         <PackageBuilder
@@ -84,6 +84,7 @@ export default function Page() {
           items={state.cart}
           totals={cartTotals(state)}
           onContinue={() => dispatch({ type: 'GO', step: 'PILGRIMS' })}
+          onBack={back('RESULTS')}
         />
       )}
 
@@ -96,6 +97,7 @@ export default function Page() {
           route={previewVisaRoute(pilgrim)}
           onField={(field, value) => setPilgrim((p) => ({ ...p, [field]: value }))}
           onContinue={() => dispatch({ type: 'GO', step: 'CHECKOUT' })}
+          onBack={back('BUILDER')}
         />
       )}
 
@@ -107,20 +109,23 @@ export default function Page() {
           onCurrency={(currency) => dispatch({ type: 'SET_CURRENCY', currency })}
           onPay={pay}
           paying={pending}
+          onBack={back('PILGRIMS')}
         />
       )}
 
       {state.step === 'CONFIRMED' && booking && (
-        <div className="grid gap-3">
+        <div>
           <MyBooking locale="en" booking={booking} visaCase={visaCase} />
-          <button
-            type="button"
-            onClick={refreshVisa}
-            disabled={pending}
-            className="rounded-lg bg-accent-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
-          >
-            Refresh visa status
-          </button>
+          <div className="bg-sand-50 px-4 pb-6">
+            <button
+              type="button"
+              onClick={refreshVisa}
+              disabled={pending}
+              className="w-full rounded-lg bg-accent-600 px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-50"
+            >
+              Refresh visa status
+            </button>
+          </div>
         </div>
       )}
     </main>
