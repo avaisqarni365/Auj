@@ -8,8 +8,6 @@ const nextConfig = {
   reactStrictMode: true,
   // Slim, self-contained server output for Docker.
   output: 'standalone',
-  // Trace from the monorepo root so workspace packages are bundled into standalone.
-  outputFileTracingRoot: path.join(dirname, '../../'),
   // Compile the workspace packages from source (no prebuilt dist needed for the app).
   transpilePackages: [
     '@auj/ui',
@@ -19,8 +17,11 @@ const nextConfig = {
     '@auj/visa-router',
     '@auj/connector-mock',
   ],
-  // Keep node-postgres external (it has dynamic requires); the tracer still bundles it.
   experimental: {
+    // Trace from the monorepo root so workspace packages are bundled into standalone.
+    // (In Next 14 this lives under `experimental`, not top-level.)
+    outputFileTracingRoot: path.join(dirname, '../../'),
+    // Keep node-postgres external (it has dynamic requires); the tracer still bundles it.
     serverComponentsExternalPackages: ['pg'],
   },
   // Linting + typechecking run in the turbo gate, not during next build.
