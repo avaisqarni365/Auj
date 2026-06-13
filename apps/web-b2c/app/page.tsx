@@ -63,7 +63,7 @@ export default function Page() {
     dispatch({ type: 'GO', step });
 
   return (
-    <main className="mx-auto min-h-screen max-w-md bg-sand-50 shadow-sm">
+    <main className="mx-auto min-h-screen max-w-md bg-sand-50 shadow-lg">
       {state.step === 'SEARCH' && (
         <HomeSearch
           locale="en"

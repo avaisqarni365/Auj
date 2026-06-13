@@ -1,6 +1,5 @@
 import type { Money } from '@auj/contracts';
 import type { JournalEntry } from '@auj/payments';
-import { Card } from '@auj/ui';
 import { formatMoney, formatWithPkr } from '../money';
 
 export interface WalletViewProps {
@@ -13,54 +12,78 @@ export interface WalletViewProps {
 export function WalletView({ balance, creditLimit, account, entries }: WalletViewProps) {
   const used = balance.amount < 0 ? -balance.amount : 0;
   const pct = creditLimit > 0 ? Math.min(100, Math.round((used / creditLimit) * 100)) : 0;
+  const available = creditLimit - used;
+  const pkr = formatWithPkr(balance).split('≈')[1]?.trim();
   const txns = entries.flatMap((e) =>
     e.postings
       .filter((p) => p.account === account)
-      .map((p) => ({
-        label: e.memo || e.ref,
-        debit: p.direction === 'DEBIT' ? p.amount : 0,
-        credit: p.direction === 'CREDIT' ? p.amount : 0,
-        currency: p.currency,
-      })),
+      .map((p) => ({ label: e.memo || e.ref, ref: e.ref, debit: p.direction === 'DEBIT' ? p.amount : 0, credit: p.direction === 'CREDIT' ? p.amount : 0, currency: p.currency })),
   );
 
   return (
-    <div className="grid gap-3">
-      <Card className="bg-green-800 p-5 text-white">
-        <div className="text-xs opacity-80">Wallet balance</div>
-        <div className="font-mono text-2xl">{formatMoney(balance)}</div>
-        <div className="text-xs opacity-80">{formatWithPkr(balance)}</div>
-      </Card>
-      <Card className="p-4">
-        <div className="flex justify-between text-sm">
-          <span className="text-sand-700">Credit used</span>
-          <span className="font-mono">
-            {formatMoney({ amount: used, currency: balance.currency })} /{' '}
-            {formatMoney({ amount: creditLimit, currency: balance.currency })}
-          </span>
+    <div className="grid gap-4">
+      <div className="grid gap-4 md:grid-cols-3">
+        <div className="rounded-2xl bg-gradient-to-br from-green-700 to-green-950 p-5 text-green-50">
+          <div className="flex items-center justify-between">
+            <span className="text-[13px] text-green-100/80">Wallet balance</span>
+            <span className="text-lg">💳</span>
+          </div>
+          <div className="my-2 font-mono text-3xl font-bold">{formatMoney(balance)}</div>
+          {pkr ? <div className="font-mono text-xs text-green-100/80">≈ {pkr}</div> : null}
+          <button type="button" className="mt-4 rounded-[10px] bg-gold px-4 py-2.5 text-[13px] font-bold text-[#2A2010]">
+            + Top up wallet
+          </button>
         </div>
-        <div className="mt-2 h-2 rounded-full bg-sand-100">
-          <div className="h-2 rounded-full bg-gold" style={{ width: `${pct}%` }} />
+
+        <div className="rounded-2xl border border-sand-200 bg-white p-5">
+          <span className="text-[13px] text-sand-500">Credit limit</span>
+          <div className="my-2 font-mono text-2xl font-semibold">{formatMoney({ amount: creditLimit, currency: balance.currency })}</div>
+          <div className="mb-2 h-[9px] overflow-hidden rounded-full bg-sand-100">
+            <div className="h-full rounded-full bg-accent-600" style={{ width: `${pct}%` }} />
+          </div>
+          <div className="flex justify-between text-xs">
+            <span className="text-sand-500">
+              Used <strong className="text-sand-ink">{formatMoney({ amount: used, currency: balance.currency })}</strong>
+            </span>
+            <span className="font-semibold text-success-fg">{formatMoney({ amount: available, currency: balance.currency })} available</span>
+          </div>
         </div>
-      </Card>
-      <Card className="p-4">
-        <div className="mb-2 text-xs text-sand-500">Transactions</div>
+
+        <div className="rounded-2xl border border-sand-200 bg-white p-5">
+          <span className="text-[13px] text-sand-500">Payment terms</span>
+          <div className="my-2 font-serif text-xl font-semibold">Net 30 days</div>
+          <div className="flex flex-col gap-1.5 text-[13px]">
+            <div className="flex items-center justify-between">
+              <span className="text-sand-700">Tier</span>
+              <span className="rounded-full bg-warning-bg px-2.5 py-0.5 text-[11.5px] font-semibold text-warning-fg">Gold partner</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="overflow-hidden rounded-2xl border border-sand-200 bg-white">
+        <div className="border-b border-sand-100 px-5 py-3.5 text-sm font-bold">Wallet transactions</div>
         <table className="w-full text-[13px]">
+          <thead>
+            <tr className="bg-sand-50 text-left text-sand-500">
+              <th className="px-5 py-2.5 font-semibold">Description</th>
+              <th className="px-3 py-2.5 font-semibold">Reference</th>
+              <th className="px-3 py-2.5 text-right font-semibold">Debit</th>
+              <th className="px-5 py-2.5 text-right font-semibold">Credit</th>
+            </tr>
+          </thead>
           <tbody>
             {txns.map((t, i) => (
               <tr key={i} className="border-t border-sand-100">
-                <td className="py-1">{t.label}</td>
-                <td className="py-1 text-right font-mono text-danger">
-                  {t.debit ? formatMoney({ amount: t.debit, currency: t.currency }) : ''}
-                </td>
-                <td className="py-1 text-right font-mono text-success">
-                  {t.credit ? formatMoney({ amount: t.credit, currency: t.currency }) : ''}
-                </td>
+                <td className="px-5 py-2.5 font-medium">{t.label}</td>
+                <td className="px-3 py-2.5 font-mono text-accent-600">{t.ref.slice(0, 12)}</td>
+                <td className="px-3 py-2.5 text-right font-mono text-danger">{t.debit ? formatMoney({ amount: t.debit, currency: t.currency }) : ''}</td>
+                <td className="px-5 py-2.5 text-right font-mono text-success">{t.credit ? formatMoney({ amount: t.credit, currency: t.currency }) : ''}</td>
               </tr>
             ))}
           </tbody>
         </table>
-      </Card>
+      </div>
     </div>
   );
 }

@@ -9,8 +9,10 @@
   color-scheme: light;
 }
 
+/* The B2C funnel is mobile-first (design is 372px phone screens). On wider viewports
+   the app sits as a centered panel on a warm sand page, mirroring the mockup. */
 body {
-  background: var(--auj-bg);
+  background: #ECE7DD;
   color: var(--auj-text);
 }
 

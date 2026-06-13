@@ -6,7 +6,7 @@ ALL MODULES BUILT. web-b2b now has a Next.js shell too (runnable). Remaining: re
 
 ## How to run
 - `npm run dev` -> web-b2c booking funnel (:3000), now HI-FI per design_handoff (app bar + gold-star logo, serif hero, search card, popular rail, trust strip; sticky sub-screen headers; visa-route gradient card; green My-Booking header + live visa timeline).
-- `npm run dev:b2b` -> web-b2b agent portal (:3000): auto-onboards a GOLD agent, funds the wallet, multi-pax book (<=49) from wallet, live balance + ledger.
+- `npm run dev:b2b` -> web-b2b agent portal (:3000): HI-FI desktop design (dark-green rail + topbar, KPI dashboard + visa pipeline + credit card, multi-pax passenger table + group summary, wallet 3-card + transactions, markup rules+editor, quotation, statements). Auto-onboards a GOLD agent, funds wallet, multi-pax book (<=49).
 - `npm run dev:all` -> every app (needs --concurrency, already set).
 
 ## Status by wave
