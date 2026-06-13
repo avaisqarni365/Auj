@@ -17,6 +17,7 @@
   "dependencies": {
     "@auj/auth": "workspace:*",
     "@auj/connector-mock": "workspace:*",
+    "@auj/connector-saudi": "workspace:*",
     "@auj/connector-travel": "workspace:*",
     "@auj/contracts": "workspace:*",
     "@auj/core-booking": "workspace:*",

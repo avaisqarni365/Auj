@@ -14,6 +14,7 @@
     "dev": "turbo run dev --filter=@auj/web",
     "dev:web": "turbo run dev --filter=@auj/web",
     "dev:all": "turbo run dev --concurrency=15",
+    "gen:spec": "pnpm --filter @auj/contracts build && tsx scripts/gen-connector-spec.mts",
     "format": "prettier --write \"**/*.{ts,tsx,json,md}\""
   },
   "devDependencies": {
@@ -25,6 +26,9 @@
     "typescript-eslint": "^8.18.1",
     "prettier": "^3.4.2",
     "vitest": "^2.1.8",
-    "tsx": "^4.19.2"
+    "tsx": "^4.19.2",
+    "zod": "^3.23.8",
+    "zod-to-json-schema": "^3.23.5",
+    "@auj/contracts": "workspace:*"
   }
 }

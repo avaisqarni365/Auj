@@ -1,0 +1,1253 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AUJ Connector Contract",
+    "version": "1.2.0",
+    "description": "The single seam between AUJ product modules and external supply. `SaudiConnector` is the regulated pilgrimage pipe (Maqam GDS / Nusuk Masar, gated); `TravelSupplier` is general-travel supply (bedbank/GDS, open APIs). Operations are transport-agnostic method contracts — a partner/ERP may expose them over HTTP, gRPC, or in-process. Generated from the Zod source of truth; do not hand-edit."
+  },
+  "tags": [
+    {
+      "name": "SaudiConnector",
+      "description": "Regulated Saudi pipe (gated). Default impl = mock; certified impl swapped via CONNECTOR=saudi."
+    },
+    {
+      "name": "TravelSupplier",
+      "description": "General-travel supply (no Saudi dependency). SUPPLIER=live swaps in real bedbank/GDS."
+    }
+  ],
+  "paths": {
+    "/saudi/searchHotels": {
+      "post": {
+        "operationId": "saudi_searchHotels",
+        "summary": "Search Nusuk-approved hotels",
+        "tags": [
+          "SaudiConnector"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchCriteria"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "HotelOffer[]",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HotelOffer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/saudi/searchTransport": {
+      "post": {
+        "operationId": "saudi_searchTransport",
+        "summary": "Search intercity / ground transport",
+        "tags": [
+          "SaudiConnector"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchCriteria"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "TransportOffer[]",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TransportOffer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/saudi/searchGroundServices": {
+      "post": {
+        "operationId": "saudi_searchGroundServices",
+        "summary": "Search ground services",
+        "tags": [
+          "SaudiConnector"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchCriteria"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "GroundOffer[]",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GroundOffer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/saudi/searchZiyarah": {
+      "post": {
+        "operationId": "saudi_searchZiyarah",
+        "summary": "Curated ziyarah (heritage) bundles",
+        "tags": [
+          "SaudiConnector"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchCriteria"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "GroundOffer[]",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GroundOffer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/saudi/searchCatering": {
+      "post": {
+        "operationId": "saudi_searchCatering",
+        "summary": "Meal / catering plans",
+        "tags": [
+          "SaudiConnector"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchCriteria"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "CateringOffer[]",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CateringOffer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/saudi/hold": {
+      "post": {
+        "operationId": "saudi_hold",
+        "summary": "Place a hold on offers for a group",
+        "tags": [
+          "SaudiConnector"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "offerIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "pilgrims": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Pilgrim"
+                    }
+                  }
+                },
+                "required": [
+                  "offerIds",
+                  "pilgrims"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "HoldRef",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HoldRef"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/saudi/confirm": {
+      "post": {
+        "operationId": "saudi_confirm",
+        "summary": "Confirm a hold against payment; returns BRNs",
+        "tags": [
+          "SaudiConnector"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "holdId": {
+                    "type": "string"
+                  },
+                  "payment": {
+                    "type": "object",
+                    "properties": {
+                      "ref": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "ref"
+                    ]
+                  }
+                },
+                "required": [
+                  "holdId",
+                  "payment"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "BookingResult (BRNs)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/saudi/createVisaApplication": {
+      "post": {
+        "operationId": "saudi_createVisaApplication",
+        "summary": "Open a visa application for a booking",
+        "tags": [
+          "SaudiConnector"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "bookingRef": {
+                    "type": "string"
+                  },
+                  "pilgrims": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Pilgrim"
+                    }
+                  }
+                },
+                "required": [
+                  "bookingRef",
+                  "pilgrims"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "VisaApplication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VisaApplication"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/saudi/getVisaStatus": {
+      "post": {
+        "operationId": "saudi_getVisaStatus",
+        "summary": "Poll a visa application status",
+        "tags": [
+          "SaudiConnector"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "visaRef": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "visaRef"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "{ status: VisaStatus }",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "$ref": "#/components/schemas/VisaStatus"
+                    }
+                  },
+                  "required": [
+                    "status"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/saudi/searchRawdahSlots": {
+      "post": {
+        "operationId": "saudi_searchRawdahSlots",
+        "summary": "Rawdah (Riyadh ul-Jannah) permit slots for a date",
+        "tags": [
+          "SaudiConnector"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "date"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "RawdahSlot[]",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RawdahSlot"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/saudi/bookRawdah": {
+      "post": {
+        "operationId": "saudi_bookRawdah",
+        "summary": "Book a Rawdah permit for pilgrims",
+        "tags": [
+          "SaudiConnector"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "slotId": {
+                    "type": "string"
+                  },
+                  "pilgrims": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Pilgrim"
+                    }
+                  }
+                },
+                "required": [
+                  "slotId",
+                  "pilgrims"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "RawdahPermit",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RawdahPermit"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/saudi/cancel": {
+      "post": {
+        "operationId": "saudi_cancel",
+        "summary": "Cancel a booking and report any refund",
+        "tags": [
+          "SaudiConnector"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "bookingRef": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "bookingRef"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Cancellation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cancellation"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/travel/searchHotels": {
+      "post": {
+        "operationId": "travel_searchHotels",
+        "summary": "Search general-travel hotels (bedbank)",
+        "tags": [
+          "TravelSupplier"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/SearchCriteria"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "country": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "country"
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "HotelOffer[]",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HotelOffer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/travel/searchFlights": {
+      "post": {
+        "operationId": "travel_searchFlights",
+        "summary": "Search flights (GDS)",
+        "tags": [
+          "TravelSupplier"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "from": {
+                    "type": "string"
+                  },
+                  "to": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string"
+                  },
+                  "pax": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "from",
+                  "to",
+                  "date",
+                  "pax"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "FlightOffer[]",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FlightOffer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/travel/book": {
+      "post": {
+        "operationId": "travel_book",
+        "summary": "Book offers for travellers; returns BRNs",
+        "tags": [
+          "TravelSupplier"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "offerIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "travellers": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Pilgrim"
+                    }
+                  }
+                },
+                "required": [
+                  "offerIds",
+                  "travellers"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "BookingResult",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/travel/cancel": {
+      "post": {
+        "operationId": "travel_cancel",
+        "summary": "Cancel a booking and report any refund",
+        "tags": [
+          "TravelSupplier"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "bookingRef": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "bookingRef"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Cancellation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cancellation"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Money": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "integer"
+          },
+          "currency": {
+            "type": "string",
+            "enum": [
+              "EUR",
+              "PKR",
+              "SAR"
+            ]
+          }
+        },
+        "required": [
+          "amount",
+          "currency"
+        ],
+        "additionalProperties": false
+      },
+      "Pilgrim": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string",
+            "minLength": 1
+          },
+          "lastName": {
+            "type": "string",
+            "minLength": 1
+          },
+          "passportNumber": {
+            "type": "string",
+            "minLength": 1
+          },
+          "nationality": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 3
+          },
+          "residenceCountry": {
+            "type": "string"
+          },
+          "residencePermit": {
+            "type": "boolean"
+          },
+          "dob": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "M",
+              "F"
+            ]
+          },
+          "mahramPilgrimId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "firstName",
+          "lastName",
+          "passportNumber",
+          "nationality",
+          "dob",
+          "gender"
+        ],
+        "additionalProperties": false
+      },
+      "SearchCriteria": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string",
+            "enum": [
+              "MAKKAH",
+              "MADINAH",
+              "JEDDAH"
+            ]
+          },
+          "checkIn": {
+            "type": "string"
+          },
+          "checkOut": {
+            "type": "string"
+          },
+          "pax": {
+            "type": "integer",
+            "exclusiveMinimum": true,
+            "minimum": 0
+          },
+          "starRating": {
+            "anyOf": [
+              {
+                "type": "number",
+                "enum": [
+                  1
+                ]
+              },
+              {
+                "type": "number",
+                "enum": [
+                  2
+                ]
+              },
+              {
+                "type": "number",
+                "enum": [
+                  3
+                ]
+              },
+              {
+                "type": "number",
+                "enum": [
+                  4
+                ]
+              },
+              {
+                "type": "number",
+                "enum": [
+                  5
+                ]
+              }
+            ]
+          }
+        },
+        "required": [
+          "city",
+          "checkIn",
+          "checkOut",
+          "pax"
+        ],
+        "additionalProperties": false
+      },
+      "HotelOffer": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "starRating": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 5
+          },
+          "distanceToHaramM": {
+            "type": "number",
+            "minimum": 0
+          },
+          "nightlyNet": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "integer"
+              },
+              "currency": {
+                "type": "string",
+                "enum": [
+                  "EUR",
+                  "PKR",
+                  "SAR"
+                ]
+              }
+            },
+            "required": [
+              "amount",
+              "currency"
+            ],
+            "additionalProperties": false
+          },
+          "nusukApproved": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "city",
+          "starRating",
+          "nightlyNet",
+          "nusukApproved"
+        ],
+        "additionalProperties": false
+      },
+      "TransportOffer": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "route": {
+            "type": "string"
+          },
+          "vehicle": {
+            "type": "string"
+          },
+          "net": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "integer"
+              },
+              "currency": {
+                "type": "string",
+                "enum": [
+                  "EUR",
+                  "PKR",
+                  "SAR"
+                ]
+              }
+            },
+            "required": [
+              "amount",
+              "currency"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "route",
+          "vehicle",
+          "net"
+        ],
+        "additionalProperties": false
+      },
+      "GroundOffer": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "net": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "integer"
+              },
+              "currency": {
+                "type": "string",
+                "enum": [
+                  "EUR",
+                  "PKR",
+                  "SAR"
+                ]
+              }
+            },
+            "required": [
+              "amount",
+              "currency"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "net"
+        ],
+        "additionalProperties": false
+      },
+      "CateringOffer": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "plan": {
+            "type": "string",
+            "enum": [
+              "HALF_BOARD",
+              "FULL_BOARD",
+              "IFTAR_SUHOOR"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "net": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "integer"
+              },
+              "currency": {
+                "type": "string",
+                "enum": [
+                  "EUR",
+                  "PKR",
+                  "SAR"
+                ]
+              }
+            },
+            "required": [
+              "amount",
+              "currency"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "plan",
+          "name",
+          "city",
+          "net"
+        ],
+        "additionalProperties": false
+      },
+      "FlightOffer": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "carrier": {
+            "type": "string"
+          },
+          "depart": {
+            "type": "string"
+          },
+          "arrive": {
+            "type": "string"
+          },
+          "net": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "integer"
+              },
+              "currency": {
+                "type": "string",
+                "enum": [
+                  "EUR",
+                  "PKR",
+                  "SAR"
+                ]
+              }
+            },
+            "required": [
+              "amount",
+              "currency"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "carrier",
+          "depart",
+          "arrive",
+          "net"
+        ],
+        "additionalProperties": false
+      },
+      "HoldRef": {
+        "type": "object",
+        "properties": {
+          "holdId": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "holdId",
+          "expiresAt"
+        ],
+        "additionalProperties": false
+      },
+      "BookingResult": {
+        "type": "object",
+        "properties": {
+          "bookingRef": {
+            "type": "string"
+          },
+          "brns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "CONFIRMED",
+              "PENDING",
+              "FAILED"
+            ]
+          }
+        },
+        "required": [
+          "bookingRef",
+          "brns",
+          "status"
+        ],
+        "additionalProperties": false
+      },
+      "VisaApplication": {
+        "type": "object",
+        "properties": {
+          "visaRef": {
+            "type": "string"
+          },
+          "route": {
+            "type": "string",
+            "enum": [
+              "EVISA_DIRECT",
+              "AGENT_CHANNEL"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "SUBMITTED",
+              "PAID",
+              "ISSUED",
+              "REJECTED"
+            ]
+          }
+        },
+        "required": [
+          "visaRef",
+          "route",
+          "status"
+        ],
+        "additionalProperties": false
+      },
+      "VisaStatus": {
+        "type": "string",
+        "enum": [
+          "DRAFT",
+          "SUBMITTED",
+          "PAID",
+          "ISSUED",
+          "REJECTED"
+        ]
+      },
+      "RawdahSlot": {
+        "type": "object",
+        "properties": {
+          "slotId": {
+            "type": "string"
+          },
+          "startsAt": {
+            "type": "string"
+          },
+          "capacity": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "slotId",
+          "startsAt",
+          "capacity"
+        ],
+        "additionalProperties": false
+      },
+      "RawdahPermit": {
+        "type": "object",
+        "properties": {
+          "permitRef": {
+            "type": "string"
+          },
+          "slotId": {
+            "type": "string"
+          },
+          "startsAt": {
+            "type": "string"
+          },
+          "pilgrimIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "REQUESTED",
+              "CONFIRMED",
+              "REJECTED"
+            ]
+          }
+        },
+        "required": [
+          "permitRef",
+          "slotId",
+          "startsAt",
+          "pilgrimIds",
+          "status"
+        ],
+        "additionalProperties": false
+      },
+      "Cancellation": {
+        "type": "object",
+        "properties": {
+          "cancelled": {
+            "type": "boolean"
+          },
+          "refund": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "integer"
+              },
+              "currency": {
+                "type": "string",
+                "enum": [
+                  "EUR",
+                  "PKR",
+                  "SAR"
+                ]
+              }
+            },
+            "required": [
+              "amount",
+              "currency"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "cancelled"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}

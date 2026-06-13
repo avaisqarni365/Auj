@@ -17,9 +17,19 @@ Per user decision, the three separate Next apps were UNIFIED into one app at `ap
 - Note: `next build` standalone output fails on THIS Windows host with EPERM (symlink) — Developer
   Mode/admin needed for symlinks; does NOT affect `next dev` or the CI gate (tsc). Linux CI is fine.
 
+## Connector seam: env switch + language-agnostic contract (2026-06-13)
+- The seam is now ENV-SELECTED end-to-end: `apps/web/src/connectors.ts` reads `CONNECTOR=mock|saudi`
+  and `SUPPLIER=mock|live` and picks the connector/supplier. Both composition roots (book + agent)
+  use the selectors; `createInProcessBackend` stays mock for hermetic tests. Proven: CONNECTOR=saudi
+  swaps `htl_mak_1` (mock) → `maqam:MAK-001` (certified adapter) with zero change above the seam.
+- Language-agnostic contract GENERATED from the Zod source of truth (cannot drift):
+  `scripts/gen-connector-spec.mts` → `docs/connector-contract/openapi.json` (OpenAPI 3.1, 16 ops,
+  15 schemas) + `README.md` (one-page summary). Run with `pnpm gen:spec`. This is the artifact a
+  partner/ERP or the future Maqam integration builds against.
+
 ## Build status
-ALL MODULES BUILT + unified app. Gate: build 12/12, lint 12/12, test 21/21. Remaining: real partner
-SaudiPartnerClient (gated), real payment-gateway SDKs, run the deploy pipeline against the unified image.
+ALL MODULES BUILT + unified app + env-selected seam. Gate: build 12/12, lint 12/12, test 22/22.
+Remaining: real partner SaudiPartnerClient (gated), real payment-gateway SDKs, deploy the unified image.
 
 ## Frontend handoff (design_handoff_auj_platform, expanded 2026-06-13)
 - New bundle adds Brand/Logo, Landing (responsive web /), Admin (Web) console, Traveller portal (web /journey + mobile). CLAUDE_CODE.md = kickoff prompt + route map; README = full spec.

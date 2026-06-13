@@ -1,15 +1,15 @@
 // COMPOSITION ROOT (dev/test). The only file that references concrete connectors.
-// Wires core-booking + the mock connector + the payments wallet/ledger into the
-// AgentApi / BookingApi / WalletApi ports the portal depends on.
-import { MockSaudiConnector, MockTravelSupplier } from '@auj/connector-mock';
+// Wires core-booking + the env-selected connector + the payments wallet/ledger into
+// the AgentApi / BookingApi / WalletApi ports the portal depends on.
 import { createCoreBooking } from '@auj/core-booking';
 import { Ledger, WalletService } from '@auj/payments';
 import { AgentService } from '../agents';
 import type { AgentApi, Backend, BookingApi, WalletApi } from '../ports';
+import { selectSaudiConnector, selectTravelSupplier } from '../../connectors';
 
 export function createInProcessBackend(): Backend {
-  const saudi = new MockSaudiConnector();
-  const travel = new MockTravelSupplier();
+  const saudi = selectSaudiConnector();
+  const travel = selectTravelSupplier();
   const core = createCoreBooking({ saudi, travel });
 
   const ledger = new Ledger();

@@ -3,13 +3,15 @@
 // the BookingApi / PaymentsApi ports the rest of the app depends on.
 //   - createInProcessBackend(): in-memory, synchronous — used by tests.
 //   - createBackend(): env-aware — Postgres when DATABASE_URL is set, else in-memory.
+import type { SaudiConnector, TravelSupplier } from '@auj/contracts';
 import { MockSaudiConnector, MockTravelSupplier } from '@auj/connector-mock';
 import { createCoreBooking, type CoreBooking } from '@auj/core-booking';
 import { createPool, migrate, createPostgresStores } from '@auj/core-booking/postgres';
 import { Ledger, PaymentsService, PkrGatewayProvider, ProviderRouter, StripeProvider } from '@auj/payments';
 import type { Backend, BookingApi, PaymentsApi } from '../ports';
+import { selectSaudiConnector, selectTravelSupplier } from '../../connectors';
 
-function wire(core: CoreBooking, saudi: MockSaudiConnector, travel: MockTravelSupplier): Backend {
+function wire(core: CoreBooking, saudi: SaudiConnector, travel: TravelSupplier): Backend {
   const ledger = new Ledger();
   const router = new ProviderRouter().register(new StripeProvider()).register(new PkrGatewayProvider());
   const payments = new PaymentsService(router, ledger);
@@ -38,17 +40,18 @@ function wire(core: CoreBooking, saudi: MockSaudiConnector, travel: MockTravelSu
   return { booking, payments: paymentsApi };
 }
 
-/** In-memory backend (no DB). Synchronous — used by unit/e2e tests. */
+/** In-memory backend with the mock seam (hermetic). Synchronous — used by unit/e2e tests. */
 export function createInProcessBackend(): Backend {
   const saudi = new MockSaudiConnector();
   const travel = new MockTravelSupplier();
   return wire(createCoreBooking({ saudi, travel }), saudi, travel);
 }
 
-/** Production/dev backend: Postgres-backed when DATABASE_URL is set, else in-memory. */
+/** Production/dev backend: connector/supplier selected by env (CONNECTOR/SUPPLIER);
+ * Postgres-backed when DATABASE_URL is set, else in-memory. */
 export async function createBackend(): Promise<Backend> {
-  const saudi = new MockSaudiConnector();
-  const travel = new MockTravelSupplier();
+  const saudi = selectSaudiConnector();
+  const travel = selectTravelSupplier();
   const url = process.env.DATABASE_URL;
 
   if (url) {
