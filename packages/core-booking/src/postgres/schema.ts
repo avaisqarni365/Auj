@@ -44,6 +44,7 @@ CREATE TABLE IF NOT EXISTS bookings (
   booking_ref TEXT,
   visa_case_id TEXT,
   rawdah JSONB,
+  gift JSONB,
   refund_amount INTEGER,
   refund_currency TEXT,
   created_at TEXT NOT NULL,

@@ -13,3 +13,8 @@ export function uuidv7(): string {
   const h = buf.toString('hex');
   return `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20)}`;
 }
+
+/** Human-shareable gift voucher code, e.g. AUJ-GIFT-3F9A2C1D. */
+export function giftVoucherCode(): string {
+  return `AUJ-GIFT-${uuidv7().replace(/-/g, '').slice(0, 8).toUpperCase()}`;
+}

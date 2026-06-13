@@ -67,6 +67,16 @@ export interface BookingItem extends PackageItem {
   brn?: string;
 }
 
+/** Gift Umrah (Nusuk parity): a booking bought on behalf of a recipient, with a
+ * redeemable voucher. The buyer is the booking's customer; the recipient travels. */
+export interface Gift {
+  recipientName: string;
+  recipientEmail?: string;
+  message?: string;
+  voucherCode: string;
+  redeemed: boolean;
+}
+
 export type DocumentType = 'PASSPORT' | 'PHOTO' | 'VISA' | 'VOUCHER' | 'OTHER';
 
 export interface Document {
@@ -101,6 +111,7 @@ export interface Booking {
   bookingRef?: string;
   visaCaseId?: string;
   rawdah?: RawdahPermit;
+  gift?: Gift;
   refund?: Money;
   createdAt: string;
   updatedAt: string;

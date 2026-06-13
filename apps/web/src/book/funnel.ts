@@ -29,6 +29,8 @@ export interface FunnelState {
   mode: PackageMode;
   /** Whether the pilgrim requested a Rawdah (Riyadh ul-Jannah) permit add-on. */
   rawdahRequested: boolean;
+  /** Gift Umrah: when enabled, the booking is bought for a recipient (voucher issued). */
+  gift: { enabled: boolean; recipientName: string; recipientEmail: string; message: string };
   criteria: SearchCriteria;
   cart: PackageItem[];
   pilgrims: PilgrimDraft[];
@@ -41,6 +43,7 @@ export type FunnelAction =
   | { type: 'GO'; step: FunnelStep }
   | { type: 'SET_MODE'; mode: PackageMode }
   | { type: 'TOGGLE_RAWDAH' }
+  | { type: 'SET_GIFT'; gift: Partial<FunnelState['gift']> }
   | { type: 'ADD_ITEM'; item: PackageItem }
   | { type: 'REMOVE_ITEM'; offerId: string }
   | { type: 'SET_PILGRIMS'; pilgrims: PilgrimDraft[] }
@@ -53,6 +56,7 @@ export function initialFunnel(): FunnelState {
     channel: 'PILGRIMAGE',
     mode: 'COMPREHENSIVE',
     rawdahRequested: false,
+    gift: { enabled: false, recipientName: '', recipientEmail: '', message: '' },
     criteria: { city: 'MAKKAH', checkIn: '', checkOut: '', pax: 1 },
     cart: [],
     pilgrims: [],
@@ -70,6 +74,8 @@ export function funnelReducer(state: FunnelState, action: FunnelAction): FunnelS
       return { ...state, mode: action.mode };
     case 'TOGGLE_RAWDAH':
       return { ...state, rawdahRequested: !state.rawdahRequested };
+    case 'SET_GIFT':
+      return { ...state, gift: { ...state.gift, ...action.gift } };
     case 'ADD_ITEM':
       if (state.cart.some((i) => i.offerId === action.item.offerId)) return state;
       return { ...state, cart: [...state.cart, action.item] };

@@ -68,6 +68,15 @@ export function BookingFunnel({ initialCity, initialPax }: { initialCity: Search
         total: SELL_PRICE,
         mode: state.mode,
         ...(state.rawdahRequested ? { rawdahDate: state.criteria.checkIn || '2026-09-02' } : {}),
+        ...(state.gift.enabled && state.gift.recipientName.trim()
+          ? {
+              gift: {
+                recipientName: state.gift.recipientName.trim(),
+                ...(state.gift.recipientEmail.trim() ? { recipientEmail: state.gift.recipientEmail.trim() } : {}),
+                ...(state.gift.message.trim() ? { message: state.gift.message.trim() } : {}),
+              },
+            }
+          : {}),
       });
       setBooking(placed.booking);
       setVisaCase(placed.visaCase);
@@ -146,6 +155,8 @@ export function BookingFunnel({ initialCity, initialPax }: { initialCity: Search
           onPay={pay}
           paying={pending}
           onBack={back('PILGRIMS')}
+          gift={state.gift}
+          onGift={(patch) => dispatch({ type: 'SET_GIFT', gift: patch })}
         />
       )}
 

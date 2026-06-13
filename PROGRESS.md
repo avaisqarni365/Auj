@@ -28,8 +28,8 @@ Per user decision, the three separate Next apps were UNIFIED into one app at `ap
   partner/ERP or the future Maqam integration builds against.
 
 ## Build status
-ALL MODULES BUILT + unified app + env-selected seam. Gate: build 12/12, lint 12/12, test 22/22.
-Remaining: real partner SaudiPartnerClient (gated), real payment-gateway SDKs, deploy the unified image.
+ALL MODULES BUILT + unified app + env-selected seam + Gift Umrah. Gate: build 12/12, lint 12/12, test 22/22.
+Remaining: support tickets, real partner SaudiPartnerClient (gated), real payment-gateway SDKs, deploy.
 
 ## Frontend handoff (design_handoff_auj_platform, expanded 2026-06-13)
 - New bundle adds Brand/Logo, Landing (responsive web /), Admin (Web) console, Traveller portal (web /journey + mobile). CLAUDE_CODE.md = kickoff prompt + route map; README = full spec.
@@ -71,8 +71,14 @@ Remaining: real partner SaudiPartnerClient (gated), real payment-gateway SDKs, d
     lifecycle test builds hotel+ziyarah+catering package.
   - web-b2c: PackageBuilder ziyarah + catering add-on groups (toggle into cart via ADD/REMOVE_ITEM),
     backend+ports wired, searchAddonsAction; Results has a working distance-to-Haram sort + Near-Haram chip.
-- TODO (Nusuk features not yet built): gift Umrah, support tickets,
-  real Nusuk Masar via connector-saudi (gated).
+- [x] Gift Umrah (2026-06-13) — book/pay a package for a recipient + redeemable voucher:
+  - core-booking: Booking.gift { recipientName, recipientEmail?, message?, voucherCode, redeemed };
+    giftVoucherCode() (AUJ-GIFT-XXXXXXXX); createDraft accepts `gift`; redeemGift(code) one-time.
+    Postgres adapter persists gift (jsonb). Lifecycle + pg-mem tests.
+  - web-b2c funnel: Checkout "Send as a gift" toggle + recipient name/email/message; funnel SET_GIFT;
+    placeBookingAction passes gift; MyBooking shows a gift-voucher card (code + recipient + status).
+- TODO (Nusuk features not yet built): support tickets, personalization/special requests,
+  gift-voucher redemption UI, real Nusuk Masar via connector-saudi (gated).
 
 ## Design quality as a workflow (added 2026-06-13)
 - [x] .claude/skills/design-taste/SKILL.md — Emil-Kowalski-grade motion + impeccable design + typography + taste, with a finish checklist. Auto-surfaces on UI work (description match); invoke as /design-taste. THE workflow to apply on every frontend change.

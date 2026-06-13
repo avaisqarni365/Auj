@@ -39,6 +39,7 @@ export async function placeBookingAction(input: {
   total: Money;
   mode?: PackageMode;
   rawdahDate?: string;
+  gift?: { recipientName: string; recipientEmail?: string; message?: string };
 }): Promise<PlacedBooking> {
   const user = await getCurrentUser();
   const lead = input.pilgrims[0];

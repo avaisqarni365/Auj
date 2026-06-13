@@ -1,10 +1,10 @@
 import type { PackageMode, Pilgrim as ContractsPilgrim, RawdahPermit, RawdahSlot, SaudiConnector, TravelSupplier } from '@auj/contracts';
 import { routeForGroup, type VisaConfig } from '@auj/visa-router';
-import type { Booking, BookingChannel, CrmPilgrim, PackageItem, VisaCase } from './domain';
+import type { Booking, BookingChannel, CrmPilgrim, Gift, PackageItem, VisaCase } from './domain';
 import { toContractsPilgrim } from './domain';
 import { assertTransition } from './state-machine';
 import type { BookingRepository, Clock, PilgrimRepository, VisaCaseRepository } from './ports';
-import { uuidv7 } from './ids';
+import { giftVoucherCode, uuidv7 } from './ids';
 
 const isoNow: Clock = () => new Date().toISOString();
 
@@ -21,6 +21,8 @@ export interface CreateBookingInput {
   mode?: PackageMode;
   pilgrimIds: string[];
   items: PackageItem[];
+  /** When present, this booking is a gift — a voucher is generated for the recipient. */
+  gift?: { recipientName: string; recipientEmail?: string; message?: string };
 }
 
 export interface BookingServiceDeps {
@@ -81,7 +83,28 @@ export class BookingService {
       createdAt: ts,
       updatedAt: ts,
       ...(input.mode ? { mode: input.mode } : {}),
+      ...(input.gift
+        ? {
+            gift: {
+              recipientName: input.gift.recipientName,
+              voucherCode: giftVoucherCode(),
+              redeemed: false,
+              ...(input.gift.recipientEmail ? { recipientEmail: input.gift.recipientEmail } : {}),
+              ...(input.gift.message ? { message: input.gift.message } : {}),
+            } satisfies Gift,
+          }
+        : {}),
     });
+  }
+
+  /** Redeem a gift voucher (recipient claims it). Returns the booking, or throws if unknown/used. */
+  async redeemGift(voucherCode: string): Promise<Booking> {
+    const all = await this.deps.bookings.list();
+    const b = all.find((x) => x.gift?.voucherCode === voucherCode);
+    if (!b || !b.gift) throw new BookingError('Unknown gift voucher');
+    if (b.gift.redeemed) throw new BookingError('Gift voucher already redeemed');
+    b.gift.redeemed = true;
+    return this.persist(b);
   }
 
   /** Rawdah (Riyadh ul-Jannah) permit slots for a date (Madinah). */

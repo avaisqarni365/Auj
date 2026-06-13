@@ -105,6 +105,27 @@ export function MyBooking({ locale, booking, visaCase }: MyBookingProps) {
           </div>
         ) : null}
 
+        {/* Gift voucher */}
+        {booking.gift ? (
+          <div className="mb-3.5 rounded-2xl border border-gold/40 bg-gradient-to-br from-[#FBF6EA] to-white p-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gold/20 text-[20px]">🎁</div>
+              <div className="min-w-0 flex-1">
+                <div className="text-sm font-bold">Gift voucher</div>
+                <div className="text-[12px] text-sand-500">For {booking.gift.recipientName}{booking.gift.recipientEmail ? ` · ${booking.gift.recipientEmail}` : ''}</div>
+              </div>
+              <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold ${booking.gift.redeemed ? 'bg-sand-100 text-sand-600' : 'bg-success-bg text-success-fg'}`}>
+                {booking.gift.redeemed ? 'Redeemed' : 'Active'}
+              </span>
+            </div>
+            <div className="mt-2.5 rounded-lg border border-dashed border-gold/50 bg-white px-3 py-2 text-center">
+              <div className="text-[10.5px] uppercase tracking-wider text-sand-500">Voucher code</div>
+              <div className="font-mono text-[15px] font-bold tracking-[0.06em] text-green-800">{booking.gift.voucherCode}</div>
+            </div>
+            {booking.gift.message ? <p className="mt-2 text-center text-[12.5px] italic text-sand-700">“{booking.gift.message}”</p> : null}
+          </div>
+        ) : null}
+
         {/* pilgrims & visas */}
         <div className="mx-1 mb-2.5 text-[13px] font-bold">Pilgrims &amp; visas</div>
         <div className="mb-4 grid gap-2">

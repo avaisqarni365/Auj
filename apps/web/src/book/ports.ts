@@ -19,6 +19,7 @@ export interface BookingApi {
     mode?: PackageMode;
     pilgrimIds: string[];
     items: PackageItem[];
+    gift?: { recipientName: string; recipientEmail?: string; message?: string };
   }): Promise<Booking>;
   hold(bookingId: string): Promise<Booking>;
   confirm(bookingId: string, paymentRef: string): Promise<Booking>;

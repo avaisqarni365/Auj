@@ -105,6 +105,26 @@ describe('pilgrimage booking lifecycle (end-to-end against connector-mock)', () 
     expect(pkg.totals.length).toBeGreaterThan(0);
   });
 
+  it('creates a gift booking with a voucher and redeems it once', async () => {
+    const core = setup();
+    const customer = await core.crm.createCustomer({ fullName: 'Bilal', email: 'bilal@example.com' });
+    const booking = await core.bookings.createDraft({
+      customerId: customer.id,
+      channel: 'PILGRIMAGE',
+      pilgrimIds: [],
+      items: [],
+      gift: { recipientName: 'Mother', recipientEmail: 'mum@example.com', message: 'For you ❤' },
+    });
+    expect(booking.gift?.recipientName).toBe('Mother');
+    expect(booking.gift?.voucherCode).toMatch(/^AUJ-GIFT-[0-9A-F]{8}$/);
+    expect(booking.gift?.redeemed).toBe(false);
+
+    const redeemed = await core.bookings.redeemGift(booking.gift!.voucherCode);
+    expect(redeemed.gift?.redeemed).toBe(true);
+    await expect(core.bookings.redeemGift(booking.gift!.voucherCode)).rejects.toThrow(/already redeemed/);
+    await expect(core.bookings.redeemGift('AUJ-GIFT-NOPE')).rejects.toThrow(/Unknown gift voucher/);
+  });
+
   it('rejects Rawdah for travel bookings', async () => {
     const core = setup();
     const customer = await core.crm.createCustomer({ fullName: 'T', email: 't2@example.com' });

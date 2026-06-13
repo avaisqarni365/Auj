@@ -72,6 +72,24 @@ describe('Postgres adapter against pg-mem', () => {
     expect(reloaded?.rawdah?.pilgrimIds).toEqual([pilgrim.id]);
   });
 
+  it('persists a gift voucher (jsonb) and its redeemed flag across fresh stores', async () => {
+    const pool = await freshPool();
+    const core = createCoreBooking({ saudi: new MockSaudiConnector(), travel: new MockTravelSupplier(), stores: createPostgresStores(pool) });
+    const customer = await core.crm.createCustomer({ fullName: 'Bilal', email: 'b3@x.example' });
+    const draft = await core.bookings.createDraft({
+      customerId: customer.id, channel: 'PILGRIMAGE', pilgrimIds: [], items: [],
+      gift: { recipientName: 'Mother', recipientEmail: 'mum@x.example' },
+    });
+
+    const reloaded = await createPostgresStores(pool).bookings.get(draft.id);
+    expect(reloaded?.gift?.voucherCode).toBe(draft.gift?.voucherCode);
+    expect(reloaded?.gift?.recipientName).toBe('Mother');
+    expect(reloaded?.gift?.redeemed).toBe(false);
+
+    await core.bookings.redeemGift(draft.gift!.voucherCode);
+    expect((await createPostgresStores(pool).bookings.get(draft.id))?.gift?.redeemed).toBe(true);
+  });
+
   it('updates a booking in place (upsert) rather than duplicating', async () => {
     const pool = await freshPool();
     const stores = createPostgresStores(pool);

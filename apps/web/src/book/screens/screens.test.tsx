@@ -105,4 +105,32 @@ describe('B2C screens', () => {
     expect(html).toContain('≈ ₨');
     expect(html).toContain('charged in EUR');
   });
+
+  it('Checkout shows the gift toggle and recipient fields when enabled', () => {
+    const off = renderToStaticMarkup(
+      <Checkout locale="en" currency="EUR" totalEur={{ amount: 120000, currency: 'EUR' }} onCurrency={noop} onPay={noop}
+        gift={{ enabled: false, recipientName: '', recipientEmail: '', message: '' }} onGift={noop} />,
+    );
+    expect(off).toContain('Send as a gift');
+    expect(off).not.toContain('Recipient name');
+
+    const on = renderToStaticMarkup(
+      <Checkout locale="en" currency="EUR" totalEur={{ amount: 120000, currency: 'EUR' }} onCurrency={noop} onPay={noop}
+        gift={{ enabled: true, recipientName: '', recipientEmail: '', message: '' }} onGift={noop} />,
+    );
+    expect(on).toContain('Recipient name');
+  });
+
+  it('MyBooking renders a gift voucher card', () => {
+    const booking: Booking = {
+      id: 'g1', customerId: 'c1', channel: 'PILGRIMAGE', status: 'CONFIRMED',
+      pilgrimIds: [], items: [], createdAt: 't0', updatedAt: 't1',
+      gift: { recipientName: 'Mother', recipientEmail: 'mum@example.com', message: 'For you', voucherCode: 'AUJ-GIFT-ABCD1234', redeemed: false },
+    };
+    const html = renderToStaticMarkup(<MyBooking locale="en" booking={booking} />);
+    expect(html).toContain('Gift voucher');
+    expect(html).toContain('AUJ-GIFT-ABCD1234');
+    expect(html).toContain('For Mother');
+    expect(html).toContain('Active');
+  });
 });

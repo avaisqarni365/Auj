@@ -8,6 +8,7 @@ import type {
   Customer,
   Document,
   DocumentType,
+  Gift,
   ItemKind,
   Package,
   PackageMode,
@@ -69,6 +70,7 @@ export interface BookingRow {
   booking_ref: string | null;
   visa_case_id: string | null;
   rawdah: RawdahPermit | null; // jsonb
+  gift: Gift | null; // jsonb
   refund_amount: number | null;
   refund_currency: string | null;
   created_at: string;
@@ -109,6 +111,7 @@ export function rowToBooking(b: BookingRow, itemRows: BookingItemRow[]): Booking
     ...(b.booking_ref != null ? { bookingRef: b.booking_ref } : {}),
     ...(b.visa_case_id != null ? { visaCaseId: b.visa_case_id } : {}),
     ...(b.rawdah != null ? { rawdah: b.rawdah } : {}),
+    ...(b.gift != null ? { gift: b.gift } : {}),
     ...(b.refund_amount != null && b.refund_currency != null
       ? { refund: { amount: b.refund_amount, currency: b.refund_currency as Currency } }
       : {}),

@@ -28,6 +28,8 @@ export interface PlaceBookingInput {
   mode?: PackageMode;
   /** When set, book the first available Rawdah permit slot for this date. */
   rawdahDate?: string;
+  /** When set, this booking is a gift for the named recipient (generates a voucher). */
+  gift?: { recipientName: string; recipientEmail?: string; message?: string };
 }
 
 export interface PlacedBooking {
@@ -58,6 +60,7 @@ export async function placePilgrimageBooking(
     pilgrimIds: pilgrims.map((p) => p.id),
     items: input.items,
     ...(input.mode ? { mode: input.mode } : {}),
+    ...(input.gift ? { gift: input.gift } : {}),
   });
 
   await api.hold(draft.id);
