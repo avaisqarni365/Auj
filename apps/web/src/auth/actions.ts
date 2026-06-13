@@ -2,11 +2,18 @@
 
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { SESSION_COOKIE, type Session } from '@auj/auth';
+import { SESSION_COOKIE, type PublicUser, type Session } from '@auj/auth';
 import { getAuth } from './backend';
 
 export interface AuthState {
   error?: string;
+}
+
+/** Where a user lands after auth when no explicit destination was requested. */
+function homeForRole(user: PublicUser): string {
+  if (user.role === 'ADMIN') return '/admin';
+  if (user.role === 'AGENT' || user.role === 'SUB_AGENT') return '/agent';
+  return '/';
 }
 
 function setSessionCookie(session: Session): void {
@@ -25,17 +32,20 @@ function safeNext(raw: FormDataEntryValue | null): string {
 }
 
 export async function loginAction(_prev: AuthState, formData: FormData): Promise<AuthState> {
-  const next = safeNext(formData.get('next'));
+  const requested = safeNext(formData.get('next'));
+  let dest: string;
   try {
-    const { session } = await (await getAuth()).login({
+    const { user, session } = await (await getAuth()).login({
       email: String(formData.get('email') ?? ''),
       password: String(formData.get('password') ?? ''),
     });
     setSessionCookie(session);
+    // Honour an explicit ?next (e.g. from a guard); otherwise send each role to its home.
+    dest = requested !== '/' ? requested : homeForRole(user);
   } catch (e) {
     return { error: e instanceof Error ? e.message : 'Login failed' };
   }
-  redirect(next);
+  redirect(dest);
 }
 
 export async function signupAction(_prev: AuthState, formData: FormData): Promise<AuthState> {

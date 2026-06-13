@@ -4,7 +4,10 @@
 import { AuthService, createInMemoryAuthStores } from '@auj/auth';
 import { createPool, createPostgresAuthStores, migrateAuth } from '@auj/auth/postgres';
 
-let authPromise: Promise<AuthService> | undefined;
+// Cache on globalThis so the in-memory store (users + sessions, and the seeded admin)
+// survives Next dev's HMR / module re-evaluation — otherwise a recompile between login
+// and navigation would silently drop the session.
+const globalForAuth = globalThis as unknown as { __aujAuth?: Promise<AuthService> };
 
 async function build(): Promise<AuthService> {
   const url = process.env.DATABASE_URL;
@@ -24,6 +27,6 @@ async function build(): Promise<AuthService> {
 }
 
 export function getAuth(): Promise<AuthService> {
-  authPromise ??= build();
-  return authPromise;
+  globalForAuth.__aujAuth ??= build();
+  return globalForAuth.__aujAuth;
 }
