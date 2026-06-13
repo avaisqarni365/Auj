@@ -17,9 +17,11 @@ ALL MODULES BUILT. web-b2b now has a Next.js shell too (runnable). Remaining: re
 - [x] .claude/skills/design-taste/SKILL.md — Emil-Kowalski-grade motion + impeccable design + typography + taste, with a finish checklist. Auto-surfaces on UI work (description match); invoke as /design-taste. THE workflow to apply on every frontend change.
 - [x] @auj/ui motion — preset keyframes (fade-in/rise/pop), ease-out-soft, duration-fast; @auj/ui/motion.css (prefers-reduced-motion guard, imported in all 3 app globals); Button press (active:scale .98), Card hover transition. Purposeful, fast, transform/opacity-only.
 
-## How to run
-- `npm run dev:web` -> marketing landing (:3000).
-- `npm run dev` -> web-b2c booking funnel (:3000), now HI-FI per design_handoff (app bar + gold-star logo, serif hero, search card, popular rail, trust strip; sticky sub-screen headers; visa-route gradient card; green My-Booking header + live visa timeline).
+## How to run (each app is a SEPARATE Next app; one at a time on :3000)
+- `npm run dev`  -> marketing LANDING (@auj/web) — the public front door. Routes: / , /admin , /journey , /journey/plan.
+- `npm run dev:b2c` -> booking funnel (web-b2c). `npm run dev:b2b` -> agent portal. `npm run dev:web` = landing (alias of dev).
+- If a page shows HTTP 500 / blank after many edits: it's a stale Next cache — stop dev, `rm -rf apps/<app>/.next`, restart. NEVER run `build:next` while `next dev` is live on the same app (it corrupts .next).
+- (history) `npm run dev` previously launched web-b2c; it now launches the landing. (app bar + gold-star logo, serif hero, search card, popular rail, trust strip; sticky sub-screen headers; visa-route gradient card; green My-Booking header + live visa timeline).
 - `npm run dev:b2b` -> web-b2b agent portal (:3000): HI-FI desktop design (dark-green rail + topbar, KPI dashboard + visa pipeline + credit card, multi-pax passenger table + group summary, wallet 3-card + transactions, markup rules+editor, quotation, statements). Auto-onboards a GOLD agent, funds wallet, multi-pax book (<=49).
 - `npm run dev:all` -> every app (needs --concurrency, already set).
 
