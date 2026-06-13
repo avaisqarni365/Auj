@@ -1,6 +1,6 @@
 {
   "name": "@auj/compliance",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "main": "./dist/index.js",
@@ -14,5 +14,8 @@
   },
   "dependencies": {
     "@auj/contracts": "workspace:*"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.8"
   }
 }

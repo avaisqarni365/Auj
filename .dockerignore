@@ -1,0 +1,14 @@
+**/node_modules
+**/dist
+**/.next
+**/.turbo
+**/coverage
+.git
+**/*.log
+**/*.tsbuildinfo
+next-env.d.ts
+.claude/settings.local.json
+**/.env
+**/.env.*
+!**/.env.example
+design_handoff_auj_platform

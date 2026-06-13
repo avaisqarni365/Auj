@@ -2,7 +2,7 @@
 _Last updated: 2026-06-12 · by: Claude Code · commit: (scaffold)_
 
 ## Now building
-Wave B. ui + web-b2c (runnable) done; web-b2b framework-light done. Remaining: optional Next shell for web-b2b; then Wave C.
+Wave C started: compliance-eu done. Deployment pipeline (Docker + CI/CD + infra) added. Remaining: connector-saudi (gated), admin, optional web-b2b Next shell, real DB persistence adapter.
 
 ## Status by wave
 ### Wave 0 — sequential (scaffold + contracts + mock) — DONE
@@ -23,8 +23,15 @@ Wave B. ui + web-b2c (runnable) done; web-b2b framework-light done. Remaining: o
 
 ### Wave C — gated / anytime
 - [ ] certified-saudi-connector  (needs partner/Ministry access)
-- [ ] compliance-eu              (finalize before launch)
+- [x] compliance-eu — @auj/compliance v1.0.0: insolvency-protection certificate (issue+deliver, guarantee tier config 20k/50k/200k), pre-contract consent gating (assertChargeable blocks until consent), PTD 6-month refund window, GDPR (processing records, subject export, erasure). ComplianceService facade. 4 test groups
 - [ ] admin
+
+### Deployment pipeline (added 2026-06-13)
+- [x] web-b2c Docker image (multi-stage monorepo -> Next standalone); .dockerignore
+- [x] infra/docker-compose.yml (web + postgres/redis/minio, datastores bound to 127.0.0.1)
+- [x] CI workflow (lint/typecheck/test/build + docker build verify) + Deploy workflow (tag -> GHCR push -> SSH deploy, guarded on secrets)
+- [x] infra/deploy.sh + infra/.env.example + infra/README.md runbook (tunnel guidance, rollback)
+- NOTE: standalone next build needs Linux symlinks (works in Docker/CI); local Windows build hits EPERM on the final symlink-copy only (app compiles fine). Docker build + remote deploy not executed here (no Docker/gh locally).
 
 ## In progress
 - Wave B: web-b2c (runnable) + web-b2b (framework-light) done. Optional web-b2b Next shell; Wave C next.

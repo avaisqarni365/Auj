@@ -1,0 +1,63 @@
+# Deployable stack for AUJ. On the server: `docker compose -f infra/docker-compose.yml up -d`.
+# Datastore ports bind to 127.0.0.1 ONLY — reach Postgres from your machine via an SSH
+# tunnel (see infra/README.md), never expose 5432 publicly.
+
+services:
+  web-b2c:
+    image: ${WEB_B2C_IMAGE:-ghcr.io/avaisqarni365/auj-web-b2c:latest}
+    # For a local build instead of a pulled image, uncomment:
+    # build: { context: .., dockerfile: apps/web-b2c/Dockerfile }
+    environment:
+      CONNECTOR: ${CONNECTOR:-mock}
+      SUPPLIER: ${SUPPLIER:-mock}
+      DATABASE_URL: ${DATABASE_URL:-postgresql://auj:auj@postgres:5432/auj?schema=public}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      NODE_ENV: production
+    ports:
+      - '${WEB_PORT:-3000}:3000'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-auj}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-auj}
+      POSTGRES_DB: ${POSTGRES_DB:-auj}
+    ports:
+      - '127.0.0.1:5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-auj}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - '127.0.0.1:6379:6379'
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${OBJECT_STORE_ACCESS_KEY:-auj}
+      MINIO_ROOT_PASSWORD: ${OBJECT_STORE_SECRET_KEY:-auj-secret}
+    ports:
+      - '127.0.0.1:9000:9000'
+      - '127.0.0.1:9001:9001'
+    volumes:
+      - miniodata:/data
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  miniodata:
