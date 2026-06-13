@@ -11,6 +11,8 @@ import type {
   VisaRoute,
   Pilgrim,
   Cancellation,
+  RawdahSlot,
+  RawdahPermit,
 } from '@auj/contracts';
 import { HOTELS, TRANSPORT, GROUND } from './catalog';
 import { resolveVisaRoute } from './visa-rule';
@@ -44,6 +46,7 @@ export class MockSaudiConnector implements SaudiConnector {
   private seq = 0;
   private readonly holds = new Map<string, HoldState>();
   private readonly visas = new Map<string, VisaState>();
+  private readonly rawdahSlots = new Map<string, RawdahSlot>();
 
   private id(prefix: string): string {
     this.seq += 1;
@@ -110,6 +113,28 @@ export class MockSaudiConnector implements SaudiConnector {
       v.status = VISA_PROGRESSION[idx + 1] as VisaStatus;
     }
     return v.status;
+  }
+
+  async searchRawdahSlots(date: string): Promise<RawdahSlot[]> {
+    // Three fixed daily slots; deterministic from the requested date.
+    const slots = ['03:00', '11:30', '21:00'].map((time, i) => ({
+      slotId: `rawdah_${date}_${i}`,
+      startsAt: `${date}T${time}:00Z`,
+      capacity: 200,
+    }));
+    for (const s of slots) this.rawdahSlots.set(s.slotId, s);
+    return slots;
+  }
+
+  async bookRawdah(slotId: string, pilgrims: Pilgrim[]): Promise<RawdahPermit> {
+    const slot = this.rawdahSlots.get(slotId);
+    return {
+      permitRef: this.id('RWD'),
+      slotId,
+      startsAt: slot?.startsAt ?? new Date().toISOString(),
+      pilgrimIds: pilgrims.map((p) => p.id),
+      status: 'CONFIRMED',
+    };
   }
 
   async cancel(_bookingRef: string): Promise<Cancellation> {

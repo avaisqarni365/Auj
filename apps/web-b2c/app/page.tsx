@@ -48,6 +48,8 @@ export default function Page() {
         pilgrims: [pilgrim],
         items: state.cart,
         total: SELL_PRICE,
+        mode: state.mode,
+        ...(state.rawdahRequested ? { rawdahDate: state.criteria.checkIn || '2026-09-02' } : {}),
       });
       setBooking(placed.booking);
       setVisaCase(placed.visaCase);
@@ -84,6 +86,10 @@ export default function Page() {
           locale="en"
           items={state.cart}
           totals={cartTotals(state)}
+          mode={state.mode}
+          onMode={(mode) => dispatch({ type: 'SET_MODE', mode })}
+          rawdahRequested={state.rawdahRequested}
+          onToggleRawdah={() => dispatch({ type: 'TOGGLE_RAWDAH' })}
           onContinue={() => dispatch({ type: 'GO', step: 'PILGRIMS' })}
           onBack={back('RESULTS')}
         />

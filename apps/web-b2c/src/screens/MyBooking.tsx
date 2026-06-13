@@ -2,6 +2,12 @@ import type { Booking, VisaCase } from '@auj/core-booking';
 import { Button } from '@auj/ui';
 import { t, type Locale } from '../i18n';
 
+const MODE_LABEL: Record<NonNullable<Booking['mode']>, string> = {
+  COMPREHENSIVE: 'Comprehensive package',
+  VISA_OPTIONAL: 'Visa-optional package',
+  CUSTOM: 'Custom package',
+};
+
 const FLOW: Array<{ key: VisaCase['status']; title: string; sub: string }> = [
   { key: 'DRAFT', title: 'Application created', sub: 'Visa case opened' },
   { key: 'SUBMITTED', title: 'Submitted to authority', sub: 'Awaiting review' },
@@ -33,6 +39,11 @@ export function MyBooking({ locale, booking, visaCase }: MyBookingProps) {
         <div className="my-1 font-mono text-2xl font-semibold tracking-[0.02em]">{booking.bookingRef ?? booking.id.slice(0, 16)}</div>
         <div className="font-serif text-[19px] font-medium">Umrah Premium · 14 nights</div>
         <div className="text-[13px] text-green-100/80">12 – 26 Sep 2026 · {booking.pilgrimIds.length} pilgrims</div>
+        {booking.mode ? (
+          <span className="mt-2 inline-flex items-center rounded-full bg-green-50/15 px-2.5 py-1 text-[11px] font-semibold text-green-50">
+            {MODE_LABEL[booking.mode]}
+          </span>
+        ) : null}
       </div>
 
       {/* sheet */}
@@ -74,6 +85,25 @@ export function MyBooking({ locale, booking, visaCase }: MyBookingProps) {
             );
           })}
         </div>
+
+        {/* Rawdah permit */}
+        {booking.rawdah ? (
+          <div className="mb-3.5 flex items-center gap-3 rounded-2xl border border-sand-200 bg-white p-4">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-green-800/5 text-[20px]">🕋</div>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-bold">Rawdah permit</span>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-success-bg px-2.5 py-1 text-[11px] font-semibold text-success-fg">
+                  {booking.rawdah.status === 'CONFIRMED' ? 'Confirmed' : booking.rawdah.status === 'REQUESTED' ? 'Requested' : 'Rejected'}
+                </span>
+              </div>
+              <div className="mt-0.5 text-[12px] text-sand-500">
+                {new Date(booking.rawdah.startsAt).toUTCString().slice(0, 22)} · {booking.rawdah.pilgrimIds.length} pilgrims
+              </div>
+              <div className="mt-0.5 font-mono text-[11px] text-sand-500">{booking.rawdah.permitRef}</div>
+            </div>
+          </div>
+        ) : null}
 
         {/* pilgrims & visas */}
         <div className="mx-1 mb-2.5 text-[13px] font-bold">Pilgrims &amp; visas</div>

@@ -16,6 +16,8 @@ import {
   BookingResultSchema,
   VisaApplicationSchema,
   VisaStatusSchema,
+  RawdahSlotSchema,
+  RawdahPermitSchema,
 } from './domain';
 
 const samplePilgrims: Pilgrim[] = [
@@ -70,6 +72,19 @@ export function runSaudiConnectorContractTests(name: string, make: () => SaudiCo
         await c.createVisaApplication('BR1', samplePilgrims),
       );
       VisaStatusSchema.parse(await c.getVisaStatus(app.visaRef));
+    });
+
+    it('searchRawdahSlots then bookRawdah return valid Rawdah state', async () => {
+      const c = make();
+      const slots = await c.searchRawdahSlots('2026-09-10');
+      expect(Array.isArray(slots)).toBe(true);
+      for (const s of slots) RawdahSlotSchema.parse(s);
+      const first = slots[0];
+      if (first) {
+        const permit = RawdahPermitSchema.parse(await c.bookRawdah(first.slotId, samplePilgrims));
+        expect(['REQUESTED', 'CONFIRMED']).toContain(permit.status);
+        expect(permit.slotId).toBe(first.slotId);
+      }
     });
 
     it('cancel reports a boolean outcome', async () => {

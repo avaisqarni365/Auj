@@ -53,6 +53,25 @@ describe('Postgres adapter against pg-mem', () => {
     expect((await fresh.visaCases.get(visaCase.id))?.route).toBe('EVISA_DIRECT'); // LT
   });
 
+  it('persists package mode and a Rawdah permit (jsonb) across fresh stores', async () => {
+    const pool = await freshPool();
+    const saudi = new MockSaudiConnector();
+    const core = createCoreBooking({ saudi, travel: new MockTravelSupplier(), stores: createPostgresStores(pool) });
+
+    const customer = await core.crm.createCustomer({ fullName: 'Imran', email: 'i2@x.example' });
+    const pilgrim = await core.crm.addPilgrim({ customerId: customer.id, firstName: 'Imran', lastName: 'Ali', passportNumber: 'PK7', nationality: 'PK', dob: '1985-01-01', gender: 'M' });
+    const draft = await core.bookings.createDraft({ customerId: customer.id, channel: 'PILGRIMAGE', mode: 'COMPREHENSIVE', pilgrimIds: [pilgrim.id], items: [] });
+
+    const slots = await core.bookings.rawdahSlots('2026-09-02');
+    const permit = await core.bookings.bookRawdah(draft.id, slots[0]!.slotId);
+
+    const reloaded = await createPostgresStores(pool).bookings.get(draft.id);
+    expect(reloaded?.mode).toBe('COMPREHENSIVE');
+    expect(reloaded?.rawdah?.permitRef).toBe(permit.permitRef);
+    expect(reloaded?.rawdah?.status).toBe('CONFIRMED');
+    expect(reloaded?.rawdah?.pilgrimIds).toEqual([pilgrim.id]);
+  });
+
   it('updates a booking in place (upsert) rather than duplicating', async () => {
     const pool = await freshPool();
     const stores = createPostgresStores(pool);

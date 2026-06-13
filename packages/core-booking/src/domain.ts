@@ -1,4 +1,6 @@
-import type { Money, Pilgrim as ContractsPilgrim, VisaRoute, VisaStatus } from '@auj/contracts';
+import type { Money, PackageMode, Pilgrim as ContractsPilgrim, RawdahPermit, VisaRoute, VisaStatus } from '@auj/contracts';
+
+export type { PackageMode, RawdahPermit } from '@auj/contracts';
 
 export type BookingChannel = 'PILGRIMAGE' | 'TRAVEL';
 
@@ -55,6 +57,7 @@ export interface Package {
   id: string;
   name: string;
   channel: BookingChannel;
+  mode?: PackageMode; // Nusuk parity: comprehensive | visa-optional | custom
   items: PackageItem[];
   totals: Money[]; // net subtotal per currency
 }
@@ -89,6 +92,7 @@ export interface Booking {
   id: string;
   customerId: string;
   channel: BookingChannel;
+  mode?: PackageMode;
   status: BookingStatus;
   pilgrimIds: string[];
   items: BookingItem[];
@@ -96,6 +100,7 @@ export interface Booking {
   holdExpiresAt?: string;
   bookingRef?: string;
   visaCaseId?: string;
+  rawdah?: RawdahPermit;
   refund?: Money;
   createdAt: string;
   updatedAt: string;

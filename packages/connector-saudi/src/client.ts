@@ -48,6 +48,17 @@ export interface MaqamCancelResponse {
   refundMinor?: number;
   refundCurrency?: string;
 }
+export interface MaqamRawdahSlot {
+  slot: string;
+  at: string;
+  seatsLeft: number;
+}
+export interface MaqamRawdahResponse {
+  permitId: string;
+  slot: string;
+  at: string;
+  state: 'REQUESTED' | 'CONFIRMED' | 'REJECTED';
+}
 
 export interface SearchReq {
   cityCode: MaqamCity;
@@ -67,6 +78,8 @@ export interface SaudiPartnerClient {
   confirm(req: { reservationId: string; paymentRef: string }): Promise<MaqamConfirmResponse>;
   createVisa(req: { reference: string; paxCount: number }): Promise<MaqamVisaResponse>;
   visaStatus(applicationId: string): Promise<{ state: string }>;
+  rawdahSlots(date: string): Promise<MaqamRawdahSlot[]>;
+  bookRawdah(req: { slot: string; paxCount: number }): Promise<MaqamRawdahResponse>;
   cancel(reference: string): Promise<MaqamCancelResponse>;
 }
 
@@ -122,6 +135,15 @@ export class SandboxSaudiPartnerClient implements SaudiPartnerClient {
     const next = Math.min(idx + 1, VISA_FLOW.length - 1);
     this.visa.set(applicationId, next);
     return { state: VISA_FLOW[next] as string };
+  }
+
+  async rawdahSlots(date: string): Promise<MaqamRawdahSlot[]> {
+    return ['03:00', '11:30', '21:00'].map((t) => ({ slot: `${date}#${t}`, at: `${date}T${t}:00Z`, seatsLeft: 200 }));
+  }
+
+  async bookRawdah(req: { slot: string; paxCount: number }): Promise<MaqamRawdahResponse> {
+    const at = req.slot.includes('#') ? `${req.slot.split('#')[0]}T${req.slot.split('#')[1]}:00Z` : new Date().toISOString();
+    return { permitId: `RWD-${uuidv7().slice(0, 8)}`, slot: req.slot, at, state: 'CONFIRMED' };
   }
 
   async cancel(_reference: string): Promise<MaqamCancelResponse> {

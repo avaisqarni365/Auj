@@ -66,6 +66,34 @@ describe('pilgrimage booking lifecycle (end-to-end against connector-mock)', () 
     expect(visaCase.route).toBe('EVISA_DIRECT');
   });
 
+  it('carries package mode and books a Rawdah permit for the pilgrims', async () => {
+    const core = setup();
+    const customer = await core.crm.createCustomer({ fullName: 'Imran Ali', email: 'imran@example.com' });
+    const pilgrim = await core.crm.addPilgrim({
+      customerId: customer.id, firstName: 'Imran', lastName: 'Ali',
+      passportNumber: 'PK1234567', nationality: 'PK', dob: '1985-04-12', gender: 'M',
+    });
+    const booking = await core.bookings.createDraft({
+      customerId: customer.id, channel: 'PILGRIMAGE', mode: 'COMPREHENSIVE', pilgrimIds: [pilgrim.id], items: [],
+    });
+    expect(booking.mode).toBe('COMPREHENSIVE');
+
+    const slots = await core.bookings.rawdahSlots('2026-09-02');
+    expect(slots.length).toBeGreaterThan(0);
+    const permit = await core.bookings.bookRawdah(booking.id, slots[0]!.slotId);
+    expect(permit.status).toBe('CONFIRMED');
+    expect(permit.pilgrimIds).toEqual([pilgrim.id]);
+    expect(booking.rawdah?.permitRef).toBe(permit.permitRef); // attached to the booking
+  });
+
+  it('rejects Rawdah for travel bookings', async () => {
+    const core = setup();
+    const customer = await core.crm.createCustomer({ fullName: 'T', email: 't2@example.com' });
+    const t = await core.crm.addPilgrim({ customerId: customer.id, firstName: 'J', lastName: 'P', passportNumber: 'LT5', nationality: 'LT', dob: '1988-01-01', gender: 'M' });
+    const booking = await core.bookings.createDraft({ customerId: customer.id, channel: 'TRAVEL', pilgrimIds: [t.id], items: [] });
+    await expect(core.bookings.bookRawdah(booking.id, 'slot')).rejects.toThrow(/pilgrimage-only/);
+  });
+
   it('rejects confirm before hold', async () => {
     const core = setup();
     const customer = await core.crm.createCustomer({ fullName: 'X', email: 'x@example.com' });

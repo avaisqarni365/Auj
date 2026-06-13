@@ -101,10 +101,10 @@ class PgBookingRepository implements BookingRepository {
     try {
       await client.query('BEGIN');
       await client.query(
-        `INSERT INTO bookings (id, customer_id, channel, status, pilgrim_ids, hold_id, hold_expires_at, booking_ref, visa_case_id, refund_amount, refund_currency, created_at, updated_at)
-         VALUES ($1,$2,$3,$4,$5::jsonb,$6,$7,$8,$9,$10,$11,$12,$13)
-         ON CONFLICT (id) DO UPDATE SET customer_id=$2, channel=$3, status=$4, pilgrim_ids=$5::jsonb, hold_id=$6, hold_expires_at=$7, booking_ref=$8, visa_case_id=$9, refund_amount=$10, refund_currency=$11, updated_at=$13`,
-        [b.id, b.customerId, b.channel, b.status, JSON.stringify(b.pilgrimIds), b.holdId ?? null, b.holdExpiresAt ?? null, b.bookingRef ?? null, b.visaCaseId ?? null, b.refund?.amount ?? null, b.refund?.currency ?? null, b.createdAt, b.updatedAt],
+        `INSERT INTO bookings (id, customer_id, channel, mode, status, pilgrim_ids, hold_id, hold_expires_at, booking_ref, visa_case_id, rawdah, refund_amount, refund_currency, created_at, updated_at)
+         VALUES ($1,$2,$3,$4,$5,$6::jsonb,$7,$8,$9,$10,$11::jsonb,$12,$13,$14,$15)
+         ON CONFLICT (id) DO UPDATE SET customer_id=$2, channel=$3, mode=$4, status=$5, pilgrim_ids=$6::jsonb, hold_id=$7, hold_expires_at=$8, booking_ref=$9, visa_case_id=$10, rawdah=$11::jsonb, refund_amount=$12, refund_currency=$13, updated_at=$15`,
+        [b.id, b.customerId, b.channel, b.mode ?? null, b.status, JSON.stringify(b.pilgrimIds), b.holdId ?? null, b.holdExpiresAt ?? null, b.bookingRef ?? null, b.visaCaseId ?? null, b.rawdah ? JSON.stringify(b.rawdah) : null, b.refund?.amount ?? null, b.refund?.currency ?? null, b.createdAt, b.updatedAt],
       );
       await client.query('DELETE FROM booking_items WHERE booking_id = $1', [b.id]);
       for (let i = 0; i < b.items.length; i += 1) {

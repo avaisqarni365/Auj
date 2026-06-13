@@ -1,4 +1,4 @@
-import type { Pilgrim as ContractsPilgrim, SaudiConnector, TravelSupplier } from '@auj/contracts';
+import type { PackageMode, Pilgrim as ContractsPilgrim, RawdahPermit, RawdahSlot, SaudiConnector, TravelSupplier } from '@auj/contracts';
 import { routeForGroup, type VisaConfig } from '@auj/visa-router';
 import type { Booking, BookingChannel, CrmPilgrim, PackageItem, VisaCase } from './domain';
 import { toContractsPilgrim } from './domain';
@@ -18,6 +18,7 @@ export class BookingError extends Error {
 export interface CreateBookingInput {
   customerId: string;
   channel: BookingChannel;
+  mode?: PackageMode;
   pilgrimIds: string[];
   items: PackageItem[];
 }
@@ -79,7 +80,23 @@ export class BookingService {
       items: input.items.map((i) => ({ ...i })),
       createdAt: ts,
       updatedAt: ts,
+      ...(input.mode ? { mode: input.mode } : {}),
     });
+  }
+
+  /** Rawdah (Riyadh ul-Jannah) permit slots for a date (Madinah). */
+  async rawdahSlots(date: string): Promise<RawdahSlot[]> {
+    return this.deps.saudi.searchRawdahSlots(date);
+  }
+
+  /** Book a Rawdah permit for the booking's pilgrims and attach it to the booking. */
+  async bookRawdah(bookingId: string, slotId: string): Promise<RawdahPermit> {
+    const b = await this.require(bookingId);
+    if (b.channel !== 'PILGRIMAGE') throw new BookingError('Rawdah is pilgrimage-only');
+    const permit = await this.deps.saudi.bookRawdah(slotId, await this.contractsPilgrims(b));
+    b.rawdah = permit;
+    await this.persist(b);
+    return permit;
   }
 
   /** Pilgrimage: place a hold with the Saudi connector. */

@@ -1,4 +1,4 @@
-import type { Currency, Money, SearchCriteria } from '@auj/contracts';
+import type { Currency, Money, PackageMode, SearchCriteria } from '@auj/contracts';
 import type { PackageItem } from '@auj/core-booking';
 
 // Local copy so this module stays free of any value import from core-booking,
@@ -25,6 +25,10 @@ export interface PilgrimDraft {
 export interface FunnelState {
   step: FunnelStep;
   channel: 'PILGRIMAGE' | 'TRAVEL';
+  /** Nusuk-parity package mode: comprehensive (everything), visa-optional, or custom. */
+  mode: PackageMode;
+  /** Whether the pilgrim requested a Rawdah (Riyadh ul-Jannah) permit add-on. */
+  rawdahRequested: boolean;
   criteria: SearchCriteria;
   cart: PackageItem[];
   pilgrims: PilgrimDraft[];
@@ -35,6 +39,8 @@ export interface FunnelState {
 export type FunnelAction =
   | { type: 'SET_CRITERIA'; criteria: Partial<SearchCriteria> }
   | { type: 'GO'; step: FunnelStep }
+  | { type: 'SET_MODE'; mode: PackageMode }
+  | { type: 'TOGGLE_RAWDAH' }
   | { type: 'ADD_ITEM'; item: PackageItem }
   | { type: 'REMOVE_ITEM'; offerId: string }
   | { type: 'SET_PILGRIMS'; pilgrims: PilgrimDraft[] }
@@ -45,6 +51,8 @@ export function initialFunnel(): FunnelState {
   return {
     step: 'SEARCH',
     channel: 'PILGRIMAGE',
+    mode: 'COMPREHENSIVE',
+    rawdahRequested: false,
     criteria: { city: 'MAKKAH', checkIn: '', checkOut: '', pax: 1 },
     cart: [],
     pilgrims: [],
@@ -58,6 +66,10 @@ export function funnelReducer(state: FunnelState, action: FunnelAction): FunnelS
       return { ...state, criteria: { ...state.criteria, ...action.criteria } };
     case 'GO':
       return { ...state, step: action.step };
+    case 'SET_MODE':
+      return { ...state, mode: action.mode };
+    case 'TOGGLE_RAWDAH':
+      return { ...state, rawdahRequested: !state.rawdahRequested };
     case 'ADD_ITEM':
       if (state.cart.some((i) => i.offerId === action.item.offerId)) return state;
       return { ...state, cart: [...state.cart, action.item] };

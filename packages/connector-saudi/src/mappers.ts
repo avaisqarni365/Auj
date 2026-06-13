@@ -1,5 +1,5 @@
-import type { Currency, GroundOffer, HotelOffer, TransportOffer, VisaRoute, VisaStatus } from '@auj/contracts';
-import type { MaqamCity, MaqamGround, MaqamHotel, MaqamTransport } from './client';
+import type { Currency, GroundOffer, HotelOffer, RawdahSlot, RawdahStatus, TransportOffer, VisaRoute, VisaStatus } from '@auj/contracts';
+import type { MaqamCity, MaqamGround, MaqamHotel, MaqamRawdahSlot, MaqamTransport } from './client';
 
 const CITY: Record<MaqamCity, string> = { MAK: 'MAKKAH', MAD: 'MADINAH', JED: 'JEDDAH' };
 
@@ -40,4 +40,14 @@ const VISA_STATES = new Set<VisaStatus>(['DRAFT', 'SUBMITTED', 'PAID', 'ISSUED',
 export function mapVisaState(state: string): VisaStatus {
   const upper = state.toUpperCase();
   return VISA_STATES.has(upper as VisaStatus) ? (upper as VisaStatus) : 'SUBMITTED';
+}
+
+export function mapRawdahSlot(s: MaqamRawdahSlot): RawdahSlot {
+  return { slotId: s.slot, startsAt: s.at, capacity: s.seatsLeft };
+}
+
+const RAWDAH_STATES = new Set<RawdahStatus>(['REQUESTED', 'CONFIRMED', 'REJECTED']);
+export function mapRawdahState(state: string): RawdahStatus {
+  const upper = state.toUpperCase();
+  return RAWDAH_STATES.has(upper as RawdahStatus) ? (upper as RawdahStatus) : 'REQUESTED';
 }

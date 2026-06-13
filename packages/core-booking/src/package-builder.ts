@@ -4,6 +4,7 @@ import type {
   HotelOffer,
   TransportOffer,
 } from '@auj/contracts';
+import type { PackageMode } from '@auj/contracts';
 import type { BookingChannel, Package, PackageItem } from './domain';
 import { sumByCurrency } from './money';
 import { uuidv7 } from './ids';
@@ -38,6 +39,7 @@ export const flightItem = (o: FlightOffer): PackageItem => ({
 export function buildPackage(input: {
   name: string;
   channel: BookingChannel;
+  mode?: PackageMode;
   items: PackageItem[];
 }): Package {
   return {
@@ -46,5 +48,6 @@ export function buildPackage(input: {
     channel: input.channel,
     items: input.items,
     totals: sumByCurrency(input.items.map((i) => i.net)),
+    ...(input.mode ? { mode: input.mode } : {}),
   };
 }

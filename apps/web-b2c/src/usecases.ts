@@ -1,4 +1,4 @@
-import type { Money } from '@auj/contracts';
+import type { Money, PackageMode, RawdahPermit } from '@auj/contracts';
 import type { Booking, PackageItem, VisaCase } from '@auj/core-booking';
 import { routeFor, type VisaRouting } from '@auj/visa-router';
 import type { Backend, PaymentMethod } from './ports';
@@ -25,11 +25,15 @@ export interface PlaceBookingInput {
   items: PackageItem[];
   total: Money;
   method?: PaymentMethod;
+  mode?: PackageMode;
+  /** When set, book the first available Rawdah permit slot for this date. */
+  rawdahDate?: string;
 }
 
 export interface PlacedBooking {
   booking: Booking;
   visaCase: VisaCase;
+  rawdah?: RawdahPermit;
 }
 
 /**
@@ -53,6 +57,7 @@ export async function placePilgrimageBooking(
     channel: 'PILGRIMAGE',
     pilgrimIds: pilgrims.map((p) => p.id),
     items: input.items,
+    ...(input.mode ? { mode: input.mode } : {}),
   });
 
   await api.hold(draft.id);
@@ -65,7 +70,13 @@ export async function placePilgrimageBooking(
   const confirmed = await api.confirm(draft.id, paymentRef);
   const { visaCase } = await api.startVisa(confirmed.id);
 
-  return { booking: confirmed, visaCase };
+  let rawdah: RawdahPermit | undefined;
+  if (input.rawdahDate) {
+    const slots = await api.rawdahSlots(input.rawdahDate);
+    if (slots[0]) rawdah = await api.bookRawdah(confirmed.id, slots[0].slotId);
+  }
+
+  return { booking: confirmed, visaCase, ...(rawdah ? { rawdah } : {}) };
 }
 
 /** Poll the visa case until issued (or a guard limit), for the live tracker. */

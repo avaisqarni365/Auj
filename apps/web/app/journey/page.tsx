@@ -10,6 +10,7 @@ import {
   ITINERARY,
   NEXT_STEPS,
   PILGRIM_VISAS,
+  RAWDAH,
   STAGES,
   TIMELINE,
   TRANSACTIONS,
@@ -62,6 +63,7 @@ export default function JourneyPage() {
               <div className="my-1 font-mono text-[clamp(22px,2.6vw,28px)] font-semibold">{BOOKING.brn}</div>
               <div className="font-serif text-[22px] font-medium">{BOOKING.pkg}</div>
               <div className="mt-1 text-[13.5px] text-green-100/80">{BOOKING.route} · {BOOKING.dates} · {BOOKING.pax} pilgrims</div>
+              <span className="mt-2 inline-flex items-center rounded-full bg-[#F7EBD3]/15 px-2.5 py-1 text-[11.5px] font-semibold text-[#F0D9A4]">{BOOKING.mode}</span>
             </div>
             <div className="text-right">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F7EBD3]/20 px-3 py-1 text-[12.5px] font-semibold text-[#F0D9A4]">
@@ -137,6 +139,19 @@ function Journey() {
               <span className="whitespace-nowrap text-[12.5px] font-semibold text-accent-600">{n.action}</span>
             </div>
           ))}
+        </Panel>
+        <Panel title="Rawdah permit">
+          <div className="flex items-center gap-3 rounded-xl border border-green-100 bg-green-50 px-3.5 py-3">
+            <span className="flex h-10 w-10 items-center justify-center rounded-[9px] bg-green-100 text-[19px]">🕋</span>
+            <div className="min-w-0 flex-1">
+              <div className="text-[13.5px] font-semibold">Riyadh ul-Jannah · Madinah</div>
+              <div className="text-[11.5px] text-sand-500">{RAWDAH.when} · {RAWDAH.pax} pilgrims</div>
+              <div className="mt-0.5 font-mono text-[11px] text-sand-500">{RAWDAH.permitRef}</div>
+            </div>
+            <span className={`whitespace-nowrap rounded-full px-2.5 py-0.5 text-[11.5px] font-semibold ${RAWDAH.status === 'CONFIRMED' ? 'bg-success-bg text-success-fg' : RAWDAH.status === 'REQUESTED' ? 'bg-warning-bg text-warning-fg' : 'bg-danger-bg text-danger-fg'}`}>
+              {RAWDAH.status === 'CONFIRMED' ? 'Confirmed' : RAWDAH.status === 'REQUESTED' ? 'Requested' : 'Rejected'}
+            </span>
+          </div>
         </Panel>
         <div className="rounded-2xl bg-gradient-to-br from-green-950 to-green-900 p-6 text-center text-green-50">
           <div className="mb-3.5 text-[11.5px] tracking-[0.1em] text-green-100/70">AUJ DIGITAL PASS</div>

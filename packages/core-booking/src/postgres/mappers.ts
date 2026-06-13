@@ -10,6 +10,8 @@ import type {
   DocumentType,
   ItemKind,
   Package,
+  PackageMode,
+  RawdahPermit,
   VisaCase,
 } from '../domain';
 
@@ -59,12 +61,14 @@ export interface BookingRow {
   id: string;
   customer_id: string;
   channel: string;
+  mode: string | null;
   status: string;
   pilgrim_ids: string[]; // jsonb -> array
   hold_id: string | null;
   hold_expires_at: string | null;
   booking_ref: string | null;
   visa_case_id: string | null;
+  rawdah: RawdahPermit | null; // jsonb
   refund_amount: number | null;
   refund_currency: string | null;
   created_at: string;
@@ -99,10 +103,12 @@ export function rowToBooking(b: BookingRow, itemRows: BookingItemRow[]): Booking
     items,
     createdAt: b.created_at,
     updatedAt: b.updated_at,
+    ...(b.mode != null ? { mode: b.mode as PackageMode } : {}),
     ...(b.hold_id != null ? { holdId: b.hold_id } : {}),
     ...(b.hold_expires_at != null ? { holdExpiresAt: b.hold_expires_at } : {}),
     ...(b.booking_ref != null ? { bookingRef: b.booking_ref } : {}),
     ...(b.visa_case_id != null ? { visaCaseId: b.visa_case_id } : {}),
+    ...(b.rawdah != null ? { rawdah: b.rawdah } : {}),
     ...(b.refund_amount != null && b.refund_currency != null
       ? { refund: { amount: b.refund_amount, currency: b.refund_currency as Currency } }
       : {}),

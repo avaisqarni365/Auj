@@ -10,6 +10,8 @@ import type {
   VisaStatus,
   Pilgrim,
   Cancellation,
+  RawdahSlot,
+  RawdahPermit,
 } from './domain';
 
 /**
@@ -26,6 +28,9 @@ export interface SaudiConnector {
   confirm(holdId: string, payment: { ref: string }): Promise<BookingResult>;
   createVisaApplication(bookingRef: string, pilgrims: Pilgrim[]): Promise<VisaApplication>;
   getVisaStatus(visaRef: string): Promise<VisaStatus>;
+  /** Rawdah (Riyadh ul-Jannah) permit slots in Madinah for a date (Nusuk parity). */
+  searchRawdahSlots(date: string): Promise<RawdahSlot[]>;
+  bookRawdah(slotId: string, pilgrims: Pilgrim[]): Promise<RawdahPermit>;
   cancel(bookingRef: string): Promise<Cancellation>;
 }
 

@@ -5,6 +5,8 @@ import {
   HotelOfferSchema,
   BookingResultSchema,
   VisaApplicationSchema,
+  PackageModeSchema,
+  RawdahPermitSchema,
   CONTRACTS_VERSION,
 } from './index';
 
@@ -44,6 +46,14 @@ describe('@auj/contracts schemas', () => {
         nightlyNet: { amount: 50000, currency: 'SAR' },
         nusukApproved: true,
       }).success,
+    ).toBe(true);
+  });
+
+  it('PackageMode + RawdahPermit validate (Nusuk parity)', () => {
+    expect(PackageModeSchema.safeParse('COMPREHENSIVE').success).toBe(true);
+    expect(PackageModeSchema.safeParse('FREE').success).toBe(false);
+    expect(
+      RawdahPermitSchema.safeParse({ permitRef: 'R1', slotId: 's1', startsAt: '2026-09-10T03:00:00Z', pilgrimIds: ['p1'], status: 'CONFIRMED' }).success,
     ).toBe(true);
   });
 

@@ -1,5 +1,5 @@
 # PROGRESS — single source of truth for "where are we"
-_Last updated: 2026-06-12 · by: Claude Code · commit: (scaffold)_
+_Last updated: 2026-06-13 · by: Claude Code · commit: Rawdah permit + package modes_
 
 ## Now building
 ALL MODULES BUILT. web-b2b now has a Next.js shell too (runnable). Remaining: real partner SaudiPartnerClient (gated), real payment-gateway SDKs, optional admin Next shell, run the deploy pipeline.
@@ -24,7 +24,18 @@ ALL MODULES BUILT. web-b2b now has a Next.js shell too (runnable). Remaining: re
   TBO/Hotelbeds, Amadeus/Sabre, Stripe, Safepay/PayFast, S3/MinIO, OCR) with status pill
   (connected/sandbox/gated/not-configured), capabilities, adapter+env binding, Test-connection, Add-provider.
   PROVIDERS registry in src/admin-content.ts (test). Mirrors Nusuk's licensed-provider directory.
-- TODO (Nusuk features not yet built): Rawdah permit, package modes, catering, gift Umrah, support tickets,
+- [x] Rawdah permit + package modes (2026-06-13) — full hybrid-seam feature, contracts v1.1.0:
+  - contracts: PackageMode (COMPREHENSIVE|VISA_OPTIONAL|CUSTOM), RawdahSlot, RawdahPermit (+Zod);
+    SaudiConnector.searchRawdahSlots(date) + bookRawdah(slotId, pilgrims); contract-tests cover both.
+  - connector-mock: 3 fixed daily slots + permit issuance. connector-saudi: Maqam Rawdah client types,
+    sandbox impl, mappers (mapRawdahSlot/mapRawdahState), connector methods (withRetry).
+  - core-booking: Package.mode + Booking.mode + Booking.rawdah; BookingService.rawdahSlots()/bookRawdah()
+    (pilgrimage-only guard); Postgres adapter persists mode (text) + rawdah (jsonb) — schema/mappers/repo;
+    lifecycle + pg-mem tests green.
+  - web-b2c: PackageBuilder mode selector + Rawdah add-on toggle → funnel state → placeBookingAction
+    (mode + optional rawdahDate books first slot); MyBooking shows mode badge + Rawdah permit card.
+  - apps/web /journey: package-mode badge on hero + Rawdah permit card in the Journey tab.
+- TODO (Nusuk features not yet built): catering, gift Umrah, support tickets,
   distance-to-Haram filter, real Nusuk Masar via connector-saudi (gated).
 
 ## Design quality as a workflow (added 2026-06-13)

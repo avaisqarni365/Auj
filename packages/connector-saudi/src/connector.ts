@@ -6,6 +6,8 @@ import type {
   HoldRef,
   HotelOffer,
   Pilgrim,
+  RawdahPermit,
+  RawdahSlot,
   SaudiConnector,
   SearchCriteria,
   TransportOffer,
@@ -14,7 +16,7 @@ import type {
 } from '@auj/contracts';
 import type { SaudiPartnerClient } from './client';
 import { SandboxSaudiPartnerClient } from './client';
-import { mapBookingState, mapGround, mapHotel, mapRoute, mapTransport, mapVisaState, toCityCode } from './mappers';
+import { mapBookingState, mapGround, mapHotel, mapRawdahSlot, mapRawdahState, mapRoute, mapTransport, mapVisaState, toCityCode } from './mappers';
 
 /** Partner connection config (token auth, per-agent codes). The sandbox ignores it. */
 export interface SaudiPartnerConfig {
@@ -106,6 +108,22 @@ export class SaudiPartnerConnector implements SaudiConnector {
   async getVisaStatus(visaRef: string): Promise<VisaStatus> {
     const res = await withRetry(() => this.client.visaStatus(visaRef));
     return mapVisaState(res.state);
+  }
+
+  async searchRawdahSlots(date: string): Promise<RawdahSlot[]> {
+    const raw = await withRetry(() => this.client.rawdahSlots(date));
+    return raw.map(mapRawdahSlot);
+  }
+
+  async bookRawdah(slotId: string, pilgrims: Pilgrim[]): Promise<RawdahPermit> {
+    const res = await this.client.bookRawdah({ slot: slotId, paxCount: pilgrims.length });
+    return {
+      permitRef: res.permitId,
+      slotId: res.slot,
+      startsAt: res.at,
+      pilgrimIds: pilgrims.map((p) => p.id),
+      status: mapRawdahState(res.state),
+    };
   }
 
   async cancel(bookingRef: string): Promise<Cancellation> {

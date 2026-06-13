@@ -4,6 +4,9 @@ import type { HotelOffer } from '@auj/contracts';
 import { Results } from './Results';
 import { PilgrimCapture } from './PilgrimCapture';
 import { Checkout } from './Checkout';
+import { PackageBuilder } from './PackageBuilder';
+import { MyBooking } from './MyBooking';
+import type { Booking } from '@auj/core-booking';
 
 const noop = (): void => undefined;
 
@@ -43,6 +46,29 @@ describe('B2C screens', () => {
       />,
     );
     expect(html).toContain('Agent channel');
+  });
+
+  it('PackageBuilder offers the Nusuk package modes and the Rawdah permit add-on', () => {
+    const html = renderToStaticMarkup(
+      <PackageBuilder locale="en" items={[]} totals={[]} mode="VISA_OPTIONAL" rawdahRequested onContinue={noop} />,
+    );
+    expect(html).toContain('Package mode');
+    expect(html).toContain('Comprehensive');
+    expect(html).toContain('Visa optional');
+    expect(html).toContain('Rawdah permit');
+    expect(html).toContain('Bring your own visa'); // active mode hint
+  });
+
+  it('MyBooking renders a confirmed Rawdah permit and the package mode', () => {
+    const booking: Booking = {
+      id: 'bk1', customerId: 'c1', channel: 'PILGRIMAGE', mode: 'COMPREHENSIVE', status: 'CONFIRMED',
+      pilgrimIds: ['p1'], items: [], createdAt: 't0', updatedAt: 't1',
+      rawdah: { permitRef: 'RWD-123', slotId: 's1', startsAt: '2026-09-02T03:00:00.000Z', pilgrimIds: ['p1'], status: 'CONFIRMED' },
+    };
+    const html = renderToStaticMarkup(<MyBooking locale="en" booking={booking} />);
+    expect(html).toContain('Rawdah permit');
+    expect(html).toContain('RWD-123');
+    expect(html).toContain('Comprehensive package');
   });
 
   it('Checkout shows EUR total with a PKR equivalent and EUR disclaimer', () => {

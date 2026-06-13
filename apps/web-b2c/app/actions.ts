@@ -3,8 +3,9 @@
 // Server Actions: the booking backend runs server-side (node:crypto + DB). It is
 // Postgres-backed when DATABASE_URL is set, in-memory otherwise. A lazily-created
 // singleton (with migrate() applied once) is reused across actions.
-import type { Money, SearchCriteria } from '@auj/contracts';
-import type { Booking, PackageItem, VisaCase } from '@auj/core-booking';
+import type { Money, PackageMode, SearchCriteria } from '@auj/contracts';
+import type { PackageItem, VisaCase } from '@auj/core-booking';
+import type { PlacedBooking } from '../src/usecases';
 import { createBackend } from '../src/backend/in-process';
 import type { Backend } from '../src/ports';
 import { placePilgrimageBooking, pollVisaUntilIssued } from '../src/usecases';
@@ -26,7 +27,9 @@ export async function placeBookingAction(input: {
   pilgrims: PilgrimDraft[];
   items: PackageItem[];
   total: Money;
-}): Promise<{ booking: Booking; visaCase: VisaCase }> {
+  mode?: PackageMode;
+  rawdahDate?: string;
+}): Promise<PlacedBooking> {
   return placePilgrimageBooking(await getBackend(), input);
 }
 

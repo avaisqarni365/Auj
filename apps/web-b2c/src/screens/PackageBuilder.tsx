@@ -1,4 +1,4 @@
-import type { Money } from '@auj/contracts';
+import type { Money, PackageMode } from '@auj/contracts';
 import type { ItemKind, PackageItem } from '@auj/core-booking';
 import { Button } from '@auj/ui';
 import { formatMoney, formatWithPkr } from '../fx';
@@ -8,6 +8,10 @@ export interface PackageBuilderProps {
   locale: Locale;
   items: PackageItem[];
   totals: Money[];
+  mode?: PackageMode;
+  onMode?: (mode: PackageMode) => void;
+  rawdahRequested?: boolean;
+  onToggleRawdah?: () => void;
   onContinue: () => void;
   onBack?: () => void;
 }
@@ -15,7 +19,14 @@ export interface PackageBuilderProps {
 const ICON: Record<ItemKind, string> = { HOTEL: '🏨', TRANSPORT: '🚌', GROUND: '🕌', FLIGHT: '✈' };
 const STEPS = ['Hotel', 'Transport', 'Ground', 'Flight'];
 
-export function PackageBuilder({ locale, items, totals, onContinue, onBack }: PackageBuilderProps) {
+// Nusuk-parity package modes (see nusuk-umrah-services skill).
+const MODES: ReadonlyArray<{ value: PackageMode; label: string; hint: string }> = [
+  { value: 'COMPREHENSIVE', label: 'Comprehensive', hint: 'Visa, hotels, transport & ground — all included' },
+  { value: 'VISA_OPTIONAL', label: 'Visa optional', hint: 'Bring your own visa; we arrange the rest' },
+  { value: 'CUSTOM', label: 'Custom', hint: 'Pick exactly what you need' },
+];
+
+export function PackageBuilder({ locale, items, totals, mode = 'COMPREHENSIVE', onMode, rawdahRequested = false, onToggleRawdah, onContinue, onBack }: PackageBuilderProps) {
   const eur = totals.find((m) => m.currency === 'EUR');
   const kinds = new Set(items.map((i) => i.kind));
   return (
@@ -41,6 +52,30 @@ export function PackageBuilder({ locale, items, totals, onContinue, onBack }: Pa
         </div>
       </div>
 
+      {/* Package mode (Nusuk parity) */}
+      <div className="px-4 pt-4">
+        <div className="text-[11px] font-semibold uppercase tracking-wider text-sand-500">Package mode</div>
+        <div className="mt-2 flex gap-2">
+          {MODES.map((m) => {
+            const active = m.value === mode;
+            return (
+              <button
+                key={m.value}
+                type="button"
+                aria-pressed={active}
+                onClick={() => onMode?.(m.value)}
+                className={`flex-1 rounded-xl border px-2.5 py-2 text-[12px] font-semibold transition-colors ${
+                  active ? 'border-green-800 bg-green-800/5 text-green-800' : 'border-sand-200 bg-white text-sand-600'
+                }`}
+              >
+                {m.label}
+              </button>
+            );
+          })}
+        </div>
+        <p className="mt-1.5 text-[12px] text-sand-500">{MODES.find((m) => m.value === mode)?.hint}</p>
+      </div>
+
       <div className="flex flex-col gap-3 p-4">
         {items.map((c) => (
           <div key={c.offerId} className="flex gap-3 rounded-2xl border border-sand-200 bg-white p-3.5">
@@ -61,6 +96,30 @@ export function PackageBuilder({ locale, items, totals, onContinue, onBack }: Pa
         <div className="rounded-2xl border-[1.5px] border-dashed border-sand-300 p-3.5 text-center text-[13px] font-semibold text-accent-600">
           + Add ground transport or excursions
         </div>
+
+        {/* Rawdah (Riyadh ul-Jannah) permit add-on */}
+        <button
+          type="button"
+          aria-pressed={rawdahRequested}
+          onClick={onToggleRawdah}
+          className={`flex items-center gap-3 rounded-2xl border p-3.5 text-start transition-colors ${
+            rawdahRequested ? 'border-green-800 bg-green-800/5' : 'border-sand-200 bg-white'
+          }`}
+        >
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-sand-100 text-[22px]">🕋</div>
+          <div className="min-w-0 flex-1">
+            <div className="text-[15px] font-semibold">Rawdah permit</div>
+            <div className="text-[12px] text-sand-500">Reserve a Riyadh ul-Jannah (Rawdah) slot in Madinah for every pilgrim.</div>
+          </div>
+          <span
+            className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-[13px] font-bold ${
+              rawdahRequested ? 'border-green-800 bg-green-800 text-white' : 'border-sand-300 text-transparent'
+            }`}
+            aria-hidden
+          >
+            ✓
+          </span>
+        </button>
       </div>
 
       {/* sticky cart */}

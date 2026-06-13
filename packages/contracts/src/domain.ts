@@ -88,6 +88,31 @@ export const VisaApplicationSchema = z.object({
 });
 export type VisaApplication = z.infer<typeof VisaApplicationSchema>;
 
+/** Package mode (Nusuk parity): comprehensive = visa included; visa-optional = pilgrim
+ * holds their own visa; custom = build-your-own cart. */
+export const PackageModeSchema = z.enum(['COMPREHENSIVE', 'VISA_OPTIONAL', 'CUSTOM']);
+export type PackageMode = z.infer<typeof PackageModeSchema>;
+
+/** A bookable Rawdah (Riyadh ul-Jannah) time slot in Madinah. */
+export const RawdahSlotSchema = z.object({
+  slotId: z.string(),
+  startsAt: z.string(), // ISO-8601 datetime
+  capacity: z.number().int().nonnegative(),
+});
+export type RawdahSlot = z.infer<typeof RawdahSlotSchema>;
+
+export const RawdahStatusSchema = z.enum(['REQUESTED', 'CONFIRMED', 'REJECTED']);
+export type RawdahStatus = z.infer<typeof RawdahStatusSchema>;
+
+export const RawdahPermitSchema = z.object({
+  permitRef: z.string(),
+  slotId: z.string(),
+  startsAt: z.string(),
+  pilgrimIds: z.array(z.string()),
+  status: RawdahStatusSchema,
+});
+export type RawdahPermit = z.infer<typeof RawdahPermitSchema>;
+
 export const CancellationSchema = z.object({
   cancelled: z.boolean(),
   refund: MoneySchema.optional(),

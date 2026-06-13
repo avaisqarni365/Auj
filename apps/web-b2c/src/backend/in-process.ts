@@ -24,6 +24,8 @@ function wire(core: CoreBooking, saudi: MockSaudiConnector, travel: MockTravelSu
     confirm: (id, ref) => core.bookings.confirm(id, ref),
     startVisa: (id) => core.bookings.startVisa(id),
     refreshVisa: (id) => core.bookings.refreshVisa(id),
+    rawdahSlots: (date) => core.bookings.rawdahSlots(date),
+    bookRawdah: (id, slotId) => core.bookings.bookRawdah(id, slotId),
     getBooking: (id) => core.stores.bookings.get(id),
   };
 

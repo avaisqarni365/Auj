@@ -5,6 +5,7 @@ import type { Money } from '@auj/contracts';
 export const BOOKING = {
   brn: 'BRN-26-VNO-00481',
   pkg: 'Umrah Premium · 14 nights',
+  mode: 'Comprehensive package',
   route: 'Vilnius → Makkah → Madinah',
   dates: '12–26 Sep 2026',
   pax: 4,
@@ -12,6 +13,14 @@ export const BOOKING = {
   daysToDeparture: 91,
   total: { amount: 992000, currency: 'EUR' } as Money,
   paid: { amount: 446400, currency: 'EUR' } as Money,
+};
+
+// Rawdah (Riyadh ul-Jannah) permit — Madinah. Booked via Maqam/Nusuk on the seam.
+export const RAWDAH = {
+  permitRef: 'RWD-26-MED-02217',
+  status: 'CONFIRMED' as 'REQUESTED' | 'CONFIRMED' | 'REJECTED',
+  when: '20 Sep 2026 · 03:00',
+  pax: 4,
 };
 
 export const STAGES = ['Booked', 'Documents', 'Visa', 'Travel', 'Return'] as const;

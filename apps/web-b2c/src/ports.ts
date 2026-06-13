@@ -1,4 +1,4 @@
-import type { FlightOffer, HotelOffer, Money, SearchCriteria } from '@auj/contracts';
+import type { FlightOffer, HotelOffer, Money, PackageMode, RawdahPermit, RawdahSlot, SearchCriteria } from '@auj/contracts';
 import type { Booking, CrmPilgrim, Customer, PackageItem, VisaCase } from '@auj/core-booking';
 
 /**
@@ -14,6 +14,7 @@ export interface BookingApi {
   createBooking(input: {
     customerId: string;
     channel: 'PILGRIMAGE' | 'TRAVEL';
+    mode?: PackageMode;
     pilgrimIds: string[];
     items: PackageItem[];
   }): Promise<Booking>;
@@ -21,6 +22,8 @@ export interface BookingApi {
   confirm(bookingId: string, paymentRef: string): Promise<Booking>;
   startVisa(bookingId: string): Promise<{ booking: Booking; visaCase: VisaCase }>;
   refreshVisa(bookingId: string): Promise<VisaCase>;
+  rawdahSlots(date: string): Promise<RawdahSlot[]>;
+  bookRawdah(bookingId: string, slotId: string): Promise<RawdahPermit>;
   getBooking(bookingId: string): Promise<Booking | undefined>;
 }
 
