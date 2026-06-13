@@ -94,8 +94,12 @@ SaudiPartnerClient (gated), real payment-gateway SDKs, deploy the unified image.
   - web-b2c: Checkout "Special requests" chips (wheelchair/dietary/room-near-Haram/late-checkout) +
     free-text note → funnel TOGGLE_REQUEST/SET_REQUEST_NOTE → placeBookingAction; MyBooking lists
     requests with status.
-- TODO (Nusuk features not yet built): gift-voucher redemption UI, admin/provider special-request
-  status UI, real Nusuk Masar via connector-saudi (gated).
+- [x] Gift-voucher redemption UI (2026-06-13): public /redeem page (code is the bearer token) →
+  redeemVoucherAction → BookingApi.redeemGift → core.bookings.redeemGift; success card + journey link.
+  Booking backend singleton moved to globalThis (in-memory gift survives HMR). Footer "Redeem a gift"
+  link + voucher-card hint. Verified: /redeem public 200, bogus code → "Unknown gift voucher".
+- TODO (Nusuk features not yet built): admin/provider special-request status UI,
+  real Nusuk Masar via connector-saudi (gated).
 
 ## Design quality as a workflow (added 2026-06-13)
 - [x] .claude/skills/design-taste/SKILL.md — Emil-Kowalski-grade motion + impeccable design + typography + taste, with a finish checklist. Auto-surfaces on UI work (description match); invoke as /design-taste. THE workflow to apply on every frontend change.

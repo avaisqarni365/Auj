@@ -64,6 +64,11 @@ describe('Landing — navigation (logged out)', () => {
     expect(screen.getByText(/Always EUR/)).toBeTruthy();
   });
 
+  it('footer links to the gift-redemption page', () => {
+    render(<Landing />);
+    expect(href(screen.getByRole('link', { name: /Redeem a gift/ }))).toBe('/redeem');
+  });
+
   it('renders the primary nav links', () => {
     render(<Landing />);
     for (const label of ['Umrah', 'Hajj', 'Ziyarat', 'Packages', 'Track booking']) {

@@ -11,10 +11,12 @@ import { placePilgrimageBooking, pollVisaUntilIssued, type PlacedBooking } from 
 import type { PilgrimDraft } from './funnel';
 import { getCurrentUser } from '../auth/session';
 
-let backendPromise: Promise<Backend> | undefined;
+// Cache on globalThis so the in-memory booking store survives Next dev HMR (a gift
+// booked earlier is still found when its voucher is redeemed later).
+const globalForBackend = globalThis as unknown as { __aujBookingBackend?: Promise<Backend> };
 function getBackend(): Promise<Backend> {
-  backendPromise ??= createBackend();
-  return backendPromise;
+  globalForBackend.__aujBookingBackend ??= createBackend();
+  return globalForBackend.__aujBookingBackend;
 }
 
 export async function searchHotelsAction(criteria: SearchCriteria) {
@@ -49,6 +51,25 @@ export async function placeBookingAction(input: {
     email: user?.email ?? 'guest@auj.example',
   };
   return placePilgrimageBooking(await getBackend(), { ...input, customer });
+}
+
+export interface RedeemState {
+  error?: string;
+  ok?: boolean;
+  ref?: string;
+  recipientName?: string;
+}
+
+/** Redeem a gift voucher by code (public — the code is the bearer token). */
+export async function redeemVoucherAction(_prev: RedeemState, formData: FormData): Promise<RedeemState> {
+  const code = String(formData.get('code') ?? '').trim().toUpperCase();
+  if (!code) return { error: 'Enter your voucher code' };
+  try {
+    const booking = await (await getBackend()).booking.redeemGift(code);
+    return { ok: true, ref: booking.bookingRef ?? booking.id.slice(0, 8), recipientName: booking.gift?.recipientName ?? '' };
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : 'Could not redeem voucher' };
+  }
 }
 
 export async function pollVisaAction(bookingId: string): Promise<VisaCase> {

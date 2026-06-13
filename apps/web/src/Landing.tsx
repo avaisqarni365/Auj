@@ -373,7 +373,10 @@ export default function Landing({ user }: { user?: PublicUser }) {
             <span className="font-serif text-lg font-semibold tracking-[0.05em] text-sand-ink">AUJ</span>
           </div>
           <span>© 2026 AUJ · Licensed EU tour operator · Charged in EUR</span>
-          <span>EN · LT · UR · AR</span>
+          <div className="flex items-center gap-4">
+            <Link href="/redeem" className="font-semibold text-accent-600 hover:text-accent-700">🎁 Redeem a gift</Link>
+            <span>EN · LT · UR · AR</span>
+          </div>
         </div>
       </footer>
     </div>

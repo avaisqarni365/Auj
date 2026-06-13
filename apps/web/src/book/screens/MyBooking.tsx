@@ -131,6 +131,9 @@ export function MyBooking({ locale, booking, visaCase }: MyBookingProps) {
               <div className="font-mono text-[15px] font-bold tracking-[0.06em] text-green-800">{booking.gift.voucherCode}</div>
             </div>
             {booking.gift.message ? <p className="mt-2 text-center text-[12.5px] italic text-sand-700">“{booking.gift.message}”</p> : null}
+            {!booking.gift.redeemed ? (
+              <p className="mt-2 text-center text-[11.5px] text-sand-500">Share this code — the recipient redeems it at <span className="font-semibold">/redeem</span>.</p>
+            ) : null}
           </div>
         ) : null}
 

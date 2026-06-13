@@ -30,6 +30,7 @@ function wire(core: CoreBooking, saudi: SaudiConnector, travel: TravelSupplier):
     refreshVisa: (id) => core.bookings.refreshVisa(id),
     rawdahSlots: (date) => core.bookings.rawdahSlots(date),
     bookRawdah: (id, slotId) => core.bookings.bookRawdah(id, slotId),
+    redeemGift: (code) => core.bookings.redeemGift(code),
     getBooking: (id) => core.stores.bookings.get(id),
   };
 

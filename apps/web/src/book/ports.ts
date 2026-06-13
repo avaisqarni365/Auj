@@ -28,6 +28,7 @@ export interface BookingApi {
   refreshVisa(bookingId: string): Promise<VisaCase>;
   rawdahSlots(date: string): Promise<RawdahSlot[]>;
   bookRawdah(bookingId: string, slotId: string): Promise<RawdahPermit>;
+  redeemGift(voucherCode: string): Promise<Booking>;
   getBooking(bookingId: string): Promise<Booking | undefined>;
 }
 
