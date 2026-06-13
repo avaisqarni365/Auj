@@ -9,7 +9,8 @@ ALL MODULES BUILT. web-b2b now has a Next.js shell too (runnable). Remaining: re
 - [x] @auj/ui <Logo/> — official zenith mark (4 colourways) + bilingual Wordmark.
 - [x] apps/web (NEW Next app @auj/web) — Landing page at /: announcement, nav, hero (+floating cards), overlapping search (tabs/stepper), trust, journey types, one-cart, how-it-works, visa-route panel (real routeFor demo), featured packages, EN/LT/UR/AR switcher w/ RTL, track-booking timeline, testimonials, FAQ accordion, CTA, footer. Responsive (clamp/auto-fit). 6 tests. `npm run dev:web` (:3000).
 - [x] Admin (Web) console at /admin — 248px green sidebar + topbar (search, FX chip, bell, +New booking); client view switching: Overview (KPIs, recent bookings, visa pipeline, departures), Pilgrims·CRM (table -> master/detail profile: journey timeline, docs, visa card, payments, comms, group), Landing CMS (hero editor + sections), Users & roles (tab filter + table). visa-route pills via real routeFor. Sample data in src/admin-content.ts (4 tests).
-- [ ] Traveller web portal /journey (+ mobile app); PDF travel-plan/Umrah-guide route (flagged "still to build").
+- [x] Traveller web portal /journey — portal nav + booking hero (BRN, route/dates/pax, "Visa in progress" pill, days-to-departure, 5-stage progress) + tabs: Journey (every-step timeline + What's-next + QR digital pass encoding the BRN), Itinerary (day cards), Documents (docs + per-pilgrim visa status via routeFor), Payments (summary + EUR/PKR + transactions + receipt/plan). Content in src/journey-content.ts (5 tests).
+- [ ] Traveller MOBILE app screens (separate RN/PWA track); PDF travel-plan/Umrah-guide route (handoff: "still to build").
 
 ## How to run
 - `npm run dev:web` -> marketing landing (:3000).
