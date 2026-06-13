@@ -2,7 +2,7 @@
 _Last updated: 2026-06-12 · by: Claude Code · commit: (scaffold)_
 
 ## Now building
-Wave C + infra. compliance-eu, deployment pipeline, Postgres adapter, and web-b2c env-driven persistence done. Remaining: connector-saudi (gated), admin, optional web-b2b Next shell.
+Wave C + infra. compliance-eu, deployment pipeline, Postgres adapter + web-b2c persistence, and connector-saudi SHELL done. Remaining: admin (last greenfield app), optional web-b2b Next shell, real partner SaudiPartnerClient when access lands.
 
 ## Status by wave
 ### Wave 0 — sequential (scaffold + contracts + mock) — DONE
@@ -22,7 +22,7 @@ Wave C + infra. compliance-eu, deployment pipeline, Postgres adapter, and web-b2
 - [x] b2b-agent-portal (framework-light) — @auj/web-b2b: AgentService (register/approve/sub-agent hierarchy), MarkupEngine (tier+product specificity), multi-pax bookGroupFromWallet (<=49, wallet-funded, credit limit blocks over-limit), QuotationService, statements (ledger-reconciling + CSV), 6 @auj/ui screens. 21 tests incl. e2e (register->approve->fund->book 49 pax with markup->statement reconciles). Next.js shell optional/pending like web-b2c
 
 ### Wave C — gated / anytime
-- [ ] certified-saudi-connector  (needs partner/Ministry access)
+- [x] certified-saudi-connector (SHELL) — @auj/connector-saudi v1.0.0: SaudiPartnerConnector implements SaudiConnector by mapping Maqam/Nusuk vendor payloads (client.ts SaudiPartnerClient seam) -> domain; BRNs verbatim; Nusuk-approved-hotel rule enforced on visa flow; retry resilience. Ships an offline SandboxSaudiPartnerClient so the SHARED contract-tests pass now. 11 tests. SWAP: implement a real HTTP SaudiPartnerClient when partner sandbox/credentials land (A1); select via CONNECTOR=saudi
 - [x] compliance-eu — @auj/compliance v1.0.0: insolvency-protection certificate (issue+deliver, guarantee tier config 20k/50k/200k), pre-contract consent gating (assertChargeable blocks until consent), PTD 6-month refund window, GDPR (processing records, subject export, erasure). ComplianceService facade. 4 test groups
 - [ ] admin
 
