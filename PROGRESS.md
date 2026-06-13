@@ -2,7 +2,7 @@
 _Last updated: 2026-06-12 · by: Claude Code · commit: (scaffold)_
 
 ## Now building
-Wave C + infra. compliance-eu, deployment pipeline, Postgres adapter + web-b2c persistence, and connector-saudi SHELL done. Remaining: admin (last greenfield app), optional web-b2b Next shell, real partner SaudiPartnerClient when access lands.
+ALL MODULES BUILT (Waves 0/A/B/C). Remaining work is real-integration + polish: real partner SaudiPartnerClient (when access lands), real payment-gateway SDKs, Next shells for web-b2b + admin, wire app backends to Postgres in prod, run the deploy pipeline.
 
 ## Status by wave
 ### Wave 0 — sequential (scaffold + contracts + mock) — DONE
@@ -24,7 +24,7 @@ Wave C + infra. compliance-eu, deployment pipeline, Postgres adapter + web-b2c p
 ### Wave C — gated / anytime
 - [x] certified-saudi-connector (SHELL) — @auj/connector-saudi v1.0.0: SaudiPartnerConnector implements SaudiConnector by mapping Maqam/Nusuk vendor payloads (client.ts SaudiPartnerClient seam) -> domain; BRNs verbatim; Nusuk-approved-hotel rule enforced on visa flow; retry resilience. Ships an offline SandboxSaudiPartnerClient so the SHARED contract-tests pass now. 11 tests. SWAP: implement a real HTTP SaudiPartnerClient when partner sandbox/credentials land (A1); select via CONNECTOR=saudi
 - [x] compliance-eu — @auj/compliance v1.0.0: insolvency-protection certificate (issue+deliver, guarantee tier config 20k/50k/200k), pre-contract consent gating (assertChargeable blocks until consent), PTD 6-month refund window, GDPR (processing records, subject export, erasure). ComplianceService facade. 4 test groups
-- [ ] admin
+- [x] admin — @auj/admin v1.0.0: back office over the shared service packages. AdminApi oversight (list/cancel/refund bookings, visa cases, ledger entries + balances, certificate registry, GDPR export/erase), adminMetrics, 5 @auj/ui screens (Dashboard/BookingsTable/LedgerView/VisaMonitor/CompliancePanel). 5 tests incl. oversight e2e. Framework-light (Next shell optional, like web-b2b)
 
 ### Persistence (added 2026-06-13)
 - [x] Postgres adapter behind the repository ports — @auj/core-booking/postgres:

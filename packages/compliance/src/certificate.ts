@@ -78,6 +78,10 @@ export class CertificateService {
     return [...this.certs.values()].filter((c) => c.customerId === customerId);
   }
 
+  list(): SecurityCertificate[] {
+    return [...this.certs.values()];
+  }
+
   get(id: string): SecurityCertificate | undefined {
     return this.certs.get(id);
   }
