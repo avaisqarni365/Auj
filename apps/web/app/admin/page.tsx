@@ -92,17 +92,19 @@ export default function AdminPage() {
         </header>
 
         <div className="p-[clamp(16px,3vw,32px)]">
-          {selected ? (
-            <Profile pilgrim={selected} onBack={() => setSelected(null)} />
-          ) : view === 'overview' ? (
-            <Overview onViewAll={() => go('pilgrims')} />
-          ) : view === 'pilgrims' ? (
-            <Pilgrims onSelect={setSelected} />
-          ) : view === 'content' ? (
-            <Content />
-          ) : (
-            <Users />
-          )}
+          <div key={selected ? selected.id : view} className="animate-fade-in">
+            {selected ? (
+              <Profile pilgrim={selected} onBack={() => setSelected(null)} />
+            ) : view === 'overview' ? (
+              <Overview onViewAll={() => go('pilgrims')} />
+            ) : view === 'pilgrims' ? (
+              <Pilgrims onSelect={setSelected} />
+            ) : view === 'content' ? (
+              <Content />
+            ) : (
+              <Users />
+            )}
+          </div>
         </div>
       </main>
     </div>

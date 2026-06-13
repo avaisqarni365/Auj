@@ -83,10 +83,12 @@ export default function JourneyPage() {
           </div>
         </div>
 
-        {tab === 'Journey' && <Journey />}
-        {tab === 'Itinerary' && <Itinerary />}
-        {tab === 'Documents' && <Documents />}
-        {tab === 'Payments' && <Payments balance={balance} />}
+        <div key={tab} className="animate-rise">
+          {tab === 'Journey' && <Journey />}
+          {tab === 'Itinerary' && <Itinerary />}
+          {tab === 'Documents' && <Documents />}
+          {tab === 'Payments' && <Payments balance={balance} />}
+        </div>
       </div>
     </div>
   );

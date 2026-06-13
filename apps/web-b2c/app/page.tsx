@@ -64,6 +64,7 @@ export default function Page() {
 
   return (
     <main className="mx-auto min-h-screen max-w-md bg-sand-50 shadow-lg">
+      <div key={state.step} className="animate-rise">
       {state.step === 'SEARCH' && (
         <HomeSearch
           locale="en"
@@ -128,6 +129,7 @@ export default function Page() {
           </div>
         </div>
       )}
+      </div>
     </main>
   );
 }

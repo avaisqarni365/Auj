@@ -72,7 +72,7 @@ export default function LandingPage() {
       {/* hero */}
       <section className="relative bg-[radial-gradient(130%_110%_at_88%_0%,#156440_0%,#0A3D26_46%,#07301E_100%)] px-[clamp(16px,4vw,32px)] pb-[clamp(96px,11vw,132px)] pt-[clamp(48px,7vw,76px)] text-green-50">
         <div className="mx-auto grid max-w-6xl items-center gap-[clamp(36px,5vw,56px)] md:grid-cols-2">
-          <div>
+          <div className="animate-rise">
             <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-[13px] font-medium text-green-100">
               <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
               Umrah · Hajj · Ziyarat — EU &amp; the Pakistani diaspora
@@ -101,7 +101,7 @@ export default function LandingPage() {
             </div>
           </div>
           {/* right: photo placeholder + floating cards */}
-          <div className="relative min-w-0">
+          <div className="relative min-w-0 animate-fade-in">
             <div className="relative h-[clamp(360px,42vw,520px)] overflow-hidden rounded-3xl border border-white/10 bg-[radial-gradient(120%_90%_at_68%_16%,#2A9468_0%,#0F5132_42%,#062418_100%)] shadow-[0_36px_70px_-28px_rgba(5,28,18,0.75)]">
               <span className="absolute bottom-4 left-4 rounded-lg bg-green-950/50 px-2.5 py-1.5 font-mono text-[11px] tracking-wide text-white/75">PHOTO · MASJID AL-HARAM, MAKKAH</span>
             </div>
@@ -128,7 +128,7 @@ export default function LandingPage() {
 
       {/* search card (overlapping) */}
       <div id="search" className="relative z-20 mx-auto -mt-[clamp(88px,9vw,92px)] max-w-5xl px-[clamp(16px,4vw,32px)]">
-        <div className="rounded-[22px] border border-sand-200 bg-white p-[clamp(18px,2.4vw,24px)] shadow-[0_24px_60px_-24px_rgba(42,38,32,0.34)]">
+        <div className="animate-rise rounded-[22px] border border-sand-200 bg-white p-[clamp(18px,2.4vw,24px)] shadow-[0_24px_60px_-24px_rgba(42,38,32,0.34)]">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap gap-1 rounded-xl bg-sand-100 p-1">
               {SEARCH_TABS.map((t) => (
@@ -177,8 +177,8 @@ export default function LandingPage() {
       {/* journey types */}
       <Section id="journeys" title="Choose your journey" sub="Three ways to travel — each with the right visa route and protection.">
         <div className="grid gap-5 md:grid-cols-3">
-          {JOURNEY_TYPES.map((j) => (
-            <div key={j.name} className="overflow-hidden rounded-2xl border border-sand-200 bg-white shadow-sm">
+          {JOURNEY_TYPES.map((j, i) => (
+            <div key={j.name} style={{ animationDelay: `${i * 70}ms` }} className="animate-rise overflow-hidden rounded-2xl border border-sand-200 bg-white shadow-sm">
               <div className={`h-36 bg-gradient-to-br ${j.img}`} />
               <div className="p-5">
                 <h3 className="font-serif text-xl font-semibold">{j.name}</h3>
@@ -241,8 +241,8 @@ export default function LandingPage() {
       {/* featured packages */}
       <Section id="packages" title="Featured packages" sub="A few of this season’s most-booked journeys.">
         <div className="grid gap-5 md:grid-cols-3">
-          {PACKAGES.map((p) => (
-            <div key={p.name} className="overflow-hidden rounded-2xl border border-sand-200 bg-white shadow-sm">
+          {PACKAGES.map((p, i) => (
+            <div key={p.name} style={{ animationDelay: `${i * 70}ms` }} className="animate-rise overflow-hidden rounded-2xl border border-sand-200 bg-white shadow-sm">
               <div className={`relative h-40 bg-gradient-to-br ${p.img}`}>
                 <span className={`absolute left-3 top-3 rounded-full px-2.5 py-1 text-[11.5px] font-semibold ${p.visa === 'e-Visa' ? 'bg-success-bg text-success-fg' : 'bg-info-bg text-info-fg'}`}>{p.visa}</span>
               </div>

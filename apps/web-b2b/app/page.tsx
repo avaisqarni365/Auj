@@ -51,7 +51,7 @@ export default function Page() {
 
   return (
     <Shell agencyName={agent.agencyName} subline={`${agent.tier} partner · ${agent.id.slice(0, 8)}`} walletLabel={formatMoney(eur(balance))}>
-      <div className="grid gap-7">
+      <div className="grid gap-7 animate-fade-in">
         <AgentDashboard agent={agent} walletBalance={eur(balance)} available={eur(balance)} bookings={booking ? 1 : 0} />
 
         <section>
@@ -65,7 +65,7 @@ export default function Page() {
             onPayFromWallet={() => void book()}
           />
           {booking ? (
-            <div className="mt-3 rounded-lg bg-green-100 p-3 text-sm text-sand-ink">
+            <div className="mt-3 animate-pop rounded-lg bg-green-100 p-3 text-sm text-sand-ink">
               Booked <span className="font-mono">{booking.bookingRef}</span> — {booking.pilgrimIds.length} pax
             </div>
           ) : null}
