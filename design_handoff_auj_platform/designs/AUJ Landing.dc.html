@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  ::selection { background: #DCEDE4; }
+  a { color: inherit; }
+</style>
+</helmet>
+
+<div style="background: #FAF6EF; color: #2A2620; font-family: 'IBM Plex Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden;">
+
+  <!-- ===================== ANNOUNCEMENT BAR ===================== -->
+  <div style="background: #07301E; color: #BFE0CD; font-size: 13px;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 9px clamp(16px,4vw,32px); display: flex; align-items: center; justify-content: space-between; gap: 10px 16px; flex-wrap: wrap;">
+      <div style="display: flex; align-items: center; gap: 9px;">
+        <span style="width: 6px; height: 6px; border-radius: 50%; background: #C8A24A;"></span>
+        <span>Now departing from <strong style="color: #EFF6F1; font-weight: 600;">6 EU cities</strong> · e-Visa guidance included on every booking</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        <a href="AUJ B2B.dc.html" style="text-decoration: none; color: #9CC6AE; font-weight: 500;">For travel agents →</a>
+        <span style="display: inline-flex; align-items: center; gap: 6px; color: #9CC6AE;">🌐 EN · LT · UR · AR</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== NAV ===================== -->
+  <header style="position: sticky; top: 0; z-index: 60; background: rgba(250,246,239,0.86); backdrop-filter: blur(14px); border-bottom: 1px solid #E6DDCE;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 12px clamp(16px,4vw,32px); display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+      <div style="display: flex; align-items: center; gap: 11px;">
+        <div style="width: 38px; height: 38px; border-radius: 11px; background: #0F5132; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 18px rgba(15,81,50,0.28);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6.5 20V12a5.5 5.5 0 0 1 11 0v8" stroke="#FAF6EF" stroke-width="1.7" fill="none" stroke-linecap="round"/><g transform="translate(5.4 -0.6) scale(0.55)"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></g></svg>
+        </div>
+        <div>
+          <div style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: 20px; letter-spacing: 0.05em; line-height: 1;">AUJ</div>
+          <div style="font-size: 10.5px; color: #7A7263; letter-spacing: 0.14em; text-transform: uppercase; margin-top: 2px;">Pilgrimage &amp; travel</div>
+        </div>
+      </div>
+      <nav style="display: flex; align-items: center; gap: 2px; flex-wrap: wrap;">
+        <sc-for list="{{ navLinks }}" as="n" hint-placeholder-count="5">
+          <a href="#" style="text-decoration: none; font-size: 14.5px; font-weight: 500; color: #4A4337; padding: 9px 13px; border-radius: 9px; white-space: nowrap;" style-hover="background: #F1EADD; color: #0F5132;">{{ n }}</a>
+        </sc-for>
+      </nav>
+      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <button style="display: inline-flex; align-items: center; gap: 7px; cursor: pointer; background: #fff; border: 1px solid #E6DDCE; font-family: inherit; font-size: 13.5px; font-weight: 600; color: #4A4337; padding: 9px 12px; border-radius: 9px; white-space: nowrap;">🌐 EN <span style="color: #7A7263;">▾</span></button>
+        <a href="#search" style="text-decoration: none; font-size: 14px; font-weight: 600; color: #fff; padding: 10px 18px; border-radius: 10px; background: #0F5132; box-shadow: 0 4px 12px rgba(15,81,50,0.24); white-space: nowrap;" style-hover="background: #156440;">Search packages</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== HERO ===================== -->
+  <section style="position: relative; background: radial-gradient(130% 110% at 88% 0%, #156440 0%, #0A3D26 46%, #07301E 100%); color: #EFF6F1; padding: clamp(48px,7vw,76px) 0 clamp(96px,11vw,132px);">
+    <div style="position: absolute; inset: 0; background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 11px); pointer-events: none;"></div>
+    <div style="position: relative; max-width: 1200px; margin: 0 auto; padding: 0 clamp(16px,4vw,32px); display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: clamp(36px,5vw,56px); align-items: center;">
+      <!-- left -->
+      <div>
+        <div style="display: inline-flex; align-items: center; gap: 9px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); color: #BFE0CD; font-size: 13px; font-weight: 500; padding: 7px 14px; border-radius: 999px; margin-bottom: 26px;">
+          <span style="width: 7px; height: 7px; border-radius: 50%; background: #2A9468;"></span>
+          Umrah · Hajj · Ziyarat — for the EU &amp; the Pakistani diaspora
+        </div>
+        <h1 style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: clamp(36px,5.4vw,60px); line-height: 1.03; letter-spacing: -0.022em; margin: 0 0 22px;">Begin a sacred journey, with calm.</h1>
+        <p style="font-size: clamp(16px,1.6vw,19px); line-height: 1.62; color: #C6DDCF; max-width: 520px; margin: 0 0 32px;">Hotel, transport, ground services and flights in one cart — with e-Visa guidance, live booking status and prices in EUR or PKR. From across the EU to Makkah, Madinah and beyond.</p>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 40px; flex-wrap: wrap;">
+          <a href="#search" style="text-decoration: none; display: inline-flex; align-items: center; gap: 9px; background: #FAF6EF; color: #0A3D26; font-size: 15.5px; font-weight: 600; padding: 14px 24px; border-radius: 12px; box-shadow: 0 10px 28px rgba(7,48,30,0.4);" style-hover="background: #fff;">Plan my pilgrimage <span>→</span></a>
+          <a href="#how" style="text-decoration: none; display: inline-flex; align-items: center; gap: 9px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #EFF6F1; font-size: 15.5px; font-weight: 600; padding: 14px 22px; border-radius: 12px;" style-hover="background: rgba(255,255,255,0.14);">How it works</a>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 22px 34px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.13);">
+          <sc-for list="{{ heroStats }}" as="s" hint-placeholder-count="4">
+            <div>
+              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 600; color: #fff;">{{ s.value }}</div>
+              <div style="font-size: 12.5px; color: #9CC6AE; margin-top: 2px;">{{ s.label }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <!-- right: image placeholder + floating cards -->
+      <div style="position: relative; min-width: 0;">
+        <div style="position: relative; height: clamp(380px,42vw,540px); border-radius: 24px; overflow: hidden; background: radial-gradient(120% 90% at 68% 16%, #2A9468 0%, #0F5132 42%, #062418 100%); box-shadow: 0 36px 70px -28px rgba(5,28,18,0.75); border: 1px solid rgba(255,255,255,0.1);">
+          <div style="position: absolute; inset: 0; background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.05) 0 2px, transparent 2px 10px);"></div>
+          <div style="position: absolute; left: 50%; top: 30%; transform: translate(-50%,-50%); width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle, rgba(200,162,74,0.35), transparent 70%); filter: blur(6px);"></div>
+          <div style="position: absolute; left: 18px; bottom: 16px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.07em; color: rgba(255,255,255,0.78); background: rgba(6,36,24,0.5); padding: 6px 10px; border-radius: 8px;">PHOTO · MASJID AL-HARAM, MAKKAH</div>
+        </div>
+        <!-- floating: live visa card -->
+        <div style="position: absolute; top: 20px; left: clamp(-26px,-2vw,0px); width: 232px; max-width: 70%; background: #fff; border-radius: 16px; padding: 14px 16px; box-shadow: 0 20px 44px rgba(5,28,18,0.34); color: #2A2620;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+            <span style="font-size: 11px; font-weight: 700; color: #7A7263; letter-spacing: 0.08em;">LIVE VISA STATUS</span>
+            <span style="display: inline-flex; align-items: center; gap: 5px; background: #F7EBD3; color: #8A5A12; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;"><span style="width: 6px; height: 6px; border-radius: 50%; background: #B5791E;"></span>In progress</span>
+          </div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #2F6F8F; font-weight: 500;">BRN-26-VNO-00481</div>
+          <div style="font-size: 12.5px; color: #4A4337; margin-top: 3px;">e-Visa submitted to MOFA · est. 2–3 days</div>
+        </div>
+        <!-- floating: price chip -->
+        <div style="position: absolute; bottom: 26px; right: clamp(-22px,-2vw,0px); background: #fff; border-radius: 14px; padding: 13px 16px; box-shadow: 0 20px 44px rgba(5,28,18,0.34); color: #2A2620;">
+          <div style="font-size: 11px; color: #7A7263; font-weight: 600;">Umrah Premium · 14 nights</div>
+          <div style="display: flex; align-items: baseline; gap: 8px; margin-top: 3px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 700; color: #0F5132;">€2,480</span>
+            <span style="font-size: 11px; color: #7A7263; font-family: 'IBM Plex Mono', monospace;">≈ ₨771k</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SEARCH CARD (overlapping) ===================== -->
+  <div id="search" style="max-width: 1080px; margin: clamp(-88px,-9vw,-92px) auto 0; padding: 0 clamp(16px,4vw,32px); position: relative; z-index: 20;">
+    <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 22px; padding: clamp(18px,2.4vw,24px); box-shadow: 0 24px 60px -24px rgba(42,38,32,0.34);">
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 18px;">
+        <div style="display: flex; gap: 5px; background: #F1EADD; padding: 4px; border-radius: 12px; flex-wrap: wrap;">
+          <sc-for list="{{ searchTabs }}" as="t" hint-placeholder-count="3">
+            <button onClick="{{ t.onClick }}" style="cursor: pointer; border: none; font-family: inherit; font-size: 14px; font-weight: 600; padding: 9px 22px; border-radius: 9px; background: {{ t.bg }}; color: {{ t.fg }}; box-shadow: {{ t.shadow }};">{{ t.name }}</button>
+          </sc-for>
+        </div>
+        <span style="font-size: 13px; color: #7A7263;">FX today · 1 € = ₨310.8 · charged in EUR</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; align-items: end;">
+        <div>
+          <div style="font-size: 11px; color: #7A7263; font-weight: 600; letter-spacing: 0.06em; margin-bottom: 6px;">FROM</div>
+          <div style="display: flex; align-items: center; justify-content: space-between; border: 1.5px solid #C9BCA6; border-radius: 10px; padding: 12px 13px; font-size: 14.5px; font-weight: 500;">Vilnius (VNO) <span style="color: #7A7263;">▾</span></div>
+        </div>
+        <div>
+          <div style="font-size: 11px; color: #7A7263; font-weight: 600; letter-spacing: 0.06em; margin-bottom: 6px;">DESTINATION</div>
+          <div style="display: flex; align-items: center; justify-content: space-between; border: 1.5px solid #C9BCA6; border-radius: 10px; padding: 12px 13px; font-size: 14.5px; font-weight: 500;">Makkah <span style="color: #7A7263;">▾</span></div>
+        </div>
+        <div>
+          <div style="font-size: 11px; color: #7A7263; font-weight: 600; letter-spacing: 0.06em; margin-bottom: 6px;">DATES</div>
+          <div style="display: flex; align-items: center; gap: 9px; border: 1.5px solid #C9BCA6; border-radius: 10px; padding: 12px 13px; font-size: 14.5px; font-weight: 500;"><span style="color: #2F6F8F;">📅</span> 12–26 Sep · 14 nts</div>
+        </div>
+        <div>
+          <div style="font-size: 11px; color: #7A7263; font-weight: 600; letter-spacing: 0.06em; margin-bottom: 6px;">PILGRIMS</div>
+          <div style="display: flex; align-items: center; justify-content: space-between; border: 1.5px solid #C9BCA6; border-radius: 10px; padding: 6px 8px;">
+            <button onClick="{{ decPax }}" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #E6DDCE; background: #FAF6EF; color: #156440; font-size: 18px; cursor: pointer;">−</button>
+            <span style="font-size: 14.5px; font-weight: 600;">{{ pax }}</span>
+            <button onClick="{{ incPax }}" style="width: 32px; height: 32px; border-radius: 8px; border: none; background: #0F5132; color: #fff; font-size: 18px; cursor: pointer;">+</button>
+          </div>
+        </div>
+        <button style="height: 50px; cursor: pointer; background: #0F5132; color: #fff; border: none; font-family: inherit; font-size: 15px; font-weight: 600; padding: 0 26px; border-radius: 11px; white-space: nowrap; box-shadow: 0 6px 16px rgba(15,81,50,0.25);" style-hover="background: #156440;">Search {{ searchCount }} →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== TRUST STRIP ===================== -->
+  <section style="max-width: 1200px; margin: 0 auto; padding: 40px clamp(16px,4vw,32px) 8px;">
+    <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 14px 30px;">
+      <span style="font-size: 12.5px; color: #7A7263; font-weight: 600; letter-spacing: 0.04em;">TRUSTED &amp; COMPLIANT</span>
+      <sc-for list="{{ trustBadges }}" as="b" hint-placeholder-count="5">
+        <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #4A4337;"><span style="color: #1C7A4F;">✓</span>{{ b }}</span>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ===================== JOURNEY TYPES ===================== -->
+  <section style="max-width: 1200px; margin: 0 auto; padding: clamp(48px,7vw,64px) clamp(16px,4vw,32px) 0;">
+    <div style="display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 32px;">
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #2F6F8F; margin-bottom: 8px;">01 · WHERE TO BEGIN</div>
+        <h2 style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: clamp(28px,3.6vw,38px); letter-spacing: -0.02em; margin: 0;">Choose your journey</h2>
+      </div>
+      <p style="font-size: 15.5px; color: #7A7263; max-width: 420px; line-height: 1.6; margin: 0;">Every package is verified, near-Haram where it matters, and priced in full — no surprises at checkout.</p>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+      <sc-for list="{{ journeys }}" as="j" hint-placeholder-count="3">
+        <a href="#search" style="text-decoration: none; color: inherit; background: #fff; border: 1px solid #E6DDCE; border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 1px 2px rgba(42,38,32,0.05);" style-hover="border-color: #C9BCA6; box-shadow: 0 16px 36px -20px rgba(42,38,32,0.3); transform: translateY(-3px);">
+          <div style="position: relative; height: 180px; background: {{ j.img }};">
+            <div style="position: absolute; inset: 0; background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.06) 0 2px, transparent 2px 10px);"></div>
+            <span style="position: absolute; top: 14px; left: 14px; background: rgba(255,255,255,0.92); font-size: 12px; font-weight: 600; color: #0F5132; padding: 5px 11px; border-radius: 999px;">{{ j.season }}</span>
+            <span style="position: absolute; left: 14px; bottom: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.06em; color: rgba(255,255,255,0.8);">{{ j.photo }}</span>
+          </div>
+          <div style="padding: 22px 22px 24px; display: flex; flex-direction: column; flex: 1;">
+            <div style="font-family: 'IBM Plex Serif', serif; font-size: 24px; font-weight: 600; margin-bottom: 8px;">{{ j.title }}</div>
+            <div style="font-size: 14.5px; line-height: 1.6; color: #4A4337; flex: 1;">{{ j.body }}</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px; padding-top: 18px; border-top: 1px solid #F1EADD;">
+              <span style="font-size: 13px; color: #7A7263;">{{ j.fromLabel }} <span style="font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 600; color: #0F5132;">{{ j.price }}</span></span>
+              <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: #156440;">Explore <span>→</span></span>
+            </div>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ===================== ONE CART ===================== -->
+  <section style="margin-top: clamp(56px,8vw,80px); background: #ECE7DD; border-top: 1px solid #E6DDCE; border-bottom: 1px solid #E6DDCE;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: clamp(48px,7vw,72px) clamp(16px,4vw,32px); display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: clamp(36px,5vw,56px); align-items: center;">
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #2F6F8F; margin-bottom: 8px;">02 · ONE CART</div>
+        <h2 style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: clamp(28px,3.6vw,38px); letter-spacing: -0.02em; line-height: 1.1; margin: 0 0 18px;">Hotel, flights, transfers and ziyarat — one price.</h2>
+        <p style="font-size: 16.5px; line-height: 1.65; color: #4A4337; margin: 0 0 26px;">No piecing it together across a dozen tabs. Build a complete pilgrimage in a single cart, see the full total in EUR and PKR, and check out once. Swap any item before you pay.</p>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <sc-for list="{{ cartFeatures }}" as="f" hint-placeholder-count="4">
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <div style="width: 44px; height: 44px; border-radius: 12px; background: {{ f.iconBg }}; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;">{{ f.icon }}</div>
+              <div>
+                <div style="font-size: 15.5px; font-weight: 600;">{{ f.title }}</div>
+                <div style="font-size: 13.5px; color: #7A7263;">{{ f.body }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <!-- cart visual -->
+      <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 20px; box-shadow: 0 24px 60px -28px rgba(42,38,32,0.4); overflow: hidden;">
+        <div style="padding: 18px 22px; border-bottom: 1px solid #F1EADD; display: flex; align-items: center; justify-content: space-between;">
+          <span style="font-size: 14px; font-weight: 700;">Your package</span>
+          <span style="font-size: 12.5px; color: #7A7263;">4 pilgrims · 14 nights</span>
+        </div>
+        <div style="padding: 8px 22px;">
+          <sc-for list="{{ cartItems }}" as="c" hint-placeholder-count="4">
+            <div style="display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid #F4EEE3;">
+              <div style="width: 42px; height: 42px; border-radius: 11px; background: {{ c.iconBg }}; display: flex; align-items: center; justify-content: center; font-size: 19px; flex-shrink: 0;">{{ c.icon }}</div>
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-size: 11px; font-weight: 600; color: #7A7263; letter-spacing: 0.06em;">{{ c.kind }}</div>
+                <div style="font-size: 14.5px; font-weight: 600;">{{ c.title }}</div>
+              </div>
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 600;">{{ c.price }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="background: #FAF6EF; padding: 18px 22px; display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <div style="font-size: 14px; font-weight: 700;">Total</div>
+            <div style="font-size: 11px; color: #7A7263;">incl. taxes &amp; visa fees</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 26px; font-weight: 700; color: #0F5132;">€9,920</div>
+            <div style="font-size: 12px; color: #7A7263; font-family: 'IBM Plex Mono', monospace;">≈ ₨3,083,120</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== HOW IT WORKS ===================== -->
+  <section id="how" style="max-width: 1200px; margin: 0 auto; padding: clamp(56px,8vw,80px) clamp(16px,4vw,32px) 0;">
+    <div style="text-align: center; margin-bottom: 44px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #2F6F8F; margin-bottom: 8px;">03 · HOW IT WORKS</div>
+      <h2 style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: clamp(28px,3.6vw,38px); letter-spacing: -0.02em; margin: 0 0 12px;">From search to sacred — in four calm steps</h2>
+      <p style="font-size: 16px; color: #7A7263; max-width: 560px; margin: 0 auto; line-height: 1.6;">A linear, reassuring booking flow. You always know what's next, what's paid, and where your visa stands.</p>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px;">
+      <sc-for list="{{ steps }}" as="s" hint-placeholder-count="4">
+        <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 24px 22px; box-shadow: 0 1px 2px rgba(42,38,32,0.05);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+            <div style="width: 44px; height: 44px; border-radius: 12px; background: #DCEDE4; display: flex; align-items: center; justify-content: center; font-size: 21px;">{{ s.icon }}</div>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 26px; font-weight: 600; color: #E6DDCE;">{{ s.num }}</span>
+          </div>
+          <div style="font-size: 16.5px; font-weight: 600; margin-bottom: 8px;">{{ s.title }}</div>
+          <div style="font-size: 14px; line-height: 1.6; color: #4A4337;">{{ s.body }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ===================== VISA ROUTE ===================== -->
+  <section style="max-width: 1200px; margin: 0 auto; padding: clamp(56px,8vw,80px) clamp(16px,4vw,32px) 0;">
+    <div style="background: linear-gradient(135deg, #0A3D26, #07301E); border-radius: 24px; padding: clamp(32px,5vw,52px) clamp(24px,4vw,48px); color: #EFF6F1; position: relative; overflow: hidden;">
+      <div style="position: absolute; inset: 0; background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.02) 0 2px, transparent 2px 11px);"></div>
+      <div style="position: relative; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(32px,4vw,48px); align-items: center;">
+        <div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #9CC6AE; margin-bottom: 10px;">04 · VISA, SORTED</div>
+          <h2 style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: clamp(27px,3.4vw,36px); letter-spacing: -0.02em; line-height: 1.12; margin: 0 0 16px;">Know your visa route before you book.</h2>
+          <p style="font-size: 16px; line-height: 1.65; color: #C6DDCF; margin: 0;">We read each pilgrim's passport and automatically set the right path — an online e-Visa or our licensed agent channel. Mixed-nationality families are fully supported, every route tracked live to your booking reference.</p>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <sc-for list="{{ visaPaths }}" as="v" hint-placeholder-count="2">
+            <div style="background: rgba(255,255,255,0.06); border: 1px solid {{ v.border }}; border-radius: 16px; padding: 20px 22px;">
+              <div style="display: flex; align-items: center; gap: 13px; margin-bottom: 10px;">
+                <div style="width: 42px; height: 42px; border-radius: 12px; background: {{ v.dot }}; display: flex; align-items: center; justify-content: center; font-size: 19px;">{{ v.icon }}</div>
+                <div>
+                  <div style="font-size: 17px; font-weight: 700; color: #fff;">{{ v.title }}</div>
+                  <div style="font-size: 12.5px; color: {{ v.tagColor }}; font-weight: 600;">{{ v.tag }}</div>
+                </div>
+              </div>
+              <div style="font-size: 14px; line-height: 1.6; color: #C6DDCF;">{{ v.body }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FEATURED PACKAGES ===================== -->
+  <section style="max-width: 1200px; margin: 0 auto; padding: clamp(56px,8vw,80px) clamp(16px,4vw,32px) 0;">
+    <div style="display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 32px;">
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #2F6F8F; margin-bottom: 8px;">05 · POPULAR FROM VILNIUS</div>
+        <h2 style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: clamp(28px,3.6vw,38px); letter-spacing: -0.02em; margin: 0;">Featured packages</h2>
+      </div>
+      <a href="#search" style="text-decoration: none; font-size: 14.5px; font-weight: 600; color: #156440; display: inline-flex; align-items: center; gap: 7px;">See all 38 packages <span>→</span></a>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+      <sc-for list="{{ packages }}" as="p" hint-placeholder-count="3">
+        <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 18px; overflow: hidden; box-shadow: 0 1px 2px rgba(42,38,32,0.05);" style-hover="box-shadow: 0 18px 40px -22px rgba(42,38,32,0.34); transform: translateY(-3px);">
+          <div style="position: relative; height: 168px; background: {{ p.img }};">
+            <div style="position: absolute; inset: 0; background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.06) 0 2px, transparent 2px 10px);"></div>
+            <span style="position: absolute; top: 12px; left: 12px; display: inline-flex; align-items: center; gap: 6px; background: {{ p.vbg }}; color: {{ p.vfg }}; font-size: 12px; font-weight: 600; padding: 5px 11px; border-radius: 999px;"><span style="width: 6px; height: 6px; border-radius: 50%; background: {{ p.vfg }};"></span>{{ p.visa }}</span>
+            <span style="position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.92); font-size: 18px; padding: 4px 8px; border-radius: 10px;">♡</span>
+          </div>
+          <div style="padding: 16px 18px 18px;">
+            <div style="display: flex; align-items: start; justify-content: space-between; gap: 10px;">
+              <div>
+                <div style="font-size: 16.5px; font-weight: 600; line-height: 1.25;">{{ p.name }}</div>
+                <div style="font-size: 12.5px; color: #B5791E; margin-top: 4px;">{{ p.stars }}</div>
+              </div>
+              <div style="text-align: right; flex-shrink: 0;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 18px; font-weight: 600; color: #0F5132;">{{ p.price }}</div>
+                <div style="font-size: 11px; color: #7A7263;">per pilgrim</div>
+              </div>
+            </div>
+            <div style="display: flex; gap: 7px; flex-wrap: wrap; margin: 13px 0 16px;">
+              <sc-for list="{{ p.chips }}" as="ch" hint-placeholder-count="3">
+                <span style="font-size: 11.5px; color: #4A4337; background: #F1EADD; padding: 4px 10px; border-radius: 7px;">{{ ch }}</span>
+              </sc-for>
+            </div>
+            <div style="display: flex; gap: 10px;">
+              <button style="flex: 1; cursor: pointer; background: #fff; color: #156440; border: 1.5px solid #C9BCA6; font-family: inherit; font-size: 13.5px; font-weight: 600; padding: 11px; border-radius: 10px;">Details</button>
+              <button style="flex: 1.5; cursor: pointer; background: #0F5132; color: #fff; border: none; font-family: inherit; font-size: 13.5px; font-weight: 600; padding: 11px; border-radius: 10px;" style-hover="background: #156440;">Build package</button>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ===================== MULTILINGUAL ===================== -->
+  <section style="max-width: 1200px; margin: 0 auto; padding: clamp(56px,8vw,80px) clamp(16px,4vw,32px) 0;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: clamp(32px,4vw,52px); align-items: center;">
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #2F6F8F; margin-bottom: 8px;">06 · IN YOUR LANGUAGE</div>
+        <h2 style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: clamp(27px,3.4vw,38px); letter-spacing: -0.02em; line-height: 1.1; margin: 0 0 18px;">English, Lietuvių, اردو, العربية — fully right-to-left.</h2>
+        <p style="font-size: 16px; line-height: 1.65; color: #4A4337; margin: 0 0 24px;">Built for the EU and the Pakistani diaspora. Every screen mirrors for Arabic and Urdu, with Arabic-Indic numerals and the IBM Plex Arabic typeface — so the whole family can follow along.</p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <sc-for list="{{ langTabs }}" as="l" hint-placeholder-count="4">
+            <button onClick="{{ l.onClick }}" style="cursor: pointer; font-family: inherit; font-size: 14px; font-weight: 600; padding: 10px 18px; border-radius: 10px; border: 1.5px solid {{ l.border }}; background: {{ l.bg }}; color: {{ l.fg }};">{{ l.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <div dir="{{ cur.dir }}" style="background: #fff; border: 1px solid #E6DDCE; border-radius: 20px; padding: clamp(24px,3vw,36px); box-shadow: 0 20px 50px -28px rgba(42,38,32,0.4); min-height: 240px;">
+        <div dir="ltr" style="display: flex; justify-content: {{ cur.justify }}; margin-bottom: 18px;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: #7A7263; background: #F1EADD; padding: 5px 11px; border-radius: 999px;">{{ cur.code }} · {{ cur.dirLabel }}</span>
+        </div>
+        <div style="font-family: {{ cur.font }}; font-weight: 600; font-size: 30px; line-height: 1.25; margin-bottom: 14px;">{{ cur.h }}</div>
+        <div style="font-family: {{ cur.font }}; font-size: 16px; line-height: 1.7; color: #4A4337; margin-bottom: 22px;">{{ cur.b }}</div>
+        <div style="display: flex; gap: 10px; {{ cur.flex }}">
+          <span style="background: #0F5132; color: #fff; font-family: {{ cur.font }}; font-size: 14px; font-weight: 600; padding: 11px 20px; border-radius: 10px;">{{ cur.cta }}</span>
+          <span style="background: #DCEDE4; color: #156440; font-family: {{ cur.font }}; font-size: 14px; font-weight: 600; padding: 11px 20px; border-radius: 999px;">{{ cur.tag }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TRACK BOOKING ===================== -->
+  <section style="max-width: 1200px; margin: 0 auto; padding: clamp(56px,8vw,80px) clamp(16px,4vw,32px) 0;">
+    <div style="background: #ECE7DD; border: 1px solid #E6DDCE; border-radius: 24px; padding: clamp(32px,5vw,52px) clamp(24px,4vw,48px); display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(32px,4vw,52px); align-items: center;">
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #2F6F8F; margin-bottom: 8px;">07 · AFTER YOU BOOK</div>
+        <h2 style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: clamp(27px,3.4vw,36px); letter-spacing: -0.02em; line-height: 1.12; margin: 0 0 16px;">One reference. Live status. Total peace of mind.</h2>
+        <p style="font-size: 16px; line-height: 1.65; color: #4A4337; margin: 0 0 24px;">Every booking gets a single BRN and a per-pilgrim breakdown. Watch each visa move from submitted to issued, keep your documents in one place, and reach a human 24/7.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+          <sc-for list="{{ trackTags }}" as="t" hint-placeholder-count="4">
+            <span style="display: inline-flex; align-items: center; gap: 7px; background: #fff; border: 1px solid #E6DDCE; font-size: 13.5px; font-weight: 600; color: #4A4337; padding: 8px 14px; border-radius: 999px;"><span style="color: #1C7A4F;">✓</span>{{ t }}</span>
+          </sc-for>
+        </div>
+      </div>
+      <!-- booking card visual -->
+      <div style="background: #0F5132; border-radius: 20px; overflow: hidden; box-shadow: 0 26px 60px -28px rgba(7,48,30,0.6); max-width: 420px; width: 100%; justify-self: center;">
+        <div style="padding: 22px 24px; color: #EFF6F1;">
+          <div style="font-size: 11px; color: #9CC6AE; letter-spacing: 0.06em;">BOOKING REFERENCE</div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 600; margin: 4px 0 6px;">BRN-26-VNO-00481</div>
+          <div style="font-family: 'IBM Plex Serif', serif; font-size: 18px; font-weight: 500;">Umrah Premium · 14 nights</div>
+          <div style="font-size: 12.5px; color: #BFE0CD;">12 – 26 Sep 2026 · 4 pilgrims</div>
+        </div>
+        <div style="background: #fff; border-radius: 22px 22px 0 0; padding: 20px 22px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+            <span style="font-size: 13.5px; font-weight: 700; color: #2A2620;">Live visa status</span>
+            <span style="display: inline-flex; align-items: center; gap: 5px; background: #F7EBD3; color: #8A5A12; font-size: 11.5px; font-weight: 600; padding: 4px 10px; border-radius: 999px;"><span style="width: 6px; height: 6px; border-radius: 50%; background: #B5791E;"></span>In progress</span>
+          </div>
+          <sc-for list="{{ visaSteps }}" as="v" hint-placeholder-count="4">
+            <div style="display: flex; gap: 12px;">
+              <div style="display: flex; flex-direction: column; align-items: center;">
+                <div style="width: 22px; height: 22px; border-radius: 50%; background: {{ v.dotBg }}; border: 2px solid {{ v.dotBorder }}; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #fff;">{{ v.mark }}</div>
+                <div style="width: 2px; flex: 1; background: {{ v.line }}; min-height: 16px;"></div>
+              </div>
+              <div style="padding-bottom: 12px;">
+                <div style="font-size: 13.5px; font-weight: 600; color: {{ v.titleColor }};">{{ v.title }}</div>
+                <div style="font-size: 12px; color: #7A7263;">{{ v.sub }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TESTIMONIALS ===================== -->
+  <section style="max-width: 1200px; margin: 0 auto; padding: clamp(56px,8vw,80px) clamp(16px,4vw,32px) 0;">
+    <div style="text-align: center; margin-bottom: 40px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #2F6F8F; margin-bottom: 8px;">08 · PILGRIM STORIES</div>
+      <h2 style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: clamp(28px,3.6vw,38px); letter-spacing: -0.02em; margin: 0;">Trusted across the EU</h2>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+      <sc-for list="{{ testimonials }}" as="t" hint-placeholder-count="3">
+        <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 18px; padding: 28px 26px; display: flex; flex-direction: column; box-shadow: 0 1px 2px rgba(42,38,32,0.05);">
+          <div style="font-size: 17px; color: #C8A24A; margin-bottom: 14px; letter-spacing: 2px;">★★★★★</div>
+          <p style="font-family: 'IBM Plex Serif', serif; font-size: 18px; line-height: 1.5; color: #2A2620; margin: 0 0 22px; flex: 1;">{{ t.quote }}</p>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: {{ t.av }}; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600;">{{ t.initials }}</div>
+            <div>
+              <div style="font-size: 14px; font-weight: 600;">{{ t.name }}</div>
+              <div style="font-size: 12.5px; color: #7A7263;">{{ t.meta }}</div>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ===================== FAQ ===================== -->
+  <section style="max-width: 880px; margin: 0 auto; padding: clamp(56px,8vw,80px) clamp(16px,4vw,32px) 0;">
+    <div style="text-align: center; margin-bottom: 40px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #2F6F8F; margin-bottom: 8px;">09 · GOOD TO KNOW</div>
+      <h2 style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: clamp(28px,3.6vw,38px); letter-spacing: -0.02em; margin: 0;">Questions, answered</h2>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <sc-for list="{{ faqs }}" as="f" hint-placeholder-count="5">
+        <div style="background: #fff; border: 1px solid {{ f.border }}; border-radius: 14px; overflow: hidden;">
+          <button onClick="{{ f.onClick }}" style="width: 100%; cursor: pointer; background: none; border: none; font-family: inherit; text-align: left; padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+            <span style="font-size: 16.5px; font-weight: 600; color: #2A2620;">{{ f.q }}</span>
+            <span style="font-size: 22px; color: #2F6F8F; flex-shrink: 0; line-height: 1;">{{ f.sign }}</span>
+          </button>
+          <sc-if value="{{ f.open }}" hint-placeholder-val="{{ true }}">
+            <div style="padding: 0 24px 22px; font-size: 15px; line-height: 1.65; color: #4A4337;">{{ f.a }}</div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ===================== FINAL CTA ===================== -->
+  <section style="max-width: 1200px; margin: 0 auto; padding: clamp(56px,8vw,80px) clamp(16px,4vw,32px);">
+    <div style="background: radial-gradient(120% 130% at 80% 0%, #156440 0%, #0A3D26 48%, #07301E 100%); border-radius: 28px; padding: clamp(40px,6vw,64px) clamp(24px,4vw,56px); text-align: center; color: #EFF6F1; position: relative; overflow: hidden;">
+      <div style="position: absolute; inset: 0; background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 11px);"></div>
+      <div style="position: relative;">
+        <div style="width: 56px; height: 56px; border-radius: 16px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; margin: 0 auto 24px;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M6.5 20V12a5.5 5.5 0 0 1 11 0v8" stroke="#FAF6EF" stroke-width="1.7" fill="none" stroke-linecap="round"/><g transform="translate(5.4 -0.6) scale(0.55)"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></g></svg>
+        </div>
+        <h2 style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: clamp(30px,4.4vw,44px); letter-spacing: -0.02em; line-height: 1.08; margin: 0 0 16px;">Your journey begins with a single search.</h2>
+        <p style="font-size: 17px; line-height: 1.6; color: #C6DDCF; max-width: 540px; margin: 0 auto 32px;">Compare verified Umrah, Hajj and Ziyarat packages from your city — with visas, flights and hotels handled in one calm place.</p>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;">
+          <a href="#search" style="text-decoration: none; display: inline-flex; align-items: center; gap: 9px; background: #FAF6EF; color: #0A3D26; font-size: 16px; font-weight: 600; padding: 15px 28px; border-radius: 12px; box-shadow: 0 12px 30px rgba(7,48,30,0.4);" style-hover="background: #fff;">Search packages <span>→</span></a>
+          <a href="#" style="text-decoration: none; display: inline-flex; align-items: center; gap: 9px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #EFF6F1; font-size: 16px; font-weight: 600; padding: 15px 26px; border-radius: 12px;" style-hover="background: rgba(255,255,255,0.14);">Talk to an advisor</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer style="background: #07301E; color: #C6DDCF;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: clamp(44px,6vw,64px) clamp(16px,4vw,32px) 32px;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 36px; padding-bottom: 44px; border-bottom: 1px solid rgba(255,255,255,0.12);">
+        <div style="grid-column: 1 / -1; max-width: 320px;">
+          <div style="display: flex; align-items: center; gap: 11px; margin-bottom: 16px;">
+            <div style="width: 38px; height: 38px; border-radius: 11px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.14); display: flex; align-items: center; justify-content: center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6.5 20V12a5.5 5.5 0 0 1 11 0v8" stroke="#FAF6EF" stroke-width="1.7" fill="none" stroke-linecap="round"/><g transform="translate(5.4 -0.6) scale(0.55)"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></g></svg></div>
+            <div>
+              <div style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: 19px; letter-spacing: 0.05em; color: #EFF6F1;">AUJ</div>
+              <div style="font-size: 10.5px; color: #9CC6AE; letter-spacing: 0.12em; text-transform: uppercase;">Pilgrimage &amp; travel</div>
+            </div>
+          </div>
+          <p style="font-size: 13.5px; line-height: 1.65; color: #9CC6AE; margin: 0 0 18px;">Calm, trustworthy pilgrimage and travel for the EU and the Pakistani diaspora. Licensed, bonded and multilingual.</p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <span style="background: rgba(255,255,255,0.08); font-size: 12px; font-weight: 600; padding: 6px 11px; border-radius: 8px; color: #BFE0CD;">€ EUR</span>
+            <span style="background: rgba(255,255,255,0.08); font-size: 12px; font-weight: 600; padding: 6px 11px; border-radius: 8px; color: #BFE0CD;">₨ PKR</span>
+            <span style="background: rgba(255,255,255,0.08); font-size: 12px; font-weight: 600; padding: 6px 11px; border-radius: 8px; color: #BFE0CD;">SEPA secure</span>
+          </div>
+        </div>
+        <sc-for list="{{ footerCols }}" as="col" hint-placeholder-count="4">
+          <div>
+            <div style="font-size: 12px; font-weight: 700; color: #EFF6F1; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 16px;">{{ col.title }}</div>
+            <div style="display: flex; flex-direction: column; gap: 11px;">
+              <sc-for list="{{ col.links }}" as="lnk" hint-placeholder-count="4">
+                <a href="#" style="text-decoration: none; font-size: 14px; color: #9CC6AE;" style-hover="color: #fff;">{{ lnk }}</a>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; padding-top: 26px;">
+        <div style="font-size: 13px; color: #7FA993;">© 2026 AUJ Travel. All rights reserved. · Licensed pilgrimage operator.</div>
+        <div style="display: flex; align-items: center; gap: 22px; font-size: 13px; flex-wrap: wrap;">
+          <a href="#" style="text-decoration: none; color: #9CC6AE;">Terms</a>
+          <a href="#" style="text-decoration: none; color: #9CC6AE;">Privacy</a>
+          <a href="#" style="text-decoration: none; color: #9CC6AE;">Cookies</a>
+          <span style="color: #7FA993;">🌐 EN · LT · UR · AR</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { tab: 'Umrah', pax: 4, lang: 'EN', faq: 0 };
+
+  renderVals() {
+    const counts = { Umrah: '38 packages', Hajj: '6 packages', Ziyarat: '14 packages' };
+    const tabs = ['Umrah', 'Hajj', 'Ziyarat'];
+    const searchTabs = tabs.map(name => ({
+      name,
+      bg: this.state.tab === name ? '#fff' : 'transparent',
+      fg: this.state.tab === name ? '#0F5132' : '#7A7263',
+      shadow: this.state.tab === name ? '0 1px 2px rgba(42,38,32,0.1)' : 'none',
+      onClick: () => this.setState({ tab: name })
+    }));
+
+    const langData = {
+      EN: { code: 'EN', dirLabel: 'LTR', dir: 'ltr', justify: 'flex-start', flex: '', font: "'IBM Plex Sans', sans-serif",
+        h: 'Begin a sacred journey, with calm.',
+        b: 'Umrah, Hajj & Ziyarat from across the EU — hotel, transport, ground and flights in one place.',
+        cta: 'Search packages', tag: 'e-Visa ready' },
+      LT: { code: 'LT', dirLabel: 'LTR', dir: 'ltr', justify: 'flex-start', flex: '', font: "'IBM Plex Sans', sans-serif",
+        h: 'Pradėkite šventą kelionę ramiai.',
+        b: 'Umra, hadžas ir zijaratas iš visos ES — viešbutis, transportas ir skrydžiai vienoje vietoje.',
+        cta: 'Ieškoti paketų', tag: 'e-Viza paruošta' },
+      UR: { code: 'UR', dirLabel: 'RTL', dir: 'rtl', justify: 'flex-end', flex: 'flex-direction: row-reverse;', font: "'IBM Plex Sans Arabic', sans-serif",
+        h: 'پُرسکون انداز میں مقدّس سفر کا آغاز کریں۔',
+        b: 'یورپ بھر سے عمرہ، حج اور زیارت — ہوٹل، ٹرانسپورٹ اور پروازیں ایک ہی جگہ۔',
+        cta: 'پیکجز تلاش کریں', tag: 'ای ویزا' },
+      AR: { code: 'AR', dirLabel: 'RTL', dir: 'rtl', justify: 'flex-end', flex: 'flex-direction: row-reverse;', font: "'IBM Plex Sans Arabic', sans-serif",
+        h: 'ابدأ رحلة مقدّسة بسكينة.',
+        b: 'عمرة وحج وزيارات من جميع أنحاء الاتحاد الأوروبي — الفندق والنقل والرحلات في مكان واحد.',
+        cta: 'ابحث عن الباقات', tag: 'تأشيرة إلكترونية' }
+    };
+    const langTabs = ['EN', 'LT', 'UR', 'AR'].map(code => ({
+      label: code,
+      bg: this.state.lang === code ? '#0F5132' : '#fff',
+      fg: this.state.lang === code ? '#fff' : '#4A4337',
+      border: this.state.lang === code ? '#0F5132' : '#C9BCA6',
+      onClick: () => this.setState({ lang: code })
+    }));
+
+    const faqData = [
+      { q: 'Which visa route applies to me?', a: 'We auto-detect from each pilgrim\u2019s passport: EU/EEA passports use the online e-Visa route; Pakistani and other passports go through our licensed agent channel. Mixed-nationality groups are fully supported, each route tracked individually.' },
+      { q: 'Can I see prices and pay in PKR?', a: 'Prices are charged in EUR. We show an indicative PKR equivalent at the live rate (1 \u20AC = \u20A8310.8) throughout, so you always know the amount in both currencies before you confirm.' },
+      { q: 'What\u2019s included in one package?', a: 'A single cart combines your hotel, flights, ground transfers and excursions \u2014 with full visa guidance \u2014 at one transparent total. Swap or remove any item before you pay.' },
+      { q: 'Do you handle group and family bookings?', a: 'Yes. Families and groups of up to 49 pilgrims can be booked together, with per-pilgrim documents, visa routes and a shared booking reference.' },
+      { q: 'Which cities do you depart from?', a: 'We currently operate departures from six EU cities including Vilnius, with direct and one-stop routings to Jeddah, Madinah and Najaf. More cities are added each season.' }
+    ];
+    const faqs = faqData.map((f, i) => ({
+      q: f.q, a: f.a,
+      open: this.state.faq === i,
+      sign: this.state.faq === i ? '\u2212' : '+',
+      border: this.state.faq === i ? '#C9BCA6' : '#E6DDCE',
+      onClick: () => this.setState({ faq: this.state.faq === i ? -1 : i })
+    }));
+
+    return {
+      navLinks: ['Packages', 'How it works', 'Visa help', 'For agents', 'Support'],
+      heroStats: [
+        { value: '6 cities', label: 'EU departures' },
+        { value: '4', label: 'languages · full RTL' },
+        { value: 'e-Visa', label: 'guidance included' },
+        { value: '24/7', label: 'human support' }
+      ],
+      searchTabs,
+      pax: this.state.pax + (this.state.pax === 1 ? ' pilgrim' : ' pilgrims'),
+      incPax: () => this.setState(s => ({ pax: Math.min(49, s.pax + 1) })),
+      decPax: () => this.setState(s => ({ pax: Math.max(1, s.pax - 1) })),
+      searchCount: counts[this.state.tab],
+      trustBadges: ['Licensed operator', 'Ministry-approved', 'IATA agents', 'SEPA secure', 'GDPR · EU data'],
+      journeys: [
+        { title: 'Umrah', season: 'Year-round', photo: 'PHOTO · KAABA', img: 'linear-gradient(135deg,#1C7A4F,#07301E)',
+          body: 'Flexible 7\u201321 night Umrah from six EU cities, with near-Haram hotels and online e-Visa guidance.',
+          fromLabel: 'from', price: '\u20AC1,950' },
+        { title: 'Hajj 2026', season: 'Seasonal', photo: 'PHOTO · MINA TENTS', img: 'linear-gradient(135deg,#2A9468,#0A3D26)',
+          body: 'Complete Hajj 2026 with Ministry-approved operators, full ground services and experienced guides.',
+          fromLabel: 'from', price: '\u20AC6,400' },
+        { title: 'Ziyarat Iraq', season: 'Najaf & Karbala', photo: 'PHOTO · IMAM ALI SHRINE', img: 'linear-gradient(135deg,#2F6F8F,#265D78)',
+          body: 'Guided Ziyarat journeys to Najaf and Karbala with scholars, private transfers and the agent visa channel.',
+          fromLabel: 'from', price: '\u20AC2,120' }
+      ],
+      cartFeatures: [
+        { icon: '🏨', iconBg: '#DCEDE4', title: 'Hotels near the Haram', body: 'Verified 4\u20135\u2605 stays, walking distance where it counts.' },
+        { icon: '✈️', iconBg: '#E2EEF3', title: 'Flights from your city', body: 'Direct and one-stop routings with baggage included.' },
+        { icon: '🚌', iconBg: '#F7EBD3', title: 'Ground & transfers', body: 'Makkah\u2013Madinah transfers and meet-and-greet.' },
+        { icon: '🕋', iconBg: '#F1EADD', title: 'Guided ziyarat', body: 'Optional excursions with English and Urdu guides.' }
+      ],
+      cartItems: [
+        { kind: 'HOTEL', icon: '🏨', iconBg: '#DCEDE4', title: 'Swissôtel Makkah · 5★', price: '€6,200' },
+        { kind: 'FLIGHTS', icon: '✈️', iconBg: '#E2EEF3', title: 'Direct VNO → JED → VNO', price: '€2,560' },
+        { kind: 'GROUND', icon: '🚌', iconBg: '#F7EBD3', title: 'Makkah ⇄ Madinah transfer', price: '€760' },
+        { kind: 'ZIYARAT', icon: '🕋', iconBg: '#F1EADD', title: 'Guided Ziyarat (Makkah)', price: '€400' }
+      ],
+      steps: [
+        { num: '01', icon: '🔍', title: 'Search & compare', body: 'Pick Umrah, Hajj or Ziyarat and compare verified packages from your city.' },
+        { num: '02', icon: '🧺', title: 'Build one cart', body: 'Hotel, flights, transfers and excursions combined into a single clear price.' },
+        { num: '03', icon: '🪪', title: 'Pilgrims & visas', body: 'We auto-detect each pilgrim\u2019s visa route from their passport as you add them.' },
+        { num: '04', icon: '📍', title: 'Track your booking', body: 'One BRN, live visa status and EUR or PKR \u2014 from booking to return home.' }
+      ],
+      visaPaths: [
+        { title: 'e-Visa route', tag: 'EU / EEA passports', tagColor: '#6FD3A6', icon: '🪪', dot: '#1C7A4F', border: 'rgba(79,174,134,0.4)',
+          body: 'Issued online in around three days. No agent appointment, no embassy visit \u2014 we guide the application end to end.' },
+        { title: 'Agent channel', tag: 'Pakistani & other passports', tagColor: '#8FC3DC', icon: '🤝', dot: '#2F6F8F', border: 'rgba(60,134,168,0.4)',
+          body: 'Handled by our licensed agents with full document guidance \u2014 the right path when an e-Visa isn\u2019t available.' }
+      ],
+      packages: [
+        { name: 'Umrah Premium · Swissôtel', stars: '★★★★★ · 9.4 Exceptional', price: '€2,480', visa: 'e-Visa', vbg: '#DCEDE4', vfg: '#156440', img: 'linear-gradient(135deg,#1C7A4F,#0A3D26)', chips: ['🕋 250m to Haram', '✈ Direct VNO–JED', '🚌 Transfers'] },
+        { name: 'Umrah Standard · Anjum', stars: '★★★★ · 8.9 Very good', price: '€1,950', visa: 'e-Visa', vbg: '#DCEDE4', vfg: '#156440', img: 'linear-gradient(135deg,#3C86A8,#265D78)', chips: ['🕋 600m to Haram', '✈ 1 stop · IST', '🚌 Transfers'] },
+        { name: 'Ziyarat Iraq · Best of', stars: '★★★★ · 9.1 Excellent', price: '€2,120', visa: 'Agent channel', vbg: '#E2EEF3', vfg: '#265D78', img: 'linear-gradient(135deg,#7A7263,#4A4337)', chips: ['🕌 Najaf & Karbala', '✈ Direct VNO–NJF', '👤 Scholar guide'] }
+      ],
+      langTabs,
+      cur: langData[this.state.lang],
+      trackTags: ['Single BRN', 'Per-pilgrim visas', 'Document vault', '24/7 support'],
+      visaSteps: [
+        { title: 'Booking confirmed', sub: '9 Jun 2026 · payment received', mark: '✓', dotBg: '#1C7A4F', dotBorder: '#1C7A4F', line: '#1C7A4F', titleColor: '#2A2620' },
+        { title: 'Documents verified', sub: '10 Jun 2026 · 4 of 4 passports', mark: '✓', dotBg: '#1C7A4F', dotBorder: '#1C7A4F', line: '#1C7A4F', titleColor: '#2A2620' },
+        { title: 'e-Visa submitted to MOFA', sub: 'In progress · est. 2–3 days', mark: '', dotBg: '#B5791E', dotBorder: '#B5791E', line: '#E6DDCE', titleColor: '#2A2620' },
+        { title: 'Visas issued', sub: 'Pending', mark: '', dotBg: '#fff', dotBorder: '#C9BCA6', line: 'transparent', titleColor: '#A6A293' }
+      ],
+      testimonials: [
+        { quote: '\u201CEverything in one place \u2014 flights, a hotel by the Haram, and our visas tracked to the day.\u201D', name: 'Ayesha Khan', meta: 'Umrah · Vilnius', initials: 'AK', av: '#0F5132' },
+        { quote: '\u201CThe Urdu interface meant my mother could follow every step alongside me.\u201D', name: 'Bilal Ahmed', meta: 'Umrah · Dublin', initials: 'BA', av: '#2F6F8F' },
+        { quote: '\u201CThe agent channel sorted our Pakistani passports without a single embassy trip.\u201D', name: 'Fatima Noor', meta: 'Ziyarat · Berlin', initials: 'FN', av: '#B5791E' }
+      ],
+      faqs,
+      footerCols: [
+        { title: 'Packages', links: ['Umrah', 'Hajj 2026', 'Ziyarat Iraq', 'Group bookings'] },
+        { title: 'Company', links: ['About AUJ', 'Licensing', 'Careers', 'Press'] },
+        { title: 'Support', links: ['Help centre', 'Track booking', 'Visa help', 'Contact 24/7'] },
+        { title: 'For trade', links: ['Agent portal', 'Apply for account', 'Wallet & credit'] }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

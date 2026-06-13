@@ -6,6 +6,7 @@ import { StatusPill } from './StatusPill';
 import { Stepper } from './Stepper';
 import { SegmentedControl } from './SegmentedControl';
 import { Toggle } from './Toggle';
+import { Logo } from './Logo';
 
 describe('UI components render with the AUJ token classes', () => {
   it('Button defaults to the primary brand style', () => {
@@ -57,5 +58,14 @@ describe('UI components render with the AUJ token classes', () => {
   it('Toggle reflects checked state on the switch role', () => {
     expect(renderToStaticMarkup(<Toggle checked />)).toContain('aria-checked="true"');
     expect(renderToStaticMarkup(<Toggle checked={false} />)).toContain('bg-sand-300');
+  });
+
+  it('Logo renders the zenith mark (tile + arch + gold star) per colourway', () => {
+    const primary = renderToStaticMarkup(<Logo />);
+    expect(primary).toContain('#0F5132'); // green-800 tile
+    expect(primary).toContain('#C8A24A'); // gold star
+    expect(primary).toContain('M19 47V31'); // mihrab arch
+    expect(renderToStaticMarkup(<Logo variant="onDark" />)).toContain('#07301E');
+    expect(renderToStaticMarkup(<Logo variant="mono" />)).toContain('currentColor');
   });
 });

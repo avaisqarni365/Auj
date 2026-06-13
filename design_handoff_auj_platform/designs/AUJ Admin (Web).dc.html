@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  ::selection { background: #DCEDE4; }
+  .auj-scroll::-webkit-scrollbar { width: 10px; height: 10px; }
+  .auj-scroll::-webkit-scrollbar-thumb { background: #D8CDBA; border-radius: 6px; border: 2px solid #FAF6EF; }
+</style>
+</helmet>
+
+<div style="display: flex; min-height: 100vh; background: #FAF6EF; color: #2A2620; font-family: 'IBM Plex Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased;">
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside style="width: 248px; flex-shrink: 0; background: #0A3D26; color: #C6DDCF; display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh;">
+    <div style="padding: 20px 20px 18px; display: flex; align-items: center; gap: 11px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+      <div style="width: 38px; height: 38px; border-radius: 11px; background: #0F5132; display: flex; align-items: center; justify-content: center;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6.5 20V12a5.5 5.5 0 0 1 11 0v8" stroke="#FAF6EF" stroke-width="1.7" fill="none" stroke-linecap="round"/><g transform="translate(5.4 -0.6) scale(0.55)"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></g></svg>
+      </div>
+      <div>
+        <div style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: 18px; letter-spacing: 0.05em; color: #fff; line-height: 1;">AUJ</div>
+        <div style="font-size: 10px; color: #7FA993; letter-spacing: 0.14em; text-transform: uppercase; margin-top: 2px;">Admin · Web</div>
+      </div>
+    </div>
+
+    <nav style="padding: 14px 12px; display: flex; flex-direction: column; gap: 3px; flex: 1;">
+      <div style="font-size: 10.5px; color: #5E8770; letter-spacing: 0.12em; text-transform: uppercase; padding: 8px 12px 6px;">Operate</div>
+      <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="4">
+        <button onClick="{{ n.onClick }}" style="display: flex; align-items: center; gap: 12px; cursor: pointer; border: none; font-family: inherit; text-align: left; font-size: 14px; font-weight: {{ n.weight }}; color: {{ n.fg }}; background: {{ n.bg }}; padding: 11px 12px; border-radius: 10px; width: 100%;">
+          <span style="font-size: 16px; width: 20px; text-align: center;">{{ n.icon }}</span><span style="flex: 1;">{{ n.label }}</span>
+          <sc-if value="{{ n.badge }}" hint-placeholder-val="{{ true }}"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; background: {{ n.badgeBg }}; color: {{ n.badgeFg }}; padding: 2px 8px; border-radius: 999px;">{{ n.badge }}</span></sc-if>
+        </button>
+      </sc-for>
+      <div style="font-size: 10.5px; color: #5E8770; letter-spacing: 0.12em; text-transform: uppercase; padding: 16px 12px 6px;">More</div>
+      <sc-for list="{{ navSecondary }}" as="n" hint-placeholder-count="3">
+        <div style="display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 500; color: #7FA993; padding: 11px 12px; border-radius: 10px;">
+          <span style="font-size: 16px; width: 20px; text-align: center;">{{ n.icon }}</span>{{ n.label }}
+        </div>
+      </sc-for>
+    </nav>
+
+    <div style="padding: 14px; border-top: 1px solid rgba(255,255,255,0.08);">
+      <div style="display: flex; align-items: center; gap: 11px; background: rgba(255,255,255,0.05); border-radius: 12px; padding: 10px 12px;">
+        <div style="width: 34px; height: 34px; border-radius: 50%; background: #C8A24A; color: #07301E; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700;">SR</div>
+        <div style="flex: 1; min-width: 0;">
+          <div style="font-size: 13px; font-weight: 600; color: #fff;">Sara Rashid</div>
+          <div style="font-size: 11px; color: #7FA993;">Operations admin</div>
+        </div>
+        <span style="color: #7FA993; font-size: 16px;">⋯</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===================== MAIN ===================== -->
+  <main class="auj-scroll" style="flex: 1; min-width: 0; height: 100vh; overflow-y: auto;">
+
+    <!-- topbar -->
+    <header style="position: sticky; top: 0; z-index: 30; background: rgba(250,246,239,0.9); backdrop-filter: blur(12px); border-bottom: 1px solid #E6DDCE; padding: 14px clamp(20px,3vw,36px); display: flex; align-items: center; gap: 14px;">
+      <div style="flex: 1; min-width: 0;">
+        <div style="display: flex; align-items: center; gap: 10px; border: 1.5px solid #E6DDCE; background: #fff; border-radius: 10px; padding: 9px 14px; max-width: 420px;">
+          <span style="color: #A6A293;">🔍</span>
+          <span style="font-size: 14px; color: #A6A293;">Search pilgrims, BRN, bookings…</span>
+          <span style="margin-inline-start: auto; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #C9BCA6; border: 1px solid #E6DDCE; padding: 1px 6px; border-radius: 5px;">⌘K</span>
+        </div>
+      </div>
+      <span style="display: inline-flex; align-items: center; gap: 7px; background: #E2EEF3; color: #265D78; font-size: 12.5px; font-weight: 600; padding: 7px 12px; border-radius: 999px; white-space: nowrap;">FX · 1 € = ₨310.8</span>
+      <button style="position: relative; width: 40px; height: 40px; border-radius: 10px; border: 1.5px solid #E6DDCE; background: #fff; cursor: pointer; font-size: 16px;">🔔<span style="position: absolute; top: 7px; right: 8px; width: 7px; height: 7px; border-radius: 50%; background: #B23A2E;"></span></button>
+      <button style="display: inline-flex; align-items: center; gap: 8px; background: #0F5132; color: #fff; border: none; font-family: inherit; font-size: 14px; font-weight: 600; padding: 10px 16px; border-radius: 10px; cursor: pointer; white-space: nowrap;" style-hover="background: #156440;">+ New booking</button>
+    </header>
+
+    <div style="padding: clamp(20px,3vw,32px);">
+
+      <!-- ========================== DASHBOARD ========================== -->
+      <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
+        <div style="margin-bottom: 24px;">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #2F6F8F; margin-bottom: 6px;">OVERVIEW · 13 JUN 2026</div>
+          <h1 style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: clamp(24px,3vw,30px); letter-spacing: -0.02em; margin: 0;">Good morning, Sara.</h1>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin-bottom: 16px;">
+          <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4">
+            <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 20px; box-shadow: 0 1px 2px rgba(42,38,32,0.05);">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                <span style="font-size: 13px; color: #7A7263; font-weight: 500;">{{ k.label }}</span>
+                <span style="width: 32px; height: 32px; border-radius: 9px; background: {{ k.iconBg }}; display: flex; align-items: center; justify-content: center; font-size: 15px;">{{ k.icon }}</span>
+              </div>
+              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 28px; font-weight: 600; color: #2A2620;">{{ k.value }}</div>
+              <div style="display: flex; align-items: center; gap: 6px; margin-top: 6px;">
+                <span style="font-size: 12px; font-weight: 600; color: {{ k.deltaColor }};">{{ k.delta }}</span>
+                <span style="font-size: 12px; color: #A6A293;">{{ k.sub }}</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+          <!-- recent bookings -->
+          <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; overflow: hidden; min-width: 0;">
+            <div style="padding: 16px 20px; border-bottom: 1px solid #F1EADD; display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 14px; font-weight: 700;">Recent bookings</span>
+              <button onClick="{{ goPilgrims }}" style="font-size: 13px; font-weight: 600; color: #156440; background: none; border: none; cursor: pointer; font-family: inherit;">View all →</button>
+            </div>
+            <div class="auj-scroll" style="overflow-x: auto;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 13px; min-width: 460px;">
+                <thead><tr style="background: #FAF6EF; text-align: left;">
+                  <th style="padding: 10px 20px; font-weight: 600; color: #7A7263;">BRN</th>
+                  <th style="padding: 10px 12px; font-weight: 600; color: #7A7263;">Lead pilgrim</th>
+                  <th style="padding: 10px 12px; font-weight: 600; color: #7A7263;">Visa</th>
+                  <th style="padding: 10px 20px; font-weight: 600; color: #7A7263; text-align: right;">Sell</th>
+                </tr></thead>
+                <tbody>
+                  <sc-for list="{{ recentBookings }}" as="r" hint-placeholder-count="5">
+                    <tr style="border-top: 1px solid #F1EADD;">
+                      <td style="padding: 11px 20px; font-family: 'IBM Plex Mono', monospace; color: #2F6F8F; font-weight: 500;">{{ r.brn }}</td>
+                      <td style="padding: 11px 12px;"><div style="font-weight: 600;">{{ r.lead }}</div><div style="font-size: 11.5px; color: #7A7263;">{{ r.pkg }}</div></td>
+                      <td style="padding: 11px 12px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: {{ r.vbg }}; color: {{ r.vfg }}; font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 999px;"><span style="width: 6px; height: 6px; border-radius: 50%; background: {{ r.vfg }};"></span>{{ r.visa }}</span></td>
+                      <td style="padding: 11px 20px; text-align: right; font-family: 'IBM Plex Mono', monospace; font-weight: 500;">{{ r.sell }}</td>
+                    </tr>
+                  </sc-for>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- visa pipeline + departures -->
+          <div style="display: flex; flex-direction: column; gap: 16px; min-width: 0;">
+            <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 18px 20px;">
+              <div style="font-size: 14px; font-weight: 700; margin-bottom: 16px;">Visa pipeline</div>
+              <sc-for list="{{ pipeline }}" as="p" hint-placeholder-count="4">
+                <div style="margin-bottom: 13px;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                    <span style="font-size: 13px; color: #4A4337;">{{ p.label }}</span>
+                    <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600;">{{ p.count }}</span>
+                  </div>
+                  <div style="height: 7px; background: #F1EADD; border-radius: 999px; overflow: hidden;"><div style="height: 100%; width: {{ p.pct }}; background: {{ p.color }}; border-radius: 999px;"></div></div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 18px 20px;">
+              <div style="font-size: 14px; font-weight: 700; margin-bottom: 14px;">Upcoming departures</div>
+              <sc-for list="{{ departures }}" as="d" hint-placeholder-count="3">
+                <div style="display: flex; align-items: center; gap: 12px; padding: 9px 0; border-top: 1px solid #F4EEE3;">
+                  <div style="width: 42px; text-align: center;"><div style="font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 600; color: #0F5132;">{{ d.day }}</div><div style="font-size: 10px; color: #7A7263; text-transform: uppercase;">{{ d.mon }}</div></div>
+                  <div style="flex: 1; min-width: 0;"><div style="font-size: 13px; font-weight: 600;">{{ d.route }}</div><div style="font-size: 11.5px; color: #7A7263;">{{ d.pax }}</div></div>
+                  <span style="display: inline-flex; align-items: center; gap: 5px; background: {{ d.bg }}; color: {{ d.fg }}; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;">{{ d.status }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ========================== PILGRIMS · LIST ========================== -->
+      <sc-if value="{{ isPilgrimsList }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 20px;">
+          <div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #2F6F8F; margin-bottom: 6px;">CRM · 1,284 ACTIVE</div>
+            <h1 style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: clamp(24px,3vw,30px); letter-spacing: -0.02em; margin: 0;">Pilgrims &amp; travellers</h1>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <span style="display: inline-flex; align-items: center; gap: 7px; border: 1.5px solid #E6DDCE; background: #fff; font-size: 13px; font-weight: 600; color: #4A4337; padding: 9px 13px; border-radius: 10px;">Route: All ▾</span>
+            <span style="display: inline-flex; align-items: center; gap: 7px; border: 1.5px solid #E6DDCE; background: #fff; font-size: 13px; font-weight: 600; color: #4A4337; padding: 9px 13px; border-radius: 10px;">Status: All ▾</span>
+            <button style="background: #0F5132; color: #fff; border: none; font-family: inherit; font-size: 13px; font-weight: 600; padding: 9px 15px; border-radius: 10px; cursor: pointer;">+ Add pilgrim</button>
+          </div>
+        </div>
+
+        <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; overflow: hidden;">
+          <div class="auj-scroll" style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 860px;">
+              <thead><tr style="background: #FAF6EF; text-align: left;">
+                <th style="padding: 12px 20px; font-weight: 600; color: #7A7263;">Pilgrim</th>
+                <th style="padding: 12px 12px; font-weight: 600; color: #7A7263;">BRN</th>
+                <th style="padding: 12px 12px; font-weight: 600; color: #7A7263;">Nationality</th>
+                <th style="padding: 12px 12px; font-weight: 600; color: #7A7263;">Visa route</th>
+                <th style="padding: 12px 12px; font-weight: 600; color: #7A7263;">Status</th>
+                <th style="padding: 12px 12px; font-weight: 600; color: #7A7263;">Journey</th>
+                <th style="padding: 12px 20px; font-weight: 600; color: #7A7263; text-align: right;">Balance</th>
+              </tr></thead>
+              <tbody>
+                <sc-for list="{{ pilgrims }}" as="p" hint-placeholder-count="8">
+                  <tr onClick="{{ p.onClick }}" style="border-top: 1px solid #F1EADD; cursor: pointer;" style-hover="background: #FAFAF6;">
+                    <td style="padding: 12px 20px;"><div style="display: flex; align-items: center; gap: 11px;"><div style="width: 34px; height: 34px; border-radius: 50%; background: {{ p.av }}; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; flex-shrink: 0;">{{ p.initials }}</div><div><div style="font-weight: 600;">{{ p.name }}</div><div style="font-size: 11.5px; color: #7A7263;">{{ p.pkg }}</div></div></div></td>
+                    <td style="padding: 12px 12px; font-family: 'IBM Plex Mono', monospace; color: #2F6F8F; font-weight: 500;">{{ p.brn }}</td>
+                    <td style="padding: 12px 12px;">{{ p.nat }}</td>
+                    <td style="padding: 12px 12px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: {{ p.routeBg }}; color: {{ p.routeFg }}; font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 999px;">{{ p.route }}</span></td>
+                    <td style="padding: 12px 12px;">
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <div style="display: flex; gap: 3px;">
+                          <sc-for list="{{ p.track }}" as="dot" hint-placeholder-count="5"><span style="width: 7px; height: 7px; border-radius: 50%; background: {{ dot.bg }};"></span></sc-for>
+                        </div>
+                        <span style="font-size: 12px; color: #4A4337;">{{ p.statusLabel }}</span>
+                      </div>
+                    </td>
+                    <td style="padding: 12px 12px; font-size: 12.5px; color: #7A7263;">{{ p.depart }}</td>
+                    <td style="padding: 12px 20px; text-align: right; font-family: 'IBM Plex Mono', monospace; font-weight: 500; color: {{ p.balColor }};">{{ p.balance }}</td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ========================== PILGRIM · DETAIL ========================== -->
+      <sc-if value="{{ isPilgrimDetail }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ backToList }}" style="display: inline-flex; align-items: center; gap: 7px; background: none; border: none; font-family: inherit; font-size: 13px; font-weight: 600; color: #7A7263; cursor: pointer; margin-bottom: 16px; padding: 0;">← All pilgrims</button>
+
+        <!-- profile header -->
+        <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 22px 24px; margin-bottom: 16px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap;">
+          <div style="width: 60px; height: 60px; border-radius: 50%; background: {{ detail.av }}; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 21px; font-weight: 700; flex-shrink: 0;">{{ detail.initials }}</div>
+          <div style="flex: 1; min-width: 180px;">
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <h1 style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: 24px; margin: 0;">{{ detail.name }}</h1>
+              <span style="display: inline-flex; align-items: center; gap: 5px; background: {{ detail.statusBg }}; color: {{ detail.statusFg }}; font-size: 12px; font-weight: 600; padding: 4px 11px; border-radius: 999px;"><span style="width: 6px; height: 6px; border-radius: 50%; background: {{ detail.statusFg }};"></span>{{ detail.statusLabel }}</span>
+            </div>
+            <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 7px; font-size: 13px; color: #7A7263;">
+              <span style="font-family: 'IBM Plex Mono', monospace; color: #2F6F8F;">{{ detail.brn }}</span>
+              <span>{{ detail.nat }}</span>
+              <span>{{ detail.pkg }}</span>
+              <span>✉ {{ detail.email }}</span>
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button style="border: 1.5px solid #C9BCA6; background: #fff; color: #4A4337; font-family: inherit; font-size: 13px; font-weight: 600; padding: 9px 14px; border-radius: 10px; cursor: pointer;">Message</button>
+            <a href="AUJ Travel Plan (Doc).dc.html" style="text-decoration: none; display: inline-flex; align-items: center; gap: 7px; background: #2F6F8F; color: #fff; font-size: 13px; font-weight: 600; padding: 9px 14px; border-radius: 10px;">📄 Travel plan PDF</a>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+          <!-- LEFT: timeline + documents -->
+          <div style="display: flex; flex-direction: column; gap: 16px; min-width: 0;">
+            <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 20px 22px;">
+              <div style="font-size: 14px; font-weight: 700; margin-bottom: 18px;">Journey status — each step</div>
+              <sc-for list="{{ detail.timeline }}" as="t" hint-placeholder-count="5">
+                <div style="display: flex; gap: 14px;">
+                  <div style="display: flex; flex-direction: column; align-items: center;">
+                    <div style="width: 26px; height: 26px; border-radius: 50%; background: {{ t.dotBg }}; border: 2px solid {{ t.dotBorder }}; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #fff;">{{ t.mark }}</div>
+                    <div style="width: 2px; flex: 1; background: {{ t.line }}; min-height: 22px;"></div>
+                  </div>
+                  <div style="padding-bottom: 18px;">
+                    <div style="font-size: 14px; font-weight: 600; color: {{ t.titleColor }};">{{ t.title }}</div>
+                    <div style="font-size: 12.5px; color: #7A7263;">{{ t.sub }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 20px 22px;">
+              <div style="font-size: 14px; font-weight: 700; margin-bottom: 14px;">Documents</div>
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                <sc-for list="{{ detail.documents }}" as="d" hint-placeholder-count="3">
+                  <div style="display: flex; align-items: center; gap: 12px; border: 1.5px solid {{ d.border }}; background: {{ d.bg }}; border-radius: 12px; padding: 11px 14px;">
+                    <div style="width: 36px; height: 36px; border-radius: 9px; background: {{ d.iconBg }}; display: flex; align-items: center; justify-content: center; font-size: 16px;">{{ d.icon }}</div>
+                    <div style="flex: 1; min-width: 0;"><div style="font-size: 13.5px; font-weight: 600;">{{ d.name }}</div><div style="font-size: 11.5px; color: {{ d.metaColor }};">{{ d.meta }}</div></div>
+                    <span style="font-size: 12px; font-weight: 600; color: {{ d.actionColor }};">{{ d.action }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT: visa route + payments + comms + group -->
+          <div style="display: flex; flex-direction: column; gap: 16px; min-width: 0;">
+            <!-- visa route -->
+            <div style="background: linear-gradient(135deg, #DCEDE4, #EFF6F1); border: 1px solid #BBD9C6; border-radius: 16px; padding: 18px 20px;">
+              <div style="font-size: 11px; font-weight: 700; color: #156440; letter-spacing: 0.1em; margin-bottom: 10px;">VISA ROUTE · AUTO-DETECTED</div>
+              <div style="display: flex; align-items: center; gap: 13px;">
+                <div style="width: 42px; height: 42px; border-radius: 12px; background: {{ detail.routeDot }}; display: flex; align-items: center; justify-content: center; font-size: 19px;">{{ detail.routeIcon }}</div>
+                <div><div style="font-size: 15px; font-weight: 700; color: #0A3D26;">{{ detail.routeTitle }}</div><div style="font-size: 12.5px; color: #156440;">{{ detail.routeSub }}</div></div>
+              </div>
+            </div>
+
+            <!-- payments / wallet -->
+            <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 20px 22px;">
+              <div style="font-size: 14px; font-weight: 700; margin-bottom: 14px;">Payments &amp; balance</div>
+              <div style="display: flex; gap: 10px; margin-bottom: 14px;">
+                <div style="flex: 1; background: #FAF6EF; border-radius: 12px; padding: 12px;"><div style="font-size: 11px; color: #7A7263;">Total</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 17px; font-weight: 700;">{{ detail.total }}</div></div>
+                <div style="flex: 1; background: #DCEDE4; border-radius: 12px; padding: 12px;"><div style="font-size: 11px; color: #156440;">Paid</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 17px; font-weight: 700; color: #156440;">{{ detail.paid }}</div></div>
+                <div style="flex: 1; background: #F7EBD3; border-radius: 12px; padding: 12px;"><div style="font-size: 11px; color: #8A5A12;">Balance</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 17px; font-weight: 700; color: #8A5A12;">{{ detail.balance }}</div></div>
+              </div>
+              <sc-for list="{{ detail.txns }}" as="x" hint-placeholder-count="3">
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-top: 1px solid #F4EEE3;">
+                  <div><div style="font-size: 13px; font-weight: 500;">{{ x.desc }}</div><div style="font-size: 11px; color: #7A7263;">{{ x.date }}</div></div>
+                  <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; color: {{ x.color }};">{{ x.amount }}</span>
+                </div>
+              </sc-for>
+            </div>
+
+            <!-- communications -->
+            <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 20px 22px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                <span style="font-size: 14px; font-weight: 700;">Communications</span>
+                <span style="font-size: 12px; color: #2F6F8F; font-weight: 600;">+ Log</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                <sc-for list="{{ detail.comms }}" as="c" hint-placeholder-count="3">
+                  <div style="display: flex; gap: 11px;">
+                    <div style="width: 30px; height: 30px; border-radius: 8px; background: {{ c.bg }}; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0;">{{ c.icon }}</div>
+                    <div style="flex: 1; min-width: 0;"><div style="font-size: 13px; font-weight: 600;">{{ c.subject }}</div><div style="font-size: 11.5px; color: #7A7263;">{{ c.channel }} · {{ c.time }}</div></div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <!-- group -->
+            <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 20px 22px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                <span style="font-size: 14px; font-weight: 700;">Group · {{ detail.groupCount }}</span>
+                <span style="font-size: 12px; color: #7A7263;">shared BRN</span>
+              </div>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <sc-for list="{{ detail.group }}" as="g" hint-placeholder-count="4">
+                  <span style="display: inline-flex; align-items: center; gap: 7px; background: #FAF6EF; border: 1px solid #E6DDCE; border-radius: 999px; padding: 5px 11px 5px 5px; font-size: 12.5px; font-weight: 500;"><span style="width: 24px; height: 24px; border-radius: 50%; background: {{ g.av }}; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">{{ g.initials }}</span>{{ g.name }}</span>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ========================== CONTENT · CMS ========================== -->
+      <sc-if value="{{ isContent }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 20px;">
+          <div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #2F6F8F; margin-bottom: 6px;">CMS · LANDING PAGE</div>
+            <h1 style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: clamp(24px,3vw,30px); letter-spacing: -0.02em; margin: 0;">Landing page content</h1>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <a href="AUJ Landing.dc.html" style="text-decoration: none; border: 1.5px solid #C9BCA6; background: #fff; color: #4A4337; font-size: 13px; font-weight: 600; padding: 9px 14px; border-radius: 10px;">Preview site ↗</a>
+            <button style="background: #0F5132; color: #fff; border: none; font-family: inherit; font-size: 13px; font-weight: 600; padding: 9px 15px; border-radius: 10px; cursor: pointer;">Publish changes</button>
+          </div>
+        </div>
+
+        <!-- hero editor -->
+        <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 22px 24px; margin-bottom: 16px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+            <span style="font-size: 14px; font-weight: 700;">Hero section</span>
+            <span style="display: inline-flex; align-items: center; gap: 5px; background: #DCEDE4; color: #156440; font-size: 11.5px; font-weight: 600; padding: 3px 10px; border-radius: 999px;">● Published</span>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
+            <div>
+              <label style="display: block; font-size: 12px; font-weight: 600; color: #4A4337; margin-bottom: 6px;">Headline</label>
+              <div style="border: 1.5px solid #C9BCA6; background: #fff; border-radius: 10px; padding: 11px 13px; font-size: 14px; font-family: 'IBM Plex Serif', serif; margin-bottom: 12px;">Begin a sacred journey, with calm.</div>
+              <label style="display: block; font-size: 12px; font-weight: 600; color: #4A4337; margin-bottom: 6px;">Subheading</label>
+              <div style="border: 1.5px solid #C9BCA6; background: #fff; border-radius: 10px; padding: 11px 13px; font-size: 13.5px; line-height: 1.5; color: #4A4337;">Hotel, transport, ground services and flights in one cart — with e-Visa guidance, live booking status and prices in EUR or PKR.</div>
+            </div>
+            <div>
+              <label style="display: block; font-size: 12px; font-weight: 600; color: #4A4337; margin-bottom: 6px;">Hero image</label>
+              <div style="border: 1.5px dashed #C9BCA6; border-radius: 10px; height: 96px; background: radial-gradient(120% 90% at 68% 16%, #2A9468, #062418); display: flex; align-items: end; padding: 10px; margin-bottom: 12px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.8);">masjid-al-haram.jpg · replace</span></div>
+              <label style="display: block; font-size: 12px; font-weight: 600; color: #4A4337; margin-bottom: 6px;">Primary CTA label</label>
+              <div style="border: 1.5px solid #C9BCA6; background: #fff; border-radius: 10px; padding: 11px 13px; font-size: 14px;">Plan my pilgrimage</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- content blocks list -->
+        <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; overflow: hidden;">
+          <div style="padding: 14px 20px; border-bottom: 1px solid #F1EADD; font-size: 14px; font-weight: 700;">All sections</div>
+          <sc-for list="{{ contentBlocks }}" as="b" hint-placeholder-count="6">
+            <div style="display: flex; align-items: center; gap: 14px; padding: 14px 20px; border-top: 1px solid #F4EEE3;">
+              <span style="width: 36px; height: 36px; border-radius: 9px; background: #F1EADD; display: flex; align-items: center; justify-content: center; font-size: 16px;">{{ b.icon }}</span>
+              <div style="flex: 1; min-width: 0;"><div style="font-size: 14px; font-weight: 600;">{{ b.name }}</div><div style="font-size: 12px; color: #7A7263;">{{ b.summary }}</div></div>
+              <span style="font-size: 12px; color: #A6A293; white-space: nowrap;">{{ b.updated }}</span>
+              <span style="display: inline-flex; align-items: center; gap: 5px; background: {{ b.statusBg }}; color: {{ b.statusFg }}; font-size: 11.5px; font-weight: 600; padding: 3px 10px; border-radius: 999px; white-space: nowrap;">{{ b.status }}</span>
+              <button style="border: 1.5px solid #E6DDCE; background: #fff; color: #4A4337; font-family: inherit; font-size: 12.5px; font-weight: 600; padding: 7px 13px; border-radius: 9px; cursor: pointer;">Edit</button>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- ========================== USERS ========================== -->
+      <sc-if value="{{ isUsers }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 20px;">
+          <div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #2F6F8F; margin-bottom: 6px;">ACCESS · {{ userCount }} ACCOUNTS</div>
+            <h1 style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: clamp(24px,3vw,30px); letter-spacing: -0.02em; margin: 0;">Users &amp; roles</h1>
+          </div>
+          <button style="background: #0F5132; color: #fff; border: none; font-family: inherit; font-size: 13px; font-weight: 600; padding: 9px 15px; border-radius: 10px; cursor: pointer;">+ Invite user</button>
+        </div>
+
+        <div style="display: flex; gap: 6px; background: #F1EADD; padding: 4px; border-radius: 11px; width: fit-content; margin-bottom: 16px; flex-wrap: wrap;">
+          <sc-for list="{{ userTabs }}" as="t" hint-placeholder-count="4">
+            <button onClick="{{ t.onClick }}" style="cursor: pointer; border: none; font-family: inherit; font-size: 13px; font-weight: 600; padding: 7px 16px; border-radius: 8px; background: {{ t.bg }}; color: {{ t.fg }}; box-shadow: {{ t.shadow }};">{{ t.label }}</button>
+          </sc-for>
+        </div>
+
+        <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; overflow: hidden;">
+          <div class="auj-scroll" style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 720px;">
+              <thead><tr style="background: #FAF6EF; text-align: left;">
+                <th style="padding: 12px 20px; font-weight: 600; color: #7A7263;">User</th>
+                <th style="padding: 12px 12px; font-weight: 600; color: #7A7263;">Role</th>
+                <th style="padding: 12px 12px; font-weight: 600; color: #7A7263;">Status</th>
+                <th style="padding: 12px 12px; font-weight: 600; color: #7A7263;">Last active</th>
+                <th style="padding: 12px 20px; font-weight: 600; color: #7A7263; text-align: right;">Actions</th>
+              </tr></thead>
+              <tbody>
+                <sc-for list="{{ users }}" as="u" hint-placeholder-count="6">
+                  <tr style="border-top: 1px solid #F1EADD;" style-hover="background: #FAFAF6;">
+                    <td style="padding: 12px 20px;"><div style="display: flex; align-items: center; gap: 11px;"><div style="width: 34px; height: 34px; border-radius: 50%; background: {{ u.av }}; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600;">{{ u.initials }}</div><div><div style="font-weight: 600;">{{ u.name }}</div><div style="font-size: 11.5px; color: #7A7263;">{{ u.email }}</div></div></div></td>
+                    <td style="padding: 12px 12px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: {{ u.roleBg }}; color: {{ u.roleFg }}; font-size: 11.5px; font-weight: 600; padding: 3px 10px; border-radius: 999px;">{{ u.role }}</span></td>
+                    <td style="padding: 12px 12px;"><span style="display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 600; color: {{ u.statusColor }};"><span style="width: 7px; height: 7px; border-radius: 50%; background: {{ u.statusColor }};"></span>{{ u.status }}</span></td>
+                    <td style="padding: 12px 12px; color: #7A7263; font-size: 12.5px;">{{ u.lastActive }}</td>
+                    <td style="padding: 12px 20px; text-align: right;"><span style="font-size: 16px; color: #A6A293;">⋯</span></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </sc-if>
+
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { view: 'dashboard', selected: null, userFilter: 'All' };
+
+  pilgrimsData() {
+    const G = '#1C7A4F', A = '#B5791E', E = '#E6DDCE';
+    const track = (stage) => [0,1,2,3,4].map(i => ({ bg: i < stage ? G : (i === stage ? A : E) }));
+    return [
+      { id:0, name:'Ayesha Khan', initials:'AK', av:'#0F5132', brn:'BRN-26-VNO-00481', nat:'🇱🇹 Lithuania', pkg:'Umrah Premium · 14 nts', route:'e-Visa', routeBg:'#DCEDE4', routeFg:'#156440', stage:2, statusLabel:'Visa submitted', depart:'12 Sep 2026', balance:'€0', balColor:'#1C7A4F', email:'ayesha.k@email.com' },
+      { id:1, name:'Bilal Ahmed', initials:'BA', av:'#2F6F8F', brn:'BRN-26-DUB-00488', nat:'🇮🇪 Ireland', pkg:'Umrah Standard · 10 nts', route:'e-Visa', routeBg:'#DCEDE4', routeFg:'#156440', stage:1, statusLabel:'Documents', depart:'28 Sep 2026', balance:'€1,950', balColor:'#8A5A12', email:'bilal.ahmed@email.com' },
+      { id:2, name:'Fatima Noor', initials:'FN', av:'#B5791E', brn:'BRN-26-BER-00490', nat:'🇵🇰 Pakistan', pkg:'Ziyarat Iraq · 9 nts', route:'Agent', routeBg:'#E2EEF3', routeFg:'#265D78', stage:3, statusLabel:'Visa issued', depart:'04 Oct 2026', balance:'€430', balColor:'#8A5A12', email:'fatima.noor@email.com' },
+      { id:3, name:'Imran Yousuf', initials:'IY', av:'#265D78', brn:'BRN-26-VNO-00492', nat:'🇵🇰 Pakistan', pkg:'Hajj 2026 · 21 nts', route:'Agent', routeBg:'#E2EEF3', routeFg:'#265D78', stage:1, statusLabel:'Documents', depart:'May 2027', balance:'€6,400', balColor:'#8A5A12', email:'imran.y@email.com' },
+      { id:4, name:'Sana Malik', initials:'SM', av:'#1C7A4F', brn:'BRN-26-VNO-00495', nat:'🇱🇹 Lithuania', pkg:'Umrah Premium · 14 nts', route:'e-Visa', routeBg:'#DCEDE4', routeFg:'#156440', stage:4, statusLabel:'Travelling', depart:'10 Jun 2026', balance:'€0', balColor:'#1C7A4F', email:'sana.malik@email.com' },
+      { id:5, name:'Omar Farooq', initials:'OF', av:'#8A5A12', brn:'BRN-26-FRA-00498', nat:'🇩🇪 Germany', pkg:'Umrah Standard · 12 nts', route:'e-Visa', routeBg:'#DCEDE4', routeFg:'#156440', stage:5, statusLabel:'Completed', depart:'Returned', balance:'€0', balColor:'#7A7263', email:'omar.farooq@email.com' },
+      { id:6, name:'Hira Saeed', initials:'HS', av:'#2A9468', brn:'BRN-26-VNO-00501', nat:'🇵🇰 Pakistan', pkg:'Ziyarat Iraq · 9 nts', route:'Agent', routeBg:'#E2EEF3', routeFg:'#265D78', stage:0, statusLabel:'Booked', depart:'18 Oct 2026', balance:'€2,120', balColor:'#8A5A12', email:'hira.saeed@email.com' },
+      { id:7, name:'Yusuf Raza', initials:'YR', av:'#0F5132', brn:'BRN-26-AMS-00503', nat:'🇳🇱 Netherlands', pkg:'Umrah Premium · 14 nts', route:'e-Visa', routeBg:'#DCEDE4', routeFg:'#156440', stage:2, statusLabel:'Visa submitted', depart:'02 Nov 2026', balance:'€1,240', balColor:'#8A5A12', email:'yusuf.raza@email.com' }
+    ].map(p => ({ ...p, track: track(p.stage), onClick: () => this.setState({ selected: p.id }) }));
+  }
+
+  buildDetail(p) {
+    const STAGES = [
+      { title:'Booking confirmed', sub:'Payment received · deposit' },
+      { title:'Documents verified', sub:'Passports & photos checked' },
+      { title:'Visa processing', sub:'Submitted to authority' },
+      { title:'Travel & departure', sub:'Tickets & itinerary issued' },
+      { title:'Return & complete', sub:'Journey closed' }
+    ];
+    const timeline = STAGES.map((s, i) => {
+      const done = i < p.stage, active = i === p.stage;
+      return {
+        title: s.title, sub: done ? s.sub + ' · done' : (active ? s.sub + ' · in progress' : 'Pending'),
+        mark: done ? '✓' : '', dotBg: done ? '#1C7A4F' : (active ? '#B5791E' : '#fff'),
+        dotBorder: done ? '#1C7A4F' : (active ? '#B5791E' : '#C9BCA6'),
+        line: done ? '#1C7A4F' : '#E6DDCE',
+        titleColor: (done || active) ? '#2A2620' : '#A6A293'
+      };
+    });
+    const isAgent = p.route === 'Agent';
+    return {
+      ...p,
+      documents: [
+        { name:'Passport scan', meta:'verified', icon:'📄', iconBg:'#DCEDE4', bg:'#EFF6F1', border:'#BBD9C6', metaColor:'#156440', action:'✓', actionColor:'#1C7A4F' },
+        { name:'Visa photo', meta: p.stage >= 1 ? 'uploaded' : 'awaiting upload', icon:'📷', iconBg:'#DCEDE4', bg: p.stage>=1?'#EFF6F1':'#fff', border: p.stage>=1?'#BBD9C6':'#E6DDCE', metaColor: p.stage>=1?'#156440':'#7A7263', action: p.stage>=1?'✓':'Upload', actionColor: p.stage>=1?'#1C7A4F':'#2F6F8F' },
+        { name:'Vaccination certificate', meta: p.stage >= 2 ? 'uploaded' : 'pending', icon:'💉', iconBg:'#F1EADD', bg: p.stage>=2?'#EFF6F1':'#fff', border: p.stage>=2?'#BBD9C6':'#E6DDCE', metaColor: p.stage>=2?'#156440':'#7A7263', action: p.stage>=2?'✓':'Request', actionColor: p.stage>=2?'#1C7A4F':'#2F6F8F' }
+      ],
+      total: p.balance === '€0' ? '€2,480' : (p.pkg.includes('Hajj') ? '€6,400' : (p.pkg.includes('Ziyarat') ? '€2,120' : '€2,480')),
+      paid: p.balance === '€0' ? '€2,480' : '€496',
+      txns: [
+        { desc:'Deposit · card', date:'09 Jun 2026', amount:'+€496', color:'#1C7A4F' },
+        { desc: p.balance === '€0' ? 'Balance · SEPA' : 'Balance due', date: p.balance === '€0' ? '20 Jun 2026' : 'Due 01 Aug', amount: p.balance === '€0' ? '+€1,984' : p.balance, color: p.balance === '€0' ? '#1C7A4F' : '#8A5A12' }
+      ],
+      routeTitle: isAgent ? 'Agent channel' : 'e-Visa route',
+      routeSub: isAgent ? 'Handled by licensed agents' : 'Issued online · ~3 days',
+      routeDot: isAgent ? '#2F6F8F' : '#1C7A4F',
+      routeIcon: isAgent ? '🤝' : '🪪',
+      comms: [
+        { subject:'Booking confirmation sent', channel:'Email', time:'09 Jun · 14:02', icon:'✉️', bg:'#E2EEF3' },
+        { subject:'Document reminder', channel:'WhatsApp', time:'10 Jun · 09:30', icon:'💬', bg:'#DCEDE4' },
+        { subject:'Visa update', channel:'SMS', time:'12 Jun · 16:45', icon:'📱', bg:'#F7EBD3' }
+      ],
+      groupCount: '4 pilgrims',
+      group: [
+        { name:'Ayesha K.', initials:'AK', av:'#0F5132' },
+        { name:'Bilal A.', initials:'BA', av:'#2F6F8F' },
+        { name:'Fatima N.', initials:'FN', av:'#B5791E' },
+        { name:'Imran Y.', initials:'IY', av:'#265D78' }
+      ],
+      statusBg: p.stage >= 5 ? '#F1EADD' : (p.stage >= 3 ? '#DCEDE4' : '#F7EBD3'),
+      statusFg: p.stage >= 5 ? '#7A7263' : (p.stage >= 3 ? '#156440' : '#8A5A12')
+    };
+  }
+
+  renderVals() {
+    const v = this.state.view;
+    const items = [
+      { key:'dashboard', label:'Overview', icon:'🏠' },
+      { key:'pilgrims', label:'Pilgrims · CRM', icon:'🧑', badge:'1,284', badgeBg:'rgba(255,255,255,0.12)', badgeFg:'#BFE0CD' },
+      { key:'content', label:'Landing content', icon:'📝' },
+      { key:'users', label:'Users & roles', icon:'👥' }
+    ];
+    const navItems = items.map(it => {
+      const active = v === it.key;
+      return { ...it, weight: active ? 600 : 500, fg: active ? '#fff' : '#C6DDCF', bg: active ? '#156440' : 'transparent', onClick: () => this.setState({ view: it.key, selected: null }) };
+    });
+
+    const pilgrims = this.pilgrimsData();
+    const selectedP = this.state.selected != null ? pilgrims.find(p => p.id === this.state.selected) : null;
+
+    const allUsers = [
+      { name:'Sara Rashid', initials:'SR', av:'#0F5132', email:'sara@auj.travel', role:'Admin', roleBg:'#DCEDE4', roleFg:'#156440', status:'Active', statusColor:'#1C7A4F', lastActive:'Now' },
+      { name:'Daniel Vargas', initials:'DV', av:'#2F6F8F', email:'daniel@auj.travel', role:'Admin', roleBg:'#DCEDE4', roleFg:'#156440', status:'Active', statusColor:'#1C7A4F', lastActive:'2h ago' },
+      { name:'Karim Travel Co.', initials:'KT', av:'#265D78', email:'ops@karimtravel.lt', role:'Agent', roleBg:'#E2EEF3', roleFg:'#265D78', status:'Active', statusColor:'#1C7A4F', lastActive:'1d ago' },
+      { name:'Noor Tours', initials:'NT', av:'#3C86A8', email:'desk@noortours.de', role:'Agent', roleBg:'#E2EEF3', roleFg:'#265D78', status:'Invited', statusColor:'#B5791E', lastActive:'—' },
+      { name:'Ayesha Khan', initials:'AK', av:'#0F5132', email:'ayesha.k@email.com', role:'Customer', roleBg:'#F1EADD', roleFg:'#7A7263', status:'Active', statusColor:'#1C7A4F', lastActive:'3h ago' },
+      { name:'Omar Farooq', initials:'OF', av:'#8A5A12', email:'omar.farooq@email.com', role:'Customer', roleBg:'#F1EADD', roleFg:'#7A7263', status:'Active', statusColor:'#1C7A4F', lastActive:'5d ago' },
+      { name:'Hassan Bm', initials:'HB', av:'#B23A2E', email:'h.bm@email.com', role:'Customer', roleBg:'#F1EADD', roleFg:'#7A7263', status:'Suspended', statusColor:'#B23A2E', lastActive:'30d ago' }
+    ];
+    const filter = this.state.userFilter;
+    const users = filter === 'All' ? allUsers : allUsers.filter(u => u.role === filter.replace(/s$/, ''));
+    const userTabs = ['All','Admins','Agents','Customers'].map(label => {
+      const active = filter === label;
+      return { label, bg: active ? '#fff' : 'transparent', fg: active ? '#0F5132' : '#7A7263', shadow: active ? '0 1px 2px rgba(42,38,32,0.1)' : 'none', onClick: () => this.setState({ userFilter: label }) };
+    });
+
+    return {
+      navItems,
+      navSecondary: [ { icon:'🧾', label:'Bookings' }, { icon:'💳', label:'Payments' }, { icon:'⚙️', label:'Settings' } ],
+      isDashboard: v === 'dashboard',
+      isPilgrimsList: v === 'pilgrims' && this.state.selected == null,
+      isPilgrimDetail: v === 'pilgrims' && this.state.selected != null,
+      isContent: v === 'content',
+      isUsers: v === 'users',
+      goPilgrims: () => this.setState({ view: 'pilgrims', selected: null }),
+      backToList: () => this.setState({ selected: null }),
+      kpis: [
+        { label:'Active pilgrims', value:'1,284', delta:'+86', deltaColor:'#1C7A4F', sub:'this season', icon:'🧑', iconBg:'#DCEDE4' },
+        { label:'Bookings · June', value:'213', delta:'+12%', deltaColor:'#1C7A4F', sub:'vs May', icon:'🧾', iconBg:'#E2EEF3' },
+        { label:'Visas in progress', value:'147', delta:'34', deltaColor:'#2F6F8F', sub:'today', icon:'🪪', iconBg:'#F7EBD3' },
+        { label:'Revenue · June', value:'€1.84M', delta:'+9%', deltaColor:'#1C7A4F', sub:'≈ ₨572M', icon:'€', iconBg:'#DCEDE4' }
+      ],
+      recentBookings: [
+        { brn:'BRN-26-00481', lead:'Ayesha Khan', pkg:'Umrah Premium', visa:'e-Visa', vbg:'#DCEDE4', vfg:'#156440', sell:'€9,920' },
+        { brn:'BRN-26-00490', lead:'Fatima Noor', pkg:'Ziyarat Iraq', visa:'Agent', vbg:'#E2EEF3', vfg:'#265D78', sell:'€8,480' },
+        { brn:'BRN-26-00492', lead:'Imran Yousuf', pkg:'Hajj 2026', visa:'Agent', vbg:'#E2EEF3', vfg:'#265D78', sell:'€25,600' },
+        { brn:'BRN-26-00495', lead:'Sana Malik', pkg:'Umrah Premium', visa:'e-Visa', vbg:'#DCEDE4', vfg:'#156440', sell:'€4,960' },
+        { brn:'BRN-26-00498', lead:'Omar Farooq', pkg:'Umrah Standard', visa:'Issued', vbg:'#DCEDE4', vfg:'#156440', sell:'€3,900' }
+      ],
+      pipeline: [
+        { label:'Submitted', count:'64', pct:'80%', color:'#2F6F8F' },
+        { label:'Under review', count:'41', pct:'52%', color:'#B5791E' },
+        { label:'Issued', count:'38', pct:'48%', color:'#1C7A4F' },
+        { label:'Action needed', count:'4', pct:'8%', color:'#B23A2E' }
+      ],
+      departures: [
+        { day:'10', mon:'Jun', route:'VNO → JED', pax:'4 pilgrims · Umrah', status:'Boarding', bg:'#DCEDE4', fg:'#156440' },
+        { day:'12', mon:'Sep', route:'VNO → JED', pax:'4 pilgrims · Umrah', status:'On track', bg:'#E2EEF3', fg:'#265D78' },
+        { day:'04', mon:'Oct', route:'VNO → NJF', pax:'6 pilgrims · Ziyarat', status:'Visas due', bg:'#F7EBD3', fg:'#8A5A12' }
+      ],
+      pilgrims,
+      detail: selectedP ? this.buildDetail(selectedP) : {},
+      contentBlocks: [
+        { name:'Journey types', icon:'🧭', summary:'Umrah · Hajj · Ziyarat cards', updated:'Edited 2d ago', status:'Published', statusBg:'#DCEDE4', statusFg:'#156440' },
+        { name:'Featured packages', icon:'📦', summary:'3 cards · prices & visa pills', updated:'Edited 5h ago', status:'Published', statusBg:'#DCEDE4', statusFg:'#156440' },
+        { name:'How it works', icon:'🔢', summary:'4 steps', updated:'Edited 1w ago', status:'Published', statusBg:'#DCEDE4', statusFg:'#156440' },
+        { name:'Visa route', icon:'🪪', summary:'e-Visa vs agent channel', updated:'Edited 3d ago', status:'Published', statusBg:'#DCEDE4', statusFg:'#156440' },
+        { name:'Testimonials', icon:'💬', summary:'3 pilgrim stories', updated:'Draft', status:'Draft', statusBg:'#F1EADD', statusFg:'#7A7263' },
+        { name:'FAQ', icon:'❓', summary:'5 questions', updated:'Edited 6h ago', status:'Published', statusBg:'#DCEDE4', statusFg:'#156440' },
+        { name:'Footer', icon:'⬇️', summary:'4 link columns', updated:'Edited 2w ago', status:'Published', statusBg:'#DCEDE4', statusFg:'#156440' }
+      ],
+      userCount: allUsers.length,
+      users,
+      userTabs
+    };
+  }
+}
+</script>
+</body>
+</html>

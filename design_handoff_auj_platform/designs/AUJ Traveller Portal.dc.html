@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  ::selection { background: #DCEDE4; }
+  .auj-screen::-webkit-scrollbar { display: none; }
+</style>
+</helmet>
+
+<div style="background: #ECE7DD; color: #2A2620; font-family: 'IBM Plex Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; min-height: 100vh; padding-bottom: 64px;">
+
+  <!-- page header -->
+  <header style="background: rgba(236,231,221,0.9); backdrop-filter: blur(12px); border-bottom: 1px solid #DBD0BD; position: sticky; top: 0; z-index: 80;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 14px clamp(16px,4vw,28px); display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+      <div style="display: flex; align-items: center; gap: 11px;">
+        <div style="width: 34px; height: 34px; border-radius: 10px; background: #0F5132; display: flex; align-items: center; justify-content: center;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6.5 20V12a5.5 5.5 0 0 1 11 0v8" stroke="#FAF6EF" stroke-width="1.7" fill="none" stroke-linecap="round"/><g transform="translate(5.4 -0.6) scale(0.55)"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></g></svg>
+        </div>
+        <div>
+          <span style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: 18px; letter-spacing: 0.04em;">AUJ</span>
+          <span style="font-size: 13px; color: #7A7263; margin-inline-start: 10px;">Traveller portal · my journey</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <a href="AUJ Landing.dc.html" style="text-decoration: none; font-size: 13px; font-weight: 600; color: #4A4337; padding: 8px 14px; border: 1px solid #C9BCA6; border-radius: 9px; background: #fff; white-space: nowrap;">← Landing</a>
+        <a href="AUJ Travel Plan (Doc).dc.html" style="text-decoration: none; font-size: 13px; font-weight: 600; color: #fff; padding: 8px 14px; background: #0F5132; border-radius: 9px; white-space: nowrap;">📄 Travel plan</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================== -->
+  <!-- WEB PORTAL (complete page) -->
+  <!-- =========================================================== -->
+  <div style="max-width: 1280px; margin: 0 auto; padding: clamp(20px,3vw,32px) clamp(16px,4vw,28px) 0;">
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; color: #fff; background: #2F6F8F; padding: 4px 11px; border-radius: 7px;">WEB · PORTAL</span>
+      <span style="font-size: 14px; color: #7A7263;">Responsive · desktop &amp; tablet</span>
+    </div>
+
+    <!-- browser frame -->
+    <div style="background: #fff; border: 1px solid #DBD0BD; border-radius: 16px; overflow: hidden; box-shadow: 0 30px 70px -34px rgba(42,38,32,0.5);">
+      <!-- chrome -->
+      <div style="background: #F1EADD; border-bottom: 1px solid #E6DDCE; padding: 11px 16px; display: flex; align-items: center; gap: 12px;">
+        <div style="display: flex; gap: 7px;"><span style="width: 11px; height: 11px; border-radius: 50%; background: #DBA9A2;"></span><span style="width: 11px; height: 11px; border-radius: 50%; background: #E3CC97;"></span><span style="width: 11px; height: 11px; border-radius: 50%; background: #A9C7B3;"></span></div>
+        <div style="flex: 1; background: #fff; border: 1px solid #E6DDCE; border-radius: 8px; padding: 6px 13px; font-size: 12.5px; color: #7A7263; font-family: 'IBM Plex Mono', monospace; max-width: 460px;">🔒 my.auj.travel/journey/BRN-26-VNO-00481</div>
+      </div>
+
+      <!-- portal app -->
+      <div style="background: #FAF6EF;">
+        <!-- portal top nav -->
+        <div style="background: #fff; border-bottom: 1px solid #E6DDCE; padding: 13px clamp(16px,2.5vw,28px); display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 18px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 9px;">
+              <div style="width: 30px; height: 30px; border-radius: 9px; background: #0F5132; display: flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6.5 20V12a5.5 5.5 0 0 1 11 0v8" stroke="#FAF6EF" stroke-width="1.7" fill="none" stroke-linecap="round"/><g transform="translate(5.4 -0.6) scale(0.55)"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></g></svg></div>
+              <span style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: 16px; letter-spacing: 0.04em;">AUJ</span>
+            </div>
+            <div style="display: flex; gap: 2px; flex-wrap: wrap;">
+              <sc-for list="{{ webTabs }}" as="t" hint-placeholder-count="5">
+                <button onClick="{{ t.onClick }}" style="cursor: pointer; border: none; background: {{ t.bg }}; font-family: inherit; font-size: 13.5px; font-weight: 600; color: {{ t.fg }}; padding: 8px 14px; border-radius: 9px;">{{ t.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: #4A4337; border: 1px solid #E6DDCE; padding: 6px 11px; border-radius: 8px;">🌐 EN</span>
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: #0F5132; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600;">AK</div>
+          </div>
+        </div>
+
+        <div style="padding: clamp(20px,2.6vw,30px);">
+          <!-- booking hero -->
+          <div style="background: linear-gradient(135deg, #0F5132, #0A3D26); border-radius: 18px; padding: clamp(22px,2.6vw,30px); color: #EFF6F1; margin-bottom: 20px; position: relative; overflow: hidden;">
+            <div style="position: absolute; inset: 0; background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);"></div>
+            <div style="position: relative; display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
+              <div>
+                <div style="font-size: 11.5px; color: #9CC6AE; letter-spacing: 0.08em;">BOOKING REFERENCE</div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: clamp(22px,2.6vw,28px); font-weight: 600; margin: 4px 0 8px;">BRN-26-VNO-00481</div>
+                <div style="font-family: 'IBM Plex Serif', serif; font-size: 22px; font-weight: 500;">Umrah Premium · 14 nights</div>
+                <div style="font-size: 13.5px; color: #BFE0CD; margin-top: 4px;">Vilnius → Makkah → Madinah · 12–26 Sep 2026 · 4 pilgrims</div>
+              </div>
+              <div style="text-align: right;">
+                <span style="display: inline-flex; align-items: center; gap: 6px; background: rgba(247,235,211,0.18); color: #F0D9A4; font-size: 12.5px; font-weight: 600; padding: 5px 12px; border-radius: 999px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #E3CC97;"></span>Visa in progress</span>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 30px; font-weight: 700; color: #fff; margin-top: 12px;">91</div>
+                <div style="font-size: 12px; color: #9CC6AE;">days to departure</div>
+              </div>
+            </div>
+            <!-- progress -->
+            <div style="position: relative; margin-top: 22px;">
+              <div style="height: 6px; background: rgba(255,255,255,0.14); border-radius: 999px; overflow: hidden;"><div style="height: 100%; width: 45%; background: linear-gradient(90deg,#2A9468,#C8A24A); border-radius: 999px;"></div></div>
+              <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 11.5px; color: #BFE0CD;">
+                <span>Booked</span><span>Documents</span><span style="color: #F0D9A4; font-weight: 600;">Visa</span><span>Travel</span><span>Return</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== TAB: JOURNEY ===== -->
+          <sc-if value="{{ isJourney }}" hint-placeholder-val="{{ true }}">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px;">
+              <!-- timeline -->
+              <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 22px 24px; grid-column: span 2; min-width: 0;">
+                <div style="font-size: 15px; font-weight: 700; margin-bottom: 20px;">Your journey — every step</div>
+                <sc-for list="{{ timeline }}" as="t" hint-placeholder-count="5">
+                  <div style="display: flex; gap: 16px;">
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                      <div style="width: 30px; height: 30px; border-radius: 50%; background: {{ t.dotBg }}; border: 2px solid {{ t.dotBorder }}; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #fff;">{{ t.mark }}</div>
+                      <div style="width: 2px; flex: 1; background: {{ t.line }}; min-height: 26px;"></div>
+                    </div>
+                    <div style="padding-bottom: 22px; flex: 1;">
+                      <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                        <span style="font-size: 15px; font-weight: 600; color: {{ t.titleColor }};">{{ t.title }}</span>
+                        <sc-if value="{{ t.badge }}" hint-placeholder-val="{{ true }}"><span style="background: {{ t.badgeBg }}; color: {{ t.badgeFg }}; font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 999px;">{{ t.badge }}</span></sc-if>
+                      </div>
+                      <div style="font-size: 13px; color: #7A7263; margin-top: 3px;">{{ t.sub }}</div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+              <!-- next steps + QR -->
+              <div style="display: flex; flex-direction: column; gap: 18px; min-width: 0;">
+                <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 22px 24px;">
+                  <div style="font-size: 15px; font-weight: 700; margin-bottom: 14px;">What's next</div>
+                  <sc-for list="{{ nextSteps }}" as="n" hint-placeholder-count="2">
+                    <div style="display: flex; align-items: center; gap: 13px; border: 1px solid {{ n.border }}; background: {{ n.bg }}; border-radius: 12px; padding: 13px 14px; margin-bottom: 10px;">
+                      <span style="width: 36px; height: 36px; border-radius: 9px; background: {{ n.iconBg }}; display: flex; align-items: center; justify-content: center; font-size: 16px;">{{ n.icon }}</span>
+                      <div style="flex: 1; min-width: 0;"><div style="font-size: 13.5px; font-weight: 600;">{{ n.title }}</div><div style="font-size: 11.5px; color: #7A7263;">{{ n.sub }}</div></div>
+                      <span style="font-size: 12.5px; font-weight: 600; color: {{ n.actionColor }}; white-space: nowrap;">{{ n.action }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+                <!-- QR digital pass -->
+                <div style="background: linear-gradient(150deg, #07301E, #0A3D26); border-radius: 16px; padding: 22px; color: #EFF6F1; text-align: center;">
+                  <div style="font-size: 11.5px; color: #9CC6AE; letter-spacing: 0.1em; margin-bottom: 14px;">AUJ DIGITAL PASS</div>
+                  <div style="background: #fff; border-radius: 14px; padding: 14px; display: inline-block; position: relative;">
+                    <div style="display: flex; flex-wrap: wrap; width: 132px;">
+                      <sc-for list="{{ qrCells }}" as="c" hint-placeholder-count="144"><span style="width: 11px; height: 11px; background: {{ c }};"></span></sc-for>
+                    </div>
+                    <div style="position: absolute; top: 14px; left: 14px; width: 33px; height: 33px; border: 6px solid #07301E; background: #fff;"></div>
+                    <div style="position: absolute; top: 14px; right: 14px; width: 33px; height: 33px; border: 6px solid #07301E; background: #fff;"></div>
+                    <div style="position: absolute; bottom: 14px; left: 14px; width: 33px; height: 33px; border: 6px solid #07301E; background: #fff;"></div>
+                  </div>
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; margin-top: 14px; color: #fff;">BRN-26-VNO-00481</div>
+                  <div style="font-size: 12px; color: #9CC6AE; margin-top: 2px;">Show at check-in &amp; ground services</div>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- ===== TAB: ITINERARY ===== -->
+          <sc-if value="{{ isItinerary }}" hint-placeholder-val="{{ true }}">
+            <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 8px 0; overflow: hidden;">
+              <sc-for list="{{ itinerary }}" as="d" hint-placeholder-count="6">
+                <div style="display: flex; gap: 18px; padding: 18px 24px; border-top: 1px solid #F4EEE3;">
+                  <div style="flex-shrink: 0; width: 58px; text-align: center;">
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7A7263;">{{ d.day }}</div>
+                    <div style="width: 44px; height: 44px; border-radius: 12px; background: {{ d.iconBg }}; display: flex; align-items: center; justify-content: center; font-size: 21px; margin-top: 6px;">{{ d.icon }}</div>
+                  </div>
+                  <div style="flex: 1; min-width: 0;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
+                      <span style="font-size: 15.5px; font-weight: 600;">{{ d.title }}</span>
+                      <span style="font-size: 12px; color: #7A7263;">{{ d.date }}</span>
+                    </div>
+                    <div style="font-size: 13.5px; line-height: 1.6; color: #4A4337; margin-top: 4px;">{{ d.body }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <!-- ===== TAB: DOCUMENTS ===== -->
+          <sc-if value="{{ isDocuments }}" hint-placeholder-val="{{ true }}">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px;">
+              <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 22px 24px; min-width: 0;">
+                <div style="font-size: 15px; font-weight: 700; margin-bottom: 14px;">Documents</div>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                  <sc-for list="{{ documents }}" as="d" hint-placeholder-count="3">
+                    <div style="display: flex; align-items: center; gap: 12px; border: 1.5px solid {{ d.border }}; background: {{ d.bg }}; border-radius: 12px; padding: 12px 14px;">
+                      <span style="width: 38px; height: 38px; border-radius: 9px; background: {{ d.iconBg }}; display: flex; align-items: center; justify-content: center; font-size: 17px;">{{ d.icon }}</span>
+                      <div style="flex: 1; min-width: 0;"><div style="font-size: 13.5px; font-weight: 600;">{{ d.name }}</div><div style="font-size: 11.5px; color: {{ d.metaColor }};">{{ d.meta }}</div></div>
+                      <span style="font-size: 12.5px; font-weight: 600; color: {{ d.actionColor }};">{{ d.action }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 22px 24px; min-width: 0;">
+                <div style="font-size: 15px; font-weight: 700; margin-bottom: 14px;">Per-pilgrim visa</div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <sc-for list="{{ visaPilgrims }}" as="p" hint-placeholder-count="4">
+                    <div style="display: flex; align-items: center; gap: 12px; background: #FAF6EF; border: 1px solid #E6DDCE; border-radius: 12px; padding: 10px 13px;">
+                      <div style="width: 32px; height: 32px; border-radius: 50%; background: {{ p.av }}; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600;">{{ p.initials }}</div>
+                      <div style="flex: 1; min-width: 0;"><div style="font-size: 13.5px; font-weight: 600;">{{ p.name }}</div><div style="font-size: 11px; color: #7A7263;">{{ p.route }}</div></div>
+                      <span style="display: inline-flex; align-items: center; gap: 5px; background: {{ p.vbg }}; color: {{ p.vfg }}; font-size: 11.5px; font-weight: 600; padding: 4px 10px; border-radius: 999px;">{{ p.visa }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- ===== TAB: PAYMENTS ===== -->
+          <sc-if value="{{ isPayments }}" hint-placeholder-val="{{ true }}">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px;">
+              <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 22px 24px; min-width: 0;">
+                <div style="font-size: 15px; font-weight: 700; margin-bottom: 16px;">Payment summary</div>
+                <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+                  <div style="flex: 1; background: #FAF6EF; border-radius: 12px; padding: 13px;"><div style="font-size: 11px; color: #7A7263;">Total</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 18px; font-weight: 700;">€9,920</div></div>
+                  <div style="flex: 1; background: #DCEDE4; border-radius: 12px; padding: 13px;"><div style="font-size: 11px; color: #156440;">Paid</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 18px; font-weight: 700; color: #156440;">€9,920</div></div>
+                  <div style="flex: 1; background: #FAF6EF; border-radius: 12px; padding: 13px;"><div style="font-size: 11px; color: #7A7263;">Balance</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 18px; font-weight: 700;">€0</div></div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; background: #E2EEF3; border-radius: 10px; padding: 10px 12px; font-size: 12.5px; color: #265D78;">ℹ️ Charged in EUR · ≈ ₨3,083,120 at today's rate (1 € = ₨310.8).</div>
+              </div>
+              <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 22px 24px; min-width: 0;">
+                <div style="font-size: 15px; font-weight: 700; margin-bottom: 14px;">Transactions</div>
+                <sc-for list="{{ txns }}" as="x" hint-placeholder-count="3">
+                  <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-top: 1px solid #F4EEE3;">
+                    <div><div style="font-size: 13.5px; font-weight: 500;">{{ x.desc }}</div><div style="font-size: 11px; color: #7A7263;">{{ x.date }}</div></div>
+                    <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; font-weight: 600; color: #1C7A4F;">{{ x.amount }}</span>
+                  </div>
+                </sc-for>
+                <a href="AUJ Travel Plan (Doc).dc.html" style="text-decoration: none; display: block; text-align: center; margin-top: 14px; background: #FAF6EF; border: 1px solid #E6DDCE; border-radius: 10px; padding: 11px; font-size: 13px; font-weight: 600; color: #156440;">Download receipt &amp; travel plan (PDF)</a>
+              </div>
+            </div>
+          </sc-if>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================== -->
+  <!-- MOBILE APP -->
+  <!-- =========================================================== -->
+  <div style="max-width: 1280px; margin: 0 auto; padding: clamp(40px,5vw,56px) clamp(16px,4vw,28px) 0;">
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 18px;">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; color: #fff; background: #0F5132; padding: 4px 11px; border-radius: 7px;">MOBILE · APP</span>
+      <span style="font-size: 14px; color: #7A7263;">iOS / Android · the same journey, in your pocket</span>
+    </div>
+
+    <div style="display: flex; gap: clamp(20px,3vw,36px); flex-wrap: wrap; justify-content: center;">
+
+      <!-- PHONE 1: My journey -->
+      <div style="width: 332px; background: #14170F; border-radius: 40px; padding: 9px; box-shadow: 0 30px 60px -22px rgba(20,23,15,0.5);">
+        <div class="auj-screen" style="width: 314px; height: 678px; background: #0F5132; border-radius: 32px; overflow: hidden; overflow-y: auto;">
+          <div style="background: #0F5132; color: #EFF6F1; padding: 14px 18px 20px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 14px;"><span>9:41</span><span>▮▮▮ ⌁ ▦</span></div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;"><span style="font-size: 15px; font-weight: 600;">My journey</span><span style="font-size: 18px;">⋯</span></div>
+            <div style="font-size: 11px; color: #9CC6AE; letter-spacing: 0.06em;">BOOKING REFERENCE</div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 19px; font-weight: 600; margin: 3px 0 5px;">BRN-26-VNO-00481</div>
+            <div style="font-family: 'IBM Plex Serif', serif; font-size: 17px;">Umrah Premium · 14 nights</div>
+            <div style="font-size: 12px; color: #BFE0CD;">12–26 Sep 2026 · 4 pilgrims</div>
+          </div>
+          <div style="background: #FAF6EF; border-radius: 26px 26px 0 0; margin-top: -8px; padding: 18px 16px 22px;">
+            <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 15px 16px; margin-bottom: 14px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                <span style="font-size: 13.5px; font-weight: 700;">Every step</span>
+                <span style="display: inline-flex; align-items: center; gap: 5px; background: #F7EBD3; color: #8A5A12; font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 999px;"><span style="width: 6px; height: 6px; border-radius: 50%; background: #B5791E;"></span>Visa stage</span>
+              </div>
+              <sc-for list="{{ timeline }}" as="t" hint-placeholder-count="5">
+                <div style="display: flex; gap: 11px;">
+                  <div style="display: flex; flex-direction: column; align-items: center;">
+                    <div style="width: 20px; height: 20px; border-radius: 50%; background: {{ t.dotBg }}; border: 2px solid {{ t.dotBorder }}; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #fff;">{{ t.mark }}</div>
+                    <div style="width: 2px; flex: 1; background: {{ t.line }}; min-height: 16px;"></div>
+                  </div>
+                  <div style="padding-bottom: 12px;"><div style="font-size: 13px; font-weight: 600; color: {{ t.titleColor }};">{{ t.title }}</div><div style="font-size: 11.5px; color: #7A7263;">{{ t.sub }}</div></div>
+                </div>
+              </sc-for>
+            </div>
+            <button style="width: 100%; cursor: pointer; background: #07301E; color: #EFF6F1; border: none; font-family: inherit; font-size: 14px; font-weight: 600; padding: 13px; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 8px;">▦ Show digital pass</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHONE 2: Itinerary -->
+      <div style="width: 332px; background: #14170F; border-radius: 40px; padding: 9px; box-shadow: 0 30px 60px -22px rgba(20,23,15,0.5);">
+        <div class="auj-screen" style="width: 314px; height: 678px; background: #FAF6EF; border-radius: 32px; overflow: hidden; overflow-y: auto;">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 18px 4px; font-size: 12px; font-weight: 600;"><span>9:41</span><span>▮▮▮ ⌁ ▦</span></div>
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 18px 12px;"><span style="font-size: 20px; color: #4A4337;">←</span><span style="font-size: 15px; font-weight: 600;">Itinerary</span><span style="font-size: 13px; color: #2F6F8F; font-weight: 600;">Map</span></div>
+          <div style="padding: 4px 14px 18px;">
+            <sc-for list="{{ itinerary }}" as="d" hint-placeholder-count="6">
+              <div style="display: flex; gap: 12px; background: #fff; border: 1px solid #E6DDCE; border-radius: 14px; padding: 13px; margin-bottom: 10px;">
+                <div style="width: 40px; height: 40px; border-radius: 11px; background: {{ d.iconBg }}; display: flex; align-items: center; justify-content: center; font-size: 19px; flex-shrink: 0;">{{ d.icon }}</div>
+                <div style="flex: 1; min-width: 0;"><div style="font-size: 10.5px; color: #7A7263; font-family: 'IBM Plex Mono', monospace;">{{ d.day }} · {{ d.date }}</div><div style="font-size: 14px; font-weight: 600; margin: 1px 0 3px;">{{ d.title }}</div><div style="font-size: 11.5px; line-height: 1.45; color: #7A7263;">{{ d.body }}</div></div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHONE 3: Documents + QR -->
+      <div style="width: 332px; background: #14170F; border-radius: 40px; padding: 9px; box-shadow: 0 30px 60px -22px rgba(20,23,15,0.5);">
+        <div class="auj-screen" style="width: 314px; height: 678px; background: #FAF6EF; border-radius: 32px; overflow: hidden; overflow-y: auto;">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 18px 4px; font-size: 12px; font-weight: 600;"><span>9:41</span><span>▮▮▮ ⌁ ▦</span></div>
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 18px 12px;"><span style="font-size: 20px; color: #4A4337;">←</span><span style="font-size: 15px; font-weight: 600;">Documents &amp; pass</span><span style="font-size: 18px;">＋</span></div>
+          <div style="padding: 4px 16px 20px;">
+            <!-- QR pass card -->
+            <div style="background: linear-gradient(150deg, #07301E, #0A3D26); border-radius: 16px; padding: 18px; text-align: center; color: #EFF6F1; margin-bottom: 16px;">
+              <div style="font-size: 11px; color: #9CC6AE; letter-spacing: 0.1em; margin-bottom: 12px;">AUJ DIGITAL PASS</div>
+              <div style="background: #fff; border-radius: 12px; padding: 12px; display: inline-block; position: relative;">
+                <div style="display: flex; flex-wrap: wrap; width: 110px;">
+                  <sc-for list="{{ qrCellsSm }}" as="c" hint-placeholder-count="100"><span style="width: 11px; height: 11px; background: {{ c }};"></span></sc-for>
+                </div>
+                <div style="position: absolute; top: 12px; left: 12px; width: 30px; height: 30px; border: 5px solid #07301E; background: #fff;"></div>
+                <div style="position: absolute; top: 12px; right: 12px; width: 30px; height: 30px; border: 5px solid #07301E; background: #fff;"></div>
+                <div style="position: absolute; bottom: 12px; left: 12px; width: 30px; height: 30px; border: 5px solid #07301E; background: #fff;"></div>
+              </div>
+              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; margin-top: 12px; color: #fff;">BRN-26-VNO-00481</div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 9px;">
+              <sc-for list="{{ documents }}" as="d" hint-placeholder-count="3">
+                <div style="display: flex; align-items: center; gap: 11px; border: 1.5px solid {{ d.border }}; background: {{ d.bg }}; border-radius: 12px; padding: 11px 13px;">
+                  <span style="width: 34px; height: 34px; border-radius: 9px; background: {{ d.iconBg }}; display: flex; align-items: center; justify-content: center; font-size: 15px;">{{ d.icon }}</span>
+                  <div style="flex: 1; min-width: 0;"><div style="font-size: 13px; font-weight: 600;">{{ d.name }}</div><div style="font-size: 11px; color: {{ d.metaColor }};">{{ d.meta }}</div></div>
+                  <span style="font-size: 11.5px; font-weight: 600; color: {{ d.actionColor }};">{{ d.action }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { tab: 'journey' };
+
+  qr(n, cols) {
+    const out = [];
+    for (let i = 0; i < n; i++) {
+      const r = Math.floor(i / cols), c = i % cols;
+      const on = ((r * 7 + c * 5 + (r ^ c) * 3 + r * c) % 3 !== 0);
+      out.push(on ? '#07301E' : 'transparent');
+    }
+    return out;
+  }
+
+  renderVals() {
+    const tab = this.state.tab;
+    const webTabs = [
+      { key: 'journey', label: 'Journey' },
+      { key: 'itinerary', label: 'Itinerary' },
+      { key: 'documents', label: 'Documents' },
+      { key: 'payments', label: 'Payments' }
+    ].map(t => {
+      const active = tab === t.key;
+      return { ...t, bg: active ? '#0F5132' : 'transparent', fg: active ? '#fff' : '#4A4337', onClick: () => this.setState({ tab: t.key }) };
+    });
+
+    return {
+      webTabs,
+      isJourney: tab === 'journey',
+      isItinerary: tab === 'itinerary',
+      isDocuments: tab === 'documents',
+      isPayments: tab === 'payments',
+      timeline: [
+        { title: 'Booking confirmed', sub: '9 Jun 2026 · payment received', mark: '✓', dotBg: '#1C7A4F', dotBorder: '#1C7A4F', line: '#1C7A4F', titleColor: '#2A2620', badge: 'Paid', badgeBg: '#DCEDE4', badgeFg: '#156440' },
+        { title: 'Documents verified', sub: '10 Jun 2026 · 4 of 4 passports', mark: '✓', dotBg: '#1C7A4F', dotBorder: '#1C7A4F', line: '#1C7A4F', titleColor: '#2A2620', badge: '', badgeBg: '', badgeFg: '' },
+        { title: 'Visa processing', sub: 'e-Visa submitted to MOFA · est. 2–3 days', mark: '', dotBg: '#B5791E', dotBorder: '#B5791E', line: '#E6DDCE', titleColor: '#2A2620', badge: 'In progress', badgeBg: '#F7EBD3', badgeFg: '#8A5A12' },
+        { title: 'Travel & departure', sub: 'Tickets and final itinerary issued 7 days before', mark: '', dotBg: '#fff', dotBorder: '#C9BCA6', line: '#E6DDCE', titleColor: '#A6A293', badge: '', badgeBg: '', badgeFg: '' },
+        { title: 'Return & complete', sub: 'Journey closed · feedback', mark: '', dotBg: '#fff', dotBorder: '#C9BCA6', line: 'transparent', titleColor: '#A6A293', badge: '', badgeBg: '', badgeFg: '' }
+      ],
+      nextSteps: [
+        { title: 'Visa photo — 2 pilgrims', sub: 'White background · 45×35mm', icon: '📷', iconBg: '#F7EBD3', bg: '#fff', border: '#E3CC97', action: 'Upload', actionColor: '#8A5A12' },
+        { title: 'Balance settled', sub: 'No payment due', icon: '✓', iconBg: '#DCEDE4', bg: '#EFF6F1', border: '#BBD9C6', action: 'Paid', actionColor: '#156440' }
+      ],
+      qrCells: this.qr(144, 12),
+      qrCellsSm: this.qr(100, 10),
+      itinerary: [
+        { day: 'DAY 1', date: '12 Sep', icon: '✈️', iconBg: '#E2EEF3', title: 'Vilnius → Jeddah', body: 'Direct flight VNO–JED on Saudia. Meet-and-greet at Jeddah, private transfer to your Makkah hotel.' },
+        { day: 'DAY 2', date: '13 Sep', icon: '🕋', iconBg: '#DCEDE4', title: 'Arrival Umrah', body: 'Rest, then perform your first Umrah with a guide — ihram, tawaf, sa\u2019i and tahallul.' },
+        { day: 'DAY 3–7', date: '14–18 Sep', icon: '🌙', iconBg: '#F1EADD', title: 'Makkah · worship', body: 'Daily prayers at Masjid al-Haram, optional ziyarat of historical sites around Makkah.' },
+        { day: 'DAY 8', date: '19 Sep', icon: '🚌', iconBg: '#F7EBD3', title: 'Makkah → Madinah', body: 'Private GMC transfer to Madinah (approx. 4.5 hrs). Check in near Masjid an-Nabawi.' },
+        { day: 'DAY 9–13', date: '20–24 Sep', icon: '🕌', iconBg: '#DCEDE4', title: 'Madinah · worship', body: 'Prayers at Masjid an-Nabawi, visit to Rawdah, guided ziyarat of Uhud, Quba and the date markets.' },
+        { day: 'DAY 14', date: '26 Sep', icon: '✈️', iconBg: '#E2EEF3', title: 'Jeddah → Vilnius', body: 'Transfer to Jeddah airport and return flight home. Journey complete.' }
+      ],
+      documents: [
+        { name: 'Passport scan', meta: 'verified · all 4', icon: '📄', iconBg: '#DCEDE4', bg: '#EFF6F1', border: '#BBD9C6', metaColor: '#156440', action: '✓', actionColor: '#1C7A4F' },
+        { name: 'Visa photo', meta: '2 of 4 uploaded', icon: '📷', iconBg: '#F7EBD3', bg: '#fff', border: '#E3CC97', metaColor: '#8A5A12', action: 'Upload', actionColor: '#2F6F8F' },
+        { name: 'e-Visa (issued)', meta: 'available once issued', icon: '🪪', iconBg: '#F1EADD', bg: '#fff', border: '#E6DDCE', metaColor: '#7A7263', action: 'Pending', actionColor: '#A6A293' },
+        { name: 'Flight tickets', meta: 'issued 7 days before', icon: '🎫', iconBg: '#E2EEF3', bg: '#fff', border: '#E6DDCE', metaColor: '#7A7263', action: 'Pending', actionColor: '#A6A293' }
+      ],
+      visaPilgrims: [
+        { name: 'Ayesha Khan', initials: 'AK', av: '#0F5132', route: 'e-Visa route', visa: 'Submitted', vbg: '#F7EBD3', vfg: '#8A5A12' },
+        { name: 'Bilal Ahmed', initials: 'BA', av: '#2F6F8F', route: 'e-Visa route', visa: 'Submitted', vbg: '#F7EBD3', vfg: '#8A5A12' },
+        { name: 'Fatima Noor', initials: 'FN', av: '#B5791E', route: 'e-Visa route', visa: 'Issued', vbg: '#DCEDE4', vfg: '#156440' },
+        { name: 'Imran Yousuf', initials: 'IY', av: '#265D78', route: 'e-Visa route', visa: 'Issued', vbg: '#DCEDE4', vfg: '#156440' }
+      ],
+      txns: [
+        { desc: 'Deposit · card', date: '9 Jun 2026', amount: '+€1,984' },
+        { desc: 'Balance · SEPA transfer', date: '20 Jun 2026', amount: '+€7,936' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

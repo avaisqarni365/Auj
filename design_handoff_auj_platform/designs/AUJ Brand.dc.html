@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  ::selection { background: #DCEDE4; }
+</style>
+</helmet>
+
+<div style="background: #FAF6EF; color: #2A2620; font-family: 'IBM Plex Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; min-height: 100vh; overflow-x: hidden;">
+
+  <!-- top bar -->
+  <header style="border-bottom: 1px solid #E6DDCE; background: rgba(250,246,239,0.86); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 30;">
+    <div style="max-width: 1120px; margin: 0 auto; padding: 14px clamp(16px,4vw,28px); display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
+      <div style="display: flex; align-items: center; gap: 11px;">
+        <svg width="34" height="34" viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="17" fill="#0F5132"/><path d="M19 47V31a13 13 0 0 1 26 0v16" stroke="#FAF6EF" stroke-width="3.4" fill="none" stroke-linecap="round"/><g transform="translate(17.8 4) scale(1.18)"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></g></svg>
+        <div>
+          <div style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: 18px; letter-spacing: 0.05em; line-height: 1;">AUJ</div>
+          <div style="font-size: 10.5px; color: #7A7263; letter-spacing: 0.14em; text-transform: uppercase; margin-top: 2px;">Brand · Logo</div>
+        </div>
+      </div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <a href="AUJ Landing.dc.html" style="text-decoration: none; font-size: 13px; font-weight: 600; color: #4A4337; padding: 8px 14px; border: 1px solid #C9BCA6; border-radius: 9px; background: #fff; white-space: nowrap;">← Landing</a>
+        <a href="AUJ Design System.dc.html" style="text-decoration: none; font-size: 13px; font-weight: 600; color: #4A4337; padding: 8px 14px; border: 1px solid #C9BCA6; border-radius: 9px; background: #fff; white-space: nowrap;">Design system</a>
+      </div>
+    </div>
+  </header>
+
+  <div style="max-width: 1120px; margin: 0 auto; padding: clamp(36px,6vw,64px) clamp(16px,4vw,28px) 80px;">
+
+    <!-- ===== HERO / MEANING ===== -->
+    <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; align-items: center; margin-bottom: clamp(48px,7vw,72px);">
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #2F6F8F; margin-bottom: 16px;">THE MARK · أوج</div>
+        <h1 style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: clamp(34px,5vw,52px); line-height: 1.05; letter-spacing: -0.02em; margin: 0 0 18px;">A star at its zenith, crowning a sacred arch.</h1>
+        <p style="font-size: 17px; line-height: 1.65; color: #4A4337; margin: 0 0 18px; max-width: 480px;"><strong>Auj (أوج)</strong> means <em>zenith</em> — the highest point a thing can reach. The mark places an eight-point guiding star at the keystone of a mihrab arch: the summit of devotion, framed by the threshold of a holy place.</p>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <span style="display: inline-flex; align-items: center; gap: 7px; background: #DCEDE4; color: #156440; font-size: 13px; font-weight: 600; padding: 7px 13px; border-radius: 999px;">★ Star · zenith of devotion</span>
+          <span style="display: inline-flex; align-items: center; gap: 7px; background: #E2EEF3; color: #265D78; font-size: 13px; font-weight: 600; padding: 7px 13px; border-radius: 999px;">⌒ Arch · sacred threshold</span>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg,#EFF6F1,#FAF6EF); border: 1px solid #E6DDCE; border-radius: 24px; padding: 48px;">
+        <svg width="176" height="176" viewBox="0 0 64 64" fill="none" style="filter: drop-shadow(0 20px 40px rgba(15,81,50,0.32));"><rect width="64" height="64" rx="17" fill="#0F5132"/><path d="M19 47V31a13 13 0 0 1 26 0v16" stroke="#FAF6EF" stroke-width="3.4" fill="none" stroke-linecap="round"/><g transform="translate(17.8 4) scale(1.18)"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></g></svg>
+      </div>
+    </section>
+
+    <!-- ===== MARK ON BACKGROUNDS ===== -->
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #2F6F8F; margin-bottom: 16px;">01 · THE MARK</div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; margin-bottom: clamp(48px,7vw,68px);">
+      <!-- primary -->
+      <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; align-items: center; gap: 16px;">
+        <svg width="84" height="84" viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="17" fill="#0F5132"/><path d="M19 47V31a13 13 0 0 1 26 0v16" stroke="#FAF6EF" stroke-width="3.4" fill="none" stroke-linecap="round"/><g transform="translate(17.8 4) scale(1.18)"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></g></svg>
+        <div style="text-align: center;"><div style="font-size: 13px; font-weight: 600;">Primary</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7A7263;">green-800 · gold · cream</div></div>
+      </div>
+      <!-- inverse -->
+      <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; align-items: center; gap: 16px;">
+        <svg width="84" height="84" viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="17" fill="#FAF6EF" stroke="#E6DDCE"/><path d="M19 47V31a13 13 0 0 1 26 0v16" stroke="#0F5132" stroke-width="3.4" fill="none" stroke-linecap="round"/><g transform="translate(17.8 4) scale(1.18)"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></g></svg>
+        <div style="text-align: center;"><div style="font-size: 13px; font-weight: 600;">Inverse</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7A7263;">on light surfaces</div></div>
+      </div>
+      <!-- dark -->
+      <div style="background: #11140F; border: 1px solid #2E342A; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; align-items: center; gap: 16px;">
+        <svg width="84" height="84" viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="17" fill="#07301E"/><path d="M19 47V31a13 13 0 0 1 26 0v16" stroke="#EFF6F1" stroke-width="3.4" fill="none" stroke-linecap="round"/><g transform="translate(17.8 4) scale(1.18)"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></g></svg>
+        <div style="text-align: center;"><div style="font-size: 13px; font-weight: 600; color: #ECEAE3;">On dark</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #A6A293;">green-950 ground</div></div>
+      </div>
+      <!-- mono -->
+      <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; align-items: center; gap: 16px;">
+        <svg width="84" height="84" viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="17" fill="none" stroke="#2A2620" stroke-width="1.4"/><path d="M19 47V31a13 13 0 0 1 26 0v16" stroke="#2A2620" stroke-width="3.4" fill="none" stroke-linecap="round"/><g transform="translate(17.8 4) scale(1.18)"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#2A2620"/></g></svg>
+        <div style="text-align: center;"><div style="font-size: 13px; font-weight: 600;">Monochrome</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7A7263;">stamp · emboss · 1-colour</div></div>
+      </div>
+    </div>
+
+    <!-- ===== LOCKUPS ===== -->
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #2F6F8F; margin-bottom: 16px;">02 · LOCKUPS</div>
+
+    <!-- artistic signature lockup · Masjid an-Nabawi -->
+    <div style="position: relative; border-radius: 22px; overflow: hidden; margin-bottom: 16px; min-height: 260px; background: linear-gradient(168deg, #061F16 0%, #0A3D26 52%, #0F5132 100%); border: 1px solid #0A3D26; box-shadow: 0 24px 60px -28px rgba(6,31,22,0.7);">
+      <!-- night sky stars -->
+      <div style="position: absolute; top: 26px; left: 12%; width: 3px; height: 3px; border-radius: 50%; background: #F0E4C0; opacity: 0.85;"></div>
+      <div style="position: absolute; top: 44px; left: 24%; width: 2px; height: 2px; border-radius: 50%; background: #F0E4C0; opacity: 0.6;"></div>
+      <div style="position: absolute; top: 32px; right: 18%; width: 2.5px; height: 2.5px; border-radius: 50%; background: #F0E4C0; opacity: 0.7;"></div>
+      <div style="position: absolute; top: 56px; right: 30%; width: 2px; height: 2px; border-radius: 50%; background: #C8A24A; opacity: 0.7;"></div>
+      <!-- crescent -->
+      <div style="position: absolute; top: 24px; right: 9%; width: 22px; height: 22px; border-radius: 50%; box-shadow: inset -7px 2px 0 0 #C8A24A; transform: rotate(-18deg); opacity: 0.9;"></div>
+      <!-- warm glow behind dome -->
+      <div style="position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); width: 300px; height: 190px; background: radial-gradient(circle at 50% 100%, rgba(200,162,74,0.34), transparent 68%); pointer-events: none;"></div>
+
+      <!-- skyline silhouette -->
+      <div style="position: absolute; inset-inline: 0; bottom: 0; height: 110px;">
+        <!-- ground band -->
+        <div style="position: absolute; inset-inline: 0; bottom: 0; height: 22px; background: #051A12;"></div>
+        <!-- left minaret -->
+        <div style="position: absolute; left: 19%; bottom: 18px; width: 11px; height: 92px; background: #051A12; border-radius: 6px 6px 0 0;"></div>
+        <div style="position: absolute; left: calc(19% - 4px); bottom: 104px; width: 19px; height: 12px; background: #051A12; border-radius: 50% 50% 4px 4px;"></div>
+        <div style="position: absolute; left: calc(19% + 3.5px); bottom: 116px; width: 4px; height: 12px; background: #C8A24A; border-radius: 2px;"></div>
+        <!-- right minaret -->
+        <div style="position: absolute; right: 19%; bottom: 18px; width: 11px; height: 92px; background: #051A12; border-radius: 6px 6px 0 0;"></div>
+        <div style="position: absolute; right: calc(19% - 4px); bottom: 104px; width: 19px; height: 12px; background: #051A12; border-radius: 50% 50% 4px 4px;"></div>
+        <div style="position: absolute; right: calc(19% + 3.5px); bottom: 116px; width: 4px; height: 12px; background: #C8A24A; border-radius: 2px;"></div>
+        <!-- central green dome -->
+        <div style="position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); width: 132px; height: 70px; background: linear-gradient(180deg, #0F5132, #06281B); border-radius: 132px 132px 16px 16px; box-shadow: inset 0 3px 0 rgba(200,162,74,0.25);"></div>
+        <div style="position: absolute; left: 50%; bottom: 86px; transform: translateX(-50%); width: 4px; height: 16px; background: #C8A24A; border-radius: 2px;"></div>
+        <div style="position: absolute; left: 50%; bottom: 100px; transform: translateX(-50%); width: 8px; height: 8px; border-radius: 50%; background: #C8A24A;"></div>
+        <!-- flanking small domes -->
+        <div style="position: absolute; left: 34%; bottom: 18px; width: 54px; height: 34px; background: #06281B; border-radius: 54px 54px 8px 8px;"></div>
+        <div style="position: absolute; right: 34%; bottom: 18px; width: 54px; height: 34px; background: #06281B; border-radius: 54px 54px 8px 8px;"></div>
+      </div>
+
+      <!-- bilingual wordmark overlay -->
+      <div style="position: relative; padding: 36px 36px 0; text-align: center;">
+        <div style="display: flex; justify-content: center; margin-bottom: 12px;">
+          <svg width="46" height="46" viewBox="0 0 64 64" fill="none" style="filter: drop-shadow(0 8px 18px rgba(0,0,0,0.4));"><rect width="64" height="64" rx="16" fill="#0F5132"/><path d="M19 47V31a13 13 0 0 1 26 0v16" stroke="#FAF6EF" stroke-width="3.4" fill="none" stroke-linecap="round"/><g transform="translate(17.8 4) scale(1.18)"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></g></svg>
+        </div>
+        <div style="font-family: 'IBM Plex Sans Arabic', sans-serif; font-size: 40px; font-weight: 600; color: #C8A24A; line-height: 1; margin-bottom: 6px; text-shadow: 0 2px 12px rgba(6,31,22,0.6);">أوج</div>
+        <div style="font-family: 'IBM Plex Serif', serif; font-size: 26px; font-weight: 600; letter-spacing: 0.18em; color: #FAF6EF; margin-bottom: 8px;">AUJ</div>
+        <div style="display: inline-flex; align-items: center; gap: 10px; font-size: 12.5px; color: #9CC6AE;">
+          <span>Pilgrimage &amp; travel</span>
+          <span style="width: 4px; height: 4px; border-radius: 50%; background: #C8A24A;"></span>
+          <span style="font-family: 'IBM Plex Sans Arabic', sans-serif;">رحلةٌ مُقدّسة</span>
+        </div>
+      </div>
+      <div style="position: absolute; bottom: 9px; inset-inline-end: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.06em; color: rgba(198,221,207,0.55);">ARTWORK · MASJID AN-NABAWI, MADINAH</div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: clamp(48px,7vw,68px);">
+      <!-- horizontal -->
+      <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 36px 32px; display: flex; align-items: center; gap: 16px;">
+        <svg width="52" height="52" viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="17" fill="#0F5132"/><path d="M19 47V31a13 13 0 0 1 26 0v16" stroke="#FAF6EF" stroke-width="3.4" fill="none" stroke-linecap="round"/><g transform="translate(17.8 4) scale(1.18)"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></g></svg>
+        <div>
+          <div style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: 28px; letter-spacing: 0.05em; line-height: 1;">AUJ</div>
+          <div style="font-size: 11px; color: #7A7263; letter-spacing: 0.16em; text-transform: uppercase; margin-top: 4px;">Pilgrimage &amp; travel</div>
+        </div>
+        <span style="margin-inline-start: auto; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #A6A293;">horizontal</span>
+      </div>
+      <!-- stacked -->
+      <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 36px 32px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center;">
+        <svg width="52" height="52" viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="17" fill="#0F5132"/><path d="M19 47V31a13 13 0 0 1 26 0v16" stroke="#FAF6EF" stroke-width="3.4" fill="none" stroke-linecap="round"/><g transform="translate(17.8 4) scale(1.18)"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></g></svg>
+        <div>
+          <div style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: 26px; letter-spacing: 0.06em; line-height: 1;">AUJ</div>
+          <div style="font-size: 10.5px; color: #7A7263; letter-spacing: 0.16em; text-transform: uppercase; margin-top: 5px;">Pilgrimage &amp; travel</div>
+        </div>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #A6A293;">stacked</span>
+      </div>
+      <!-- arabic + wordmark -->
+      <div style="background: #0F5132; border-radius: 16px; padding: 36px 32px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; color: #EFF6F1;">
+        <div style="font-family: 'IBM Plex Sans Arabic', sans-serif; font-size: 40px; color: #C8A24A; line-height: 1;">أوج</div>
+        <div style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: 22px; letter-spacing: 0.08em;">AUJ</div>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #9CC6AE;">bilingual wordmark</span>
+      </div>
+    </div>
+
+    <!-- ===== CLEARSPACE + PALETTE ===== -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: clamp(48px,7vw,68px);">
+      <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 28px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #2F6F8F; margin-bottom: 16px;">03 · CLEARSPACE &amp; MIN SIZE</div>
+        <div style="display: flex; align-items: center; gap: 24px; flex-wrap: wrap;">
+          <div style="position: relative; padding: 22px; border: 1px dashed #C9BCA6; border-radius: 14px;">
+            <svg width="60" height="60" viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="17" fill="#0F5132"/><path d="M19 47V31a13 13 0 0 1 26 0v16" stroke="#FAF6EF" stroke-width="3.4" fill="none" stroke-linecap="round"/><g transform="translate(17.8 4) scale(1.18)"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></g></svg>
+            <span style="position: absolute; top: 4px; left: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #A6A293;">½×</span>
+          </div>
+          <div style="display: flex; align-items: flex-end; gap: 16px;">
+            <svg width="40" height="40" viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="17" fill="#0F5132"/><path d="M19 47V31a13 13 0 0 1 26 0v16" stroke="#FAF6EF" stroke-width="3.4" fill="none" stroke-linecap="round"/><g transform="translate(17.8 4) scale(1.18)"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></g></svg>
+            <svg width="24" height="24" viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="17" fill="#0F5132"/><path d="M19 47V31a13 13 0 0 1 26 0v16" stroke="#FAF6EF" stroke-width="4.4" fill="none" stroke-linecap="round"/><g transform="translate(17.8 4) scale(1.18)"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></g></svg>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7A7263;">min 24px<br>(digital)</div>
+          </div>
+        </div>
+        <p style="font-size: 13px; color: #7A7263; line-height: 1.55; margin: 16px 0 0;">Keep clearspace of at least half the tile height on all sides. Never render the digital mark below 24px or the print mark below 8mm.</p>
+      </div>
+      <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 28px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #2F6F8F; margin-bottom: 16px;">04 · CORE COLOURS</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px,1fr)); gap: 10px;">
+          <div style="border: 1px solid #E6DDCE; border-radius: 11px; overflow: hidden;"><div style="height: 56px; background: #0F5132;"></div><div style="padding: 8px 10px;"><div style="font-size: 12px; font-weight: 600;">Brand green</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7A7263;">#0F5132</div></div></div>
+          <div style="border: 1px solid #E6DDCE; border-radius: 11px; overflow: hidden;"><div style="height: 56px; background: #C8A24A;"></div><div style="padding: 8px 10px;"><div style="font-size: 12px; font-weight: 600;">Zenith gold</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7A7263;">#C8A24A</div></div></div>
+          <div style="border: 1px solid #E6DDCE; border-radius: 11px; overflow: hidden;"><div style="height: 56px; background: #FAF6EF;"></div><div style="padding: 8px 10px;"><div style="font-size: 12px; font-weight: 600;">Cream</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7A7263;">#FAF6EF</div></div></div>
+          <div style="border: 1px solid #E6DDCE; border-radius: 11px; overflow: hidden;"><div style="height: 56px; background: #2F6F8F;"></div><div style="padding: 8px 10px;"><div style="font-size: 12px; font-weight: 600;">Teal accent</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7A7263;">#2F6F8F</div></div></div>
+        </div>
+        <p style="font-size: 13px; color: #7A7263; line-height: 1.55; margin: 16px 0 0;">Gold is reserved for the mark's star and tiny highlights only — never body text on light.</p>
+      </div>
+    </div>
+
+    <!-- ===== DO / DON'T ===== -->
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #2F6F8F; margin-bottom: 16px;">05 · USAGE</div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: clamp(48px,7vw,68px);">
+      <div style="background: #fff; border: 1px solid #BBD9C6; border-radius: 16px; padding: 22px; text-align: center;">
+        <div style="display: flex; justify-content: center; margin-bottom: 14px;"><svg width="56" height="56" viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="17" fill="#0F5132"/><path d="M19 47V31a13 13 0 0 1 26 0v16" stroke="#FAF6EF" stroke-width="3.4" fill="none" stroke-linecap="round"/><g transform="translate(17.8 4) scale(1.18)"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></g></svg></div>
+        <div style="display: inline-flex; align-items: center; gap: 6px; color: #156440; font-size: 13px; font-weight: 700;">✓ DO use approved colourways</div>
+      </div>
+      <div style="background: #fff; border: 1px solid #E6C9C4; border-radius: 16px; padding: 22px; text-align: center;">
+        <div style="display: flex; justify-content: center; margin-bottom: 14px;"><svg width="56" height="56" viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="17" fill="#8E1D7E"/><path d="M19 47V31a13 13 0 0 1 26 0v16" stroke="#FAF6EF" stroke-width="3.4" fill="none" stroke-linecap="round"/><g transform="translate(17.8 4) scale(1.18)"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></g></svg></div>
+        <div style="display: inline-flex; align-items: center; gap: 6px; color: #8F2E24; font-size: 13px; font-weight: 700;">✕ DON'T recolour the tile</div>
+      </div>
+      <div style="background: #fff; border: 1px solid #E6C9C4; border-radius: 16px; padding: 22px; text-align: center;">
+        <div style="display: flex; justify-content: center; margin-bottom: 14px;"><svg width="56" height="56" viewBox="0 0 64 64" fill="none" style="transform: skewX(-16deg);"><rect width="64" height="64" rx="17" fill="#0F5132"/><path d="M19 47V31a13 13 0 0 1 26 0v16" stroke="#FAF6EF" stroke-width="3.4" fill="none" stroke-linecap="round"/><g transform="translate(17.8 4) scale(1.18)"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></g></svg></div>
+        <div style="display: inline-flex; align-items: center; gap: 6px; color: #8F2E24; font-size: 13px; font-weight: 700;">✕ DON'T distort or skew</div>
+      </div>
+      <div style="background: #ECE7DD; border: 1px solid #E6C9C4; border-radius: 16px; padding: 22px; text-align: center;">
+        <div style="display: flex; justify-content: center; margin-bottom: 14px;"><svg width="56" height="56" viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="17" fill="#0F5132" opacity="0.45"/><path d="M19 47V31a13 13 0 0 1 26 0v16" stroke="#FAF6EF" stroke-width="3.4" fill="none" stroke-linecap="round" opacity="0.45"/><g transform="translate(17.8 4) scale(1.18)" opacity="0.45"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></g></svg></div>
+        <div style="display: inline-flex; align-items: center; gap: 6px; color: #8F2E24; font-size: 13px; font-weight: 700;">✕ DON'T place low-contrast</div>
+      </div>
+    </div>
+
+    <!-- ===== IN CONTEXT ===== -->
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #2F6F8F; margin-bottom: 16px;">06 · IN CONTEXT</div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+      <!-- app icon -->
+      <div style="background: linear-gradient(160deg,#2F6F8F,#0A3D26); border-radius: 16px; padding: 32px; display: flex; flex-direction: column; align-items: center; gap: 14px;">
+        <svg width="92" height="92" viewBox="0 0 64 64" fill="none" style="filter: drop-shadow(0 12px 24px rgba(0,0,0,0.3));"><rect width="64" height="64" rx="15" fill="#0F5132"/><path d="M19 47V31a13 13 0 0 1 26 0v16" stroke="#FAF6EF" stroke-width="3.4" fill="none" stroke-linecap="round"/><g transform="translate(17.8 4) scale(1.18)"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></g></svg>
+        <div style="color: #fff; font-size: 13px; font-weight: 600;">AUJ</div>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.7);">app icon</span>
+      </div>
+      <!-- nav bar -->
+      <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 0; overflow: hidden;">
+        <div style="background: rgba(250,246,239,0.9); border-bottom: 1px solid #E6DDCE; padding: 14px 18px; display: flex; align-items: center; gap: 10px;">
+          <svg width="30" height="30" viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="17" fill="#0F5132"/><path d="M19 47V31a13 13 0 0 1 26 0v16" stroke="#FAF6EF" stroke-width="3.4" fill="none" stroke-linecap="round"/><g transform="translate(17.8 4) scale(1.18)"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></g></svg>
+          <span style="font-family: 'IBM Plex Serif', serif; font-weight: 600; font-size: 16px; letter-spacing: 0.05em;">AUJ</span>
+          <span style="margin-inline-start: auto; font-size: 12px; color: #7A7263;">Packages · Visa · Support</span>
+        </div>
+        <div style="padding: 22px 18px; font-size: 12px; color: #A6A293; font-family: 'IBM Plex Mono', monospace;">nav bar lockup</div>
+      </div>
+      <!-- favicon -->
+      <div style="background: #fff; border: 1px solid #E6DDCE; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="display: inline-flex; align-items: center; gap: 7px; background: #F1EADD; border-radius: 8px 8px 0 0; padding: 7px 12px 9px; font-size: 12px; color: #4A4337;">
+            <svg width="16" height="16" viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="17" fill="#0F5132"/><path d="M19 47V31a13 13 0 0 1 26 0v16" stroke="#FAF6EF" stroke-width="5" fill="none" stroke-linecap="round"/><g transform="translate(17.8 4) scale(1.18)"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></g></svg>
+            auj.travel
+          </span>
+        </div>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #A6A293;">favicon · browser tab</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

@@ -3,6 +3,7 @@
 // CSS variables at '@auj/ui/tokens.css'.
 export { cn } from './cn';
 export { aujPreset, type AujPreset } from './preset';
+export * from './components/Logo';
 export * from './components/Button';
 export * from './components/Input';
 export * from './components/Select';
