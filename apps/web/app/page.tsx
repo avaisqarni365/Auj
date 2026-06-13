@@ -5,6 +5,8 @@ import { Logo } from '@auj/ui';
 import { routeFor } from '@auj/visa-router';
 import { formatMoney, pkrIndicative } from '../src/currency';
 import {
+  DEPARTURE_CITIES,
+  DESTINATIONS,
   FAQS,
   HERO_STATS,
   JOURNEY_TYPES,
@@ -21,9 +23,12 @@ import {
 
 export default function LandingPage() {
   const [tab, setTab] = useState<SearchTab>('Umrah');
+  const [from, setFrom] = useState<string>(DEPARTURE_CITIES[0]);
+  const [dest, setDest] = useState<string>(DESTINATIONS[0]);
   const [pax, setPax] = useState(4);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [locale, setLocale] = useState(LOCALES[0]!);
+  const cycleLocale = (): void => setLocale((cur) => LOCALES[(LOCALES.findIndex((l) => l.code === cur.code) + 1) % LOCALES.length]!);
 
   return (
     <div className="overflow-x-hidden bg-sand-50 text-sand-ink">
@@ -59,7 +64,7 @@ export default function LandingPage() {
             ))}
           </nav>
           <div className="flex items-center gap-2">
-            <button type="button" className="inline-flex items-center gap-1.5 rounded-lg border border-sand-200 bg-white px-3 py-2 text-[13.5px] font-semibold text-sand-700">
+            <button type="button" onClick={cycleLocale} aria-label="Switch language" className="inline-flex items-center gap-1.5 rounded-lg border border-sand-200 bg-white px-3 py-2 text-[13.5px] font-semibold text-sand-700 hover:bg-sand-100">
               🌐 {locale.code.toUpperCase()} ▾
             </button>
             <a href="#search" className="whitespace-nowrap rounded-[10px] bg-green-800 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_4px_12px_rgba(15,81,50,0.24)] hover:bg-green-700">
@@ -145,8 +150,8 @@ export default function LandingPage() {
             <span className="text-[13px] text-sand-500">FX today · 1 € = ₨310.8 · charged in EUR</span>
           </div>
           <div className="grid items-end gap-3 md:grid-cols-[repeat(4,1fr)_auto]">
-            <Field label="From" value="Vilnius (VNO)" />
-            <Field label="Destination" value="Makkah" />
+            <SelectField label="From" value={from} onChange={setFrom} options={[...DEPARTURE_CITIES]} />
+            <SelectField label="Destination" value={dest} onChange={setDest} options={[...DESTINATIONS]} />
             <Field label="Dates" value="📅 12–26 Sep · 14 nts" />
             <div>
               <Lbl>Pilgrims</Lbl>
@@ -157,7 +162,7 @@ export default function LandingPage() {
               </div>
             </div>
             <a href="#packages" className="flex h-[50px] items-center justify-center whitespace-nowrap rounded-[11px] bg-green-800 px-6 text-[15px] font-semibold text-white shadow-[0_6px_16px_rgba(15,81,50,0.25)] hover:bg-green-700">
-              Search {SEARCH_COUNT[tab]} →
+              Search {SEARCH_COUNT[tab]} {tab} · {dest} →
             </a>
           </div>
         </div>
@@ -373,6 +378,24 @@ function Field({ label, value }: { label: string; value: string }) {
       <div className="flex items-center justify-between rounded-[10px] border-[1.5px] border-sand-300 px-3 py-3 text-[14.5px] font-medium">
         {value} <span className="text-sand-500">▾</span>
       </div>
+    </div>
+  );
+}
+
+function SelectField({ label, value, onChange, options }: { label: string; value: string; onChange: (v: string) => void; options: string[] }) {
+  return (
+    <div>
+      <Lbl>{label}</Lbl>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        aria-label={label}
+        className="w-full rounded-[10px] border-[1.5px] border-sand-300 bg-white px-3 py-3 text-[14.5px] font-medium text-sand-ink focus:border-green-700 focus:outline-none"
+      >
+        {options.map((o) => (
+          <option key={o} value={o}>{o}</option>
+        ))}
+      </select>
     </div>
   );
 }

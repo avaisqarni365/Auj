@@ -14,6 +14,10 @@ export const SEARCH_TABS = ['Umrah', 'Hajj', 'Ziyarat'] as const;
 export type SearchTab = (typeof SEARCH_TABS)[number];
 export const SEARCH_COUNT: Record<SearchTab, number> = { Umrah: 38, Hajj: 12, Ziyarat: 9 };
 
+// Search-widget options (the booking funnel itself lives in the web-b2c app).
+export const DEPARTURE_CITIES = ['Vilnius (VNO)', 'Riga (RIX)', 'Warsaw (WAW)', 'Dublin (DUB)', 'Berlin (BER)', 'Tallinn (TLL)'] as const;
+export const DESTINATIONS = ['Makkah', 'Madinah', 'Jeddah'] as const;
+
 export const TRUST = ['Licensed EU tour operator', 'e-Visa guidance included', 'EUR or PKR pricing', 'ATOL-style protection'];
 
 export const JOURNEY_TYPES: Array<{ name: string; desc: string; img: string }> = [
