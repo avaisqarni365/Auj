@@ -10,7 +10,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const base =
-  'inline-flex items-center justify-center font-semibold transition-colors focus:outline-none focus-visible:shadow-focus focus-visible:border-accent-600 disabled:cursor-not-allowed disabled:bg-sand-200 disabled:text-sand-500';
+  'inline-flex items-center justify-center font-semibold transition-[colors,transform] duration-fast ease-out-soft active:scale-[0.98] focus:outline-none focus-visible:shadow-focus focus-visible:border-accent-600 disabled:cursor-not-allowed disabled:bg-sand-200 disabled:text-sand-500 disabled:active:scale-100';
 
 const sizes: Record<ButtonSize, string> = {
   md: 'text-sm px-5 py-[11px] rounded-lg',

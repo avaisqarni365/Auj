@@ -20,4 +20,10 @@ describe('aujPreset', () => {
     expect(aujPreset.theme.extend.fontFamily.arabic[0]).toBe('"IBM Plex Sans Arabic"');
     expect(aujPreset.theme.extend.fontSize.base[0]).toBe('16px');
   });
+
+  it('ships purposeful motion utilities (fast, soft-out)', () => {
+    expect(aujPreset.theme.extend.transitionDuration.fast).toBe('140ms');
+    expect(aujPreset.theme.extend.transitionTimingFunction['out-soft']).toContain('cubic-bezier');
+    expect(Object.keys(aujPreset.theme.extend.animation)).toEqual(['fade-in', 'rise', 'pop']);
+  });
 });

@@ -10,7 +10,12 @@ ALL MODULES BUILT. web-b2b now has a Next.js shell too (runnable). Remaining: re
 - [x] apps/web (NEW Next app @auj/web) — Landing page at /: announcement, nav, hero (+floating cards), overlapping search (tabs/stepper), trust, journey types, one-cart, how-it-works, visa-route panel (real routeFor demo), featured packages, EN/LT/UR/AR switcher w/ RTL, track-booking timeline, testimonials, FAQ accordion, CTA, footer. Responsive (clamp/auto-fit). 6 tests. `npm run dev:web` (:3000).
 - [x] Admin (Web) console at /admin — 248px green sidebar + topbar (search, FX chip, bell, +New booking); client view switching: Overview (KPIs, recent bookings, visa pipeline, departures), Pilgrims·CRM (table -> master/detail profile: journey timeline, docs, visa card, payments, comms, group), Landing CMS (hero editor + sections), Users & roles (tab filter + table). visa-route pills via real routeFor. Sample data in src/admin-content.ts (4 tests).
 - [x] Traveller web portal /journey — portal nav + booking hero (BRN, route/dates/pax, "Visa in progress" pill, days-to-departure, 5-stage progress) + tabs: Journey (every-step timeline + What's-next + QR digital pass encoding the BRN), Itinerary (day cards), Documents (docs + per-pilgrim visa status via routeFor), Payments (summary + EUR/PKR + transactions + receipt/plan). Content in src/journey-content.ts (5 tests).
-- [ ] Traveller MOBILE app screens (separate RN/PWA track); PDF travel-plan/Umrah-guide route (handoff: "still to build").
+- [x] PDF travel-plan + Umrah guide — print-optimised /journey/plan (rituals, day-by-day, document checklist, tips; Print/Save-PDF; print:hidden toolbar, break-inside-avoid). Linked from portal + admin profile.
+- [ ] Traveller MOBILE app screens (separate RN/PWA track).
+
+## Design quality as a workflow (added 2026-06-13)
+- [x] .claude/skills/design-taste/SKILL.md — Emil-Kowalski-grade motion + impeccable design + typography + taste, with a finish checklist. Auto-surfaces on UI work (description match); invoke as /design-taste. THE workflow to apply on every frontend change.
+- [x] @auj/ui motion — preset keyframes (fade-in/rise/pop), ease-out-soft, duration-fast; @auj/ui/motion.css (prefers-reduced-motion guard, imported in all 3 app globals); Button press (active:scale .98), Card hover transition. Purposeful, fast, transform/opacity-only.
 
 ## How to run
 - `npm run dev:web` -> marketing landing (:3000).

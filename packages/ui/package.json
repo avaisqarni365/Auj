@@ -14,7 +14,8 @@
       "types": "./dist/preset.d.ts",
       "default": "./dist/preset.js"
     },
-    "./tokens.css": "./src/tokens.css"
+    "./tokens.css": "./src/tokens.css",
+    "./motion.css": "./src/motion.css"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",

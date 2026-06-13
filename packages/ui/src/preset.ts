@@ -78,6 +78,23 @@ export const aujPreset = {
         modal: '0 24px 60px rgba(42,38,32,0.22)',
         focus: '0 0 0 3px rgba(47,111,143,0.14)',
       },
+      // Motion: purposeful, fast, origin-aware. See the design-taste skill.
+      transitionTimingFunction: {
+        'out-soft': 'cubic-bezier(0.22, 1, 0.36, 1)', // decelerate-in for enters
+      },
+      transitionDuration: {
+        fast: '140ms',
+      },
+      keyframes: {
+        'fade-in': { from: { opacity: '0' }, to: { opacity: '1' } },
+        rise: { from: { opacity: '0', transform: 'translateY(6px)' }, to: { opacity: '1', transform: 'translateY(0)' } },
+        pop: { from: { opacity: '0', transform: 'scale(0.96)' }, to: { opacity: '1', transform: 'scale(1)' } },
+      },
+      animation: {
+        'fade-in': 'fade-in 200ms cubic-bezier(0.22,1,0.36,1) both',
+        rise: 'rise 220ms cubic-bezier(0.22,1,0.36,1) both',
+        pop: 'pop 180ms cubic-bezier(0.22,1,0.36,1) both',
+      },
     },
   },
 };
