@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import type { PublicUser } from '@auj/auth';
-import { logoutAction } from './actions';
 
 const ROLE_LABEL: Record<PublicUser['role'], string> = {
   PILGRIM: 'Pilgrim',
@@ -48,11 +47,9 @@ export function AccountMenu({ user }: { user: PublicUser }) {
           <MenuLink href="/journey">My journey</MenuLink>
           {isAgent ? <MenuLink href="/agent">Agent portal</MenuLink> : null}
           {user.role === 'ADMIN' ? <MenuLink href="/admin">Admin console</MenuLink> : null}
-          <form action={logoutAction} className="border-t border-sand-100">
-            <button type="submit" className="block w-full px-4 py-2.5 text-left text-sm font-medium text-danger-fg hover:bg-sand-50">
-              Log out
-            </button>
-          </form>
+          <a href="/logout" className="block border-t border-sand-100 px-4 py-2.5 text-left text-sm font-medium text-danger-fg hover:bg-sand-50">
+            Log out
+          </a>
         </div>
       ) : null}
     </div>
