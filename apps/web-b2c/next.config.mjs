@@ -19,6 +19,10 @@ const nextConfig = {
     '@auj/visa-router',
     '@auj/connector-mock',
   ],
+  // Keep node-postgres external (it has dynamic requires); the tracer still bundles it.
+  experimental: {
+    serverComponentsExternalPackages: ['pg'],
+  },
   // Linting + typechecking run in the turbo gate, not during next build.
   eslint: { ignoreDuringBuilds: true },
 };

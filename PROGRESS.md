@@ -2,7 +2,7 @@
 _Last updated: 2026-06-12 · by: Claude Code · commit: (scaffold)_
 
 ## Now building
-Wave C + infra. compliance-eu + deployment pipeline + Postgres persistence adapter done. Remaining: connector-saudi (gated), admin, optional web-b2b Next shell, wire app backends to Postgres when DATABASE_URL is set.
+Wave C + infra. compliance-eu, deployment pipeline, Postgres adapter, and web-b2c env-driven persistence done. Remaining: connector-saudi (gated), admin, optional web-b2b Next shell.
 
 ## Status by wave
 ### Wave 0 — sequential (scaffold + contracts + mock) — DONE
@@ -33,6 +33,10 @@ Wave C + infra. compliance-eu + deployment pipeline + Postgres persistence adapt
   + hand-written SQL (not Prisma — keeps the offline gate green; see ADR-0002).
   Pure row<->domain mappers unit-tested; full adapter exercised offline via pg-mem
   (aggregate save/reload, jsonb, upsert); real-DB integration test gated on TEST_DATABASE_URL.
+- [x] web-b2c env-driven persistence — backend/in-process.ts now has createBackend():
+  Postgres (createPool + migrate + createPostgresStores) when DATABASE_URL is set, else
+  in-memory. Server Actions use a lazy async singleton. next.config marks pg external.
+  Next app compiles + generates pages either way.
 
 ### Deployment pipeline (added 2026-06-13)
 - [x] web-b2c Docker image (multi-stage monorepo -> Next standalone); .dockerignore

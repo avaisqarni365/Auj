@@ -1,24 +1,15 @@
-// COMPOSITION ROOT (dev/test). This is the ONLY file in the app that knows about a
-// concrete connector — it selects CONNECTOR=mock and wires core-booking + payments
-// into the BookingApi / PaymentsApi ports the rest of the app depends on. In
-// production a different backend (real connector by env, or a network client)
-// implements the same ports; no screen or usecase changes.
+// COMPOSITION ROOT (dev/test + server). The ONLY file in the app that knows about a
+// concrete connector and the persistence choice. It wires core-booking + payments into
+// the BookingApi / PaymentsApi ports the rest of the app depends on.
+//   - createInProcessBackend(): in-memory, synchronous — used by tests.
+//   - createBackend(): env-aware — Postgres when DATABASE_URL is set, else in-memory.
 import { MockSaudiConnector, MockTravelSupplier } from '@auj/connector-mock';
-import { createCoreBooking } from '@auj/core-booking';
-import {
-  Ledger,
-  PaymentsService,
-  PkrGatewayProvider,
-  ProviderRouter,
-  StripeProvider,
-} from '@auj/payments';
+import { createCoreBooking, type CoreBooking } from '@auj/core-booking';
+import { createPool, migrate, createPostgresStores } from '@auj/core-booking/postgres';
+import { Ledger, PaymentsService, PkrGatewayProvider, ProviderRouter, StripeProvider } from '@auj/payments';
 import type { Backend, BookingApi, PaymentsApi } from '../ports';
 
-export function createInProcessBackend(): Backend {
-  const saudi = new MockSaudiConnector();
-  const travel = new MockTravelSupplier();
-  const core = createCoreBooking({ saudi, travel });
-
+function wire(core: CoreBooking, saudi: MockSaudiConnector, travel: MockTravelSupplier): Backend {
   const ledger = new Ledger();
   const router = new ProviderRouter().register(new StripeProvider()).register(new PkrGatewayProvider());
   const payments = new PaymentsService(router, ledger);
@@ -41,4 +32,25 @@ export function createInProcessBackend(): Backend {
   };
 
   return { booking, payments: paymentsApi };
+}
+
+/** In-memory backend (no DB). Synchronous — used by unit/e2e tests. */
+export function createInProcessBackend(): Backend {
+  const saudi = new MockSaudiConnector();
+  const travel = new MockTravelSupplier();
+  return wire(createCoreBooking({ saudi, travel }), saudi, travel);
+}
+
+/** Production/dev backend: Postgres-backed when DATABASE_URL is set, else in-memory. */
+export async function createBackend(): Promise<Backend> {
+  const saudi = new MockSaudiConnector();
+  const travel = new MockTravelSupplier();
+  const url = process.env.DATABASE_URL;
+
+  if (url) {
+    const pool = createPool(url);
+    await migrate(pool);
+    return wire(createCoreBooking({ saudi, travel, stores: createPostgresStores(pool) }), saudi, travel);
+  }
+  return wire(createCoreBooking({ saudi, travel }), saudi, travel);
 }
