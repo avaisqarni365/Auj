@@ -1,10 +1,20 @@
 {
   "name": "@auj/core-booking",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./postgres": {
+      "types": "./dist/postgres/index.d.ts",
+      "default": "./dist/postgres/index.js"
+    }
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -14,10 +24,13 @@
   },
   "dependencies": {
     "@auj/contracts": "workspace:*",
-    "@auj/visa-router": "workspace:*"
+    "@auj/visa-router": "workspace:*",
+    "pg": "^8.13.1"
   },
   "devDependencies": {
     "@auj/connector-mock": "workspace:*",
+    "@types/pg": "^8.11.10",
+    "pg-mem": "^3.0.14",
     "prisma": "^6.1.0",
     "vitest": "^2.1.8"
   }

@@ -2,7 +2,7 @@
 _Last updated: 2026-06-12 · by: Claude Code · commit: (scaffold)_
 
 ## Now building
-Wave C started: compliance-eu done. Deployment pipeline (Docker + CI/CD + infra) added. Remaining: connector-saudi (gated), admin, optional web-b2b Next shell, real DB persistence adapter.
+Wave C + infra. compliance-eu + deployment pipeline + Postgres persistence adapter done. Remaining: connector-saudi (gated), admin, optional web-b2b Next shell, wire app backends to Postgres when DATABASE_URL is set.
 
 ## Status by wave
 ### Wave 0 — sequential (scaffold + contracts + mock) — DONE
@@ -26,6 +26,14 @@ Wave C started: compliance-eu done. Deployment pipeline (Docker + CI/CD + infra)
 - [x] compliance-eu — @auj/compliance v1.0.0: insolvency-protection certificate (issue+deliver, guarantee tier config 20k/50k/200k), pre-contract consent gating (assertChargeable blocks until consent), PTD 6-month refund window, GDPR (processing records, subject export, erasure). ComplianceService facade. 4 test groups
 - [ ] admin
 
+### Persistence (added 2026-06-13)
+- [x] Postgres adapter behind the repository ports — @auj/core-booking/postgres:
+  createPool/migrate (inline SCHEMA_SQL) + createPostgresStores(pool) returning the
+  same Stores shape as in-memory (drop-in for createCoreBooking({ stores })). node-postgres
+  + hand-written SQL (not Prisma — keeps the offline gate green; see ADR-0002).
+  Pure row<->domain mappers unit-tested; full adapter exercised offline via pg-mem
+  (aggregate save/reload, jsonb, upsert); real-DB integration test gated on TEST_DATABASE_URL.
+
 ### Deployment pipeline (added 2026-06-13)
 - [x] web-b2c Docker image (multi-stage monorepo -> Next standalone); .dockerignore
 - [x] infra/docker-compose.yml (web + postgres/redis/minio, datastores bound to 127.0.0.1)
@@ -37,7 +45,7 @@ Wave C started: compliance-eu done. Deployment pipeline (Docker + CI/CD + infra)
 - Wave B: web-b2c (runnable) + web-b2b (framework-light) done. Optional web-b2b Next shell; Wave C next.
 
 ## DB / infra (answered 2026-06-13)
-- DB = PostgreSQL (Prisma provider in core-booking + payments). Runtime is in-memory repos for now; SQLite is fine for local dev. Constraint "only sqlite or postgres" satisfied.
+- DB = PostgreSQL. Real adapter now exists at @auj/core-booking/postgres (node-postgres). In-memory remains the default until an app wires DATABASE_URL. To use it: createPool -> migrate -> createCoreBooking({ stores: createPostgresStores(pool) }). Verify against a DB: `TEST_DATABASE_URL=postgresql://auj:auj@localhost:5432/auj pnpm --filter @auj/core-booking test`.
 - IONOS server 212.227.54.250: direct SSH check was blocked by the "only through tunnel" guardrail. To use the DB: open an SSH tunnel `ssh -N -L 5432:localhost:5432 root@212.227.54.250`, keep Postgres bound to 127.0.0.1 on the server, set DATABASE_URL=postgresql://USER:PASS@localhost:5432/auj. Do NOT expose 5432 publicly.
 
 ## Notes / how to run
