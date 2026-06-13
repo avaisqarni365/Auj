@@ -105,6 +105,9 @@ importers:
       '@auj/payments':
         specifier: workspace:*
         version: link:../../packages/payments
+      '@auj/support':
+        specifier: workspace:*
+        version: link:../../packages/support
       '@auj/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -258,6 +261,25 @@ importers:
       prisma:
         specifier: ^6.1.0
         version: 6.19.3(typescript@5.9.3)
+      vitest:
+        specifier: ^2.1.8
+        version: 2.1.9(@types/node@22.19.21)(jsdom@25.0.1)
+
+  packages/support:
+    dependencies:
+      pg:
+        specifier: ^8.13.1
+        version: 8.21.0
+      zod:
+        specifier: ^3.23.8
+        version: 3.25.76
+    devDependencies:
+      '@types/pg':
+        specifier: ^8.11.10
+        version: 8.20.0
+      pg-mem:
+        specifier: ^3.0.14
+        version: 3.0.14
       vitest:
         specifier: ^2.1.8
         version: 2.1.9(@types/node@22.19.21)(jsdom@25.0.1)

@@ -4,8 +4,10 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { Logo, StatusPill, type PillTone } from '@auj/ui';
 import { routeFor } from '@auj/visa-router';
 import type { PublicUser } from '@auj/auth';
+import type { Ticket, TicketStatus } from '@auj/support';
 import { formatMoney } from '../../src/currency';
 import { approveAgentAction, listAgentsAction } from '../../src/auth/admin-actions';
+import { listAllTicketsAction, setTicketStatusAction, staffReplyAction } from '../../src/support/admin-actions';
 import {
   ADMIN_KPIS,
   CMS_SECTIONS,
@@ -20,12 +22,13 @@ import {
   type ProviderStatus,
 } from '../../src/admin-content';
 
-type View = 'overview' | 'pilgrims' | 'providers' | 'content' | 'users';
+type View = 'overview' | 'pilgrims' | 'providers' | 'content' | 'users' | 'support';
 
 const NAV: Array<{ key: View; label: string; icon: string; badge?: string }> = [
   { key: 'overview', label: 'Overview', icon: '▦' },
   { key: 'pilgrims', label: 'Pilgrims · CRM', icon: '👥', badge: '1.3k' },
   { key: 'providers', label: 'Service providers', icon: '🔌' },
+  { key: 'support', label: 'Support', icon: '🎧' },
   { key: 'content', label: 'Landing content', icon: '📝' },
   { key: 'users', label: 'Users & roles', icon: '🛡' },
 ];
@@ -106,6 +109,8 @@ export function AdminConsole() {
               <Pilgrims onSelect={setSelected} />
             ) : view === 'providers' ? (
               <ServiceProviders />
+            ) : view === 'support' ? (
+              <Support />
             ) : view === 'content' ? (
               <Content />
             ) : (
@@ -511,6 +516,86 @@ function AgentApprovals() {
         })}
       </div>
     </Card>
+  );
+}
+
+const TICKET_TONE: Record<TicketStatus, PillTone> = { OPEN: 'info', PENDING: 'warning', RESOLVED: 'success', CLOSED: 'draft' };
+
+function Support() {
+  const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [drafts, setDrafts] = useState<Record<string, string>>({});
+  const [busy, setBusy] = useState<string | null>(null);
+  const [err, setErr] = useState<string>();
+
+  useEffect(() => {
+    void listAllTicketsAction()
+      .then(setTickets)
+      .catch((e: unknown) => setErr(e instanceof Error ? e.message : 'Failed to load tickets'));
+  }, []);
+
+  const run = (id: string, p: Promise<Ticket[]>): void => {
+    setBusy(id);
+    void p
+      .then(setTickets)
+      .catch((e: unknown) => setErr(e instanceof Error ? e.message : 'Action failed'))
+      .finally(() => setBusy(null));
+  };
+  const reply = (id: string): void => {
+    const body = (drafts[id] ?? '').trim();
+    if (!body) return;
+    setDrafts((d) => ({ ...d, [id]: '' }));
+    run(id, staffReplyAction(id, body));
+  };
+
+  const open = tickets.filter((t) => t.status === 'OPEN' || t.status === 'PENDING').length;
+
+  return (
+    <>
+      <PageHead kicker="SUPPORT" title="Customer support" />
+      {err ? <p className="mb-3 text-[13px] text-danger-fg">{err}</p> : null}
+      <div className="mb-4 text-[13px] text-sand-500"><strong className="text-sand-ink">{open}</strong> open · {tickets.length} total</div>
+      {tickets.length === 0 ? (
+        <Card className="p-6 text-center text-sm text-sand-500">No tickets yet.</Card>
+      ) : (
+        <div className="grid gap-3">
+          {tickets.map((t) => (
+            <Card key={t.id} className="p-4">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <div className="text-[14.5px] font-semibold">{t.subject}</div>
+                  <div className="font-mono text-[11px] text-sand-500">{t.ref} · {t.category} · {t.userEmail}{t.bookingRef ? ` · ${t.bookingRef}` : ''}</div>
+                </div>
+                <StatusPill tone={TICKET_TONE[t.status]}>{t.status}</StatusPill>
+              </div>
+              <div className="mt-3 grid gap-2">
+                {t.messages.map((m, i) => (
+                  <div key={i} className={`rounded-xl px-3 py-2 text-[13.5px] ${m.author === 'STAFF' ? 'bg-green-100 text-sand-ink' : 'bg-sand-50 text-sand-700'}`}>
+                    <div className="mb-0.5 text-[11px] font-semibold text-sand-500">{m.author === 'STAFF' ? `${m.authorName} · AUJ` : m.authorName}</div>
+                    {m.body}
+                  </div>
+                ))}
+              </div>
+              <div className="mt-3 flex gap-2">
+                <input
+                  value={drafts[t.id] ?? ''}
+                  onChange={(e) => setDrafts((d) => ({ ...d, [t.id]: e.target.value }))}
+                  placeholder="Reply as AUJ…"
+                  className="flex-1 rounded-[10px] border-[1.5px] border-sand-300 px-3 py-2 text-[14px] focus:border-green-700 focus:outline-none"
+                />
+                <button type="button" disabled={busy === t.id} onClick={() => reply(t.id)} className="rounded-[10px] bg-green-800 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700 disabled:opacity-60">Reply</button>
+              </div>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {(['RESOLVED', 'CLOSED', 'OPEN'] as const).map((s) => (
+                  <button key={s} type="button" disabled={busy === t.id || t.status === s} onClick={() => run(t.id, setTicketStatusAction(t.id, s))} className="rounded-full border border-sand-300 px-3 py-1 text-[12px] font-semibold text-sand-700 hover:bg-sand-100 disabled:opacity-40">
+                    {s === 'OPEN' ? 'Re-open' : s === 'RESOLVED' ? 'Resolve' : 'Close'}
+                  </button>
+                ))}
+              </div>
+            </Card>
+          ))}
+        </div>
+      )}
+    </>
   );
 }
 

@@ -45,6 +45,7 @@ export function AccountMenu({ user }: { user: PublicUser }) {
           </div>
           <MenuLink href="/book">Book a journey</MenuLink>
           <MenuLink href="/journey">My journey</MenuLink>
+          <MenuLink href="/support">Help &amp; support</MenuLink>
           {isAgent ? <MenuLink href="/agent">Agent portal</MenuLink> : null}
           {user.role === 'ADMIN' ? <MenuLink href="/admin">Admin console</MenuLink> : null}
           <a href="/logout" className="block border-t border-sand-100 px-4 py-2.5 text-left text-sm font-medium text-danger-fg hover:bg-sand-50">

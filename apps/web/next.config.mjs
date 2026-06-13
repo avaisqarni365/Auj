@@ -7,7 +7,7 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 const nextConfig = {
   reactStrictMode: true,
   output: 'standalone',
-  transpilePackages: ['@auj/ui', '@auj/contracts', '@auj/visa-router', '@auj/auth', '@auj/core-booking', '@auj/connector-mock', '@auj/connector-saudi', '@auj/connector-travel', '@auj/payments'],
+  transpilePackages: ['@auj/ui', '@auj/contracts', '@auj/visa-router', '@auj/auth', '@auj/core-booking', '@auj/connector-mock', '@auj/connector-saudi', '@auj/connector-travel', '@auj/payments', '@auj/support'],
   experimental: {
     outputFileTracingRoot: path.join(dirname, '../../'),
   },
