@@ -10,6 +10,16 @@ const config: Config = {
     // Scan the shared component library so its utility classes are generated.
     '../../packages/ui/src/**/*.{ts,tsx}',
   ],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        serif: ['var(--font-serif)', 'Georgia', 'serif'],
+        mono: ['var(--font-mono)', 'ui-monospace', 'monospace'],
+        arabic: ['var(--font-arabic)', 'sans-serif'],
+      },
+    },
+  },
 };
 
 export default config;
