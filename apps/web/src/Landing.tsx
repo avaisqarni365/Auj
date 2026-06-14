@@ -36,6 +36,11 @@ export default function Landing({ user }: { user?: PublicUser }) {
   const tl = useTranslations('landing');
   const trust = tl.raw('trust') as string[];
   const statLabels = tl.raw('statLabels') as string[];
+  const journeyDesc = tl.raw('journeyDesc') as string[];
+  const stepItems = tl.raw('steps') as { title: string; desc: string }[];
+  const pkgItems = tl.raw('packages') as { name: string; meta: string; visa: string }[];
+  const faqItems = tl.raw('faqs') as { q: string; a: string }[];
+  const quotes = tl.raw('testimonialQuotes') as string[];
   const locale = useLocale();
 
   return (
@@ -45,10 +50,10 @@ export default function Landing({ user }: { user?: PublicUser }) {
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-[clamp(16px,4vw,32px)] py-2.5">
           <span className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-            Now departing from <strong className="font-semibold text-green-50">6 EU cities</strong> · e-Visa guidance on every booking
+            {tl('announce')}
           </span>
           <span className="flex items-center gap-4 text-green-100/80">
-            <a href="#agents" className="font-medium hover:text-green-50">For travel agents →</a>
+            <a href="#agents" className="font-medium hover:text-green-50">{tl('forAgents')}</a>
             <span>🌐 EN · LT · UR · AR</span>
           </span>
         </div>
@@ -203,8 +208,8 @@ export default function Landing({ user }: { user?: PublicUser }) {
               <div className={`h-36 bg-gradient-to-br ${j.img}`} />
               <div className="p-5">
                 <h3 className="font-serif text-xl font-semibold">{j.name}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-sand-500">{j.desc}</p>
-                <a href="#packages" className="mt-4 inline-block text-sm font-semibold text-accent-600">Explore {j.name} →</a>
+                <p className="mt-2 text-sm leading-relaxed text-sand-500">{journeyDesc[i] ?? j.desc}</p>
+                <a href="#packages" className="mt-4 inline-block text-sm font-semibold text-accent-600">{tl('explore', { name: j.name })}</a>
               </div>
             </div>
           ))}
@@ -237,11 +242,11 @@ export default function Landing({ user }: { user?: PublicUser }) {
       {/* how it works */}
       <Section id="how" title={tl('sections.how.title')} sub={tl('sections.how.sub')}>
         <div className="grid gap-5 md:grid-cols-4">
-          {STEPS.map((s) => (
+          {STEPS.map((s, i) => (
             <div key={s.n} className="rounded-2xl border border-sand-200 bg-white p-5">
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-800 font-mono text-lg font-semibold text-white">{s.n}</span>
-              <h3 className="mt-3 text-base font-semibold">{s.title}</h3>
-              <p className="mt-1.5 text-[13px] leading-relaxed text-sand-500">{s.desc}</p>
+              <h3 className="mt-3 text-base font-semibold">{stepItems[i]?.title ?? s.title}</h3>
+              <p className="mt-1.5 text-[13px] leading-relaxed text-sand-500">{stepItems[i]?.desc ?? s.desc}</p>
             </div>
           ))}
         </div>
@@ -265,11 +270,11 @@ export default function Landing({ user }: { user?: PublicUser }) {
           {PACKAGES.map((p, i) => (
             <div key={p.name} style={{ animationDelay: `${i * 70}ms` }} className="animate-rise overflow-hidden rounded-2xl border border-sand-200 bg-white shadow-sm">
               <div className={`relative h-40 bg-gradient-to-br ${p.img}`}>
-                <span className={`absolute left-3 top-3 rounded-full px-2.5 py-1 text-[11.5px] font-semibold ${p.visa === 'e-Visa' ? 'bg-success-bg text-success-fg' : 'bg-info-bg text-info-fg'}`}>{p.visa}</span>
+                <span className={`absolute left-3 top-3 rounded-full px-2.5 py-1 text-[11.5px] font-semibold ${p.visa === 'e-Visa' ? 'bg-success-bg text-success-fg' : 'bg-info-bg text-info-fg'}`}>{pkgItems[i]?.visa ?? p.visa}</span>
               </div>
               <div className="p-5">
-                <h3 className="text-base font-semibold">{p.name}</h3>
-                <div className="mt-0.5 text-[13px] text-sand-500">{p.meta}</div>
+                <h3 className="text-base font-semibold">{pkgItems[i]?.name ?? p.name}</h3>
+                <div className="mt-0.5 text-[13px] text-sand-500">{pkgItems[i]?.meta ?? p.meta}</div>
                 <div className="mt-3 flex items-baseline gap-2">
                   <span className="font-mono text-2xl font-bold text-green-800">{formatMoney(p.price)}</span>
                   <span className="text-[11px] text-sand-500">per pilgrim</span>
@@ -328,11 +333,11 @@ export default function Landing({ user }: { user?: PublicUser }) {
       {/* testimonials */}
       <Section id="reviews" title={tl('sections.reviews.title')}>
         <div className="grid gap-5 md:grid-cols-3">
-          {TESTIMONIALS.map((t) => (
-            <figure key={t.name} className="rounded-2xl border border-sand-200 bg-white p-5 shadow-sm">
-              <blockquote className="text-[15px] leading-relaxed text-sand-700">“{t.quote}”</blockquote>
+          {TESTIMONIALS.map((tt, i) => (
+            <figure key={tt.name} className="rounded-2xl border border-sand-200 bg-white p-5 shadow-sm">
+              <blockquote className="text-[15px] leading-relaxed text-sand-700">“{quotes[i] ?? tt.quote}”</blockquote>
               <figcaption className="mt-3 text-sm font-semibold text-sand-ink">
-                {t.name} <span className="font-normal text-sand-500">· {t.city}</span>
+                {tt.name} <span className="font-normal text-sand-500">· {tt.city}</span>
               </figcaption>
             </figure>
           ))}
@@ -343,12 +348,12 @@ export default function Landing({ user }: { user?: PublicUser }) {
       <Section id="faq" title={tl('sections.faq.title')}>
         <div className="mx-auto max-w-3xl divide-y divide-sand-200 overflow-hidden rounded-2xl border border-sand-200 bg-white">
           {FAQS.map((f, i) => (
-            <div key={f.q}>
+            <div key={i}>
               <button type="button" onClick={() => setOpenFaq(openFaq === i ? null : i)} className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-[15px] font-semibold">
-                {f.q}
+                {faqItems[i]?.q ?? f.q}
                 <span className="text-sand-500">{openFaq === i ? '−' : '+'}</span>
               </button>
-              {openFaq === i ? <p className="px-5 pb-4 text-sm leading-relaxed text-sand-500">{f.a}</p> : null}
+              {openFaq === i ? <p className="px-5 pb-4 text-sm leading-relaxed text-sand-500">{faqItems[i]?.a ?? f.a}</p> : null}
             </div>
           ))}
         </div>

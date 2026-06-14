@@ -78,6 +78,36 @@
       "faq": { "title": "Dažni klausimai" }
     },
     "trust": ["Licencijuotas ES kelionių operatorius", "Įtraukta e. vizos pagalba", "Kainos EUR arba PKR", "ATOL tipo apsauga"],
-    "statLabels": ["ES išvykimo miestai", "aptarnauta piligrimų", "EN · LT · UR · AR", "pagalba"]
+    "statLabels": ["ES išvykimo miestai", "aptarnauta piligrimų", "EN · LT · UR · AR", "pagalba"],
+    "announce": "Išvykstama iš 6 ES miestų · e. vizos pagalba kiekvienam užsakymui",
+    "forAgents": "Kelionių agentams →",
+    "explore": "Atrasti {name} →",
+    "journeyDesc": [
+      "Bet kuriuo metų laiku — lankstus naktų skaičius Makoje ir Medinoje su e. vizos pagalba.",
+      "Sezoninės, ministerijos reguliuojamos kelionės su Nusuk patvirtintais viešbučiais.",
+      "Gidų lydimi vizitai — Nadžafas, Kerbela ir šventos vietos už Haramaino."
+    ],
+    "steps": [
+      { "title": "Ieškoti ir sudaryti", "desc": "Pasirinkite paketą; pridėkite viešbutį, transportą, paslaugas ir skrydžius į vieną krepšelį." },
+      { "title": "Pridėti piligrimus", "desc": "Pagal pasą automatiškai nustatome kiekvieno piligrimo vizos kelią." },
+      { "title": "Mokėti saugiai", "desc": "Mokama EUR; PKR rodoma informaciniais tikslais šios dienos kursu." },
+      { "title": "Keliauti ir sekti", "desc": "Tiesioginis BRN ir vizos statusas, jūsų maršrutas ir skaitmeninis leidimas." }
+    ],
+    "packages": [
+      { "name": "Umra Premium", "meta": "5★ · prie Haramo · 14 naktų", "visa": "e. viza" },
+      { "name": "Umra Essential", "meta": "4★ · 10 naktų · lankstus", "visa": "e. viza" },
+      { "name": "Irako Zijara", "meta": "Nadžafas ir Kerbela · 9 naktys", "visa": "Agentas" }
+    ],
+    "faqs": [
+      { "q": "Kuris vizos kelias man taikomas?", "a": "Jį automatiškai nustatome pagal kiekvieno piligrimo pasą: ES/EEE pasai naudoja Saudo e. vizą; Pakistano ir kiti pasai nukreipiami per MoRA licencijuotą agento kanalą. Mišrios grupės palaikomos — kiekvienas piligrimas mato savo kelią." },
+      { "q": "Kokia valiuta esu apmokestinamas?", "a": "Visada EUR. Taip pat informaciniais tikslais rodome orientacinę PKR sumą šios dienos kursu (1 € = ₨310,8), tačiau mokama suma niekada tyliai nekonvertuojama." },
+      { "q": "Ar galiu užsakyti grupei?", "a": "Taip — iki 49 piligrimų viename užsakyme su atskirais dokumentais ir vizų nukreipimu. Kelionių agentai turi atskirą portalą su pinigine, kreditu ir antkainiais." },
+      { "q": "Kaip sekti užsakymą?", "a": "Kiekvienas užsakymas gauna BRN su tiesiogine būsenos seka (užsakyta → dokumentai → viza → kelionė → grįžimas) ir QR skaitmeninį leidimą." }
+    ],
+    "testimonialQuotes": [
+      "Vizos kelias buvo aiškus nuo pirmo ekrano — jokių staigmenų. Viskas viename krepšelyje.",
+      "Mokėjau EUR, mačiau PKR sumą šeimai namuose. Nuostabiai paprasta.",
+      "Tiesioginis BRN ir vizos sekimas suteikė mano tėvams tikrą ramybę."
+    ]
   }
 }

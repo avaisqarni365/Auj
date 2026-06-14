@@ -146,7 +146,11 @@ core-booking 29). Remaining: real partner SaudiPartnerClient (gated), real payme
 - Landing section headings + trust badges + hero-stat labels translated (2026-06-14) via a
   "landing" namespace (4 catalogs); Landing reads them with useTranslations + t.raw for arrays.
   Verified ar/lt. Remaining landing prose (FAQ answers, testimonials, package details) left in EN.
-- Incremental follow-up: /agent + /admin chrome + the long landing prose (FAQ/testimonials).
+- Landing prose fully translated (2026-06-14): announcement bar, journey-type descriptions,
+  how-it-works steps, package name/meta/visa, all FAQ Q&A, and testimonial quotes — in the
+  "landing" namespace (4 catalogs), rendered via t.raw arrays zipped with content.ts for the
+  non-text bits (gradients, prices, person names). The LANDING is now 100% localized EN/LT/UR/AR + RTL.
+- Incremental follow-up: /agent + /admin staff chrome (lower priority).
 - Gate: build 13/13, lint 13/13, test 24/24 (apps/web 64).
 
 ## Real payment acquirers (2026-06-14)
