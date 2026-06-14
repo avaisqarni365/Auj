@@ -32,5 +32,11 @@ describe('BookingApi.myBookings', () => {
     const docs = await be.booking.documentsForPilgrims([p.id]);
     expect(docs).toHaveLength(1);
     expect(docs[0]?.pilgrimId).toBe(p.id);
+
+    // staff verification
+    expect(await be.booking.listAllDocuments()).toHaveLength(1);
+    const verified = await be.booking.verifyDocument(doc.id);
+    expect(verified.verified).toBe(true);
+    expect((await be.booking.documentsForPilgrims([p.id]))[0]?.verified).toBe(true);
   });
 });

@@ -41,6 +41,10 @@ export interface BookingApi {
   uploadDocument(input: { pilgrimId: string; type: DocumentType; fileName: string; bytes: Uint8Array; contentType: string }): Promise<Document>;
   /** All documents across the given pilgrims (for the detail view). */
   documentsForPilgrims(ids: string[]): Promise<Document[]>;
+  /** Every uploaded document (admin verification queue). */
+  listAllDocuments(): Promise<Document[]>;
+  /** Mark a document verified (staff). */
+  verifyDocument(documentId: string): Promise<Document>;
   getBooking(bookingId: string): Promise<Booking | undefined>;
 }
 

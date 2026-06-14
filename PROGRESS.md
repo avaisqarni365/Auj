@@ -116,6 +116,9 @@ core-booking 29). Remaining: real partner SaudiPartnerClient (gated), real payme
   pilgrim → uploadDocumentAction (multipart File → bytes → DocumentService.upload → DocumentStore).
   Ownership-checked (pilgrim must be in one of the user's bookings). Documents listed per pilgrim with
   verified badge. BookingApi.uploadDocument + documentsForPilgrims wired to core.documents. Unit-tested.
+- Staff document verification (2026-06-14): /admin → "Documents" view lists every uploaded doc
+  (pilgrim name join, unverified first) with a Verify button → verifyDocumentAction (admin-guarded) →
+  DocumentService.verify. BookingApi.listAllDocuments + verifyDocument. Closes the upload→verify loop.
 
 ## Multi-pilgrim capture (2026-06-14)
 - B2C funnel now captures a GROUP, not a single pilgrim. BookingFunnel holds pilgrims: PilgrimDraft[]

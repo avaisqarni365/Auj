@@ -9,7 +9,7 @@ import type { SpecialRequestCategory, SpecialRequestStatus } from '@auj/core-boo
 import { formatMoney } from '../../src/currency';
 import { approveAgentAction, listAgentsAction } from '../../src/auth/admin-actions';
 import { listAllTicketsAction, setTicketStatusAction, staffReplyAction } from '../../src/support/admin-actions';
-import { listSpecialRequestsAction, setRequestStatusAction, type RequestGroup } from '../../src/book/admin-actions';
+import { listDocumentsAction, listSpecialRequestsAction, setRequestStatusAction, verifyDocumentAction, type DocRow, type RequestGroup } from '../../src/book/admin-actions';
 import {
   ADMIN_KPIS,
   CMS_SECTIONS,
@@ -24,13 +24,14 @@ import {
   type ProviderStatus,
 } from '../../src/admin-content';
 
-type View = 'overview' | 'pilgrims' | 'providers' | 'requests' | 'content' | 'users' | 'support';
+type View = 'overview' | 'pilgrims' | 'providers' | 'requests' | 'documents' | 'content' | 'users' | 'support';
 
 const NAV: Array<{ key: View; label: string; icon: string; badge?: string }> = [
   { key: 'overview', label: 'Overview', icon: '▦' },
   { key: 'pilgrims', label: 'Pilgrims · CRM', icon: '👥', badge: '1.3k' },
   { key: 'providers', label: 'Service providers', icon: '🔌' },
   { key: 'requests', label: 'Special requests', icon: '🧩' },
+  { key: 'documents', label: 'Documents', icon: '📄' },
   { key: 'support', label: 'Support', icon: '🎧' },
   { key: 'content', label: 'Landing content', icon: '📝' },
   { key: 'users', label: 'Users & roles', icon: '🛡' },
@@ -114,6 +115,8 @@ export function AdminConsole() {
               <ServiceProviders />
             ) : view === 'requests' ? (
               <Requests />
+            ) : view === 'documents' ? (
+              <Documents />
             ) : view === 'support' ? (
               <Support />
             ) : view === 'content' ? (
@@ -537,6 +540,68 @@ const NEXT_ACTIONS: Array<{ status: SpecialRequestStatus; label: string }> = [
   { status: 'FULFILLED', label: 'Fulfil' },
   { status: 'DECLINED', label: 'Decline' },
 ];
+
+function Documents() {
+  const [docs, setDocs] = useState<DocRow[]>([]);
+  const [busy, setBusy] = useState<string | null>(null);
+  const [err, setErr] = useState<string>();
+
+  useEffect(() => {
+    void listDocumentsAction()
+      .then(setDocs)
+      .catch((e: unknown) => setErr(e instanceof Error ? e.message : 'Failed to load documents'));
+  }, []);
+
+  const verify = (id: string): void => {
+    setBusy(id);
+    void verifyDocumentAction(id)
+      .then(setDocs)
+      .catch((e: unknown) => setErr(e instanceof Error ? e.message : 'Verify failed'))
+      .finally(() => setBusy(null));
+  };
+
+  const pending = docs.filter((d) => !d.verified).length;
+
+  return (
+    <>
+      <PageHead kicker="COMPLIANCE" title="Documents" />
+      {err ? <p className="mb-3 text-[13px] text-danger-fg">{err}</p> : null}
+      <div className="mb-4 text-[13px] text-sand-500"><strong className="text-sand-ink">{pending}</strong> awaiting verification · {docs.length} total</div>
+      {docs.length === 0 ? (
+        <Card className="p-6 text-center text-sm text-sand-500">No documents uploaded yet.</Card>
+      ) : (
+        <Card className="overflow-hidden">
+          <table className="w-full text-[13.5px]">
+            <thead>
+              <tr className="bg-sand-50 text-left text-sand-500">
+                <th className="px-5 py-3 font-semibold">Pilgrim</th>
+                <th className="px-3 py-3 font-semibold">Type</th>
+                <th className="px-3 py-3 font-semibold">Status</th>
+                <th className="px-5 py-3 text-right font-semibold">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {docs.map((d) => (
+                <tr key={d.id} className="border-t border-sand-100">
+                  <td className="px-5 py-3"><div className="font-semibold">{d.pilgrimName}</div><div className="font-mono text-[10.5px] text-sand-500">{d.fileRef.split('/').pop()}</div></td>
+                  <td className="px-3 py-3"><span className="rounded-full bg-sand-100 px-2.5 py-0.5 text-[11.5px] font-semibold text-sand-700">{d.type}</span></td>
+                  <td className="px-3 py-3"><StatusPill tone={d.verified ? 'success' : 'warning'}>{d.verified ? 'Verified' : 'Pending'}</StatusPill></td>
+                  <td className="px-5 py-3 text-right">
+                    {d.verified ? <span className="text-[12px] text-sand-400">—</span> : (
+                      <button type="button" disabled={busy === d.id} onClick={() => verify(d.id)} className="rounded-lg bg-green-800 px-3 py-1.5 text-[12.5px] font-semibold text-white hover:bg-green-700 disabled:opacity-60">
+                        {busy === d.id ? 'Verifying…' : 'Verify'}
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </Card>
+      )}
+    </>
+  );
+}
 
 function Requests() {
   const [groups, setGroups] = useState<RequestGroup[]>([]);

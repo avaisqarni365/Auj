@@ -48,6 +48,8 @@ function wire(core: CoreBooking, saudi: SaudiConnector, travel: TravelSupplier):
     pilgrims: (ids) => core.crm.getPilgrims(ids),
     uploadDocument: (input) => core.documents.upload(input),
     documentsForPilgrims: async (ids) => (await Promise.all(ids.map((id) => core.documents.forPilgrim(id)))).flat(),
+    listAllDocuments: () => core.stores.documents.list(),
+    verifyDocument: (id) => core.documents.verify(id),
     getBooking: (id) => core.stores.bookings.get(id),
   };
 
