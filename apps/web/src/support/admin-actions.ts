@@ -2,8 +2,10 @@
 
 import { revalidatePath } from 'next/cache';
 import type { Ticket, TicketStatus } from '@auj/support';
+import { ticketReply } from '@auj/notifications';
 import { getSupport } from './backend';
 import { getCurrentUser } from '../auth/session';
+import { getNotifier } from '../notifications/notifier';
 
 async function assertAdmin(): Promise<string> {
   const me = await getCurrentUser();
@@ -20,9 +22,18 @@ export async function listAllTicketsAction(): Promise<Ticket[]> {
 /** Staff reply to any ticket (ADMIN only). Returns the refreshed list. */
 export async function staffReplyAction(ticketId: string, body: string): Promise<Ticket[]> {
   const name = await assertAdmin();
-  if (body.trim()) await (await getSupport()).reply(ticketId, 'STAFF', name, body);
+  const svc = await getSupport();
+  if (body.trim()) {
+    const ticket = await svc.reply(ticketId, 'STAFF', name, body);
+    // Best-effort email to the ticket owner.
+    try {
+      await getNotifier().send(ticketReply({ to: ticket.userEmail, ref: ticket.ref, subject: ticket.subject, body }));
+    } catch {
+      /* notifications are non-critical */
+    }
+  }
   revalidatePath('/admin');
-  return (await getSupport()).listAll();
+  return svc.listAll();
 }
 
 /** Staff set ticket status (ADMIN only). Returns the refreshed list. */

@@ -21,6 +21,7 @@
     "@auj/connector-travel": "workspace:*",
     "@auj/contracts": "workspace:*",
     "@auj/core-booking": "workspace:*",
+    "@auj/notifications": "workspace:*",
     "@auj/payments": "workspace:*",
     "@auj/support": "workspace:*",
     "@auj/visa-router": "workspace:*",

@@ -120,6 +120,14 @@ core-booking 29). Remaining: real partner SaudiPartnerClient (gated), real payme
   (pilgrim name join, unverified first) with a Verify button → verifyDocumentAction (admin-guarded) →
   DocumentService.verify. BookingApi.listAllDocuments + verifyDocument. Closes the upload→verify loop.
 
+## Email notifications (2026-06-14)
+- NEW @auj/notifications: Notifier port + LogNotifier (default, offline) + HttpEmailNotifier
+  (generic JSON email API, injectable fetch); pure message builders (bookingConfirmation,
+  ticketReply); createNotifier(env) → HTTP when EMAIL_API_URL+KEY set, else log. 4 tests.
+- Wired (best-effort, never fails the action): booking confirmation email on placeBookingAction;
+  ticket-owner email on staff reply. Notifier singleton on globalThis. infra/.env.example documents
+  EMAIL_API_URL/KEY/FROM. Gate: build 14/14, lint 14/14, test 26/26.
+
 ## Multi-pilgrim capture (2026-06-14)
 - B2C funnel now captures a GROUP, not a single pilgrim. BookingFunnel holds pilgrims: PilgrimDraft[]
   (sized to the pax chosen at search; add/remove in the PILGRIMS step). PilgrimCapture refactored to

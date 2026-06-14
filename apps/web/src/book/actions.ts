@@ -5,10 +5,12 @@
 // the logged-in user (their account is the customer).
 import type { CateringOffer, GroundOffer, Money, PackageMode, SearchCriteria } from '@auj/contracts';
 import type { PackageItem, SpecialRequestCategory, VisaCase } from '@auj/core-booking';
+import { bookingConfirmation } from '@auj/notifications';
 import { placePilgrimageBooking, pollVisaUntilIssued, type PlacedBooking } from './usecases';
 import type { PilgrimDraft } from './funnel';
 import { getCurrentUser } from '../auth/session';
 import { getBookingBackend as getBackend } from './backend/singleton';
+import { getNotifier } from '../notifications/notifier';
 
 export async function searchHotelsAction(criteria: SearchCriteria) {
   const backend = await getBackend();
@@ -41,7 +43,21 @@ export async function placeBookingAction(input: {
     fullName: user?.displayName ?? (lead ? `${lead.firstName} ${lead.lastName}` : 'Guest'),
     email: user?.email ?? 'guest@auj.example',
   };
-  return placePilgrimageBooking(await getBackend(), { ...input, customer });
+  const placed = await placePilgrimageBooking(await getBackend(), { ...input, customer });
+
+  // Best-effort confirmation email (never fail the booking on a notify error).
+  try {
+    await getNotifier().send(
+      bookingConfirmation({
+        to: customer.email,
+        bookingRef: placed.booking.bookingRef ?? placed.booking.id.slice(0, 12),
+        pilgrims: placed.booking.pilgrimIds.length,
+      }),
+    );
+  } catch {
+    /* swallow — notifications are non-critical */
+  }
+  return placed;
 }
 
 export interface RedeemState {

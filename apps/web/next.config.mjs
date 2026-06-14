@@ -9,7 +9,7 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 const nextConfig = {
   reactStrictMode: true,
   output: 'standalone',
-  transpilePackages: ['@auj/ui', '@auj/contracts', '@auj/visa-router', '@auj/auth', '@auj/core-booking', '@auj/connector-mock', '@auj/connector-saudi', '@auj/connector-travel', '@auj/payments', '@auj/support'],
+  transpilePackages: ['@auj/ui', '@auj/contracts', '@auj/visa-router', '@auj/auth', '@auj/core-booking', '@auj/connector-mock', '@auj/connector-saudi', '@auj/connector-travel', '@auj/payments', '@auj/support', '@auj/notifications'],
   experimental: {
     outputFileTracingRoot: path.join(dirname, '../../'),
   },
