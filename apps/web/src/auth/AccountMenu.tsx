@@ -2,17 +2,12 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import type { PublicUser } from '@auj/auth';
-
-const ROLE_LABEL: Record<PublicUser['role'], string> = {
-  PILGRIM: 'Pilgrim',
-  AGENT: 'Travel agent',
-  SUB_AGENT: 'Sub-agent',
-  ADMIN: 'Administrator',
-};
 
 export function AccountMenu({ user }: { user: PublicUser }) {
   const [open, setOpen] = useState(false);
+  const t = useTranslations('account');
   const initials = user.displayName
     .split(' ')
     .map((s) => s.charAt(0))
@@ -39,17 +34,17 @@ export function AccountMenu({ user }: { user: PublicUser }) {
             <div className="truncate text-sm font-semibold text-sand-ink">{user.displayName}</div>
             <div className="truncate text-[12px] text-sand-500">{user.email}</div>
             <div className="mt-1 inline-block rounded-full bg-sand-100 px-2 py-0.5 text-[11px] font-semibold text-sand-700">
-              {ROLE_LABEL[user.role]}
+              {t(`roles.${user.role}`)}
               {isAgent && user.agentStatus !== 'ACTIVE' ? ` · ${user.agentStatus?.toLowerCase()}` : ''}
             </div>
           </div>
-          <MenuLink href="/book">Book a journey</MenuLink>
-          <MenuLink href="/journey">My journey</MenuLink>
-          <MenuLink href="/support">Help &amp; support</MenuLink>
-          {isAgent ? <MenuLink href="/agent">Agent portal</MenuLink> : null}
-          {user.role === 'ADMIN' ? <MenuLink href="/admin">Admin console</MenuLink> : null}
+          <MenuLink href="/book">{t('book')}</MenuLink>
+          <MenuLink href="/journey">{t('journey')}</MenuLink>
+          <MenuLink href="/support">{t('support')}</MenuLink>
+          {isAgent ? <MenuLink href="/agent">{t('agentPortal')}</MenuLink> : null}
+          {user.role === 'ADMIN' ? <MenuLink href="/admin">{t('adminConsole')}</MenuLink> : null}
           <a href="/logout" className="block border-t border-sand-100 px-4 py-2.5 text-left text-sm font-medium text-danger-fg hover:bg-sand-50">
-            Log out
+            {t('logout')}
           </a>
         </div>
       ) : null}

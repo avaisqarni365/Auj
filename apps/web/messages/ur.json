@@ -15,5 +15,32 @@
     "searchCta": "{count} {tab} · {dest} تلاش کریں →",
     "footerRights": "© 2026 AUJ · لائسنس یافتہ ای یو ٹور آپریٹر · EUR میں ادائیگی",
     "redeemGift": "🎁 تحفہ ریڈیم کریں"
+  },
+  "auth": {
+    "titleSignup": "اپنا اکاؤنٹ بنائیں",
+    "titleLogin": "خوش آمدید",
+    "subSignup": "زیارت بُک کریں، ویزا ٹریک کریں، دستاویزات منظم کریں۔",
+    "subLogin": "اپنا سفر جاری رکھنے کے لیے سائن اِن کریں۔",
+    "fullName": "پورا نام",
+    "email": "ای میل",
+    "password": "پاس ورڈ",
+    "accountType": "اکاؤنٹ کی قسم",
+    "rolePilgrim": "زائر — اپنے / خاندان کے لیے بُک کریں",
+    "roleAgent": "ٹریول ایجنٹ — کلائنٹس کو فروخت کریں (منظوری درکار)",
+    "createAccount": "اکاؤنٹ بنائیں",
+    "login": "لاگ اِن",
+    "pleaseWait": "براہ کرم انتظار کریں…",
+    "haveAccount": "پہلے سے اکاؤنٹ ہے؟",
+    "newToAuj": "AUJ پر نئے ہیں؟",
+    "createOne": "اکاؤنٹ بنائیں"
+  },
+  "account": {
+    "book": "سفر بُک کریں",
+    "journey": "میرا سفر",
+    "support": "مدد اور سپورٹ",
+    "agentPortal": "ایجنٹ پورٹل",
+    "adminConsole": "ایڈمن کنسول",
+    "logout": "لاگ آؤٹ",
+    "roles": { "PILGRIM": "زائر", "AGENT": "ٹریول ایجنٹ", "SUB_AGENT": "ذیلی ایجنٹ", "ADMIN": "ایڈمنسٹریٹر" }
   }
 }

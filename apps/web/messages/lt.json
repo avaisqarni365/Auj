@@ -15,5 +15,32 @@
     "searchCta": "Ieškoti {count} {tab} · {dest} →",
     "footerRights": "© 2026 AUJ · Licencijuotas ES kelionių operatorius · Mokama EUR",
     "redeemGift": "🎁 Panaudoti dovaną"
+  },
+  "auth": {
+    "titleSignup": "Sukurkite paskyrą",
+    "titleLogin": "Sveiki sugrįžę",
+    "subSignup": "Užsisakykite piligrimines keliones, sekite vizas, tvarkykite dokumentus.",
+    "subLogin": "Prisijunkite ir tęskite savo kelionę.",
+    "fullName": "Vardas ir pavardė",
+    "email": "El. paštas",
+    "password": "Slaptažodis",
+    "accountType": "Paskyros tipas",
+    "rolePilgrim": "Piligrimas — užsakau sau / šeimai",
+    "roleAgent": "Kelionių agentas — parduodu klientams (reikia patvirtinimo)",
+    "createAccount": "Sukurti paskyrą",
+    "login": "Prisijungti",
+    "pleaseWait": "Palaukite…",
+    "haveAccount": "Jau turite paskyrą?",
+    "newToAuj": "Pirmą kartą AUJ?",
+    "createOne": "Sukurti paskyrą"
+  },
+  "account": {
+    "book": "Užsakyti kelionę",
+    "journey": "Mano kelionė",
+    "support": "Pagalba",
+    "agentPortal": "Agento portalas",
+    "adminConsole": "Administratorius",
+    "logout": "Atsijungti",
+    "roles": { "PILGRIM": "Piligrimas", "AGENT": "Kelionių agentas", "SUB_AGENT": "Subagentas", "ADMIN": "Administratorius" }
   }
 }

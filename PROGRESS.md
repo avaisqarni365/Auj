@@ -114,6 +114,9 @@ core-booking 29). Remaining: real partner SaudiPartnerClient (gated), real payme
 - Landing chrome migrated to useTranslations (hero, auth CTAs, search labels + CTA, footer, redeem);
   LocaleSwitcher (server action sets cookie + revalidates layout) replaces the fake cycle button.
   Verified: NEXT_LOCALE=ar → <html lang="ar" dir="rtl"> + Arabic copy; lt → Lithuanian.
+- Auth surface translated (2026-06-14): AuthForm (/login + /signup — titles, field labels,
+  role options, submit, footer links) + AccountMenu (menu items + role label) via "auth"/"account"
+  namespaces in all 4 catalogs. Verified: /login ar → RTL + Arabic; /signup lt → Lithuanian.
 - Incremental follow-up: translate /book, /agent, /admin, /support chrome + content.ts data (FAQ,
   packages) — foundation is in place, add keys per surface.
 - Gate: build 13/13, lint 13/13, test 24/24 (apps/web 62).

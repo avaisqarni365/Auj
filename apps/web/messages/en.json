@@ -15,5 +15,32 @@
     "searchCta": "Search {count} {tab} · {dest} →",
     "footerRights": "© 2026 AUJ · Licensed EU tour operator · Charged in EUR",
     "redeemGift": "🎁 Redeem a gift"
+  },
+  "auth": {
+    "titleSignup": "Create your account",
+    "titleLogin": "Welcome back",
+    "subSignup": "Book pilgrimages, track visas, manage documents.",
+    "subLogin": "Sign in to continue your journey.",
+    "fullName": "Full name",
+    "email": "Email",
+    "password": "Password",
+    "accountType": "Account type",
+    "rolePilgrim": "Pilgrim — book for myself / family",
+    "roleAgent": "Travel agent — sell to clients (needs approval)",
+    "createAccount": "Create account",
+    "login": "Log in",
+    "pleaseWait": "Please wait…",
+    "haveAccount": "Already have an account?",
+    "newToAuj": "New to AUJ?",
+    "createOne": "Create an account"
+  },
+  "account": {
+    "book": "Book a journey",
+    "journey": "My journey",
+    "support": "Help & support",
+    "agentPortal": "Agent portal",
+    "adminConsole": "Admin console",
+    "logout": "Log out",
+    "roles": { "PILGRIM": "Pilgrim", "AGENT": "Travel agent", "SUB_AGENT": "Sub-agent", "ADMIN": "Administrator" }
   }
 }

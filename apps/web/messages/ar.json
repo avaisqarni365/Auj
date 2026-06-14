@@ -15,5 +15,32 @@
     "searchCta": "ابحث عن {count} {tab} · {dest} →",
     "footerRights": "© 2026 AUJ · مشغّل سياحي مرخّص في الاتحاد الأوروبي · الدفع باليورو",
     "redeemGift": "🎁 استبدال هدية"
+  },
+  "auth": {
+    "titleSignup": "أنشئ حسابك",
+    "titleLogin": "مرحبًا بعودتك",
+    "subSignup": "احجز رحلات العمرة، تابع التأشيرات، وأدر مستنداتك.",
+    "subLogin": "سجّل الدخول لمتابعة رحلتك.",
+    "fullName": "الاسم الكامل",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "accountType": "نوع الحساب",
+    "rolePilgrim": "حاج — أحجز لنفسي / لعائلتي",
+    "roleAgent": "وكيل سفر — أبيع للعملاء (يتطلب الموافقة)",
+    "createAccount": "إنشاء حساب",
+    "login": "تسجيل الدخول",
+    "pleaseWait": "يرجى الانتظار…",
+    "haveAccount": "لديك حساب بالفعل؟",
+    "newToAuj": "جديد على AUJ؟",
+    "createOne": "إنشاء حساب"
+  },
+  "account": {
+    "book": "احجز رحلة",
+    "journey": "رحلتي",
+    "support": "المساعدة والدعم",
+    "agentPortal": "بوابة الوكلاء",
+    "adminConsole": "لوحة الإدارة",
+    "logout": "تسجيل الخروج",
+    "roles": { "PILGRIM": "حاج", "AGENT": "وكيل سفر", "SUB_AGENT": "وكيل فرعي", "ADMIN": "مدير" }
   }
 }
