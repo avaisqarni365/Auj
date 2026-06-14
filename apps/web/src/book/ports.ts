@@ -1,5 +1,5 @@
 import type { CateringOffer, FlightOffer, GroundOffer, HotelOffer, Money, PackageMode, RawdahPermit, RawdahSlot, SearchCriteria } from '@auj/contracts';
-import type { Booking, CrmPilgrim, Customer, PackageItem, SpecialRequestCategory, SpecialRequestStatus, VisaCase } from '@auj/core-booking';
+import type { Booking, CrmPilgrim, Customer, Document, DocumentType, PackageItem, SpecialRequestCategory, SpecialRequestStatus, VisaCase } from '@auj/core-booking';
 
 /**
  * The booking surface the B2C app talks to. The app NEVER imports a connector —
@@ -37,6 +37,10 @@ export interface BookingApi {
   myBooking(email: string, bookingId: string): Promise<Booking | undefined>;
   /** Pilgrims by id (for names + nationality on the detail view). */
   pilgrims(ids: string[]): Promise<CrmPilgrim[]>;
+  /** Upload a document for a pilgrim (passport/photo/…). Bytes go to the object store. */
+  uploadDocument(input: { pilgrimId: string; type: DocumentType; fileName: string; bytes: Uint8Array; contentType: string }): Promise<Document>;
+  /** All documents across the given pilgrims (for the detail view). */
+  documentsForPilgrims(ids: string[]): Promise<Document[]>;
   getBooking(bookingId: string): Promise<Booking | undefined>;
 }
 

@@ -112,6 +112,10 @@ core-booking 29). Remaining: real partner SaudiPartnerClient (gated), real payme
   booking only if it belongs to the user) — items+BRNs, pilgrims with per-pilgrim visa route (routeFor),
   Rawdah/Gift/special-requests. Shared booking-backend singleton extracted to backend/singleton.ts.
   Unit tests for myBookings/myBooking; verified guard (307) + ownership notFound (404). apps/web 63.
+- Per-pilgrim document upload (2026-06-14): /bookings/[id] has a passport/photo/visa upload form per
+  pilgrim → uploadDocumentAction (multipart File → bytes → DocumentService.upload → DocumentStore).
+  Ownership-checked (pilgrim must be in one of the user's bookings). Documents listed per pilgrim with
+  verified badge. BookingApi.uploadDocument + documentsForPilgrims wired to core.documents. Unit-tested.
 
 ## Multi-pilgrim capture (2026-06-14)
 - B2C funnel now captures a GROUP, not a single pilgrim. BookingFunnel holds pilgrims: PilgrimDraft[]

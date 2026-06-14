@@ -3,9 +3,10 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Logo, StatusPill, type PillTone } from '@auj/ui';
 import { routeFor } from '@auj/visa-router';
-import type { Booking, BookingStatus, CrmPilgrim, SpecialRequestCategory } from '@auj/core-booking';
+import type { Booking, BookingStatus, CrmPilgrim, Document, SpecialRequestCategory } from '@auj/core-booking';
 import { requireRole } from '../../../src/auth/session';
 import { getBookingBackend } from '../../../src/book/backend/singleton';
+import { uploadDocumentAction } from '../../../src/book/doc-actions';
 import { formatMoney } from '../../../src/currency';
 
 const STATUS_TONE: Record<BookingStatus, PillTone> = {
@@ -25,6 +26,8 @@ export default async function BookingDetailPage({ params }: { params: { id: stri
   const booking = await backend.myBooking(user.email, params.id);
   if (!booking) notFound();
   const pilgrims = await backend.pilgrims(booking.pilgrimIds);
+  const docs = await backend.documentsForPilgrims(booking.pilgrimIds);
+  const docsByPilgrim = (id: string): Document[] => docs.filter((d) => d.pilgrimId === id);
 
   return (
     <div className="min-h-screen bg-sand-50">
@@ -74,13 +77,39 @@ export default async function BookingDetailPage({ params }: { params: { id: stri
           <div className="grid gap-2">
             {pilgrims.map((p: CrmPilgrim) => {
               const evisa = routeFor(p).route === 'EVISA_DIRECT';
+              const pd = docsByPilgrim(p.id);
               return (
-                <div key={p.id} className="flex items-center justify-between rounded-xl border border-sand-200 px-3 py-2">
-                  <div>
-                    <div className="text-[13.5px] font-semibold">{p.firstName} {p.lastName}</div>
-                    <div className="text-[11px] text-sand-500">{p.nationality} · {p.passportNumber}</div>
+                <div key={p.id} className="rounded-xl border border-sand-200 px-3 py-2.5">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="text-[13.5px] font-semibold">{p.firstName} {p.lastName}</div>
+                      <div className="text-[11px] text-sand-500">{p.nationality} · {p.passportNumber}</div>
+                    </div>
+                    <StatusPill tone={evisa ? 'success' : 'info'}>{evisa ? 'e-Visa' : 'Agent channel'}</StatusPill>
                   </div>
-                  <StatusPill tone={evisa ? 'success' : 'info'}>{evisa ? 'e-Visa' : 'Agent channel'}</StatusPill>
+
+                  {/* documents */}
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {pd.length === 0 ? <span className="text-[11.5px] text-sand-500">No documents yet.</span> : null}
+                    {pd.map((d) => (
+                      <span key={d.id} className={`rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${d.verified ? 'bg-success-bg text-success-fg' : 'bg-sand-100 text-sand-700'}`}>
+                        📄 {d.type}{d.verified ? ' ✓' : ''}
+                      </span>
+                    ))}
+                  </div>
+
+                  <form action={uploadDocumentAction} className="mt-2 flex flex-wrap items-center gap-2">
+                    <input type="hidden" name="pilgrimId" value={p.id} />
+                    <input type="hidden" name="bookingId" value={booking.id} />
+                    <select name="type" defaultValue="PASSPORT" className="rounded-lg border border-sand-300 bg-white px-2 py-1.5 text-[12.5px]">
+                      <option value="PASSPORT">Passport</option>
+                      <option value="PHOTO">Visa photo</option>
+                      <option value="VISA">Visa</option>
+                      <option value="OTHER">Other</option>
+                    </select>
+                    <input type="file" name="file" required className="text-[12px] text-sand-600 file:mr-2 file:rounded-md file:border-0 file:bg-sand-100 file:px-2.5 file:py-1.5 file:text-[12px] file:font-semibold" />
+                    <button type="submit" className="rounded-lg bg-green-800 px-3 py-1.5 text-[12.5px] font-semibold text-white hover:bg-green-700">Upload</button>
+                  </form>
                 </div>
               );
             })}

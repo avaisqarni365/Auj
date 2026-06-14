@@ -46,6 +46,8 @@ function wire(core: CoreBooking, saudi: SaudiConnector, travel: TravelSupplier):
       return customer && customer.email.toLowerCase() === email.toLowerCase() ? b : undefined;
     },
     pilgrims: (ids) => core.crm.getPilgrims(ids),
+    uploadDocument: (input) => core.documents.upload(input),
+    documentsForPilgrims: async (ids) => (await Promise.all(ids.map((id) => core.documents.forPilgrim(id)))).flat(),
     getBooking: (id) => core.stores.bookings.get(id),
   };
 
