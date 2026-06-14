@@ -28,9 +28,10 @@ Per user decision, the three separate Next apps were UNIFIED into one app at `ap
   partner/ERP or the future Maqam integration builds against.
 
 ## Build status
-ALL MODULES BUILT + unified app + env-selected seam + Gift Umrah + Support tickets + Personalization.
-Gate: build 13/13, lint 13/13, test 24/24 (apps/web 61, core-booking 29). Remaining: real partner
-SaudiPartnerClient (gated), real payment-gateway SDKs, deploy the unified image.
+ALL MODULES BUILT + unified app + env-selected seam + full Nusuk-parity product surface
+(modes, Rawdah, ziyarah, catering, distance sort, Gift Umrah + redemption, Support tickets,
+Personalization + admin management). Gate: build 13/13, lint 13/13, test 24/24 (apps/web 62,
+core-booking 29). Remaining: real partner SaudiPartnerClient (gated), real payment-gateway SDKs, deploy.
 
 ## Frontend handoff (design_handoff_auj_platform, expanded 2026-06-13)
 - New bundle adds Brand/Logo, Landing (responsive web /), Admin (Web) console, Traveller portal (web /journey + mobile). CLAUDE_CODE.md = kickoff prompt + route map; README = full spec.
@@ -98,8 +99,12 @@ SaudiPartnerClient (gated), real payment-gateway SDKs, deploy the unified image.
   redeemVoucherAction → BookingApi.redeemGift → core.bookings.redeemGift; success card + journey link.
   Booking backend singleton moved to globalThis (in-memory gift survives HMR). Footer "Redeem a gift"
   link + voucher-card hint. Verified: /redeem public 200, bogus code → "Unknown gift voucher".
-- TODO (Nusuk features not yet built): admin/provider special-request status UI,
-  real Nusuk Masar via connector-saudi (gated).
+- [x] Admin special-request management (2026-06-14): /admin → "Special requests" view lists
+  bookings carrying requests; staff Acknowledge / Fulfil / Decline each (admin-guarded actions
+  listSpecialRequestsAction + setRequestStatusAction → BookingApi.listBookings/setRequestStatus →
+  core.bookings.setRequestStatus). Verified: nav present, /admin 200.
+- TODO: real Nusuk Masar via connector-saudi (gated on partner access). Nusuk-parity product
+  surface otherwise COMPLETE behind the mock seam.
 
 ## Design quality as a workflow (added 2026-06-13)
 - [x] .claude/skills/design-taste/SKILL.md — Emil-Kowalski-grade motion + impeccable design + typography + taste, with a finish checklist. Auto-surfaces on UI work (description match); invoke as /design-taste. THE workflow to apply on every frontend change.

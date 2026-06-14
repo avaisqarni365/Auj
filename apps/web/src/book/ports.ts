@@ -1,5 +1,5 @@
 import type { CateringOffer, FlightOffer, GroundOffer, HotelOffer, Money, PackageMode, RawdahPermit, RawdahSlot, SearchCriteria } from '@auj/contracts';
-import type { Booking, CrmPilgrim, Customer, PackageItem, SpecialRequestCategory, VisaCase } from '@auj/core-booking';
+import type { Booking, CrmPilgrim, Customer, PackageItem, SpecialRequestCategory, SpecialRequestStatus, VisaCase } from '@auj/core-booking';
 
 /**
  * The booking surface the B2C app talks to. The app NEVER imports a connector —
@@ -29,6 +29,8 @@ export interface BookingApi {
   rawdahSlots(date: string): Promise<RawdahSlot[]>;
   bookRawdah(bookingId: string, slotId: string): Promise<RawdahPermit>;
   redeemGift(voucherCode: string): Promise<Booking>;
+  setRequestStatus(bookingId: string, requestId: string, status: SpecialRequestStatus): Promise<Booking>;
+  listBookings(): Promise<Booking[]>;
   getBooking(bookingId: string): Promise<Booking | undefined>;
 }
 

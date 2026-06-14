@@ -31,6 +31,8 @@ function wire(core: CoreBooking, saudi: SaudiConnector, travel: TravelSupplier):
     rawdahSlots: (date) => core.bookings.rawdahSlots(date),
     bookRawdah: (id, slotId) => core.bookings.bookRawdah(id, slotId),
     redeemGift: (code) => core.bookings.redeemGift(code),
+    setRequestStatus: (id, requestId, status) => core.bookings.setRequestStatus(id, requestId, status),
+    listBookings: () => core.stores.bookings.list(),
     getBooking: (id) => core.stores.bookings.get(id),
   };
 

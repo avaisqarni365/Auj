@@ -5,9 +5,11 @@ import { Logo, StatusPill, type PillTone } from '@auj/ui';
 import { routeFor } from '@auj/visa-router';
 import type { PublicUser } from '@auj/auth';
 import type { Ticket, TicketStatus } from '@auj/support';
+import type { SpecialRequestCategory, SpecialRequestStatus } from '@auj/core-booking';
 import { formatMoney } from '../../src/currency';
 import { approveAgentAction, listAgentsAction } from '../../src/auth/admin-actions';
 import { listAllTicketsAction, setTicketStatusAction, staffReplyAction } from '../../src/support/admin-actions';
+import { listSpecialRequestsAction, setRequestStatusAction, type RequestGroup } from '../../src/book/admin-actions';
 import {
   ADMIN_KPIS,
   CMS_SECTIONS,
@@ -22,12 +24,13 @@ import {
   type ProviderStatus,
 } from '../../src/admin-content';
 
-type View = 'overview' | 'pilgrims' | 'providers' | 'content' | 'users' | 'support';
+type View = 'overview' | 'pilgrims' | 'providers' | 'requests' | 'content' | 'users' | 'support';
 
 const NAV: Array<{ key: View; label: string; icon: string; badge?: string }> = [
   { key: 'overview', label: 'Overview', icon: '▦' },
   { key: 'pilgrims', label: 'Pilgrims · CRM', icon: '👥', badge: '1.3k' },
   { key: 'providers', label: 'Service providers', icon: '🔌' },
+  { key: 'requests', label: 'Special requests', icon: '🧩' },
   { key: 'support', label: 'Support', icon: '🎧' },
   { key: 'content', label: 'Landing content', icon: '📝' },
   { key: 'users', label: 'Users & roles', icon: '🛡' },
@@ -109,6 +112,8 @@ export function AdminConsole() {
               <Pilgrims onSelect={setSelected} />
             ) : view === 'providers' ? (
               <ServiceProviders />
+            ) : view === 'requests' ? (
+              <Requests />
             ) : view === 'support' ? (
               <Support />
             ) : view === 'content' ? (
@@ -516,6 +521,76 @@ function AgentApprovals() {
         })}
       </div>
     </Card>
+  );
+}
+
+const REQUEST_LABEL: Record<SpecialRequestCategory, string> = {
+  WHEELCHAIR: '♿ Wheelchair access',
+  DIETARY: '🍽 Dietary needs',
+  ROOM_NEAR_HARAM: '🕋 Room near Haram',
+  LATE_CHECKOUT: '🕔 Late checkout',
+  OTHER: '📝 Note',
+};
+const REQUEST_TONE: Record<SpecialRequestStatus, PillTone> = { REQUESTED: 'info', ACKNOWLEDGED: 'warning', FULFILLED: 'success', DECLINED: 'danger' };
+const NEXT_ACTIONS: Array<{ status: SpecialRequestStatus; label: string }> = [
+  { status: 'ACKNOWLEDGED', label: 'Acknowledge' },
+  { status: 'FULFILLED', label: 'Fulfil' },
+  { status: 'DECLINED', label: 'Decline' },
+];
+
+function Requests() {
+  const [groups, setGroups] = useState<RequestGroup[]>([]);
+  const [busy, setBusy] = useState<string | null>(null);
+  const [err, setErr] = useState<string>();
+
+  useEffect(() => {
+    void listSpecialRequestsAction()
+      .then(setGroups)
+      .catch((e: unknown) => setErr(e instanceof Error ? e.message : 'Failed to load requests'));
+  }, []);
+
+  const set = (bookingId: string, requestId: string, status: SpecialRequestStatus): void => {
+    setBusy(requestId);
+    void setRequestStatusAction(bookingId, requestId, status)
+      .then(setGroups)
+      .catch((e: unknown) => setErr(e instanceof Error ? e.message : 'Update failed'))
+      .finally(() => setBusy(null));
+  };
+
+  const pending = groups.flatMap((g) => g.requests).filter((r) => r.status === 'REQUESTED' || r.status === 'ACKNOWLEDGED').length;
+
+  return (
+    <>
+      <PageHead kicker="PERSONALIZATION" title="Special requests" />
+      {err ? <p className="mb-3 text-[13px] text-danger-fg">{err}</p> : null}
+      <div className="mb-4 text-[13px] text-sand-500"><strong className="text-sand-ink">{pending}</strong> open across <strong className="text-sand-ink">{groups.length}</strong> bookings</div>
+      {groups.length === 0 ? (
+        <Card className="p-6 text-center text-sm text-sand-500">No special requests yet.</Card>
+      ) : (
+        <div className="grid gap-3">
+          {groups.map((g) => (
+            <Card key={g.bookingId} className="p-4">
+              <div className="mb-2 font-mono text-[12px] text-sand-500">{g.bookingRef}</div>
+              <div className="grid gap-2">
+                {g.requests.map((r) => (
+                  <div key={r.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-sand-50 px-3 py-2">
+                    <span className="text-[13.5px] text-sand-700">{REQUEST_LABEL[r.category]}{r.note ? ` — ${r.note}` : ''}</span>
+                    <div className="flex items-center gap-2">
+                      <StatusPill tone={REQUEST_TONE[r.status]}>{r.status}</StatusPill>
+                      {NEXT_ACTIONS.filter((a) => a.status !== r.status).map((a) => (
+                        <button key={a.status} type="button" disabled={busy === r.id} onClick={() => set(g.bookingId, r.id, a.status)} className="rounded-full border border-sand-300 px-2.5 py-1 text-[11.5px] font-semibold text-sand-700 hover:bg-sand-100 disabled:opacity-40">
+                          {a.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          ))}
+        </div>
+      )}
+    </>
   );
 }
 
