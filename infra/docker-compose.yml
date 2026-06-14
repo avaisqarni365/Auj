@@ -3,6 +3,24 @@
 # tunnel (see infra/README.md), never expose 5432 publicly.
 
 services:
+  # TLS reverse proxy — terminates HTTPS for ${DOMAIN} and proxies to the app. Caddy
+  # auto-provisions + renews a Let's Encrypt cert (needs DNS A record + ports 80/443 open).
+  caddy:
+    image: caddy:2-alpine
+    environment:
+      DOMAIN: ${DOMAIN:-auj.codes-ai.uk}
+      ACME_EMAIL: ${ACME_EMAIL:-admin@codes-ai.uk}
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - web
+    restart: unless-stopped
+
   web:
     image: ${WEB_IMAGE:-ghcr.io/avaisqarni365/auj-web:latest}
     # For a local build instead of a pulled image, uncomment:
@@ -13,8 +31,12 @@ services:
       DATABASE_URL: ${DATABASE_URL:-postgresql://auj:auj@postgres:5432/auj?schema=public}
       REDIS_URL: ${REDIS_URL:-redis://redis:6379}
       NODE_ENV: production
+      # Public origin (behind Caddy) so Next trusts server-action requests over HTTPS.
+      APP_ORIGIN: ${APP_ORIGIN:-https://auj.codes-ai.uk}
+    # Bound to localhost only — the public entrypoint is Caddy (443). For a direct/no-TLS
+    # run, change to '${WEB_PORT:-3000}:3000'.
     ports:
-      - '${WEB_PORT:-3000}:3000'
+      - '127.0.0.1:${WEB_PORT:-3000}:3000'
     depends_on:
       postgres:
         condition: service_healthy
@@ -61,3 +83,5 @@ services:
 volumes:
   pgdata:
   miniodata:
+  caddy_data:
+  caddy_config:

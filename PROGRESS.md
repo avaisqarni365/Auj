@@ -120,6 +120,14 @@ core-booking 29). Remaining: real partner SaudiPartnerClient (gated), real payme
   (pilgrim name join, unverified first) with a Verify button → verifyDocumentAction (admin-guarded) →
   DocumentService.verify. BookingApi.listAllDocuments + verifyDocument. Closes the upload→verify loop.
 
+## Domain + TLS — auj.codes-ai.uk (2026-06-14)
+- infra now includes a Caddy reverse proxy (auto Let's Encrypt) for ${DOMAIN}; web is bound to
+  127.0.0.1 (Caddy on 80/443 is the public entrypoint). infra/Caddyfile + compose `caddy` service
+  + caddy_data/config volumes. .env.example gains DOMAIN/ACME_EMAIL/APP_ORIGIN (defaults
+  auj.codes-ai.uk). next.config serverActions.allowedOrigins allow-lists the domain so login/signup
+  work behind the proxy. DEPLOY-RUNBOOK §2a: exact GoDaddy A-record steps (auj → 212.227.54.250),
+  open 80/443, set env, deploy → https. Operator still does the GoDaddy DNS + firewall.
+
 ## Deploy runbook (2026-06-14)
 - infra/DEPLOY-RUNBOOK.md: concrete copy-paste deploy procedure (prereqs, env table, first-time
   server setup, CI/CD tag→build→push→ssh-deploy, smoke test, rollback, tunnel-only datastores,

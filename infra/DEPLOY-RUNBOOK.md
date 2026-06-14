@@ -39,6 +39,29 @@ Copy `infra/.env.example` → `infra/.env` and set:
 **Migrations:** there is no separate migration step — the app applies the schema
 (`migrate` + `migrateAuth` + `migrateSupport`) lazily on the first request once `DATABASE_URL` is set.
 
+## 2a. Domain & TLS — auj.codes-ai.uk (GoDaddy → IONOS)
+The stack includes a **Caddy** reverse proxy that terminates HTTPS and auto-provisions a
+Let's Encrypt certificate. The app (`web`) is bound to `127.0.0.1` only; Caddy on 80/443 is the
+public entrypoint.
+
+1. **GoDaddy DNS** — the domain `codes-ai.uk` is managed in GoDaddy. Add a record for the
+   `auj` subdomain pointing at the server:
+   - GoDaddy → My Products → `codes-ai.uk` → **DNS** → **Add Record**
+   - **Type:** A · **Name (Host):** `auj` · **Value:** `212.227.54.250` (the IONOS server IP)
+     · **TTL:** 600
+   - (If you also want `www.auj`, add a CNAME `www.auj` → `auj.codes-ai.uk`.)
+   - Wait for propagation: `dig +short auj.codes-ai.uk` should return the server IP.
+2. **Open the firewall** for 80 + 443 on the server (Caddy needs both for the ACME HTTP-01
+   challenge and serving). Keep 3000 closed publicly (it's bound to 127.0.0.1).
+3. In `infra/.env` set `DOMAIN=auj.codes-ai.uk`, `ACME_EMAIL=<you>@codes-ai.uk`,
+   `APP_ORIGIN=https://auj.codes-ai.uk`.
+4. `bash deploy.sh` — Caddy fetches the cert on first boot. Then:
+   `curl -s -o /dev/null -w '%{http_code}\n' https://auj.codes-ai.uk/` → 200.
+
+> Server Actions are origin-checked: the app's `next.config.mjs` already allow-lists
+> `auj.codes-ai.uk`, so login/signup work behind the proxy. If you use a different domain,
+> add it there and rebuild the image.
+
 ## 3. First-time server setup
 ```bash
 ssh deploy@<host>

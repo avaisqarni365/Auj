@@ -1,0 +1,10 @@
+# Auto-HTTPS reverse proxy for AUJ. Caddy obtains + renews a Let's Encrypt certificate
+# for $DOMAIN automatically (requires the DNS A record to point here and ports 80/443 open).
+{
+	email {$ACME_EMAIL}
+}
+
+{$DOMAIN} {
+	encode zstd gzip
+	reverse_proxy web:3000
+}

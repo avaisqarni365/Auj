@@ -12,6 +12,11 @@ const nextConfig = {
   transpilePackages: ['@auj/ui', '@auj/contracts', '@auj/visa-router', '@auj/auth', '@auj/core-booking', '@auj/connector-mock', '@auj/connector-saudi', '@auj/connector-travel', '@auj/payments', '@auj/support', '@auj/notifications'],
   experimental: {
     outputFileTracingRoot: path.join(dirname, '../../'),
+    // Trust the production domain (behind the Caddy TLS proxy) for Server Actions, so
+    // login/signup/etc. aren't rejected as cross-origin. Localhost covers dev.
+    serverActions: {
+      allowedOrigins: ['auj.codes-ai.uk', 'localhost:3000'],
+    },
   },
   eslint: { ignoreDuringBuilds: true },
 };
