@@ -36,6 +36,7 @@
   },
   "account": {
     "book": "Užsakyti kelionę",
+    "bookings": "Mano užsakymai",
     "journey": "Mano kelionė",
     "support": "Pagalba",
     "agentPortal": "Agento portalas",

@@ -36,6 +36,7 @@
   },
   "account": {
     "book": "Book a journey",
+    "bookings": "My bookings",
     "journey": "My journey",
     "support": "Help & support",
     "agentPortal": "Agent portal",

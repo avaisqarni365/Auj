@@ -36,6 +36,7 @@
   },
   "account": {
     "book": "احجز رحلة",
+    "bookings": "حجوزاتي",
     "journey": "رحلتي",
     "support": "المساعدة والدعم",
     "agentPortal": "بوابة الوكلاء",

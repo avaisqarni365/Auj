@@ -5,19 +5,10 @@
 // the logged-in user (their account is the customer).
 import type { CateringOffer, GroundOffer, Money, PackageMode, SearchCriteria } from '@auj/contracts';
 import type { PackageItem, SpecialRequestCategory, VisaCase } from '@auj/core-booking';
-import { createBackend } from './backend/in-process';
-import type { Backend } from './ports';
 import { placePilgrimageBooking, pollVisaUntilIssued, type PlacedBooking } from './usecases';
 import type { PilgrimDraft } from './funnel';
 import { getCurrentUser } from '../auth/session';
-
-// Cache on globalThis so the in-memory booking store survives Next dev HMR (a gift
-// booked earlier is still found when its voucher is redeemed later).
-const globalForBackend = globalThis as unknown as { __aujBookingBackend?: Promise<Backend> };
-function getBackend(): Promise<Backend> {
-  globalForBackend.__aujBookingBackend ??= createBackend();
-  return globalForBackend.__aujBookingBackend;
-}
+import { getBookingBackend as getBackend } from './backend/singleton';
 
 export async function searchHotelsAction(criteria: SearchCriteria) {
   const backend = await getBackend();

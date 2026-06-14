@@ -31,6 +31,8 @@ export interface BookingApi {
   redeemGift(voucherCode: string): Promise<Booking>;
   setRequestStatus(bookingId: string, requestId: string, status: SpecialRequestStatus): Promise<Booking>;
   listBookings(): Promise<Booking[]>;
+  /** Bookings belonging to the customer with this email (the logged-in user's account). */
+  myBookings(email: string): Promise<Booking[]>;
   getBooking(bookingId: string): Promise<Booking | undefined>;
 }
 

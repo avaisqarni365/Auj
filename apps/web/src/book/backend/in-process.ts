@@ -33,6 +33,12 @@ function wire(core: CoreBooking, saudi: SaudiConnector, travel: TravelSupplier):
     redeemGift: (code) => core.bookings.redeemGift(code),
     setRequestStatus: (id, requestId, status) => core.bookings.setRequestStatus(id, requestId, status),
     listBookings: () => core.stores.bookings.list(),
+    myBookings: async (email) => {
+      const lower = email.toLowerCase();
+      const mine = new Set((await core.stores.customers.list()).filter((c) => c.email.toLowerCase() === lower).map((c) => c.id));
+      const all = await core.stores.bookings.list();
+      return all.filter((b) => mine.has(b.customerId)).sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+    },
     getBooking: (id) => core.stores.bookings.get(id),
   };
 

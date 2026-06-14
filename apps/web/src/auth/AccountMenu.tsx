@@ -39,6 +39,7 @@ export function AccountMenu({ user }: { user: PublicUser }) {
             </div>
           </div>
           <MenuLink href="/book">{t('book')}</MenuLink>
+          <MenuLink href="/bookings">{t('bookings')}</MenuLink>
           <MenuLink href="/journey">{t('journey')}</MenuLink>
           <MenuLink href="/support">{t('support')}</MenuLink>
           {isAgent ? <MenuLink href="/agent">{t('agentPortal')}</MenuLink> : null}
