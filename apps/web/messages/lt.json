@@ -65,5 +65,19 @@
     "openTicket": "Pateikti užklausą",
     "sending": "Siunčiama…",
     "created": "Užklausa sukurta — atsakysime el. paštu ir čia."
+  },
+  "landing": {
+    "sections": {
+      "journeys": { "title": "Pasirinkite kelionę", "sub": "Trys kelionės būdai — kiekvienas su tinkamu vizos keliu ir apsauga." },
+      "cart": { "title": "Viskas viename krepšelyje", "sub": "Viešbutis, transportas, paslaugos ir skrydžiai — kaina kartu, mokama EUR." },
+      "how": { "title": "Kaip tai veikia", "sub": "Nuo paieškos iki sekamo, bilietais patvirtinto užsakymo — keturiais ramiais žingsniais." },
+      "packages": { "title": "Rekomenduojami paketai", "sub": "Keletas šio sezono populiariausių kelionių." },
+      "lang": { "title": "Jūsų kalba", "sub": "EN · LT · UR · AR — arabų ir urdu kalbos rodomos iš dešinės į kairę." },
+      "track": { "title": "Sekti užsakymą", "sub": "Įveskite BRN ir matykite būseną — užsakyta, dokumentai, viza, kelionė, grįžimas." },
+      "reviews": { "title": "Piligrimų vertinama visoje ES" },
+      "faq": { "title": "Dažni klausimai" }
+    },
+    "trust": ["Licencijuotas ES kelionių operatorius", "Įtraukta e. vizos pagalba", "Kainos EUR arba PKR", "ATOL tipo apsauga"],
+    "statLabels": ["ES išvykimo miestai", "aptarnauta piligrimų", "EN · LT · UR · AR", "pagalba"]
   }
 }

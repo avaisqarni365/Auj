@@ -65,5 +65,19 @@
     "openTicket": "Open ticket",
     "sending": "Sending…",
     "created": "Ticket created — we’ll reply by email and here."
+  },
+  "landing": {
+    "sections": {
+      "journeys": { "title": "Choose your journey", "sub": "Three ways to travel — each with the right visa route and protection." },
+      "cart": { "title": "Everything in one cart", "sub": "Hotel, transport, ground services and flights — priced together, charged in EUR." },
+      "how": { "title": "How it works", "sub": "From search to a tracked, ticketed booking — in four calm steps." },
+      "packages": { "title": "Featured packages", "sub": "A few of this season’s most-booked journeys." },
+      "lang": { "title": "In your language", "sub": "EN · LT · UR · AR — Arabic and Urdu mirror to right-to-left." },
+      "track": { "title": "Track any booking", "sub": "Enter a BRN to see live status — booked, documents, visa, travel, return." },
+      "reviews": { "title": "Trusted by pilgrims across the EU" },
+      "faq": { "title": "Frequently asked" }
+    },
+    "trust": ["Licensed EU tour operator", "e-Visa guidance included", "EUR or PKR pricing", "ATOL-style protection"],
+    "statLabels": ["EU departure cities", "pilgrims served", "EN · LT · UR · AR", "support desk"]
   }
 }

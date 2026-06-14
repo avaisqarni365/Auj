@@ -22,7 +22,6 @@ import {
   SEARCH_TABS,
   STEPS,
   TESTIMONIALS,
-  TRUST,
   type SearchTab,
 } from './content';
 
@@ -34,6 +33,9 @@ export default function Landing({ user }: { user?: PublicUser }) {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [demoLocale, setDemoLocale] = useState(LOCALES[0]!); // the "in your language" preview widget
   const t = useTranslations('common');
+  const tl = useTranslations('landing');
+  const trust = tl.raw('trust') as string[];
+  const statLabels = tl.raw('statLabels') as string[];
   const locale = useLocale();
 
   return (
@@ -108,10 +110,10 @@ export default function Landing({ user }: { user?: PublicUser }) {
               </a>
             </div>
             <div className="flex flex-wrap gap-x-9 gap-y-5 border-t border-white/15 pt-7">
-              {HERO_STATS.map((s) => (
+              {HERO_STATS.map((s, i) => (
                 <div key={s.label}>
                   <div className="font-mono text-[22px] font-semibold text-white">{s.value}</div>
-                  <div className="mt-0.5 text-[12.5px] text-green-100/70">{s.label}</div>
+                  <div className="mt-0.5 text-[12.5px] text-green-100/70">{statLabels[i] ?? s.label}</div>
                 </div>
               ))}
             </div>
@@ -185,16 +187,16 @@ export default function Landing({ user }: { user?: PublicUser }) {
       {/* trust strip */}
       <div className="mx-auto max-w-6xl px-[clamp(16px,4vw,32px)] py-10">
         <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-center text-[13.5px] font-semibold text-sand-700">
-          {TRUST.map((t) => (
-            <span key={t} className="inline-flex items-center gap-2">
-              <span className="text-success">✓</span> {t}
+          {trust.map((badge) => (
+            <span key={badge} className="inline-flex items-center gap-2">
+              <span className="text-success">✓</span> {badge}
             </span>
           ))}
         </div>
       </div>
 
       {/* journey types */}
-      <Section id="journeys" title="Choose your journey" sub="Three ways to travel — each with the right visa route and protection.">
+      <Section id="journeys" title={tl('sections.journeys.title')} sub={tl('sections.journeys.sub')}>
         <div className="grid gap-5 md:grid-cols-3">
           {JOURNEY_TYPES.map((j, i) => (
             <div key={j.name} style={{ animationDelay: `${i * 70}ms` }} className="animate-rise overflow-hidden rounded-2xl border border-sand-200 bg-white shadow-sm">
@@ -210,7 +212,7 @@ export default function Landing({ user }: { user?: PublicUser }) {
       </Section>
 
       {/* one cart */}
-      <Section id="cart" title="Everything in one cart" sub="Hotel, transport, ground services and flights — priced together, charged in EUR.">
+      <Section id="cart" title={tl('sections.cart.title')} sub={tl('sections.cart.sub')}>
         <div className="grid items-center gap-8 md:grid-cols-2">
           <ul className="grid gap-3">
             {['Nusuk-approved hotels in Makkah & Madinah', 'Airport & inter-city transport (Naqaba)', 'Guided ground services & ziyarah', 'Flights from your EU city'].map((f) => (
@@ -233,7 +235,7 @@ export default function Landing({ user }: { user?: PublicUser }) {
       </Section>
 
       {/* how it works */}
-      <Section id="how" title="How it works" sub="From search to a tracked, ticketed booking — in four calm steps.">
+      <Section id="how" title={tl('sections.how.title')} sub={tl('sections.how.sub')}>
         <div className="grid gap-5 md:grid-cols-4">
           {STEPS.map((s) => (
             <div key={s.n} className="rounded-2xl border border-sand-200 bg-white p-5">
@@ -258,7 +260,7 @@ export default function Landing({ user }: { user?: PublicUser }) {
       </div>
 
       {/* featured packages */}
-      <Section id="packages" title="Featured packages" sub="A few of this season’s most-booked journeys.">
+      <Section id="packages" title={tl('sections.packages.title')} sub={tl('sections.packages.sub')}>
         <div className="grid gap-5 md:grid-cols-3">
           {PACKAGES.map((p, i) => (
             <div key={p.name} style={{ animationDelay: `${i * 70}ms` }} className="animate-rise overflow-hidden rounded-2xl border border-sand-200 bg-white shadow-sm">
@@ -281,7 +283,7 @@ export default function Landing({ user }: { user?: PublicUser }) {
       </Section>
 
       {/* multilingual */}
-      <Section id="lang" title="In your language" sub="EN · LT · UR · AR — Arabic and Urdu mirror to right-to-left.">
+      <Section id="lang" title={tl('sections.lang.title')} sub={tl('sections.lang.sub')}>
         <div className="rounded-2xl border border-sand-200 bg-white p-6 shadow-sm">
           <div className="mb-4 flex flex-wrap gap-2">
             {LOCALES.map((l) => (
@@ -303,7 +305,7 @@ export default function Landing({ user }: { user?: PublicUser }) {
       </Section>
 
       {/* track booking */}
-      <Section id="track" title="Track any booking" sub="Enter a BRN to see live status — booked, documents, visa, travel, return.">
+      <Section id="track" title={tl('sections.track.title')} sub={tl('sections.track.sub')}>
         <div className="grid gap-5 md:grid-cols-2">
           <div className="rounded-2xl border border-sand-200 bg-white p-6 shadow-sm">
             <label className="text-[13px] font-medium text-sand-700">Booking reference (BRN)</label>
@@ -324,7 +326,7 @@ export default function Landing({ user }: { user?: PublicUser }) {
       </Section>
 
       {/* testimonials */}
-      <Section id="reviews" title="Trusted by pilgrims across the EU">
+      <Section id="reviews" title={tl('sections.reviews.title')}>
         <div className="grid gap-5 md:grid-cols-3">
           {TESTIMONIALS.map((t) => (
             <figure key={t.name} className="rounded-2xl border border-sand-200 bg-white p-5 shadow-sm">
@@ -338,7 +340,7 @@ export default function Landing({ user }: { user?: PublicUser }) {
       </Section>
 
       {/* faq */}
-      <Section id="faq" title="Frequently asked">
+      <Section id="faq" title={tl('sections.faq.title')}>
         <div className="mx-auto max-w-3xl divide-y divide-sand-200 overflow-hidden rounded-2xl border border-sand-200 bg-white">
           {FAQS.map((f, i) => (
             <div key={f.q}>

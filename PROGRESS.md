@@ -143,8 +143,11 @@ core-booking 29). Remaining: real partner SaudiPartnerClient (gated), real payme
   locale (useLocale) into every screen — activating the EXISTING 4-locale dict in book/i18n.ts
   across search→build→pilgrims→checkout→confirm. /support page (getTranslations) + OpenTicketForm
   (useTranslations) via a "support" namespace (4 catalogs). Verified ar/lt at runtime.
-- Incremental follow-up: /agent + /admin chrome + content.ts marketing data (FAQ, packages).
-- Gate: build 13/13, lint 13/13, test 24/24 (apps/web 62).
+- Landing section headings + trust badges + hero-stat labels translated (2026-06-14) via a
+  "landing" namespace (4 catalogs); Landing reads them with useTranslations + t.raw for arrays.
+  Verified ar/lt. Remaining landing prose (FAQ answers, testimonials, package details) left in EN.
+- Incremental follow-up: /agent + /admin chrome + the long landing prose (FAQ/testimonials).
+- Gate: build 13/13, lint 13/13, test 24/24 (apps/web 64).
 
 ## Real payment acquirers (2026-06-14)
 - @auj/payments: LiveStripeProvider (real Stripe PaymentIntents REST — manual-capture create,
