@@ -4,8 +4,11 @@
 
 services:
   # TLS reverse proxy — terminates HTTPS for ${DOMAIN} and proxies to the app. Caddy
-  # auto-provisions + renews a Let's Encrypt cert (needs DNS A record + ports 80/443 open).
+  # auto-provisions + renews a Let's Encrypt cert (needs DNS A record + ports 80/443 FREE).
+  # Opt-in: `docker compose --profile caddy up -d`. SKIP this if the host already runs a
+  # proxy on 80/443 (e.g. nginx) — instead front the app with that (see infra/nginx-auj.conf).
   caddy:
+    profiles: ['caddy']
     image: caddy:2-alpine
     environment:
       DOMAIN: ${DOMAIN:-auj.codes-ai.uk}

@@ -39,28 +39,33 @@ Copy `infra/.env.example` → `infra/.env` and set:
 **Migrations:** there is no separate migration step — the app applies the schema
 (`migrate` + `migrateAuth` + `migrateSupport`) lazily on the first request once `DATABASE_URL` is set.
 
-## 2a. Domain & TLS — auj.codes-ai.uk (GoDaddy → IONOS)
-The stack includes a **Caddy** reverse proxy that terminates HTTPS and auto-provisions a
-Let's Encrypt certificate. The app (`web`) is bound to `127.0.0.1` only; Caddy on 80/443 is the
-public entrypoint.
+## 2a. Domain & TLS — auj.codes-ai.uk
+**DNS:** ✅ done — `auj.codes-ai.uk` resolves to `212.227.54.250` (A) + the box's IPv6 (AAAA).
+(GoDaddy → `codes-ai.uk` → DNS → A record, Host `auj` → server IP.)
 
-1. **GoDaddy DNS** — the domain `codes-ai.uk` is managed in GoDaddy. Add a record for the
-   `auj` subdomain pointing at the server:
-   - GoDaddy → My Products → `codes-ai.uk` → **DNS** → **Add Record**
-   - **Type:** A · **Name (Host):** `auj` · **Value:** `212.227.54.250` (the IONOS server IP)
-     · **TTL:** 600
-   - (If you also want `www.auj`, add a CNAME `www.auj` → `auj.codes-ai.uk`.)
-   - Wait for propagation: `dig +short auj.codes-ai.uk` should return the server IP.
-2. **Open the firewall** for 80 + 443 on the server (Caddy needs both for the ACME HTTP-01
-   challenge and serving). Keep 3000 closed publicly (it's bound to 127.0.0.1).
-3. In `infra/.env` set `DOMAIN=auj.codes-ai.uk`, `ACME_EMAIL=<you>@codes-ai.uk`,
-   `APP_ORIGIN=https://auj.codes-ai.uk`.
-4. `bash deploy.sh` — Caddy fetches the cert on first boot. Then:
-   `curl -s -o /dev/null -w '%{http_code}\n' https://auj.codes-ai.uk/` → 200.
+The app container (`web`) is bound to `127.0.0.1:3000`. Put a TLS reverse proxy in front. The
+server **already runs nginx on 80/443**, so use **Option A**.
 
-> Server Actions are origin-checked: the app's `next.config.mjs` already allow-lists
-> `auj.codes-ai.uk`, so login/signup work behind the proxy. If you use a different domain,
-> add it there and rebuild the image.
+### Option A — existing host nginx (recommended for this box)
+Do NOT start the bundled Caddy (it would fight nginx for 80/443). Bring up just the app + data:
+```bash
+cd ~/auj/infra && bash deploy.sh           # caddy is profile-gated → not started
+# wire nginx → the app, with a Let's Encrypt cert:
+sudo cp nginx-auj.conf /etc/nginx/sites-available/auj.codes-ai.uk
+sudo ln -s /etc/nginx/sites-available/auj.codes-ai.uk /etc/nginx/sites-enabled/
+sudo certbot --nginx -d auj.codes-ai.uk    # obtains + installs the cert
+sudo nginx -t && sudo systemctl reload nginx
+curl -s -o /dev/null -w '%{http_code}\n' https://auj.codes-ai.uk/   # 200
+```
+`infra/nginx-auj.conf` is the ready vhost (proxies to 127.0.0.1:3000, forwards X-Forwarded-*,
+25 MB upload cap). Ensure `WEB_PORT=3000` in `.env`.
+
+### Option B — bundled Caddy (only if 80/443 are FREE)
+If you'd rather not use the host nginx: stop it, open 80/443, set `DOMAIN` + `ACME_EMAIL` in
+`.env`, then `docker compose --profile caddy up -d`. Caddy auto-fetches the cert.
+
+> Server Actions are origin-checked: `next.config.mjs` already allow-lists `auj.codes-ai.uk`,
+> so login/signup work behind either proxy. A different domain → add it there and rebuild.
 
 ## 3. First-time server setup
 ```bash
