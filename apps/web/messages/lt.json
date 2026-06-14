@@ -42,5 +42,27 @@
     "adminConsole": "Administratorius",
     "logout": "Atsijungti",
     "roles": { "PILGRIM": "Piligrimas", "AGENT": "Kelionių agentas", "SUB_AGENT": "Subagentas", "ADMIN": "Administratorius" }
+  },
+  "support": {
+    "supportOf": "Pagalba",
+    "title": "Pagalba",
+    "subtitle": "Pateikite užklausą arba tęskite pokalbį. Atsakome čia ir el. paštu.",
+    "yourTickets": "Jūsų užklausos",
+    "none": "Užklausų dar nėra.",
+    "closedNote": "Ši užklausa yra {status}. Jei reikia daugiau pagalbos, pateikite naują.",
+    "replyPlaceholder": "Parašykite atsakymą…",
+    "reply": "Atsakyti",
+    "newRequest": "Nauja užklausa",
+    "subject": "Tema",
+    "category": "Kategorija",
+    "catGeneral": "Bendra",
+    "catBooking": "Užsakymas",
+    "catVisa": "Viza",
+    "catPayment": "Mokėjimas",
+    "bookingRef": "Užsakymo numeris (nebūtina)",
+    "body": "Kuo galime padėti?",
+    "openTicket": "Pateikti užklausą",
+    "sending": "Siunčiama…",
+    "created": "Užklausa sukurta — atsakysime el. paštu ir čia."
   }
 }

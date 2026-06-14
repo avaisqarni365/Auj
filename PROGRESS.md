@@ -117,8 +117,11 @@ core-booking 29). Remaining: real partner SaudiPartnerClient (gated), real payme
 - Auth surface translated (2026-06-14): AuthForm (/login + /signup — titles, field labels,
   role options, submit, footer links) + AccountMenu (menu items + role label) via "auth"/"account"
   namespaces in all 4 catalogs. Verified: /login ar → RTL + Arabic; /signup lt → Lithuanian.
-- Incremental follow-up: translate /book, /agent, /admin, /support chrome + content.ts data (FAQ,
-  packages) — foundation is in place, add keys per surface.
+- Booking funnel + support translated (2026-06-14): BookingFunnel now passes the real cookie
+  locale (useLocale) into every screen — activating the EXISTING 4-locale dict in book/i18n.ts
+  across search→build→pilgrims→checkout→confirm. /support page (getTranslations) + OpenTicketForm
+  (useTranslations) via a "support" namespace (4 catalogs). Verified ar/lt at runtime.
+- Incremental follow-up: /agent + /admin chrome + content.ts marketing data (FAQ, packages).
 - Gate: build 13/13, lint 13/13, test 24/24 (apps/web 62).
 
 ## Real payment acquirers (2026-06-14)

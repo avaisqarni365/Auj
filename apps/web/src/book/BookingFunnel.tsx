@@ -2,6 +2,7 @@
 
 import { useReducer, useState, useTransition } from 'react';
 import Link from 'next/link';
+import { useLocale } from 'next-intl';
 import type { CateringOffer, GroundOffer, HotelOffer, SearchCriteria } from '@auj/contracts';
 import type { Booking, PackageItem, VisaCase } from '@auj/core-booking';
 import { Logo } from '@auj/ui';
@@ -9,6 +10,7 @@ import { Logo } from '@auj/ui';
 // in the in-process backend, which depends on node:crypto via core-booking.
 import { Checkout, HomeSearch, MyBooking, PackageBuilder, PilgrimCapture, Results } from './screens';
 import { cartTotals, funnelReducer, initialFunnel, type FunnelState, type PilgrimDraft } from './funnel';
+import { LOCALES as BOOK_LOCALES, type Locale as BookLocale } from './i18n';
 import { previewVisaRoute } from './usecases';
 import { placeBookingAction, pollVisaAction, searchAddonsAction, searchHotelsAction } from './actions';
 
@@ -38,6 +40,8 @@ export function BookingFunnel({ initialCity, initialPax }: { initialCity: Search
   const [booking, setBooking] = useState<Booking>();
   const [visaCase, setVisaCase] = useState<VisaCase>();
   const [pending, start] = useTransition();
+  const loc = useLocale();
+  const bookLocale: BookLocale = (BOOK_LOCALES as readonly string[]).includes(loc) ? (loc as BookLocale) : 'en';
 
   const search = (): void =>
     start(async () => {
@@ -110,7 +114,7 @@ export function BookingFunnel({ initialCity, initialPax }: { initialCity: Search
       <div key={state.step} className="animate-rise">
       {state.step === 'SEARCH' && (
         <HomeSearch
-          locale="en"
+          locale={bookLocale}
           criteria={state.criteria}
           onCity={(city: SearchCriteria['city']) => dispatch({ type: 'SET_CRITERIA', criteria: { city } })}
           onPax={(pax: number) => dispatch({ type: 'SET_CRITERIA', criteria: { pax } })}
@@ -119,12 +123,12 @@ export function BookingFunnel({ initialCity, initialPax }: { initialCity: Search
       )}
 
       {state.step === 'RESULTS' && (
-        <Results locale="en" criteria={state.criteria} offers={offers} onBuild={build} onBack={back('SEARCH')} />
+        <Results locale={bookLocale} criteria={state.criteria} offers={offers} onBuild={build} onBack={back('SEARCH')} />
       )}
 
       {state.step === 'BUILDER' && (
         <PackageBuilder
-          locale="en"
+          locale={bookLocale}
           items={state.cart}
           totals={cartTotals(state)}
           mode={state.mode}
@@ -142,7 +146,7 @@ export function BookingFunnel({ initialCity, initialPax }: { initialCity: Search
 
       {state.step === 'PILGRIMS' && (
         <PilgrimCapture
-          locale="en"
+          locale={bookLocale}
           firstName={pilgrim.firstName}
           nationality={pilgrim.nationality}
           passportNumber={pilgrim.passportNumber}
@@ -155,7 +159,7 @@ export function BookingFunnel({ initialCity, initialPax }: { initialCity: Search
 
       {state.step === 'CHECKOUT' && (
         <Checkout
-          locale="en"
+          locale={bookLocale}
           currency={state.currency}
           totalEur={SELL_PRICE}
           onCurrency={(currency) => dispatch({ type: 'SET_CURRENCY', currency })}
@@ -172,7 +176,7 @@ export function BookingFunnel({ initialCity, initialPax }: { initialCity: Search
 
       {state.step === 'CONFIRMED' && booking && (
         <div>
-          <MyBooking locale="en" booking={booking} visaCase={visaCase} />
+          <MyBooking locale={bookLocale} booking={booking} visaCase={visaCase} />
           <div className="bg-sand-50 px-4 pb-6">
             <button
               type="button"

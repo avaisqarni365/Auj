@@ -42,5 +42,27 @@
     "adminConsole": "Admin console",
     "logout": "Log out",
     "roles": { "PILGRIM": "Pilgrim", "AGENT": "Travel agent", "SUB_AGENT": "Sub-agent", "ADMIN": "Administrator" }
+  },
+  "support": {
+    "supportOf": "Support",
+    "title": "Help & support",
+    "subtitle": "Open a request or continue a conversation. We reply here and by email.",
+    "yourTickets": "Your tickets",
+    "none": "No tickets yet.",
+    "closedNote": "This ticket is {status}. Open a new request if you need more help.",
+    "replyPlaceholder": "Write a reply…",
+    "reply": "Reply",
+    "newRequest": "New request",
+    "subject": "Subject",
+    "category": "Category",
+    "catGeneral": "General",
+    "catBooking": "Booking",
+    "catVisa": "Visa",
+    "catPayment": "Payment",
+    "bookingRef": "Booking reference (optional)",
+    "body": "How can we help?",
+    "openTicket": "Open ticket",
+    "sending": "Sending…",
+    "created": "Ticket created — we’ll reply by email and here."
   }
 }
