@@ -106,6 +106,18 @@ core-booking 29). Remaining: real partner SaudiPartnerClient (gated), real payme
 - TODO: real Nusuk Masar via connector-saudi (gated on partner access). Nusuk-parity product
   surface otherwise COMPLETE behind the mock seam.
 
+## Real i18n (2026-06-14)
+- next-intl wired in apps/web WITHOUT /[locale] URL routing — cookie-driven (NEXT_LOCALE).
+  src/i18n/{locales,request,actions,LocaleSwitcher}; messages/{en,lt,ur,ar}.json (namespace "common").
+  Root layout drives <html lang dir> from the locale (RTL for ar/ur) + NextIntlClientProvider.
+  next.config wrapped with createNextIntlPlugin.
+- Landing chrome migrated to useTranslations (hero, auth CTAs, search labels + CTA, footer, redeem);
+  LocaleSwitcher (server action sets cookie + revalidates layout) replaces the fake cycle button.
+  Verified: NEXT_LOCALE=ar → <html lang="ar" dir="rtl"> + Arabic copy; lt → Lithuanian.
+- Incremental follow-up: translate /book, /agent, /admin, /support chrome + content.ts data (FAQ,
+  packages) — foundation is in place, add keys per surface.
+- Gate: build 13/13, lint 13/13, test 24/24 (apps/web 62).
+
 ## Real payment acquirers (2026-06-14)
 - @auj/payments: LiveStripeProvider (real Stripe PaymentIntents REST — manual-capture create,
   capture, refund via PI re-read, webhook + status mapping) and LiveHttpProvider (generic JSON

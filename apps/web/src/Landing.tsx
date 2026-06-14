@@ -2,11 +2,13 @@
 
 import { useState, type ReactNode } from 'react';
 import Link from 'next/link';
+import { useLocale, useTranslations } from 'next-intl';
 import { Logo } from '@auj/ui';
 import { routeFor } from '@auj/visa-router';
 import type { PublicUser } from '@auj/auth';
 import { formatMoney, pkrIndicative } from './currency';
 import { AccountMenu } from './auth/AccountMenu';
+import { LocaleSwitcher } from './i18n/LocaleSwitcher';
 import {
   DEPARTURE_CITIES,
   DESTINATIONS,
@@ -30,8 +32,9 @@ export default function Landing({ user }: { user?: PublicUser }) {
   const [dest, setDest] = useState<string>(DESTINATIONS[0]);
   const [pax, setPax] = useState(4);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const [locale, setLocale] = useState(LOCALES[0]!);
-  const cycleLocale = (): void => setLocale((cur) => LOCALES[(LOCALES.findIndex((l) => l.code === cur.code) + 1) % LOCALES.length]!);
+  const [demoLocale, setDemoLocale] = useState(LOCALES[0]!); // the "in your language" preview widget
+  const t = useTranslations('common');
+  const locale = useLocale();
 
   return (
     <div className="overflow-x-hidden bg-sand-50 text-sand-ink">
@@ -67,18 +70,16 @@ export default function Landing({ user }: { user?: PublicUser }) {
             ))}
           </nav>
           <div className="flex items-center gap-2">
-            <button type="button" onClick={cycleLocale} aria-label="Switch language" className="inline-flex items-center gap-1.5 rounded-lg border border-sand-200 bg-white px-3 py-2 text-[13.5px] font-semibold text-sand-700 hover:bg-sand-100">
-              🌐 {locale.code.toUpperCase()} ▾
-            </button>
+            <LocaleSwitcher current={locale} />
             {user ? (
               <AccountMenu user={user} />
             ) : (
               <Link href="/login" className="whitespace-nowrap rounded-lg px-3 py-2 text-[14.5px] font-semibold text-sand-700 hover:bg-sand-100">
-                Log in
+                {t('login')}
               </Link>
             )}
             <Link href={user ? '/book' : '/signup'} className="whitespace-nowrap rounded-[10px] bg-green-800 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_4px_12px_rgba(15,81,50,0.24)] hover:bg-green-700">
-              {user ? 'Book now' : 'Sign up'}
+              {user ? t('bookNow') : t('signup')}
             </Link>
           </div>
         </div>
@@ -90,20 +91,20 @@ export default function Landing({ user }: { user?: PublicUser }) {
           <div className="animate-rise">
             <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-[13px] font-medium text-green-100">
               <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
-              Umrah · Hajj · Ziyarat — EU &amp; the Pakistani diaspora
+              {t('heroBadge')}
             </span>
             <h1 className="mb-5 font-serif text-[clamp(2.25rem,5.4vw,3.75rem)] font-semibold leading-[1.03] tracking-[-0.022em]">
-              Begin a sacred journey, with calm.
+              {t('heroTitle')}
             </h1>
             <p className="mb-8 max-w-[520px] text-[clamp(1rem,1.6vw,1.2rem)] leading-relaxed text-green-100/90">
-              Hotel, transport, ground services and flights in one cart — with e-Visa guidance, live booking status and prices in EUR or PKR.
+              {t('heroSubtitle')}
             </p>
             <div className="mb-10 flex flex-wrap items-center gap-3">
               <a href="#search" className="inline-flex items-center gap-2 rounded-xl bg-sand-50 px-6 py-3.5 text-[15.5px] font-semibold text-green-900 shadow-[0_10px_28px_rgba(7,48,30,0.4)] hover:bg-white">
-                Plan my pilgrimage →
+                {t('planPilgrimage')}
               </a>
               <a href="#how" className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-5 py-3.5 text-[15.5px] font-semibold hover:bg-white/15">
-                How it works
+                {t('howItWorks')}
               </a>
             </div>
             <div className="flex flex-wrap gap-x-9 gap-y-5 border-t border-white/15 pt-7">
@@ -146,25 +147,25 @@ export default function Landing({ user }: { user?: PublicUser }) {
         <div className="animate-rise rounded-[22px] border border-sand-200 bg-white p-[clamp(18px,2.4vw,24px)] shadow-[0_24px_60px_-24px_rgba(42,38,32,0.34)]">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap gap-1 rounded-xl bg-sand-100 p-1">
-              {SEARCH_TABS.map((t) => (
+              {SEARCH_TABS.map((tb) => (
                 <button
-                  key={t}
+                  key={tb}
                   type="button"
-                  onClick={() => setTab(t)}
-                  className={`rounded-lg px-5 py-2 text-sm font-semibold ${tab === t ? 'bg-white text-green-800 shadow-sm' : 'text-sand-500'}`}
+                  onClick={() => setTab(tb)}
+                  className={`rounded-lg px-5 py-2 text-sm font-semibold ${tab === tb ? 'bg-white text-green-800 shadow-sm' : 'text-sand-500'}`}
                 >
-                  {t}
+                  {tb}
                 </button>
               ))}
             </div>
             <span className="text-[13px] text-sand-500">FX today · 1 € = ₨310.8 · charged in EUR</span>
           </div>
           <div className="grid items-end gap-3 md:grid-cols-[repeat(4,1fr)_auto]">
-            <SelectField label="From" value={from} onChange={setFrom} options={[...DEPARTURE_CITIES]} />
-            <SelectField label="Destination" value={dest} onChange={setDest} options={[...DESTINATIONS]} />
-            <Field label="Dates" value="📅 12–26 Sep · 14 nts" />
+            <SelectField label={t('from')} value={from} onChange={setFrom} options={[...DEPARTURE_CITIES]} />
+            <SelectField label={t('destination')} value={dest} onChange={setDest} options={[...DESTINATIONS]} />
+            <Field label={t('dates')} value="📅 12–26 Sep · 14 nts" />
             <div>
-              <Lbl>Pilgrims</Lbl>
+              <Lbl>{t('pilgrims')}</Lbl>
               <div className="flex items-center justify-between rounded-[10px] border-[1.5px] border-sand-300 px-2 py-1.5">
                 <button type="button" aria-label="Decrease" onClick={() => setPax((p) => Math.max(1, p - 1))} className="h-8 w-8 rounded-lg border border-sand-200 bg-sand-50 text-lg text-green-700">−</button>
                 <span className="text-[14.5px] font-semibold">{pax}</span>
@@ -175,7 +176,7 @@ export default function Landing({ user }: { user?: PublicUser }) {
               href={`/book?city=${dest.toUpperCase()}&pax=${pax}`}
               className="flex h-[50px] items-center justify-center whitespace-nowrap rounded-[11px] bg-green-800 px-6 text-[15px] font-semibold text-white shadow-[0_6px_16px_rgba(15,81,50,0.25)] hover:bg-green-700"
             >
-              Search {SEARCH_COUNT[tab]} {tab} · {dest} →
+              {t('searchCta', { count: SEARCH_COUNT[tab], tab, dest })}
             </Link>
           </div>
         </div>
@@ -287,16 +288,16 @@ export default function Landing({ user }: { user?: PublicUser }) {
               <button
                 key={l.code}
                 type="button"
-                onClick={() => setLocale(l)}
-                className={`rounded-full px-4 py-2 text-sm font-semibold ${locale.code === l.code ? 'bg-green-800 text-white' : 'bg-sand-100 text-sand-700'}`}
+                onClick={() => setDemoLocale(l)}
+                className={`rounded-full px-4 py-2 text-sm font-semibold ${demoLocale.code === l.code ? 'bg-green-800 text-white' : 'bg-sand-100 text-sand-700'}`}
               >
                 {l.label}
               </button>
             ))}
           </div>
-          <div dir={locale.rtl ? 'rtl' : 'ltr'} className={`rounded-xl bg-sand-50 p-6 ${locale.rtl ? 'font-arabic' : ''}`}>
-            <div className="font-serif text-2xl font-semibold text-sand-ink">{locale.phrase}</div>
-            <div className="mt-1 text-sm text-sand-500">{locale.label} · dir={locale.rtl ? 'rtl' : 'ltr'}</div>
+          <div dir={demoLocale.rtl ? 'rtl' : 'ltr'} className={`rounded-xl bg-sand-50 p-6 ${demoLocale.rtl ? 'font-arabic' : ''}`}>
+            <div className="font-serif text-2xl font-semibold text-sand-ink">{demoLocale.phrase}</div>
+            <div className="mt-1 text-sm text-sand-500">{demoLocale.label} · dir={demoLocale.rtl ? 'rtl' : 'ltr'}</div>
           </div>
         </div>
       </Section>
@@ -372,9 +373,9 @@ export default function Landing({ user }: { user?: PublicUser }) {
             <Logo size={32} />
             <span className="font-serif text-lg font-semibold tracking-[0.05em] text-sand-ink">AUJ</span>
           </div>
-          <span>© 2026 AUJ · Licensed EU tour operator · Charged in EUR</span>
+          <span>{t('footerRights')}</span>
           <div className="flex items-center gap-4">
-            <Link href="/redeem" className="font-semibold text-accent-600 hover:text-accent-700">🎁 Redeem a gift</Link>
+            <Link href="/redeem" className="font-semibold text-accent-600 hover:text-accent-700">{t('redeemGift')}</Link>
             <span>EN · LT · UR · AR</span>
           </div>
         </div>

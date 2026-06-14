@@ -1,0 +1,19 @@
+{
+  "common": {
+    "heroBadge": "Umra · Hadžas · Zijara — ES ir Pakistano diaspora",
+    "heroTitle": "Pradėkite šventą kelionę ramiai.",
+    "heroSubtitle": "Viešbutis, transportas, paslaugos ir skrydžiai viename krepšelyje — su e. vizos pagalba, tiesiogine užsakymo būsena ir kainomis EUR arba PKR.",
+    "planPilgrimage": "Planuoti piligriminę kelionę →",
+    "howItWorks": "Kaip tai veikia",
+    "login": "Prisijungti",
+    "signup": "Registruotis",
+    "bookNow": "Užsakyti",
+    "from": "Iš",
+    "destination": "Kelionės tikslas",
+    "dates": "Datos",
+    "pilgrims": "Piligrimai",
+    "searchCta": "Ieškoti {count} {tab} · {dest} →",
+    "footerRights": "© 2026 AUJ · Licencijuotas ES kelionių operatorius · Mokama EUR",
+    "redeemGift": "🎁 Panaudoti dovaną"
+  }
+}

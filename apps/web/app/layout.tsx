@@ -1,5 +1,8 @@
 import type { ReactNode } from 'react';
 import { IBM_Plex_Mono, IBM_Plex_Sans, IBM_Plex_Sans_Arabic, IBM_Plex_Serif } from 'next/font/google';
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale, getMessages } from 'next-intl/server';
+import { dirFor } from '../src/i18n/locales';
 import './globals.css';
 
 // Self-hosted via next/font (no external @import, no FOUT). Exposed as CSS variables
@@ -14,10 +17,14 @@ export const metadata = {
   description: 'Umrah, Hajj & Ziyarat for the EU and the Pakistani diaspora — one cart, e-Visa guidance, EUR/PKR pricing.',
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const locale = await getLocale();
+  const messages = await getMessages();
   return (
-    <html lang="en" dir="ltr" className={`${sans.variable} ${serif.variable} ${mono.variable} ${arabic.variable}`}>
-      <body className="font-sans antialiased">{children}</body>
+    <html lang={locale} dir={dirFor(locale)} className={`${sans.variable} ${serif.variable} ${mono.variable} ${arabic.variable}`}>
+      <body className="font-sans antialiased">
+        <NextIntlClientProvider locale={locale} messages={messages}>{children}</NextIntlClientProvider>
+      </body>
     </html>
   );
 }

@@ -1,0 +1,19 @@
+{
+  "common": {
+    "heroBadge": "Umrah · Hajj · Ziyarat — EU & the Pakistani diaspora",
+    "heroTitle": "Begin a sacred journey, with calm.",
+    "heroSubtitle": "Hotel, transport, ground services and flights in one cart — with e-Visa guidance, live booking status and prices in EUR or PKR.",
+    "planPilgrimage": "Plan my pilgrimage →",
+    "howItWorks": "How it works",
+    "login": "Log in",
+    "signup": "Sign up",
+    "bookNow": "Book now",
+    "from": "From",
+    "destination": "Destination",
+    "dates": "Dates",
+    "pilgrims": "Pilgrims",
+    "searchCta": "Search {count} {tab} · {dest} →",
+    "footerRights": "© 2026 AUJ · Licensed EU tour operator · Charged in EUR",
+    "redeemGift": "🎁 Redeem a gift"
+  }
+}
