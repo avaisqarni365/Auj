@@ -120,6 +120,13 @@ core-booking 29). Remaining: real partner SaudiPartnerClient (gated), real payme
   (pilgrim name join, unverified first) with a Verify button → verifyDocumentAction (admin-guarded) →
   DocumentService.verify. BookingApi.listAllDocuments + verifyDocument. Closes the upload→verify loop.
 
+## Deploy runbook (2026-06-14)
+- infra/DEPLOY-RUNBOOK.md: concrete copy-paste deploy procedure (prereqs, env table, first-time
+  server setup, CI/CD tag→build→push→ssh-deploy, smoke test, rollback, tunnel-only datastores,
+  security checklist). Confirmed schema auto-migrates on first request when DATABASE_URL is set
+  (book migrate + auth migrateAuth + support migrateSupport). Only host + secret VALUES remain on
+  the operator. Note: `next build` standalone fails on Windows (EPERM symlink) — build on Linux/CI.
+
 ## Email notifications (2026-06-14)
 - NEW @auj/notifications: Notifier port + LogNotifier (default, offline) + HttpEmailNotifier
   (generic JSON email API, injectable fetch); pure message builders (bookingConfirmation,

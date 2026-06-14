@@ -1,5 +1,8 @@
 # Deployment
 
+> **Step-by-step:** see [`DEPLOY-RUNBOOK.md`](./DEPLOY-RUNBOOK.md) for the concrete, copy-paste
+> deploy procedure (prereqs, env, first-time setup, CI/CD, smoke test, rollback).
+
 AUJ ships as a single Docker image (the unified `web` Next.js app — landing, `/book`, `/agent`, `/admin`, auth) plus a Postgres/Redis/MinIO stack.
 
 ## Pipeline overview
