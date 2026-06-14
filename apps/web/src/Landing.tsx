@@ -25,6 +25,15 @@ import {
   type SearchTab,
 } from './content';
 
+const NAV_ANCHOR: Record<string, string> = {
+  Umrah: '#journeys',
+  Hajj: '#journeys',
+  Ziyarat: '#journeys',
+  'How it works': '#how',
+  Packages: '#packages',
+  'Track booking': '#track',
+};
+
 export default function Landing({ user }: { user?: PublicUser }) {
   const [tab, setTab] = useState<SearchTab>('Umrah');
   const [from, setFrom] = useState<string>(DEPARTURE_CITIES[0]);
@@ -73,7 +82,7 @@ export default function Landing({ user }: { user?: PublicUser }) {
           </div>
           <nav className="hidden flex-wrap items-center gap-0.5 md:flex">
             {NAV_LINKS.map((n) => (
-              <a key={n} href="#" className="whitespace-nowrap rounded-lg px-3 py-2 text-[14.5px] font-medium text-sand-700 hover:bg-sand-100 hover:text-green-800">
+              <a key={n} href={NAV_ANCHOR[n] ?? '#search'} className="whitespace-nowrap rounded-lg px-3 py-2 text-[14.5px] font-medium text-sand-700 hover:bg-sand-100 hover:text-green-800">
                 {n}
               </a>
             ))}
