@@ -106,6 +106,17 @@ core-booking 29). Remaining: real partner SaudiPartnerClient (gated), real payme
 - TODO: real Nusuk Masar via connector-saudi (gated on partner access). Nusuk-parity product
   surface otherwise COMPLETE behind the mock seam.
 
+## Real payment acquirers (2026-06-14)
+- @auj/payments: LiveStripeProvider (real Stripe PaymentIntents REST — manual-capture create,
+  capture, refund via PI re-read, webhook + status mapping) and LiveHttpProvider (generic JSON
+  gateway for PKR / Safepay-PayFast). Both take an INJECTABLE fetch → mapping/idempotency unit-tested
+  offline (no network, CI stays green). `createPaymentRouter(env)` selects live when keys present
+  (STRIPE_SECRET_KEY / PKR_GATEWAY_URL+KEY), else the in-memory sandbox (default).
+- apps/web book backend now builds payments via createPaymentRouter() — set the keys in infra/.env to
+  go live, no code change. Stripe NOTE: a production card flow also needs the Stripe.js client step
+  (collect+confirm the payment method) before capture — documented limitation, next step.
+- Gate: build 13/13, lint 13/13, test 24/24 (payments 28).
+
 ## Design quality as a workflow (added 2026-06-13)
 - [x] .claude/skills/design-taste/SKILL.md — Emil-Kowalski-grade motion + impeccable design + typography + taste, with a finish checklist. Auto-surfaces on UI work (description match); invoke as /design-taste. THE workflow to apply on every frontend change.
 - [x] @auj/ui motion — preset keyframes (fade-in/rise/pop), ease-out-soft, duration-fast; @auj/ui/motion.css (prefers-reduced-motion guard, imported in all 3 app globals); Button press (active:scale .98), Card hover transition. Purposeful, fast, transform/opacity-only.

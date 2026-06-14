@@ -7,14 +7,14 @@ import type { SaudiConnector, TravelSupplier } from '@auj/contracts';
 import { MockSaudiConnector, MockTravelSupplier } from '@auj/connector-mock';
 import { createCoreBooking, type CoreBooking } from '@auj/core-booking';
 import { createPool, migrate, createPostgresStores } from '@auj/core-booking/postgres';
-import { Ledger, PaymentsService, PkrGatewayProvider, ProviderRouter, StripeProvider } from '@auj/payments';
+import { Ledger, PaymentsService, createPaymentRouter } from '@auj/payments';
 import type { Backend, BookingApi, PaymentsApi } from '../ports';
 import { selectSaudiConnector, selectTravelSupplier } from '../../connectors';
 
 function wire(core: CoreBooking, saudi: SaudiConnector, travel: TravelSupplier): Backend {
   const ledger = new Ledger();
-  const router = new ProviderRouter().register(new StripeProvider()).register(new PkrGatewayProvider());
-  const payments = new PaymentsService(router, ledger);
+  // Env-selected: live Stripe/PKR when their keys are set, else the offline sandbox.
+  const payments = new PaymentsService(createPaymentRouter(), ledger);
 
   const booking: BookingApi = {
     searchHotels: (c) => saudi.searchHotels(c),
