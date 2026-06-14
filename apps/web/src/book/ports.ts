@@ -33,6 +33,10 @@ export interface BookingApi {
   listBookings(): Promise<Booking[]>;
   /** Bookings belonging to the customer with this email (the logged-in user's account). */
   myBookings(email: string): Promise<Booking[]>;
+  /** A single booking, only if it belongs to this email (ownership-checked). */
+  myBooking(email: string, bookingId: string): Promise<Booking | undefined>;
+  /** Pilgrims by id (for names + nationality on the detail view). */
+  pilgrims(ids: string[]): Promise<CrmPilgrim[]>;
   getBooking(bookingId: string): Promise<Booking | undefined>;
 }
 

@@ -39,6 +39,13 @@ function wire(core: CoreBooking, saudi: SaudiConnector, travel: TravelSupplier):
       const all = await core.stores.bookings.list();
       return all.filter((b) => mine.has(b.customerId)).sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
     },
+    myBooking: async (email, id) => {
+      const b = await core.stores.bookings.get(id);
+      if (!b) return undefined;
+      const customer = await core.stores.customers.get(b.customerId);
+      return customer && customer.email.toLowerCase() === email.toLowerCase() ? b : undefined;
+    },
+    pilgrims: (ids) => core.crm.getPilgrims(ids),
     getBooking: (id) => core.stores.bookings.get(id),
   };
 

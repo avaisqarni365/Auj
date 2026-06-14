@@ -70,7 +70,7 @@ function BookingCard({ booking: b }: { booking: Booking }) {
   ].filter(Boolean) as string[];
 
   return (
-    <div className="rounded-2xl border border-sand-200 bg-white p-4">
+    <Link href={`/bookings/${b.id}`} className="block rounded-2xl border border-sand-200 bg-white p-4 transition-colors hover:border-sand-300 hover:bg-white/80">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
           <div className="font-mono text-[14px] font-semibold">{b.bookingRef ?? b.id.slice(0, 16)}</div>
@@ -92,6 +92,6 @@ function BookingCard({ booking: b }: { booking: Booking }) {
         <span className="text-[12px] text-sand-500">{new Date(b.createdAt).toUTCString().slice(0, 16)}</span>
         {eur ? <span className="font-mono text-sm font-semibold text-green-800">{formatMoney(eur)}</span> : null}
       </div>
-    </div>
+    </Link>
   );
 }

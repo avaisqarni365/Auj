@@ -13,5 +13,10 @@ describe('BookingApi.myBookings', () => {
     expect(result).toHaveLength(1);
     expect(result[0]?.id).toBe(mine.id);
     expect(await be.booking.myBookings('nobody@auj.example')).toHaveLength(0);
+
+    // myBooking is ownership-checked: owner gets it, others get undefined.
+    expect((await be.booking.myBooking('aisha@auj.example', mine.id))?.id).toBe(mine.id);
+    expect(await be.booking.myBooking('bilal@auj.example', mine.id)).toBeUndefined();
+    expect(await be.booking.myBooking('aisha@auj.example', 'no-such-id')).toBeUndefined();
   });
 });

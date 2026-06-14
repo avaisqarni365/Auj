@@ -106,6 +106,13 @@ core-booking 29). Remaining: real partner SaudiPartnerClient (gated), real payme
 - TODO: real Nusuk Masar via connector-saudi (gated on partner access). Nusuk-parity product
   surface otherwise COMPLETE behind the mock seam.
 
+## My bookings + detail (2026-06-14)
+- /bookings: real list of the logged-in user's bookings (BookingApi.myBookings by customer email);
+  cards link to detail. /bookings/[id]: ownership-checked detail (BookingApi.myBooking returns the
+  booking only if it belongs to the user) — items+BRNs, pilgrims with per-pilgrim visa route (routeFor),
+  Rawdah/Gift/special-requests. Shared booking-backend singleton extracted to backend/singleton.ts.
+  Unit tests for myBookings/myBooking; verified guard (307) + ownership notFound (404). apps/web 63.
+
 ## Multi-pilgrim capture (2026-06-14)
 - B2C funnel now captures a GROUP, not a single pilgrim. BookingFunnel holds pilgrims: PilgrimDraft[]
   (sized to the pax chosen at search; add/remove in the PILGRIMS step). PilgrimCapture refactored to
