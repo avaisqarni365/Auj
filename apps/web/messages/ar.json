@@ -11,6 +11,8 @@
     "from": "من",
     "destination": "الوجهة",
     "dates": "التواريخ",
+    "checkIn": "تسجيل الوصول",
+    "checkOut": "تسجيل المغادرة",
     "pilgrims": "الحجّاج",
     "searchCta": "ابحث عن {count} {tab} · {dest} →",
     "footerRights": "© 2026 AUJ · مشغّل سياحي مرخّص في الاتحاد الأوروبي · الدفع باليورو",

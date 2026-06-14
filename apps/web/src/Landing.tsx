@@ -30,6 +30,8 @@ export default function Landing({ user }: { user?: PublicUser }) {
   const [from, setFrom] = useState<string>(DEPARTURE_CITIES[0]);
   const [dest, setDest] = useState<string>(DESTINATIONS[0]);
   const [pax, setPax] = useState(4);
+  const [checkIn, setCheckIn] = useState('2026-09-12');
+  const [checkOut, setCheckOut] = useState('2026-09-26');
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [demoLocale, setDemoLocale] = useState(LOCALES[0]!); // the "in your language" preview widget
   const t = useTranslations('common');
@@ -167,10 +169,11 @@ export default function Landing({ user }: { user?: PublicUser }) {
             </div>
             <span className="text-[13px] text-sand-500">FX today · 1 € = ₨310.8 · charged in EUR</span>
           </div>
-          <div className="grid items-end gap-3 md:grid-cols-[repeat(4,1fr)_auto]">
+          <div className="grid items-end gap-3 md:grid-cols-[repeat(5,1fr)_auto]">
             <SelectField label={t('from')} value={from} onChange={setFrom} options={[...DEPARTURE_CITIES]} />
             <SelectField label={t('destination')} value={dest} onChange={setDest} options={[...DESTINATIONS]} />
-            <Field label={t('dates')} value="📅 12–26 Sep · 14 nts" />
+            <DateField label={t('checkIn')} value={checkIn} onChange={setCheckIn} />
+            <DateField label={t('checkOut')} value={checkOut} min={checkIn} onChange={setCheckOut} />
             <div>
               <Lbl>{t('pilgrims')}</Lbl>
               <div className="flex items-center justify-between rounded-[10px] border-[1.5px] border-sand-300 px-2 py-1.5">
@@ -180,7 +183,7 @@ export default function Landing({ user }: { user?: PublicUser }) {
               </div>
             </div>
             <Link
-              href={`/book?city=${dest.toUpperCase()}&pax=${pax}`}
+              href={`/book?city=${dest.toUpperCase()}&pax=${pax}&checkIn=${checkIn}&checkOut=${checkOut}`}
               className="flex h-[50px] items-center justify-center whitespace-nowrap rounded-[11px] bg-green-800 px-6 text-[15px] font-semibold text-white shadow-[0_6px_16px_rgba(15,81,50,0.25)] hover:bg-green-700"
             >
               {t('searchCta', { count: SEARCH_COUNT[tab], tab, dest })}
@@ -395,13 +398,18 @@ function Lbl({ children }: { children: ReactNode }) {
   return <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-sand-500">{children}</div>;
 }
 
-function Field({ label, value }: { label: string; value: string }) {
+function DateField({ label, value, onChange, min }: { label: string; value: string; onChange: (v: string) => void; min?: string }) {
   return (
     <div>
       <Lbl>{label}</Lbl>
-      <div className="flex items-center justify-between rounded-[10px] border-[1.5px] border-sand-300 px-3 py-3 text-[14.5px] font-medium">
-        {value} <span className="text-sand-500">▾</span>
-      </div>
+      <input
+        type="date"
+        value={value}
+        min={min}
+        onChange={(e) => onChange(e.target.value)}
+        aria-label={label}
+        className="w-full rounded-[10px] border-[1.5px] border-sand-300 bg-white px-3 py-[11px] text-[14px] font-medium text-sand-ink focus:border-green-700 focus:outline-none"
+      />
     </div>
   );
 }

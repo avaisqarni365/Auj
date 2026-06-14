@@ -25,13 +25,23 @@ const DEFAULT_PILGRIM: PilgrimDraft = {
   gender: 'M',
 };
 
-export function BookingFunnel({ initialCity, initialPax }: { initialCity: SearchCriteria['city']; initialPax: number }) {
+export function BookingFunnel({
+  initialCity,
+  initialPax,
+  initialCheckIn = '',
+  initialCheckOut = '',
+}: {
+  initialCity: SearchCriteria['city'];
+  initialPax: number;
+  initialCheckIn?: string;
+  initialCheckOut?: string;
+}) {
   const [state, dispatch] = useReducer(
     funnelReducer,
-    { city: initialCity, pax: initialPax },
+    { city: initialCity, pax: initialPax, checkIn: initialCheckIn, checkOut: initialCheckOut },
     (init): FunnelState => {
       const base = initialFunnel();
-      return { ...base, criteria: { ...base.criteria, city: init.city, pax: init.pax } };
+      return { ...base, criteria: { ...base.criteria, city: init.city, pax: init.pax, checkIn: init.checkIn, checkOut: init.checkOut } };
     },
   );
   const [offers, setOffers] = useState<HotelOffer[]>([]);

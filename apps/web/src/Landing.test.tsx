@@ -35,21 +35,33 @@ describe('Landing — navigation (logged out)', () => {
   it('hero search links to /book with the default city + pax', () => {
     renderLanding();
     const cta = screen.getByRole('link', { name: /Search \d+ Umrah/ });
-    expect(href(cta)).toBe('/book?city=MAKKAH&pax=4');
+    expect(href(cta)).toContain('/book?city=MAKKAH&pax=4');
+    expect(href(cta)).toContain('checkIn=');
   });
 
   it('changing the destination updates the search link', async () => {
     const user = userEvent.setup();
     renderLanding();
     await user.selectOptions(screen.getByLabelText('Destination'), 'Madinah');
-    expect(href(screen.getByRole('link', { name: /Search \d+ Umrah/ }))).toBe('/book?city=MADINAH&pax=4');
+    expect(href(screen.getByRole('link', { name: /Search \d+ Umrah/ }))).toContain('/book?city=MADINAH&pax=4');
   });
 
   it('the pax stepper changes the search link', async () => {
     const user = userEvent.setup();
     renderLanding();
     await user.click(screen.getByLabelText('Increase'));
-    expect(href(screen.getByRole('link', { name: /Search \d+ Umrah/ }))).toBe('/book?city=MAKKAH&pax=5');
+    expect(href(screen.getByRole('link', { name: /Search \d+ Umrah/ }))).toContain('/book?city=MAKKAH&pax=5');
+  });
+
+  it('renders real check-in/check-out date pickers wired into the search link', () => {
+    renderLanding();
+    const ci = screen.getByLabelText('Check-in') as HTMLInputElement;
+    const co = screen.getByLabelText('Check-out') as HTMLInputElement;
+    expect(ci.getAttribute('type')).toBe('date');
+    expect(co.getAttribute('type')).toBe('date');
+    const cta = screen.getByRole('link', { name: /Search \d+ Umrah/ });
+    expect(href(cta)).toContain(`checkIn=${ci.value}`);
+    expect(href(cta)).toContain(`checkOut=${co.value}`);
   });
 
   it('switching the journey tab updates the count + destination label in the CTA', async () => {

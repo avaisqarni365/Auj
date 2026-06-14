@@ -11,6 +11,8 @@
     "from": "Iš",
     "destination": "Kelionės tikslas",
     "dates": "Datos",
+    "checkIn": "Atvykimas",
+    "checkOut": "Išvykimas",
     "pilgrims": "Piligrimai",
     "searchCta": "Ieškoti {count} {tab} · {dest} →",
     "footerRights": "© 2026 AUJ · Licencijuotas ES kelionių operatorius · Mokama EUR",

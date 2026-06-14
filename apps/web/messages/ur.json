@@ -11,6 +11,8 @@
     "from": "روانگی",
     "destination": "منزل",
     "dates": "تاریخیں",
+    "checkIn": "چیک اِن",
+    "checkOut": "چیک آؤٹ",
     "pilgrims": "زائرین",
     "searchCta": "{count} {tab} · {dest} تلاش کریں →",
     "footerRights": "© 2026 AUJ · لائسنس یافتہ ای یو ٹور آپریٹر · EUR میں ادائیگی",
