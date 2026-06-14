@@ -36,7 +36,7 @@ export function BookingFunnel({ initialCity, initialPax }: { initialCity: Search
   );
   const [offers, setOffers] = useState<HotelOffer[]>([]);
   const [addons, setAddons] = useState<{ ziyarah: GroundOffer[]; catering: CateringOffer[] }>({ ziyarah: [], catering: [] });
-  const [pilgrim, setPilgrim] = useState<PilgrimDraft>(DEFAULT_PILGRIM);
+  const [pilgrims, setPilgrims] = useState<PilgrimDraft[]>([DEFAULT_PILGRIM]);
   const [booking, setBooking] = useState<Booking>();
   const [visaCase, setVisaCase] = useState<VisaCase>();
   const [pending, start] = useTransition();
@@ -67,7 +67,7 @@ export function BookingFunnel({ initialCity, initialPax }: { initialCity: Search
   const pay = (): void =>
     start(async () => {
       const placed = await placeBookingAction({
-        pilgrims: [pilgrim],
+        pilgrims,
         items: state.cart,
         total: SELL_PRICE,
         mode: state.mode,
@@ -101,6 +101,23 @@ export function BookingFunnel({ initialCity, initialPax }: { initialCity: Search
 
   const back = (step: 'SEARCH' | 'RESULTS' | 'BUILDER' | 'PILGRIMS'): (() => void) => () =>
     dispatch({ type: 'GO', step });
+
+  const blankPilgrim = (): PilgrimDraft => ({ firstName: '', lastName: '', passportNumber: '', nationality: 'PK', dob: '1990-01-01', gender: 'M' });
+  const goToPilgrims = (): void => {
+    const n = Math.max(1, state.criteria.pax);
+    setPilgrims((cur) =>
+      cur.length === n
+        ? cur
+        : cur.length > n
+          ? cur.slice(0, n)
+          : [...cur, ...Array.from({ length: n - cur.length }, blankPilgrim)],
+    );
+    dispatch({ type: 'GO', step: 'PILGRIMS' });
+  };
+  const setPilgrimField = (index: number, field: 'firstName' | 'lastName' | 'nationality' | 'passportNumber', value: string): void =>
+    setPilgrims((cur) => cur.map((p, i) => (i === index ? { ...p, [field]: value } : p)));
+  const addPilgrim = (): void => setPilgrims((cur) => [...cur, blankPilgrim()]);
+  const removePilgrim = (index: number): void => setPilgrims((cur) => (cur.length > 1 ? cur.filter((_, i) => i !== index) : cur));
 
   return (
     <main className="mx-auto min-h-screen max-w-md bg-sand-50 shadow-lg">
@@ -139,7 +156,7 @@ export function BookingFunnel({ initialCity, initialPax }: { initialCity: Search
           catering={addons.catering}
           selectedOfferIds={state.cart.map((i) => i.offerId)}
           onToggleAddon={toggleAddon}
-          onContinue={() => dispatch({ type: 'GO', step: 'PILGRIMS' })}
+          onContinue={goToPilgrims}
           onBack={back('RESULTS')}
         />
       )}
@@ -147,11 +164,11 @@ export function BookingFunnel({ initialCity, initialPax }: { initialCity: Search
       {state.step === 'PILGRIMS' && (
         <PilgrimCapture
           locale={bookLocale}
-          firstName={pilgrim.firstName}
-          nationality={pilgrim.nationality}
-          passportNumber={pilgrim.passportNumber}
-          route={previewVisaRoute(pilgrim)}
-          onField={(field, value) => setPilgrim((p) => ({ ...p, [field]: value }))}
+          pilgrims={pilgrims}
+          routes={pilgrims.map(previewVisaRoute)}
+          onField={setPilgrimField}
+          onAdd={addPilgrim}
+          onRemove={removePilgrim}
           onContinue={() => dispatch({ type: 'GO', step: 'CHECKOUT' })}
           onBack={back('BUILDER')}
         />

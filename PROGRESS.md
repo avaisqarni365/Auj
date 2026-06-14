@@ -106,6 +106,14 @@ core-booking 29). Remaining: real partner SaudiPartnerClient (gated), real payme
 - TODO: real Nusuk Masar via connector-saudi (gated on partner access). Nusuk-parity product
   surface otherwise COMPLETE behind the mock seam.
 
+## Multi-pilgrim capture (2026-06-14)
+- B2C funnel now captures a GROUP, not a single pilgrim. BookingFunnel holds pilgrims: PilgrimDraft[]
+  (sized to the pax chosen at search; add/remove in the PILGRIMS step). PilgrimCapture refactored to
+  render a card per pilgrim (first/last/nationality/passport) with a per-pilgrim visa-route pill
+  (routeForGroup/previewVisaRoute) + warnings. placeBookingAction already accepted an array, so the
+  whole group flows through to per-pilgrim visa cases + MyBooking's per-pilgrim list. screens tests
+  updated to the multi API. Gate: build 13/13, lint 13/13, test 24/24 (apps/web 62).
+
 ## Real i18n (2026-06-14)
 - next-intl wired in apps/web WITHOUT /[locale] URL routing — cookie-driven (NEXT_LOCALE).
   src/i18n/{locales,request,actions,LocaleSwitcher}; messages/{en,lt,ur,ar}.json (namespace "common").

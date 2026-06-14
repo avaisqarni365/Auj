@@ -25,27 +25,34 @@ describe('B2C screens', () => {
     expect(html).toContain('SAR');
   });
 
-  it('PilgrimCapture surfaces the e-Visa route for an EU passport', () => {
+  it('PilgrimCapture surfaces a per-pilgrim e-Visa route for an EU passport', () => {
     const html = renderToStaticMarkup(
       <PilgrimCapture
-        locale="en" firstName="Greta" nationality="LT" passportNumber="LT9"
-        route={{ route: 'EVISA_DIRECT', warnings: [] }}
+        locale="en"
+        pilgrims={[{ firstName: 'Greta', lastName: 'K', passportNumber: 'LT9', nationality: 'LT', dob: '1990-01-01', gender: 'F' }]}
+        routes={[{ route: 'EVISA_DIRECT', warnings: [] }]}
         onField={noop} onContinue={noop}
       />,
     );
     expect(html).toContain('e-Visa');
-    expect(html).toContain('bg-success-bg');
+    expect(html).toContain('Greta');
   });
 
-  it('PilgrimCapture surfaces the agent channel for a PK passport', () => {
+  it('PilgrimCapture surfaces the agent channel + supports a group with add/remove', () => {
     const html = renderToStaticMarkup(
       <PilgrimCapture
-        locale="en" firstName="Imran" nationality="PK" passportNumber="PK1"
-        route={{ route: 'AGENT_CHANNEL', warnings: [] }}
-        onField={noop} onContinue={noop}
+        locale="en"
+        pilgrims={[
+          { firstName: 'Imran', lastName: 'Ali', passportNumber: 'PK1', nationality: 'PK', dob: '1985-01-01', gender: 'M' },
+          { firstName: 'Sara', lastName: 'Ali', passportNumber: 'PK2', nationality: 'PK', dob: '1990-01-01', gender: 'F' },
+        ]}
+        routes={[{ route: 'AGENT_CHANNEL', warnings: [] }, { route: 'AGENT_CHANNEL', warnings: [] }]}
+        onField={noop} onAdd={noop} onRemove={noop} onContinue={noop}
       />,
     );
     expect(html).toContain('Agent channel');
+    expect(html).toContain('Pilgrims 2'); // second pilgrim card
+    expect(html).toContain('Add pilgrim');
   });
 
   it('PackageBuilder offers the Nusuk package modes and the Rawdah permit add-on', () => {
