@@ -17,8 +17,8 @@ function Submit() {
 export function RedeemForm() {
   const [state, action] = useFormState(redeemVoucherAction, {} as RedeemState);
   return (
-    <main className="flex min-h-screen items-center justify-center bg-sand-50 px-4 py-10">
-      <div className="w-full max-w-md">
+    <div className="w-full px-4 py-10">
+      <div className="mx-auto w-full max-w-md">
         <div className="mb-6 flex flex-col items-center gap-2.5 text-center">
           <Logo size={44} />
           <h1 className="font-serif text-2xl font-semibold">Redeem a gift</h1>
@@ -56,6 +56,6 @@ export function RedeemForm() {
           <Link href="/" className="font-semibold text-accent-600">← Back to AUJ</Link>
         </p>
       </div>
-    </main>
+    </div>
   );
 }

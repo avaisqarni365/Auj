@@ -1,6 +1,7 @@
 import type { SearchCriteria } from '@auj/contracts';
 import { requireRole } from '../../src/auth/session';
 import { BookingFunnel } from '../../src/book/BookingFunnel';
+import { SitePage } from '../../src/components/SitePage';
 
 const CITIES = ['MAKKAH', 'MADINAH', 'JEDDAH'] as const;
 
@@ -12,14 +13,16 @@ const isDate = (v: string | undefined): v is string => !!v && /^\d{4}-\d{2}-\d{2
 
 // Booking funnel — any signed-in user. The booking is attached to their account.
 export default async function BookPage({ searchParams }: { searchParams: { city?: string; pax?: string; checkIn?: string; checkOut?: string } }) {
-  await requireRole(['PILGRIM', 'AGENT', 'SUB_AGENT', 'ADMIN'], '/book');
+  const user = await requireRole(['PILGRIM', 'AGENT', 'SUB_AGENT', 'ADMIN'], '/book');
   const pax = Math.min(49, Math.max(1, Number.parseInt(searchParams.pax ?? '1', 10) || 1));
   return (
-    <BookingFunnel
-      initialCity={toCity(searchParams.city)}
-      initialPax={pax}
-      initialCheckIn={isDate(searchParams.checkIn) ? searchParams.checkIn : ''}
-      initialCheckOut={isDate(searchParams.checkOut) ? searchParams.checkOut : ''}
-    />
+    <SitePage user={user}>
+      <BookingFunnel
+        initialCity={toCity(searchParams.city)}
+        initialPax={pax}
+        initialCheckIn={isDate(searchParams.checkIn) ? searchParams.checkIn : ''}
+        initialCheckOut={isDate(searchParams.checkOut) ? searchParams.checkOut : ''}
+      />
+    </SitePage>
   );
 }

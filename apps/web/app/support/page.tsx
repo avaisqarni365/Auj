@@ -1,11 +1,10 @@
-import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import { Logo } from '@auj/ui';
 import type { Ticket, TicketStatus } from '@auj/support';
 import { requireRole } from '../../src/auth/session';
 import { getSupport } from '../../src/support/backend';
 import { replyTicketAction } from '../../src/support/actions';
 import { OpenTicketForm } from '../../src/support/OpenTicketForm';
+import { SitePage } from '../../src/components/SitePage';
 
 const STATUS_TONE: Record<TicketStatus, string> = {
   OPEN: 'bg-info-bg text-info-fg',
@@ -21,18 +20,8 @@ export default async function SupportPage() {
   const t = await getTranslations('support');
 
   return (
-    <div className="min-h-screen bg-sand-50">
-      <header className="border-b border-sand-200 bg-white">
-        <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
-          <Link href="/" className="flex items-center gap-2 text-sand-700">
-            <Logo size={26} />
-            <span className="font-serif text-base font-semibold tracking-[0.04em]">AUJ</span>
-          </Link>
-          <span className="text-[13px] text-sand-500">{t('supportOf')} · {user.email}</span>
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-3xl px-4 py-6">
+    <SitePage user={user}>
+      <div className="mx-auto max-w-3xl px-4 py-6">
         <h1 className="mb-1 font-serif text-2xl font-semibold">{t('title')}</h1>
         <p className="mb-5 text-sm text-sand-500">{t('subtitle')}</p>
 
@@ -48,8 +37,8 @@ export default async function SupportPage() {
             ))}
           </div>
         )}
-      </main>
-    </div>
+      </div>
+    </SitePage>
   );
 }
 

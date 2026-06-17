@@ -1,9 +1,10 @@
 import Link from 'next/link';
-import { Logo, StatusPill, type PillTone } from '@auj/ui';
+import { StatusPill, type PillTone } from '@auj/ui';
 import type { Booking, BookingStatus } from '@auj/core-booking';
 import { requireRole } from '../../src/auth/session';
 import { getBookingBackend } from '../../src/book/backend/singleton';
 import { formatMoney } from '../../src/currency';
+import { SitePage } from '../../src/components/SitePage';
 
 const STATUS_TONE: Record<BookingStatus, PillTone> = {
   DRAFT: 'draft',
@@ -29,25 +30,20 @@ export default async function BookingsPage() {
   const bookings = await (await getBookingBackend()).booking.myBookings(user.email);
 
   return (
-    <div className="min-h-screen bg-sand-50">
-      <header className="border-b border-sand-200 bg-white">
-        <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
-          <Link href="/" className="flex items-center gap-2 text-sand-700">
-            <Logo size={26} />
-            <span className="font-serif text-base font-semibold tracking-[0.04em]">AUJ</span>
-          </Link>
-          <Link href="/book" className="text-[13px] font-semibold text-accent-600">+ New booking</Link>
+    <SitePage user={user}>
+      <div className="mx-auto max-w-3xl px-4 py-6">
+        <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h1 className="mb-1 font-serif text-2xl font-semibold">My bookings</h1>
+            <p className="text-sm text-sand-500">{bookings.length} booking{bookings.length === 1 ? '' : 's'} on {user.email}</p>
+          </div>
+          <Link href="/book" className="text-[13px] font-semibold text-accent-600 hover:text-accent-700">+ New booking</Link>
         </div>
-      </header>
-
-      <main className="mx-auto max-w-3xl px-4 py-6">
-        <h1 className="mb-1 font-serif text-2xl font-semibold">My bookings</h1>
-        <p className="mb-5 text-sm text-sand-500">{bookings.length} booking{bookings.length === 1 ? '' : 's'} on {user.email}</p>
 
         {bookings.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-sand-300 bg-white p-8 text-center">
             <p className="text-sm text-sand-500">No bookings yet.</p>
-            <Link href="/book" className="mt-3 inline-block rounded-xl bg-green-800 px-5 py-2.5 text-sm font-semibold text-white hover:bg-green-700">Start a booking →</Link>
+            <Link href="/book" className="mt-3 inline-block rounded-xl bg-green-800 px-5 py-2.5 text-sm font-semibold text-white transition-[transform,background-color] duration-fast hover:bg-green-700 active:scale-[0.98]">Start a booking →</Link>
           </div>
         ) : (
           <div className="grid gap-3">
@@ -56,8 +52,8 @@ export default async function BookingsPage() {
             ))}
           </div>
         )}
-      </main>
-    </div>
+      </div>
+    </SitePage>
   );
 }
 

@@ -1,46 +1,46 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
-import { Logo } from '@auj/ui';
+import { useTranslations } from 'next-intl';
 import { routeFor } from '@auj/visa-router';
 import type { PublicUser } from '@auj/auth';
 import { formatMoney, pkrIndicative } from './currency';
-import { AccountMenu } from './auth/AccountMenu';
-import { LocaleSwitcher } from './i18n/LocaleSwitcher';
+import { Scene } from './components/Scene';
+import { SiteHeader } from './components/SiteHeader';
+import { SiteFooter } from './components/SiteFooter';
 import {
+  DEALS,
+  type Deal,
   DEPARTURE_CITIES,
+  DEPARTURES_GRID,
   DESTINATIONS,
   FAQS,
+  FEATURE_ICONS,
   HERO_STATS,
   JOURNEY_TYPES,
   LOCALES,
-  NAV_LINKS,
   PACKAGES,
+  PAYMENT_METHODS,
   SEARCH_COUNT,
   SEARCH_TABS,
-  STEPS,
+  SUPPORT_CHANNELS,
   TESTIMONIALS,
+  VALUE_ICONS,
   type SearchTab,
 } from './content';
 
-const NAV_ANCHOR: Record<string, string> = {
-  Umrah: '#journeys',
-  Hajj: '#journeys',
-  Ziyarat: '#journeys',
-  'How it works': '#how',
-  Packages: '#packages',
-  'Track booking': '#track',
-};
-
-export default function Landing({ user }: { user?: PublicUser }) {
+export default function Landing({ user, deals }: { user?: PublicUser; deals?: Deal[] }) {
+  const dealCards = deals && deals.length > 0 ? deals : DEALS;
   const [tab, setTab] = useState<SearchTab>('Umrah');
   const [from, setFrom] = useState<string>(DEPARTURE_CITIES[0]);
   const [dest, setDest] = useState<string>(DESTINATIONS[0]);
   const [pax, setPax] = useState(4);
   const [checkIn, setCheckIn] = useState('2026-09-12');
   const [checkOut, setCheckOut] = useState('2026-09-26');
+  const [makkahNights, setMakkahNights] = useState(6);
+  const [madinahNights, setMadinahNights] = useState(3);
+  const [madinahFirst, setMadinahFirst] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [demoLocale, setDemoLocale] = useState(LOCALES[0]!); // the "in your language" preview widget
   const t = useTranslations('common');
@@ -48,11 +48,16 @@ export default function Landing({ user }: { user?: PublicUser }) {
   const trust = tl.raw('trust') as string[];
   const statLabels = tl.raw('statLabels') as string[];
   const journeyDesc = tl.raw('journeyDesc') as string[];
-  const stepItems = tl.raw('steps') as { title: string; desc: string }[];
+  const stepItems = tl.raw('steps6') as { title: string; desc: string }[];
   const pkgItems = tl.raw('packages') as { name: string; meta: string; visa: string }[];
   const faqItems = tl.raw('faqs') as { q: string; a: string }[];
   const quotes = tl.raw('testimonialQuotes') as string[];
-  const locale = useLocale();
+  const microtrust = tl.raw('microtrust') as string[];
+  const valueProps = tl.raw('valueProps') as { title: string; desc: string }[];
+  const features = tl.raw('features') as { title: string; desc: string }[];
+  const categories = tl.raw('categories') as string[];
+  const departureRegions = tl.raw('departures') as string[];
+  const supportChannels = tl.raw('supportChannels') as string[];
 
   return (
     <div className="overflow-x-hidden bg-sand-50 text-sand-ink">
@@ -71,37 +76,7 @@ export default function Landing({ user }: { user?: PublicUser }) {
       </div>
 
       {/* nav */}
-      <header className="sticky top-0 z-50 border-b border-sand-200 bg-sand-50/85 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-[clamp(16px,4vw,32px)] py-3">
-          <div className="flex items-center gap-2.5">
-            <Logo size={38} />
-            <div>
-              <div className="font-serif text-xl font-semibold leading-none tracking-[0.05em]">AUJ</div>
-              <div className="mt-0.5 text-[10.5px] uppercase tracking-[0.14em] text-sand-500">Pilgrimage &amp; travel</div>
-            </div>
-          </div>
-          <nav className="hidden flex-wrap items-center gap-0.5 md:flex">
-            {NAV_LINKS.map((n) => (
-              <a key={n} href={NAV_ANCHOR[n] ?? '#search'} className="whitespace-nowrap rounded-lg px-3 py-2 text-[14.5px] font-medium text-sand-700 hover:bg-sand-100 hover:text-green-800">
-                {n}
-              </a>
-            ))}
-          </nav>
-          <div className="flex items-center gap-2">
-            <LocaleSwitcher current={locale} />
-            {user ? (
-              <AccountMenu user={user} />
-            ) : (
-              <Link href="/login" className="whitespace-nowrap rounded-lg px-3 py-2 text-[14.5px] font-semibold text-sand-700 hover:bg-sand-100">
-                {t('login')}
-              </Link>
-            )}
-            <Link href={user ? '/book' : '/signup'} className="whitespace-nowrap rounded-[10px] bg-green-800 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_4px_12px_rgba(15,81,50,0.24)] hover:bg-green-700">
-              {user ? t('bookNow') : t('signup')}
-            </Link>
-          </div>
-        </div>
-      </header>
+      <SiteHeader user={user} />
 
       {/* hero */}
       <section className="relative bg-[radial-gradient(130%_110%_at_88%_0%,#156440_0%,#0A3D26_46%,#07301E_100%)] px-[clamp(16px,4vw,32px)] pb-[clamp(96px,11vw,132px)] pt-[clamp(48px,7vw,76px)] text-green-50">
@@ -118,10 +93,10 @@ export default function Landing({ user }: { user?: PublicUser }) {
               {t('heroSubtitle')}
             </p>
             <div className="mb-10 flex flex-wrap items-center gap-3">
-              <a href="#search" className="inline-flex items-center gap-2 rounded-xl bg-sand-50 px-6 py-3.5 text-[15.5px] font-semibold text-green-900 shadow-[0_10px_28px_rgba(7,48,30,0.4)] hover:bg-white">
+              <a href="#search" className="inline-flex items-center gap-2 rounded-xl bg-sand-50 px-6 py-3.5 text-[15.5px] font-semibold text-green-900 shadow-[0_10px_28px_rgba(7,48,30,0.4)] transition-[transform,background-color] duration-fast hover:bg-white active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">
                 {t('planPilgrimage')}
               </a>
-              <a href="#how" className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-5 py-3.5 text-[15.5px] font-semibold hover:bg-white/15">
+              <a href="#how" className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-5 py-3.5 text-[15.5px] font-semibold transition-[transform,background-color] duration-fast hover:bg-white/15 active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">
                 {t('howItWorks')}
               </a>
             </div>
@@ -134,10 +109,11 @@ export default function Landing({ user }: { user?: PublicUser }) {
               ))}
             </div>
           </div>
-          {/* right: photo placeholder + floating cards */}
+          {/* right: hero scene (Makkah) + floating live-status / price cards */}
           <div className="relative min-w-0 animate-fade-in">
             <div className="relative h-[clamp(360px,42vw,520px)] overflow-hidden rounded-3xl border border-white/10 bg-[radial-gradient(120%_90%_at_68%_16%,#2A9468_0%,#0F5132_42%,#062418_100%)] shadow-[0_36px_70px_-28px_rgba(5,28,18,0.75)]">
-              <span className="absolute bottom-4 left-4 rounded-lg bg-green-950/50 px-2.5 py-1.5 font-mono text-[11px] tracking-wide text-white/75">PHOTO · MASJID AL-HARAM, MAKKAH</span>
+              <Scene name="makkah" priority className="absolute inset-0 h-full w-full object-cover" />
+              <span className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-green-950/55 to-transparent" />
             </div>
             <div className="absolute -left-2 top-5 w-[232px] max-w-[70%] rounded-2xl bg-white p-4 text-sand-ink shadow-[0_20px_44px_rgba(5,28,18,0.34)]">
               <div className="mb-2.5 flex items-center justify-between">
@@ -178,6 +154,28 @@ export default function Landing({ user }: { user?: PublicUser }) {
             </div>
             <span className="text-[13px] text-sand-500">FX today · 1 € = ₨310.8 · charged in EUR</span>
           </div>
+
+          {/* city order + nights in each holy city (dynamic packaging) */}
+          <div className="mb-3 flex flex-wrap items-end gap-3">
+            <div>
+              <Lbl>{tl('search.makkahFirst').replace(' first', '')} / {tl('search.madinahFirst').replace(' first', '')}</Lbl>
+              <div className="flex gap-1 rounded-[10px] bg-sand-100 p-1">
+                {[false, true].map((mf) => (
+                  <button
+                    key={String(mf)}
+                    type="button"
+                    onClick={() => setMadinahFirst(mf)}
+                    className={`rounded-[7px] px-3.5 py-1.5 text-[13px] font-semibold ${madinahFirst === mf ? 'bg-white text-green-800 shadow-sm' : 'text-sand-500'}`}
+                  >
+                    {mf ? tl('search.madinahFirst') : tl('search.makkahFirst')}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <NightStepper label={tl('search.makkahNights')} value={makkahNights} onChange={setMakkahNights} />
+            <NightStepper label={tl('search.madinahNights')} value={madinahNights} onChange={setMadinahNights} />
+          </div>
+
           <div className="grid items-end gap-3 md:grid-cols-[repeat(5,1fr)_auto]">
             <SelectField label={t('from')} value={from} onChange={setFrom} options={[...DEPARTURE_CITIES]} />
             <SelectField label={t('destination')} value={dest} onChange={setDest} options={[...DESTINATIONS]} />
@@ -192,11 +190,19 @@ export default function Landing({ user }: { user?: PublicUser }) {
               </div>
             </div>
             <Link
-              href={`/book?city=${dest.toUpperCase()}&pax=${pax}&checkIn=${checkIn}&checkOut=${checkOut}`}
-              className="flex h-[50px] items-center justify-center whitespace-nowrap rounded-[11px] bg-green-800 px-6 text-[15px] font-semibold text-white shadow-[0_6px_16px_rgba(15,81,50,0.25)] hover:bg-green-700"
+              href={`/book?city=${dest.toUpperCase()}&pax=${pax}&checkIn=${checkIn}&checkOut=${checkOut}&makkahNights=${makkahNights}&madinahNights=${madinahNights}&order=${madinahFirst ? 'madinah' : 'makkah'}`}
+              className="flex h-[50px] items-center justify-center whitespace-nowrap rounded-[11px] bg-green-800 px-6 text-[15px] font-semibold text-white shadow-[0_6px_16px_rgba(15,81,50,0.25)] transition-[transform,background-color] duration-fast hover:bg-green-700 active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus"
             >
               {t('searchCta', { count: SEARCH_COUNT[tab], tab, dest })}
             </Link>
+          </div>
+          <p className="mt-3 text-[12.5px] text-sand-500">{tl('search.flexibleHint')}</p>
+
+          {/* micro-trust row */}
+          <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-sand-100 pt-4 text-[12.5px] font-semibold text-sand-700">
+            {microtrust.map((m) => (
+              <span key={m} className="inline-flex items-center gap-1.5"><span className="text-success">✓</span> {m}</span>
+            ))}
           </div>
         </div>
       </div>
@@ -212,17 +218,95 @@ export default function Landing({ user }: { user?: PublicUser }) {
         </div>
       </div>
 
+      {/* why book with AUJ */}
+      <Section id="why" title={tl('sections.why.title')} sub={tl('sections.why.sub')}>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {valueProps.map((v, i) => (
+            <div key={v.title} className="rounded-2xl border border-sand-200 bg-white p-5 shadow-sm transition-[transform,box-shadow] duration-200 ease-out-soft hover:-translate-y-0.5 hover:shadow-lg">
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-green-100 text-[20px]">{VALUE_ICONS[i]}</span>
+              <h3 className="mt-3.5 text-[15px] font-semibold">{v.title}</h3>
+              <p className="mt-1.5 text-[13px] leading-relaxed text-sand-500">{v.desc}</p>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      {/* this week's exclusive deals */}
+      <Section id="deals" title={tl('sections.deals.title')} sub={tl('sections.deals.sub')}>
+        {/* deal of the day — featured */}
+        {dealCards[0] ? (
+          <div className="mb-5 flex flex-col items-stretch gap-5 overflow-hidden rounded-2xl border border-sand-200 bg-green-950 text-green-50 md:flex-row">
+            <div className="relative min-h-[160px] md:w-2/5">
+              <Scene name={dealCards[0].scene} className="absolute inset-0 h-full w-full object-cover" />
+              <span className="absolute left-3 top-3 rounded-full bg-gold px-2.5 py-1 text-[11.5px] font-bold text-green-950">{tl('dealsLabels.dealOfDay')}</span>
+            </div>
+            <div className="flex flex-1 flex-col justify-center gap-2 p-[clamp(20px,3vw,32px)]">
+              <h3 className="font-serif text-[clamp(1.25rem,2.4vw,1.75rem)] font-semibold">{dealCards[0].days}-day · {tl('dealsLabels.makkah')} + {tl('dealsLabels.madinah')}</h3>
+              <p className="max-w-[52ch] text-[13.5px] leading-relaxed text-green-100/80">
+                🕋 {dealCards[0].makkahHotel} · {tl('dealsLabels.nights', { n: dealCards[0].makkahNights })} — 🕌 {dealCards[0].madinahHotel} · {tl('dealsLabels.nights', { n: dealCards[0].madinahNights })}
+              </p>
+              <div className="mt-1 flex flex-wrap items-end gap-x-4 gap-y-2">
+                <span className="font-mono text-[clamp(1.6rem,3vw,2.2rem)] font-bold">{formatMoney(dealCards[0].price)}</span>
+                <span className="text-[12px] text-green-100/70">{tl('dealsLabels.perPilgrim')} · {tl('dealsLabels.departs')} {dealCards[0].from}</span>
+                <a href="#search" className="ms-auto rounded-xl bg-sand-50 px-5 py-2.5 text-sm font-semibold text-green-900 transition-[transform,background-color] duration-150 hover:bg-white active:scale-[0.98]">{tl('dealsLabels.viewDeal')}</a>
+              </div>
+            </div>
+          </div>
+        ) : null}
+        <div className="grid gap-5 md:grid-cols-3">
+          {dealCards.map((d, i) => (
+            <div key={d.id} style={{ animationDelay: `${i * 70}ms` }} className="animate-rise overflow-hidden rounded-2xl border border-sand-200 bg-white shadow-sm transition-[transform,box-shadow] duration-200 ease-out-soft hover:-translate-y-0.5 hover:shadow-lg">
+              <div className="relative h-36 overflow-hidden bg-gradient-to-br from-green-700 to-green-950">
+                <Scene name={d.scene} className="absolute inset-0 h-full w-full object-cover" />
+                <span className="absolute left-3 top-3 rounded-full bg-gold px-2.5 py-1 text-[11.5px] font-bold text-green-950">{tl('dealsLabels.departs')} {d.from}</span>
+              </div>
+              <div className="p-5">
+                <h3 className="text-base font-semibold">{d.days}-day · {pkgItems[i % pkgItems.length]?.name ?? 'Umrah'}</h3>
+                <div className="mt-2 grid gap-1 text-[12.5px] text-sand-500">
+                  <div className="flex justify-between"><span>🕋 {tl('dealsLabels.makkah')} · {d.makkahHotel}</span><span className="font-mono">{tl('dealsLabels.nights', { n: d.makkahNights })}</span></div>
+                  <div className="flex justify-between"><span>🕌 {tl('dealsLabels.madinah')} · {d.madinahHotel}</span><span className="font-mono">{tl('dealsLabels.nights', { n: d.madinahNights })}</span></div>
+                </div>
+                <div className="mt-3 flex items-end justify-between">
+                  <div>
+                    <div className="text-[11px] text-sand-500">{tl('dealsLabels.from')}</div>
+                    <div className="font-mono text-2xl font-bold text-green-800">{formatMoney(d.price)}</div>
+                    <div className="text-[11px] text-sand-500">{tl('dealsLabels.perPilgrim')}</div>
+                  </div>
+                  <a href="#search" className="rounded-xl bg-green-800 px-4 py-2.5 text-sm font-semibold text-white transition-[transform,background-color] duration-150 hover:bg-green-700 active:scale-[0.98]">{tl('dealsLabels.viewDeal')}</a>
+                </div>
+                <div className="mt-3 border-t border-sand-100 pt-2.5 text-[11.5px] font-medium text-success-fg">🔒 {tl('dealsLabels.secure')}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Section>
+
       {/* journey types */}
       <Section id="journeys" title={tl('sections.journeys.title')} sub={tl('sections.journeys.sub')}>
         <div className="grid gap-5 md:grid-cols-3">
           {JOURNEY_TYPES.map((j, i) => (
-            <div key={j.name} style={{ animationDelay: `${i * 70}ms` }} className="animate-rise overflow-hidden rounded-2xl border border-sand-200 bg-white shadow-sm">
-              <div className={`h-36 bg-gradient-to-br ${j.img}`} />
+            <div key={j.name} style={{ animationDelay: `${i * 70}ms` }} className="animate-rise overflow-hidden rounded-2xl border border-sand-200 bg-white shadow-sm transition-[transform,box-shadow] duration-200 ease-out-soft hover:-translate-y-0.5 hover:shadow-lg">
+              <div className={`relative h-36 overflow-hidden bg-gradient-to-br ${j.img}`}>
+                <Scene name={j.scene} className="absolute inset-0 h-full w-full object-cover" />
+              </div>
               <div className="p-5">
                 <h3 className="font-serif text-xl font-semibold">{j.name}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-sand-500">{journeyDesc[i] ?? j.desc}</p>
                 <a href="#packages" className="mt-4 inline-block text-sm font-semibold text-accent-600">{tl('explore', { name: j.name })}</a>
               </div>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      {/* experience the difference */}
+      <Section id="difference" title={tl('sections.difference.title')} sub={tl('sections.difference.sub')}>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {features.map((f, i) => (
+            <div key={f.title} className="rounded-2xl border border-sand-200 bg-sand-50 p-5 transition-[transform,box-shadow] duration-200 ease-out-soft hover:-translate-y-0.5 hover:shadow-lg">
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-white text-[20px] shadow-sm">{FEATURE_ICONS[i]}</span>
+              <h3 className="mt-3.5 text-[15px] font-semibold">{f.title}</h3>
+              <p className="mt-1.5 text-[13px] leading-relaxed text-sand-500">{f.desc}</p>
             </div>
           ))}
         </div>
@@ -246,19 +330,19 @@ export default function Landing({ user }: { user?: PublicUser }) {
               <span className="font-mono text-sm text-sand-500">{pkrIndicative({ amount: 992000, currency: 'EUR' })}</span>
             </div>
             <div className="mt-1 text-xs text-sand-500">Charged in EUR · PKR indicative at today’s rate</div>
-            <a href="#search" className="mt-5 block rounded-xl bg-green-800 py-3 text-center text-sm font-semibold text-white hover:bg-green-700">Build your package</a>
+            <a href="#search" className="mt-5 block rounded-xl bg-green-800 py-3 text-center text-sm font-semibold text-white transition-[transform,background-color] duration-fast hover:bg-green-700 active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">Build your package</a>
           </div>
         </div>
       </Section>
 
       {/* how it works */}
       <Section id="how" title={tl('sections.how.title')} sub={tl('sections.how.sub')}>
-        <div className="grid gap-5 md:grid-cols-4">
-          {STEPS.map((s, i) => (
-            <div key={s.n} className="rounded-2xl border border-sand-200 bg-white p-5">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-800 font-mono text-lg font-semibold text-white">{s.n}</span>
-              <h3 className="mt-3 text-base font-semibold">{stepItems[i]?.title ?? s.title}</h3>
-              <p className="mt-1.5 text-[13px] leading-relaxed text-sand-500">{stepItems[i]?.desc ?? s.desc}</p>
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {stepItems.map((s, i) => (
+            <div key={s.title} className="rounded-2xl border border-sand-200 bg-white p-5">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-800 font-mono text-lg font-semibold text-white">{i + 1}</span>
+              <h3 className="mt-3 text-base font-semibold">{s.title}</h3>
+              <p className="mt-1.5 text-[13px] leading-relaxed text-sand-500">{s.desc}</p>
             </div>
           ))}
         </div>
@@ -280,8 +364,9 @@ export default function Landing({ user }: { user?: PublicUser }) {
       <Section id="packages" title={tl('sections.packages.title')} sub={tl('sections.packages.sub')}>
         <div className="grid gap-5 md:grid-cols-3">
           {PACKAGES.map((p, i) => (
-            <div key={p.name} style={{ animationDelay: `${i * 70}ms` }} className="animate-rise overflow-hidden rounded-2xl border border-sand-200 bg-white shadow-sm">
-              <div className={`relative h-40 bg-gradient-to-br ${p.img}`}>
+            <div key={p.name} style={{ animationDelay: `${i * 70}ms` }} className="animate-rise overflow-hidden rounded-2xl border border-sand-200 bg-white shadow-sm transition-[transform,box-shadow] duration-200 ease-out-soft hover:-translate-y-0.5 hover:shadow-lg">
+              <div className={`relative h-40 overflow-hidden bg-gradient-to-br ${p.img}`}>
+                <Scene name={p.scene} className="absolute inset-0 h-full w-full object-cover" />
                 <span className={`absolute left-3 top-3 rounded-full px-2.5 py-1 text-[11.5px] font-semibold ${p.visa === 'e-Visa' ? 'bg-success-bg text-success-fg' : 'bg-info-bg text-info-fg'}`}>{pkgItems[i]?.visa ?? p.visa}</span>
               </div>
               <div className="p-5">
@@ -292,8 +377,37 @@ export default function Landing({ user }: { user?: PublicUser }) {
                   <span className="text-[11px] text-sand-500">per pilgrim</span>
                 </div>
                 <div className="font-mono text-xs text-sand-500">{pkrIndicative(p.price)}</div>
-                <a href="#search" className="mt-4 block rounded-xl bg-green-800 py-2.5 text-center text-sm font-semibold text-white hover:bg-green-700">View package</a>
+                <a href="#search" className="mt-4 block rounded-xl bg-green-800 py-2.5 text-center text-sm font-semibold text-white transition-[transform,background-color] duration-fast hover:bg-green-700 active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">View package</a>
               </div>
+            </div>
+          ))}
+        </div>
+        {/* popular categories */}
+        <div className="mt-6 flex flex-wrap gap-2.5">
+          {categories.map((c) => (
+            <a key={c} href="#search" className="rounded-full border border-sand-200 bg-white px-4 py-2 text-[13px] font-semibold text-sand-700 hover:border-green-700 hover:text-green-800">
+              {c}
+            </a>
+          ))}
+        </div>
+      </Section>
+
+      {/* departures directory */}
+      <Section id="departures" title={tl('sections.departures.title')} sub={tl('sections.departures.sub')}>
+        <div className="grid gap-5 md:grid-cols-3">
+          {DEPARTURES_GRID.map((group, gi) => (
+            <div key={gi} className="rounded-2xl border border-sand-200 bg-white p-5 shadow-sm">
+              <div className="mb-3 text-[13px] font-bold text-sand-ink">{departureRegions[gi] ?? `Region ${gi + 1}`}</div>
+              <ul className="grid gap-2">
+                {group.cities.map((city) => (
+                  <li key={city}>
+                    <a href="#search" className="flex items-center justify-between rounded-lg px-2 py-1.5 text-[13.5px] text-sand-700 hover:bg-sand-50 hover:text-green-800">
+                      <span>✈️ {city}</span>
+                      <span className="text-sand-300">→</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
           ))}
         </div>
@@ -328,7 +442,7 @@ export default function Landing({ user }: { user?: PublicUser }) {
             <label className="text-[13px] font-medium text-sand-700">Booking reference (BRN)</label>
             <div className="mt-2 flex gap-2">
               <input defaultValue="BRN-26-VNO-00481" className="h-12 flex-1 rounded-lg border-[1.5px] border-sand-300 px-3 font-mono text-sm" />
-              <button type="button" className="rounded-lg bg-green-800 px-5 text-sm font-semibold text-white">Track</button>
+              <button type="button" className="rounded-lg bg-green-800 px-5 text-sm font-semibold text-white transition-[transform,background-color] duration-fast hover:bg-green-700 active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">Track</button>
             </div>
           </div>
           <div className="rounded-2xl border border-sand-200 bg-white p-6 shadow-sm">
@@ -338,6 +452,45 @@ export default function Landing({ user }: { user?: PublicUser }) {
                 <span className={`text-sm ${i <= 2 ? 'font-semibold text-sand-ink' : 'text-sand-500'}`}>{step}</span>
               </div>
             ))}
+          </div>
+        </div>
+      </Section>
+
+      {/* support channels */}
+      <Section id="support" title={tl('sections.support.title')} sub={tl('sections.support.sub')}>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {SUPPORT_CHANNELS.map((ch, i) => (
+            <div key={ch.detail} className="rounded-2xl border border-sand-200 bg-white p-5 shadow-sm">
+              <span className="text-[22px]">{ch.icon}</span>
+              <h3 className="mt-2.5 text-[15px] font-semibold">{supportChannels[i] ?? ch.detail}</h3>
+              <div className="mt-1 font-mono text-[13px] text-accent-600">{ch.detail}</div>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      {/* payment & protection */}
+      <Section id="protection" title={tl('sections.protection.title')} sub={tl('sections.protection.sub')}>
+        <div className="grid gap-5 lg:grid-cols-[1.2fr_1fr]">
+          <div className="grid gap-4 sm:grid-cols-3">
+            {(['installments', 'secure3ds', 'insolvency'] as const).map((k, i) => (
+              <div key={k} className="rounded-2xl border border-sand-200 bg-white p-5 shadow-sm">
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-green-100 text-[20px]">{['💳', '🔒', '🛡️'][i]}</span>
+                <h3 className="mt-3.5 text-[14.5px] font-semibold">{tl(`protection.${k}`)}</h3>
+                <p className="mt-1.5 text-[13px] leading-relaxed text-sand-500">{tl(`protection.${k}Desc`)}</p>
+              </div>
+            ))}
+          </div>
+          <div className="rounded-2xl bg-green-800 p-6 text-green-50">
+            <div className="text-[13px] font-semibold text-green-100/80">{tl('protection.methods')}</div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {PAYMENT_METHODS.map((m) => (
+                <span key={m} className="rounded-lg bg-white/10 px-3 py-1.5 text-[13px] font-semibold">{m}</span>
+              ))}
+            </div>
+            <div className="mt-5 flex items-center gap-2 border-t border-white/15 pt-4 text-[13px] font-semibold">
+              <span className="text-gold">★</span> {tl('protection.licensed')}
+            </div>
           </div>
         </div>
       </Section>
@@ -379,32 +532,33 @@ export default function Landing({ user }: { user?: PublicUser }) {
             <p className="mt-1 text-green-100/80">Plan a pilgrimage, or open a trade account for your agency.</p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <a href="#search" className="rounded-xl bg-sand-50 px-6 py-3 text-sm font-semibold text-green-900 hover:bg-white">Plan my pilgrimage</a>
-            <a href="#" className="rounded-xl border border-white/25 bg-white/10 px-6 py-3 text-sm font-semibold hover:bg-white/15">For travel agents</a>
+            <a href="#search" className="rounded-xl bg-sand-50 px-6 py-3 text-sm font-semibold text-green-900 transition-[transform,background-color] duration-fast hover:bg-white active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">Plan my pilgrimage</a>
+            <a href="#" className="rounded-xl border border-white/25 bg-white/10 px-6 py-3 text-sm font-semibold transition-[transform,background-color] duration-fast hover:bg-white/15 active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">For travel agents</a>
           </div>
         </div>
       </div>
 
       {/* footer */}
-      <footer className="border-t border-sand-200 bg-white">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-[clamp(16px,4vw,32px)] py-8 text-sm text-sand-500">
-          <div className="flex items-center gap-2.5">
-            <Logo size={32} />
-            <span className="font-serif text-lg font-semibold tracking-[0.05em] text-sand-ink">AUJ</span>
-          </div>
-          <span>{t('footerRights')}</span>
-          <div className="flex items-center gap-4">
-            <Link href="/redeem" className="font-semibold text-accent-600 hover:text-accent-700">{t('redeemGift')}</Link>
-            <span>EN · LT · UR · AR</span>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
 
 function Lbl({ children }: { children: ReactNode }) {
   return <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-sand-500">{children}</div>;
+}
+
+function NightStepper({ label, value, onChange }: { label: string; value: number; onChange: (v: number) => void }) {
+  return (
+    <div>
+      <Lbl>{label}</Lbl>
+      <div className="flex items-center gap-2 rounded-[10px] border-[1.5px] border-sand-300 px-2 py-1.5">
+        <button type="button" aria-label={`${label} −`} onClick={() => onChange(Math.max(0, value - 1))} className="h-8 w-8 rounded-lg border border-sand-200 bg-sand-50 text-lg text-green-700">−</button>
+        <span className="min-w-[1.5rem] text-center text-[14.5px] font-semibold tabular-nums">{value}</span>
+        <button type="button" aria-label={`${label} +`} onClick={() => onChange(Math.min(30, value + 1))} className="h-8 w-8 rounded-lg bg-green-800 text-lg text-white">+</button>
+      </div>
+    </div>
+  );
 }
 
 function DateField({ label, value, onChange, min }: { label: string; value: string; onChange: (v: string) => void; min?: string }) {
@@ -441,12 +595,56 @@ function SelectField({ label, value, onChange, options }: { label: string; value
   );
 }
 
+/**
+ * Reveals its children once, with a single quiet rise+fade, when they scroll into view.
+ * Origin-aware (rises 8px from below), ≤300ms, transform/opacity only. Falls back to
+ * shown-immediately where IntersectionObserver is absent (SSR/jsdom) and drops the motion
+ * entirely under prefers-reduced-motion.
+ */
+function Reveal({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [shown, setShown] = useState(false);
+  useEffect(() => {
+    if (typeof IntersectionObserver === 'undefined') {
+      setShown(true);
+      return;
+    }
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          setShown(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.08, rootMargin: '0px 0px -8% 0px' },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <div
+      ref={ref}
+      className={`transition-[opacity,transform] duration-300 ease-out-soft motion-reduce:transition-none ${
+        shown
+          ? 'opacity-100 translate-y-0'
+          : 'opacity-0 translate-y-2 motion-reduce:translate-y-0 motion-reduce:opacity-100'
+      }`}
+    >
+      {children}
+    </div>
+  );
+}
+
 function Section({ id, title, sub, children }: { id?: string; title: string; sub?: string; children: ReactNode }) {
   return (
     <section id={id} className="mx-auto max-w-6xl px-[clamp(16px,4vw,32px)] py-12">
-      <h2 className="font-serif text-[clamp(1.5rem,3vw,2.25rem)] font-semibold tracking-[-0.01em]">{title}</h2>
-      {sub ? <p className="mt-2 max-w-2xl text-sand-500">{sub}</p> : null}
-      <div className="mt-7">{children}</div>
+      <Reveal>
+        <h2 className="font-serif text-[clamp(1.5rem,3vw,2.25rem)] font-semibold tracking-[-0.01em]">{title}</h2>
+        {sub ? <p className="mt-2 max-w-[60ch] text-sand-500">{sub}</p> : null}
+        <div className="mt-7">{children}</div>
+      </Reveal>
     </section>
   );
 }

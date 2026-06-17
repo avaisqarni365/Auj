@@ -13,9 +13,11 @@ import { defaultFetch, formEncode, type FetchLike } from './http';
 // card collection happens client-side with Stripe.js; this server adapter creates a
 // manual-capture intent, captures, and refunds. `fetchFn` is injectable for offline tests.
 //
-// LIMITATION (documented, like the Maqam connector): a production card flow also needs the
-// Stripe.js client step (collect + confirm the payment method) before capture; that UI piece
-// is out of scope for this server-side port adapter.
+// Two-phase card flow (see PaymentsService.authorize / captureAuthorized):
+//   1. server: createIntent → returns `clientSecret`
+//   2. browser: Stripe.js confirms the card → intent becomes `requires_capture`
+//   3. server: capture → CAPTURED
+// The Stripe.js browser piece lives in apps/web/src/book/screens/StripePaymentForm.tsx.
 
 export interface StripeConfig {
   secretKey: string;
@@ -28,6 +30,7 @@ interface StripePI {
   status: string;
   amount: number;
   amount_received?: number;
+  client_secret?: string;
   created?: number;
   metadata?: Record<string, string>;
   latest_charge?: { amount_captured?: number; amount_refunded?: number };
@@ -104,6 +107,8 @@ export class LiveStripeProvider implements PaymentProvider {
       refundedAmount: pi.latest_charge?.amount_refunded ?? 0,
       createdAt: pi.created ? new Date(pi.created * 1000).toISOString() : new Date().toISOString(),
       ...(pi.metadata?.bookingRef ? { bookingRef: pi.metadata.bookingRef } : {}),
+      // Returned by Stripe on create; the browser uses it to confirm the card before we capture.
+      ...(pi.client_secret ? { clientSecret: pi.client_secret } : {}),
     };
   }
 

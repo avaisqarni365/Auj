@@ -44,6 +44,29 @@ describe('PaymentsService', () => {
     expect(ledger.isBalanced()).toBe(true);
   });
 
+  it('two-phase: authorize does not move money; captureAuthorized does', async () => {
+    const { ledger, payments } = setup();
+    const { intent } = await payments.authorize({
+      amount: { amount: 120000, currency: 'EUR' },
+      bookingRef: 'BK4',
+      idempotencyKey: 'idem-2phase',
+    });
+    // Authorized but not captured — ledger is still empty.
+    expect(intent.status).toBe('REQUIRES_CAPTURE');
+    expect(ledger.balance('revenue:bookings', 'EUR')).toBe(0);
+
+    const { paymentRef, intent: captured } = await payments.captureAuthorized({
+      intentId: intent.id,
+      currency: 'EUR',
+      bookingRef: 'BK4',
+      idempotencyKey: 'idem-2phase',
+    });
+    expect(captured.status).toBe('CAPTURED');
+    expect(paymentRef).toBe(intent.id);
+    expect(ledger.balance('revenue:bookings', 'EUR')).toBe(120000);
+    expect(ledger.isBalanced()).toBe(true);
+  });
+
   it('reconciles webhooks idempotently', () => {
     const { payments } = setup();
     const event = { type: 'intent.captured' as const, intentId: 'i1', amount: { amount: 1, currency: 'EUR' as const } };

@@ -27,6 +27,13 @@ export interface PaymentIntent {
   capturedAmount: number; // minor units
   refundedAmount: number; // minor units
   createdAt: string;
+  /**
+   * Opaque token the client uses to collect + confirm the card with the gateway's
+   * browser SDK (Stripe.js) BEFORE the server captures. Only populated by gateways
+   * that have a client-side confirmation step (live Stripe). Undefined for the
+   * in-memory sandbox and server-only gateways — those capture in one server call.
+   */
+  clientSecret?: string;
 }
 
 export interface RefundResult {

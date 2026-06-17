@@ -20,12 +20,14 @@ describe('LiveStripeProvider (injected fetch)', () => {
     const calls: Call[] = [];
     const fetchFn: FetchLike = async (url, init) => {
       calls.push({ url, ...init });
-      return resp({ id: 'pi_1', status: 'requires_capture', amount: 25000, metadata: { bookingRef: 'BR1' } });
+      return resp({ id: 'pi_1', status: 'requires_capture', amount: 25000, client_secret: 'pi_1_secret_abc', metadata: { bookingRef: 'BR1' } });
     };
     const stripe = new LiveStripeProvider({ secretKey: 'sk_test', fetchFn });
     const intent = await stripe.createIntent({ amount: { amount: 25000, currency: 'EUR' }, idempotencyKey: 'k1', bookingRef: 'BR1' });
 
     expect(intent).toMatchObject({ id: 'pi_1', provider: 'stripe', status: 'REQUIRES_CAPTURE', bookingRef: 'BR1' });
+    // The browser needs the client_secret to confirm the card before we capture.
+    expect(intent.clientSecret).toBe('pi_1_secret_abc');
     expect(intent.amount).toEqual({ amount: 25000, currency: 'EUR' });
     const call = calls[0]!;
     expect(call.url).toBe('https://api.stripe.com/v1/payment_intents');

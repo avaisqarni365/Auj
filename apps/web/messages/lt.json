@@ -44,7 +44,12 @@
     "agentPortal": "Agento portalas",
     "adminConsole": "Administratorius",
     "logout": "Atsijungti",
-    "roles": { "PILGRIM": "Piligrimas", "AGENT": "Kelionių agentas", "SUB_AGENT": "Subagentas", "ADMIN": "Administratorius" }
+    "roles": {
+      "PILGRIM": "Piligrimas",
+      "AGENT": "Kelionių agentas",
+      "SUB_AGENT": "Subagentas",
+      "ADMIN": "Administratorius"
+    }
   },
   "support": {
     "supportOf": "Pagalba",
@@ -70,17 +75,77 @@
   },
   "landing": {
     "sections": {
-      "journeys": { "title": "Pasirinkite kelionę", "sub": "Trys kelionės būdai — kiekvienas su tinkamu vizos keliu ir apsauga." },
-      "cart": { "title": "Viskas viename krepšelyje", "sub": "Viešbutis, transportas, paslaugos ir skrydžiai — kaina kartu, mokama EUR." },
-      "how": { "title": "Kaip tai veikia", "sub": "Nuo paieškos iki sekamo, bilietais patvirtinto užsakymo — keturiais ramiais žingsniais." },
-      "packages": { "title": "Rekomenduojami paketai", "sub": "Keletas šio sezono populiariausių kelionių." },
-      "lang": { "title": "Jūsų kalba", "sub": "EN · LT · UR · AR — arabų ir urdu kalbos rodomos iš dešinės į kairę." },
-      "track": { "title": "Sekti užsakymą", "sub": "Įveskite BRN ir matykite būseną — užsakyta, dokumentai, viza, kelionė, grįžimas." },
-      "reviews": { "title": "Piligrimų vertinama visoje ES" },
-      "faq": { "title": "Dažni klausimai" }
+      "journeys": {
+        "title": "Pasirinkite kelionę",
+        "sub": "Trys kelionės būdai — kiekvienas su tinkamu vizos keliu ir apsauga."
+      },
+      "cart": {
+        "title": "Viskas viename krepšelyje",
+        "sub": "Viešbutis, transportas, paslaugos ir skrydžiai — kaina kartu, mokama EUR."
+      },
+      "how": {
+        "title": "Kaip tai veikia",
+        "sub": "Nuo paieškos iki sekamo, bilietais patvirtinto užsakymo — keturiais ramiais žingsniais."
+      },
+      "packages": {
+        "title": "Rekomenduojami paketai",
+        "sub": "Keletas šio sezono populiariausių kelionių."
+      },
+      "lang": {
+        "title": "Jūsų kalba",
+        "sub": "EN · LT · UR · AR — arabų ir urdu kalbos rodomos iš dešinės į kairę."
+      },
+      "track": {
+        "title": "Sekti užsakymą",
+        "sub": "Įveskite BRN ir matykite būseną — užsakyta, dokumentai, viza, kelionė, grįžimas."
+      },
+      "reviews": {
+        "title": "Piligrimų vertinama visoje ES"
+      },
+      "faq": {
+        "title": "Dažni klausimai"
+      },
+      "why": {
+        "title": "Kodėl rinktis AUJ",
+        "sub": "Sąžiningos kainos realiu laiku, vienas krepšelis ir apsauga kiekvienam užsakymui."
+      },
+      "difference": {
+        "title": "Pajuskite skirtumą",
+        "sub": "Ką gaunate su kiekviena AUJ kelione."
+      },
+      "deals": {
+        "title": "Šios savaitės išskirtiniai pasiūlymai",
+        "sub": "Atrinkti paketai su konkrečiais viešbučiais ir tiesioginėmis kainomis — ribotas kiekis."
+      },
+      "categories": {
+        "title": "Populiarūs paketai",
+        "sub": "Pereikite prie kelionės, atitinkančios jūsų biudžetą ir datas."
+      },
+      "departures": {
+        "title": "Išvykimas iš jūsų miesto",
+        "sub": "Tiesioginiai ir jungiamieji maršrutai iš visos Europos."
+      },
+      "support": {
+        "title": "Parama 24/7 keliomis kalbomis",
+        "sub": "Prieš kelionę, jos metu ir po jos — jūsų kalba."
+      },
+      "protection": {
+        "title": "Mokėkite kaip patogu, saugiai",
+        "sub": "Lankstus mokėjimas, banko lygio saugumas ir ES vartotojų apsauga."
+      }
     },
-    "trust": ["Licencijuotas ES kelionių operatorius", "Įtraukta e. vizos pagalba", "Kainos EUR arba PKR", "ATOL tipo apsauga"],
-    "statLabels": ["ES išvykimo miestai", "aptarnauta piligrimų", "EN · LT · UR · AR", "pagalba"],
+    "trust": [
+      "Licencijuotas ES kelionių operatorius",
+      "Įtraukta e. vizos pagalba",
+      "Kainos EUR arba PKR",
+      "Apsauga nuo nemokumo"
+    ],
+    "statLabels": [
+      "ES išvykimo miestai",
+      "aptarnauta piligrimų",
+      "EN · LT · UR · AR",
+      "pagalba"
+    ],
     "announce": "Išvykstama iš 6 ES miestų · e. vizos pagalba kiekvienam užsakymui",
     "forAgents": "Kelionių agentams →",
     "explore": "Atrasti {name} →",
@@ -90,26 +155,340 @@
       "Gidų lydimi vizitai — Nadžafas, Kerbela ir šventos vietos už Haramaino."
     ],
     "steps": [
-      { "title": "Ieškoti ir sudaryti", "desc": "Pasirinkite paketą; pridėkite viešbutį, transportą, paslaugas ir skrydžius į vieną krepšelį." },
-      { "title": "Pridėti piligrimus", "desc": "Pagal pasą automatiškai nustatome kiekvieno piligrimo vizos kelią." },
-      { "title": "Mokėti saugiai", "desc": "Mokama EUR; PKR rodoma informaciniais tikslais šios dienos kursu." },
-      { "title": "Keliauti ir sekti", "desc": "Tiesioginis BRN ir vizos statusas, jūsų maršrutas ir skaitmeninis leidimas." }
+      {
+        "title": "Ieškoti ir sudaryti",
+        "desc": "Pasirinkite paketą; pridėkite viešbutį, transportą, paslaugas ir skrydžius į vieną krepšelį."
+      },
+      {
+        "title": "Pridėti piligrimus",
+        "desc": "Pagal pasą automatiškai nustatome kiekvieno piligrimo vizos kelią."
+      },
+      {
+        "title": "Mokėti saugiai",
+        "desc": "Mokama EUR; PKR rodoma informaciniais tikslais šios dienos kursu."
+      },
+      {
+        "title": "Keliauti ir sekti",
+        "desc": "Tiesioginis BRN ir vizos statusas, jūsų maršrutas ir skaitmeninis leidimas."
+      }
     ],
     "packages": [
-      { "name": "Umra Premium", "meta": "5★ · prie Haramo · 14 naktų", "visa": "e. viza" },
-      { "name": "Umra Essential", "meta": "4★ · 10 naktų · lankstus", "visa": "e. viza" },
-      { "name": "Irako Zijara", "meta": "Nadžafas ir Kerbela · 9 naktys", "visa": "Agentas" }
+      {
+        "name": "Umra Premium",
+        "meta": "5★ · prie Haramo · 14 naktų",
+        "visa": "e. viza"
+      },
+      {
+        "name": "Umra Essential",
+        "meta": "4★ · 10 naktų · lankstus",
+        "visa": "e. viza"
+      },
+      {
+        "name": "Irako Zijara",
+        "meta": "Nadžafas ir Kerbela · 9 naktys",
+        "visa": "Agentas"
+      }
     ],
     "faqs": [
-      { "q": "Kuris vizos kelias man taikomas?", "a": "Jį automatiškai nustatome pagal kiekvieno piligrimo pasą: ES/EEE pasai naudoja Saudo e. vizą; Pakistano ir kiti pasai nukreipiami per MoRA licencijuotą agento kanalą. Mišrios grupės palaikomos — kiekvienas piligrimas mato savo kelią." },
-      { "q": "Kokia valiuta esu apmokestinamas?", "a": "Visada EUR. Taip pat informaciniais tikslais rodome orientacinę PKR sumą šios dienos kursu (1 € = ₨310,8), tačiau mokama suma niekada tyliai nekonvertuojama." },
-      { "q": "Ar galiu užsakyti grupei?", "a": "Taip — iki 49 piligrimų viename užsakyme su atskirais dokumentais ir vizų nukreipimu. Kelionių agentai turi atskirą portalą su pinigine, kreditu ir antkainiais." },
-      { "q": "Kaip sekti užsakymą?", "a": "Kiekvienas užsakymas gauna BRN su tiesiogine būsenos seka (užsakyta → dokumentai → viza → kelionė → grįžimas) ir QR skaitmeninį leidimą." }
+      {
+        "q": "Kuris vizos kelias man taikomas?",
+        "a": "Jį automatiškai nustatome pagal kiekvieno piligrimo pasą: ES/EEE pasai naudoja Saudo e. vizą; Pakistano ir kiti pasai nukreipiami per MoRA licencijuotą agento kanalą. Mišrios grupės palaikomos — kiekvienas piligrimas mato savo kelią."
+      },
+      {
+        "q": "Kokia valiuta esu apmokestinamas?",
+        "a": "Visada EUR. Taip pat informaciniais tikslais rodome orientacinę PKR sumą šios dienos kursu (1 € = ₨310,8), tačiau mokama suma niekada tyliai nekonvertuojama."
+      },
+      {
+        "q": "Ar galiu užsakyti grupei?",
+        "a": "Taip — iki 49 piligrimų viename užsakyme su atskirais dokumentais ir vizų nukreipimu. Kelionių agentai turi atskirą portalą su pinigine, kreditu ir antkainiais."
+      },
+      {
+        "q": "Kaip sekti užsakymą?",
+        "a": "Kiekvienas užsakymas gauna BRN su tiesiogine būsenos seka (užsakyta → dokumentai → viza → kelionė → grįžimas) ir QR skaitmeninį leidimą."
+      },
+      {
+        "q": "Ar siūlote Hadžą ir bendrąsias keliones, ne tik Umrą?",
+        "a": "Taip. Be Umros ir Zijaros, AUJ rezervuoja ministerijos reguliuojamą Hadžą ir įprastas laisvalaikio keliones — viešbučius ir skrydžius — tame pačiame krepšelyje. Bendrųjų kelionių dalis nepriklauso nuo Saudo Arabijos."
+      },
+      {
+        "q": "Ar kelionių agentai gali parduoti per AUJ?",
+        "a": "Taip. Agento portalas suteikia jūsų agentūrai piniginę, kredito limitą, konfigūruojamus antkainius, kelių piligrimų rezervaciją ir suderinamas ataskaitas. Užsiregistruokite, ir administratorius patvirtins jūsų paskyrą."
+      }
     ],
     "testimonialQuotes": [
       "Vizos kelias buvo aiškus nuo pirmo ekrano — jokių staigmenų. Viskas viename krepšelyje.",
       "Mokėjau EUR, mačiau PKR sumą šeimai namuose. Nuostabiai paprasta.",
       "Tiesioginis BRN ir vizos sekimas suteikė mano tėvams tikrą ramybę."
-    ]
+    ],
+    "microtrust": [
+      "Pasitiki 12 000+ piligrimų",
+      "Mokėjimų apsauga",
+      "ES nemokumo apsauga"
+    ],
+    "search": {
+      "makkahFirst": "Pirma Meka",
+      "madinahFirst": "Pirma Medina",
+      "makkahNights": "Naktys Mekoje",
+      "madinahNights": "Naktys Medinoje",
+      "flexibleHint": "Lankstus dėl datų? Palikite jas atviras — dažnai pigiau."
+    },
+    "valueProps": [
+      {
+        "title": "Sąžiningos kainos realiu laiku",
+        "desc": "Viešbučių ir skrydžių kainos realiu laiku — be fiksuoto agento antkainio."
+      },
+      {
+        "title": "Viskas viename krepšelyje",
+        "desc": "Viešbutis, transportas, paslaugos vietoje ir skrydžiai — užsakoma kartu."
+      },
+      {
+        "title": "Jokių paslėptų mokesčių",
+        "desc": "Matoma kaina ir yra galutinė, imama EUR."
+      },
+      {
+        "title": "Saugu ir apsaugota",
+        "desc": "3-D Secure apmokėjimas ir ES nemokumo pažymėjimas kiekvienam užsakymui."
+      }
+    ],
+    "features": [
+      {
+        "title": "Viešbučiai prie Haramo",
+        "desc": "Nusuk patvirtinti viešbučiai, rikiuojami pagal atstumą iki Haramo."
+      },
+      {
+        "title": "Tiesioginiai ir jungiamieji skrydžiai",
+        "desc": "Iš didžiųjų ES miestų su patikimais vežėjais."
+      },
+      {
+        "title": "Visiškai pritaikoma",
+        "desc": "Nustatykite naktis Mekoje/Medinoje, viešbučio klasę, maitinimą ir priedus."
+      },
+      {
+        "title": "Parama 24/7 keliomis kalbomis",
+        "desc": "EN · LT · UR · AR — telefonu, WhatsApp, el. paštu ir pokalbiais."
+      }
+    ],
+    "steps6": [
+      {
+        "title": "Ieškokite paketų",
+        "desc": "Pasirinkite miestų eiliškumą ir naktis Mekoje bei Medinoje."
+      },
+      {
+        "title": "Palyginkite ir filtruokite",
+        "desc": "Pagal žvaigždutes, atstumą iki Haramo, kainą ir patogumus."
+      },
+      {
+        "title": "Pritaikykite",
+        "desc": "Pridėkite Rawdah, zijarą, maitinimą, transportą ir skrydžius."
+      },
+      {
+        "title": "Pridėkite piligrimus",
+        "desc": "Automatiškai nustatome kiekvieno vizos kelią pagal pasą."
+      },
+      {
+        "title": "Mokėkite saugiai",
+        "desc": "Kortelė, SEPA ar dalimis — imama EUR, PKR informaciniu tikslu."
+      },
+      {
+        "title": "Gaukite patvirtinimą",
+        "desc": "Greitas BRN; el. bilietai, viešbučių vaučeriai ir vizos dokumentai prieš skrydį."
+      }
+    ],
+    "categories": [
+      "Biudžetinis",
+      "Prieinamas",
+      "Prabangus 5★",
+      "Premium",
+      "Šeimai",
+      "Poroms",
+      "Ramadanas",
+      "Paskutinė minutė"
+    ],
+    "departures": [
+      "Baltijos šalys",
+      "Vidurio Europa",
+      "Vakarų Europa"
+    ],
+    "dealsLabels": {
+      "from": "Nuo",
+      "perPilgrim": "vienam piligrimui",
+      "nights": "{n} n.",
+      "viewDeal": "Žiūrėti pasiūlymą",
+      "viewAll": "Visi pasiūlymai",
+      "secure": "Saugus užsakymas · Greitas patvirtinimas",
+      "makkah": "Meka",
+      "madinah": "Medina",
+      "departs": "Išvyksta",
+      "dealOfDay": "Dienos pasiūlymas"
+    },
+    "supportChannels": [
+      "Telefonas 24/7",
+      "WhatsApp",
+      "El. paštas",
+      "Pokalbiai"
+    ],
+    "protection": {
+      "methods": "Priimami mokėjimai",
+      "installments": "Dalimis ir užstatas",
+      "installmentsDesc": "Sumokėkite iškart arba užstatą dabar ir likutį vėliau.",
+      "secure3ds": "3-D Secure ir sukčiavimo stebėsena",
+      "secure3dsDesc": "Banko lygio patvirtinimas kiekvienam mokėjimui kortele.",
+      "insolvency": "ES nemokumo apsauga",
+      "insolvencyDesc": "Su kiekvienu paketu išduodamas vartotojo apsaugos pažymėjimas.",
+      "licensed": "Licencijuotas ES kelionių organizatorius"
+    },
+    "newsletter": {
+      "title": "Likite informuoti",
+      "sub": "Sezoniniai pasiūlymai ir vizų naujienos — jokio šlamšto.",
+      "placeholder": "Jūsų el. paštas",
+      "cta": "Prenumeruoti"
+    }
+  },
+  "agent": {
+    "nav": {
+      "home": "Pradžia",
+      "pax": "Keleiviai",
+      "wallet": "Piniginė",
+      "markup": "Antkainis",
+      "quotes": "Pasiūlymai",
+      "reports": "Ataskaitos"
+    },
+    "greeting": "Salam, {name}",
+    "walletChip": "Piniginė",
+    "newBooking": "+ Naujas užsakymas",
+    "back": "← Atgal į AUJ",
+    "loading": "Įkeliama agento informacija…",
+    "multiPaxHeading": "Kelių keleivių užsakymas · iki {max} keleivių",
+    "walletCreditHeading": "Piniginė ir kreditas",
+    "booked": "Užsakyta",
+    "paxN": "{n} kel.",
+    "kpi": {
+      "walletBalance": "Piniginės likutis",
+      "available": "Galima",
+      "bookings": "Užsakymai",
+      "tier": "Lygis"
+    },
+    "visaPipeline": "Vizų eiga",
+    "pipeline": {
+      "eVisa": "e. viza · pateikta",
+      "review": "Agento kanalas · peržiūra",
+      "issued": "Išduota"
+    },
+    "creditAvailable": "Galimas kreditas",
+    "passengers": "Keleiviai",
+    "paxOfMax": "{n} / {max} kel.",
+    "seatsLeft": "Liko vietų: {n}",
+    "col": {
+      "num": "#",
+      "name": "Vardas ir pavardė",
+      "passport": "Pasas",
+      "nat": "Pilietybė",
+      "visaRoute": "Vizos kelias"
+    },
+    "addPassenger": "+ Pridėti keleivį",
+    "add10": "+ Pridėti 10 eilučių",
+    "routeNote": "Pakistano pasai automatiškai nukreipiami į agento kanalą; ES pasai gauna e. vizą. Mišrios grupės palaikomos.",
+    "groupSummary": "Grupės santrauka",
+    "hotelNights": "Viešbutis · 14 naktų",
+    "clientPrice": "Kliento kaina",
+    "payFromWallet": "Mokėti iš piniginės",
+    "holdOnCredit": "Rezervuoti kreditu",
+    "wallet2": {
+      "balance": "Piniginės likutis",
+      "topUp": "+ Papildyti piniginę",
+      "creditLimit": "Kredito limitas",
+      "used": "Panaudota",
+      "available": "galima",
+      "paymentTerms": "Mokėjimo sąlygos",
+      "net30": "30 dienų",
+      "tier": "Lygis",
+      "goldPartner": "Auksinis partneris",
+      "transactions": "Piniginės operacijos",
+      "colDescription": "Aprašymas",
+      "colReference": "Nuoroda",
+      "colDebit": "Debetas",
+      "colCredit": "Kreditas"
+    }
+  },
+  "admin": {
+    "brandSub": "Administravimas · Web",
+    "groupOperate": "Valdymas",
+    "groupMore": "Daugiau",
+    "nav": {
+      "overview": "Apžvalga",
+      "pilgrims": "Piligrimai · CRM",
+      "providers": "Paslaugų teikėjai",
+      "requests": "Specialūs pageidavimai",
+      "documents": "Dokumentai",
+      "support": "Pagalba",
+      "content": "Pradinio puslapio turinys",
+      "users": "Naudotojai ir rolės"
+    },
+    "more": {
+      "payments": "Mokėjimai",
+      "reports": "Ataskaitos",
+      "settings": "Nustatymai"
+    },
+    "userRole": "Operacijų administratorius",
+    "search": "Ieškoti piligrimų, BRN, užsakymų…",
+    "newBooking": "+ Naujas užsakymas",
+    "viewAll": "Rodyti visus",
+    "views": {
+      "overviewKicker": "APŽVALGA",
+      "overviewTitle": "Labas rytas, {name}.",
+      "pilgrimsKicker": "CRM · {count} AKTYVŪS",
+      "pilgrimsTitle": "Piligrimai ir keleiviai",
+      "providersKicker": "INTEGRACIJOS",
+      "providersTitle": "Paslaugų teikėjai",
+      "contentKicker": "TVS",
+      "contentTitle": "Pradinio puslapio turinys",
+      "documentsKicker": "ATITIKTIS",
+      "documentsTitle": "Dokumentai",
+      "requestsKicker": "PERSONALIZAVIMAS",
+      "requestsTitle": "Specialūs pageidavimai",
+      "supportKicker": "PAGALBA",
+      "supportTitle": "Klientų aptarnavimas",
+      "usersKicker": "PRIEIGA",
+      "usersTitle": "Naudotojai ir rolės"
+    },
+    "sections": {
+      "recentBookings": "Naujausi užsakymai",
+      "visaPipeline": "Vizų eiga",
+      "upcomingDepartures": "Artėjantys išvykimai",
+      "journeyStatus": "Kelionės būsena",
+      "documents": "Dokumentai",
+      "communications": "Komunikacija",
+      "visaRoute": "Vizos kelias",
+      "payments": "Mokėjimai",
+      "balance": "Likutis",
+      "groupMembers": "Grupės nariai",
+      "hero": "Pagrindinis blokas",
+      "sectionsList": "Skiltys",
+      "agentApprovals": "Agentų patvirtinimai"
+    }
+  },
+  "footer": {
+    "tagline": "Kad jūsų piligrimystė būtų paprasta, apsaugota ir dvasiškai sutelkta — su pagalba kiekviename žingsnyje.",
+    "protectionTitle": "ES nemokumo apsauga",
+    "protectionDesc": "Jūsų užsakymai finansiškai apsaugoti — su kiekvienu paketu išduodamas vartotojo apsaugos pažymėjimas.",
+    "follow": "Sekite mus",
+    "quickLinks": "Nuorodos",
+    "about": "Apie mus",
+    "contact": "Susisiekite",
+    "newsroom": "Naujienos",
+    "terms": "Sąlygos",
+    "privacy": "Privatumo politika",
+    "packages": "Mūsų paketai",
+    "economy": "Ekonominiai paketai",
+    "standard": "Standartiniai paketai",
+    "premium": "Premium paketai",
+    "payment": "Mokėjimo būdai",
+    "connect": "Likite informuoti",
+    "connectSub": "Sezoniniai pasiūlymai ir vizų naujienos — jokio šlamšto.",
+    "emailPlaceholder": "Jūsų el. paštas",
+    "subscribe": "Prenumeruoti",
+    "getInTouch": "Susisiekite",
+    "legal": "AUJ yra licencijuotas ES kelionių organizatorius ir veikia kaip paslaugų teikėjo agentas kiekvienam užsakymui; jūsų sutartis sudaroma su tuo teikėju, nebent nurodyta kitaip. Tinkami paketai apdrausti nemokumo apsaugos pažymėjimu pagal ES kelionių paketų direktyvą, išduodamu prieš apmokėjimą. Taikomą apsaugą rasite užsakymo sąlygose.",
+    "rights": "© 2026 AUJ. Visos teisės saugomos."
   }
 }

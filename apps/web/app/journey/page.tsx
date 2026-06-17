@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, type ReactNode } from 'react';
-import { Logo } from '@auj/ui';
 import { routeFor } from '@auj/visa-router';
+import { SiteHeader } from '../../src/components/SiteHeader';
+import { SiteFooter } from '../../src/components/SiteFooter';
 import { formatMoney, pkrIndicative } from '../../src/currency';
 import {
   BOOKING,
@@ -25,36 +26,25 @@ export default function JourneyPage() {
   const progress = Math.round((BOOKING.stageIndex / (STAGES.length - 1)) * 100);
 
   return (
-    <div className="min-h-screen bg-[#ECE7DD]">
-      {/* portal top nav */}
-      <header className="sticky top-0 z-40 border-b border-sand-200 bg-white">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-[clamp(16px,3vw,28px)] py-3">
-          <div className="flex flex-wrap items-center gap-4">
-            <div className="flex items-center gap-2.5">
-              <Logo size={30} />
-              <span className="font-serif text-base font-semibold tracking-[0.04em]">AUJ</span>
-            </div>
-            <div className="flex flex-wrap gap-0.5">
-              {TABS.map((t) => (
-                <button
-                  key={t}
-                  type="button"
-                  onClick={() => setTab(t)}
-                  className={`rounded-[9px] px-3.5 py-2 text-[13.5px] font-semibold ${tab === t ? 'bg-green-100 text-green-800' : 'text-sand-700 hover:bg-sand-100'}`}
-                >
-                  {t}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="flex items-center gap-2.5">
-            <span className="rounded-lg border border-sand-200 px-2.5 py-1.5 text-[13px] font-semibold text-sand-700">🌐 EN</span>
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-green-800 text-[12.5px] font-semibold text-white">AK</span>
-          </div>
+    <div className="flex min-h-screen flex-col bg-[#ECE7DD]">
+      <SiteHeader />
+      {/* portal sub-nav (tabs) */}
+      <div className="border-b border-sand-200 bg-white">
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-0.5 px-[clamp(16px,3vw,28px)] py-2.5">
+          {TABS.map((t) => (
+            <button
+              key={t}
+              type="button"
+              onClick={() => setTab(t)}
+              className={`rounded-[9px] px-3.5 py-2 text-[13.5px] font-semibold transition-colors duration-fast focus-visible:outline-none focus-visible:shadow-focus ${tab === t ? 'bg-green-100 text-green-800' : 'text-sand-700 hover:bg-sand-100'}`}
+            >
+              {t}
+            </button>
+          ))}
         </div>
-      </header>
+      </div>
 
-      <div className="mx-auto max-w-5xl p-[clamp(16px,3vw,30px)]">
+      <main className="mx-auto w-full max-w-5xl flex-1 p-[clamp(16px,3vw,30px)]">
         {/* booking hero */}
         <div className="relative mb-5 overflow-hidden rounded-[18px] bg-gradient-to-br from-green-800 to-green-900 p-[clamp(22px,2.6vw,30px)] text-green-50">
           <div className="flex flex-wrap items-start justify-between gap-6">
@@ -91,7 +81,8 @@ export default function JourneyPage() {
           {tab === 'Documents' && <Documents />}
           {tab === 'Payments' && <Payments balance={balance} />}
         </div>
-      </div>
+      </main>
+      <SiteFooter />
     </div>
   );
 }

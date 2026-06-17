@@ -29,8 +29,8 @@ export function AuthForm({ mode, action, next }: { mode: 'login' | 'signup'; act
   const isSignup = mode === 'signup';
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-sand-50 px-4 py-10">
-      <div className="w-full max-w-md">
+    <div className="w-full px-4 py-10">
+      <div className="mx-auto w-full max-w-md">
         <div className="mb-6 flex flex-col items-center gap-2.5 text-center">
           <Logo size={44} />
           <h1 className="font-serif text-2xl font-semibold">{isSignup ? t('titleSignup') : t('titleLogin')}</h1>
@@ -94,7 +94,7 @@ export function AuthForm({ mode, action, next }: { mode: 'login' | 'signup'; act
           )}
         </p>
       </div>
-    </main>
+    </div>
   );
 }
 

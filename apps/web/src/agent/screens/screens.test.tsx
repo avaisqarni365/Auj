@@ -1,16 +1,27 @@
 import { describe, it, expect } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
+import { NextIntlClientProvider } from 'next-intl';
+import type { ReactNode } from 'react';
 import { MultiPaxBooking } from './MultiPaxBooking';
 import { MarkupConfig } from './MarkupConfig';
 import { Statements } from './Statements';
 import { AgentDashboard } from './AgentDashboard';
 import type { Agent, MarkupRule, Statement } from '../domain';
+import messages from '../../../messages/en.json';
 
 const noop = (): void => undefined;
 
+// Components that now use next-intl (Shell/AgentDashboard/MultiPaxBooking) need the provider.
+const intl = (node: ReactNode): string =>
+  renderToStaticMarkup(
+    <NextIntlClientProvider locale="en" messages={messages}>
+      {node}
+    </NextIntlClientProvider>,
+  );
+
 describe('B2B screens', () => {
   it('MultiPaxBooking shows the 49-pax counter and disables when full', () => {
-    const html = renderToStaticMarkup(
+    const html = intl(
       <MultiPaxBooking paxCount={49} sell={{ amount: 4900000, currency: 'EUR' }} canBook onAddRow={noop} onAdd10={noop} onPayFromWallet={noop} />,
     );
     expect(html).toContain('49 / 49');
@@ -37,7 +48,7 @@ describe('B2B screens', () => {
 
   it('AgentDashboard shows status pill', () => {
     const agent: Agent = { id: 'a', agencyName: 'Al Noor', email: 'e@x', tier: 'GOLD', status: 'APPROVED', createdAt: 't' };
-    const html = renderToStaticMarkup(
+    const html = intl(
       <AgentDashboard agent={agent} walletBalance={{ amount: 100000, currency: 'EUR' }} available={{ amount: 150000, currency: 'EUR' }} bookings={3} />,
     );
     expect(html).toContain('Al Noor');

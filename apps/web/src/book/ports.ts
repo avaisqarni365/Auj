@@ -57,6 +57,20 @@ export interface PaymentsApi {
     idempotencyKey: string;
     method?: PaymentMethod;
   }): Promise<{ paymentRef: string }>;
+  /** Phase 1: create the intent without capturing. `clientSecret` set when the gateway has a browser step. */
+  authorize(input: {
+    amount: Money;
+    bookingRef: string;
+    idempotencyKey: string;
+    method?: PaymentMethod;
+  }): Promise<{ intentId: string; clientSecret?: string }>;
+  /** Phase 2: capture an authorized intent (after the browser confirmed the card). */
+  capture(input: {
+    intentId: string;
+    currency: 'EUR' | 'PKR';
+    bookingRef: string;
+    idempotencyKey: string;
+  }): Promise<{ paymentRef: string }>;
 }
 
 export interface Backend {

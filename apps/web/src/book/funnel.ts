@@ -9,7 +9,7 @@ function sumByCurrency(amounts: Money[]): Money[] {
   return [...totals.entries()].map(([currency, amount]) => ({ amount, currency }));
 }
 
-export type FunnelStep = 'SEARCH' | 'RESULTS' | 'BUILDER' | 'PILGRIMS' | 'CHECKOUT' | 'CONFIRMED';
+export type FunnelStep = 'SEARCH' | 'RESULTS' | 'BUILDER' | 'PILGRIMS' | 'CHECKOUT' | 'CARD' | 'CONFIRMED';
 
 export interface PilgrimDraft {
   firstName: string;

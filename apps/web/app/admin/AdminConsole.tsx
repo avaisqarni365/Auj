@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, type ReactNode } from 'react';
+import { useTranslations } from 'next-intl';
 import { Logo, StatusPill, type PillTone } from '@auj/ui';
 import { routeFor } from '@auj/visa-router';
 import type { PublicUser } from '@auj/auth';
@@ -26,18 +27,25 @@ import {
 
 type View = 'overview' | 'pilgrims' | 'providers' | 'requests' | 'documents' | 'content' | 'users' | 'support';
 
-const NAV: Array<{ key: View; label: string; icon: string; badge?: string }> = [
-  { key: 'overview', label: 'Overview', icon: '▦' },
-  { key: 'pilgrims', label: 'Pilgrims · CRM', icon: '👥', badge: '1.3k' },
-  { key: 'providers', label: 'Service providers', icon: '🔌' },
-  { key: 'requests', label: 'Special requests', icon: '🧩' },
-  { key: 'documents', label: 'Documents', icon: '📄' },
-  { key: 'support', label: 'Support', icon: '🎧' },
-  { key: 'content', label: 'Landing content', icon: '📝' },
-  { key: 'users', label: 'Users & roles', icon: '🛡' },
+const NAV: Array<{ key: View; icon: string; badge?: string }> = [
+  { key: 'overview', icon: '▦' },
+  { key: 'pilgrims', icon: '👥', badge: '1.3k' },
+  { key: 'providers', icon: '🔌' },
+  { key: 'requests', icon: '🧩' },
+  { key: 'documents', icon: '📄' },
+  { key: 'support', icon: '🎧' },
+  { key: 'content', icon: '📝' },
+  { key: 'users', icon: '🛡' },
+];
+
+const MORE: Array<{ key: 'payments' | 'reports' | 'settings'; icon: string }> = [
+  { key: 'payments', icon: '💶' },
+  { key: 'reports', icon: '📊' },
+  { key: 'settings', icon: '⚙' },
 ];
 
 export function AdminConsole() {
+  const t = useTranslations('admin');
   const [view, setView] = useState<View>('overview');
   const [selected, setSelected] = useState<AdminPilgrim | null>(null);
 
@@ -54,11 +62,11 @@ export function AdminConsole() {
           <Logo size={38} />
           <div>
             <div className="font-serif text-lg font-semibold leading-none tracking-[0.05em] text-white">AUJ</div>
-            <div className="mt-0.5 text-[10px] uppercase tracking-[0.14em] text-green-100/60">Admin · Web</div>
+            <div className="mt-0.5 text-[10px] uppercase tracking-[0.14em] text-green-100/60">{t('brandSub')}</div>
           </div>
         </div>
         <nav className="flex flex-1 flex-col gap-1 p-3">
-          <div className="px-3 pb-1.5 pt-2 text-[10.5px] uppercase tracking-wider text-green-100/50">Operate</div>
+          <div className="px-3 pb-1.5 pt-2 text-[10.5px] uppercase tracking-wider text-green-100/50">{t('groupOperate')}</div>
           {NAV.map((n) => {
             const on = n.key === view;
             return (
@@ -69,14 +77,14 @@ export function AdminConsole() {
                 className={`flex w-full items-center gap-3 rounded-[10px] px-3 py-2.5 text-left text-sm ${on ? 'bg-white font-semibold text-green-900' : 'font-medium text-green-100/90 hover:bg-white/5'}`}
               >
                 <span className="w-5 text-center">{n.icon}</span>
-                <span className="flex-1">{n.label}</span>
+                <span className="flex-1">{t(`nav.${n.key}`)}</span>
                 {n.badge ? <span className="rounded-full bg-white/15 px-2 py-0.5 font-mono text-[11px] font-semibold">{n.badge}</span> : null}
               </button>
             );
           })}
-          <div className="px-3 pb-1.5 pt-4 text-[10.5px] uppercase tracking-wider text-green-100/50">More</div>
-          {['💶 Payments', '📊 Reports', '⚙ Settings'].map((s) => (
-            <div key={s} className="rounded-[10px] px-3 py-2.5 text-sm font-medium text-green-100/60">{s}</div>
+          <div className="px-3 pb-1.5 pt-4 text-[10.5px] uppercase tracking-wider text-green-100/50">{t('groupMore')}</div>
+          {MORE.map((m) => (
+            <div key={m.key} className="rounded-[10px] px-3 py-2.5 text-sm font-medium text-green-100/60">{m.icon} {t(`more.${m.key}`)}</div>
           ))}
         </nav>
         <div className="border-t border-white/10 p-3.5">
@@ -84,7 +92,7 @@ export function AdminConsole() {
             <span className="flex h-[34px] w-[34px] items-center justify-center rounded-full bg-gold text-[13px] font-bold text-green-950">SR</span>
             <div className="min-w-0 flex-1">
               <div className="text-[13px] font-semibold text-white">Sara Rashid</div>
-              <div className="text-[11px] text-green-100/60">Operations admin</div>
+              <div className="text-[11px] text-green-100/60">{t('userRole')}</div>
             </div>
           </div>
         </div>
@@ -95,12 +103,12 @@ export function AdminConsole() {
         <header className="sticky top-0 z-30 flex items-center gap-3.5 border-b border-sand-200 bg-sand-50/90 px-[clamp(16px,3vw,36px)] py-3.5 backdrop-blur">
           <div className="flex min-w-0 flex-1 items-center gap-2.5 rounded-[10px] border-[1.5px] border-sand-200 bg-white px-3.5 py-2.5">
             <span className="text-sand-500">🔍</span>
-            <span className="truncate text-sm text-sand-500">Search pilgrims, BRN, bookings…</span>
+            <span className="truncate text-sm text-sand-500">{t('search')}</span>
             <span className="ms-auto rounded border border-sand-200 px-1.5 font-mono text-[11px] text-sand-300">⌘K</span>
           </div>
           <span className="hidden whitespace-nowrap rounded-full bg-accent-100 px-3 py-1.5 text-[12.5px] font-semibold text-accent-700 sm:inline">FX · 1 € = ₨310.8</span>
           <button type="button" className="relative h-10 w-10 rounded-[10px] border-[1.5px] border-sand-200 bg-white">🔔<span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-danger" /></button>
-          <button type="button" className="whitespace-nowrap rounded-[10px] bg-green-800 px-4 py-2.5 text-sm font-semibold text-white">+ New booking</button>
+          <button type="button" className="whitespace-nowrap rounded-[10px] bg-green-800 px-4 py-2.5 text-sm font-semibold text-white">{t('newBooking')}</button>
         </header>
 
         <div className="p-[clamp(16px,3vw,32px)]">
@@ -169,9 +177,10 @@ function Card({ children, className = '' }: { children: ReactNode; className?: s
 /* ---------- views ---------- */
 
 function Overview({ onViewAll }: { onViewAll: () => void }) {
+  const t = useTranslations('admin');
   return (
     <>
-      <PageHead kicker="OVERVIEW · 13 JUN 2026" title="Good morning, Sara." />
+      <PageHead kicker={t('views.overviewKicker')} title={t('views.overviewTitle', { name: 'Sara' })} />
       <div className="mb-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {ADMIN_KPIS.map((k) => (
           <Card key={k.label} className="p-5 shadow-sm">
@@ -187,8 +196,8 @@ function Overview({ onViewAll }: { onViewAll: () => void }) {
       <div className="grid gap-4 xl:grid-cols-[1.5fr_1fr]">
         <Card className="overflow-hidden">
           <div className="flex items-center justify-between border-b border-sand-100 px-5 py-4">
-            <span className="text-sm font-bold">Recent bookings</span>
-            <button type="button" onClick={onViewAll} className="text-[13px] font-semibold text-success-fg">View all →</button>
+            <span className="text-sm font-bold">{t('sections.recentBookings')}</span>
+            <button type="button" onClick={onViewAll} className="text-[13px] font-semibold text-success-fg">{t('viewAll')} →</button>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full min-w-[460px] text-[13px]">
@@ -215,7 +224,7 @@ function Overview({ onViewAll }: { onViewAll: () => void }) {
         </Card>
         <div className="grid gap-4">
           <Card className="p-5">
-            <div className="mb-4 text-sm font-bold">Visa pipeline</div>
+            <div className="mb-4 text-sm font-bold">{t('sections.visaPipeline')}</div>
             {PIPELINE.map((p) => (
               <div key={p.label} className="mb-3">
                 <div className="mb-1.5 flex items-center justify-between">
@@ -227,7 +236,7 @@ function Overview({ onViewAll }: { onViewAll: () => void }) {
             ))}
           </Card>
           <Card className="p-5">
-            <div className="mb-3 text-sm font-bold">Upcoming departures</div>
+            <div className="mb-3 text-sm font-bold">{t('sections.upcomingDepartures')}</div>
             {DEPARTURES.map((d) => (
               <div key={`${d.day}-${d.route}`} className="flex items-center gap-3 border-t border-sand-100 py-2.5">
                 <div className="w-10 text-center"><div className="font-mono text-base font-semibold text-green-800">{d.day}</div><div className="text-[10px] uppercase text-sand-500">{d.mon}</div></div>
@@ -243,10 +252,11 @@ function Overview({ onViewAll }: { onViewAll: () => void }) {
 }
 
 function Pilgrims({ onSelect }: { onSelect: (p: AdminPilgrim) => void }) {
+  const t = useTranslations('admin');
   return (
     <>
       <div className="mb-5 flex flex-wrap items-end justify-between gap-3.5">
-        <PageHead kicker="CRM · 1,284 ACTIVE" title="Pilgrims & travellers" />
+        <PageHead kicker={t('views.pilgrimsKicker', { count: '1,284' })} title={t('views.pilgrimsTitle')} />
         <div className="flex flex-wrap gap-2 pb-1">
           <span className="rounded-[10px] border-[1.5px] border-sand-200 bg-white px-3 py-2 text-[13px] font-semibold text-sand-700">Route: All ▾</span>
           <span className="rounded-[10px] border-[1.5px] border-sand-200 bg-white px-3 py-2 text-[13px] font-semibold text-sand-700">Status: All ▾</span>
@@ -296,10 +306,11 @@ function Pilgrims({ onSelect }: { onSelect: (p: AdminPilgrim) => void }) {
 }
 
 function Profile({ pilgrim, onBack }: { pilgrim: AdminPilgrim; onBack: () => void }) {
+  const t = useTranslations('admin');
   const balance = { amount: pilgrim.total.amount - pilgrim.paid.amount, currency: pilgrim.total.currency };
   return (
     <>
-      <button type="button" onClick={onBack} className="mb-4 text-[13px] font-semibold text-accent-600">← Back to pilgrims</button>
+      <button type="button" onClick={onBack} className="mb-4 text-[13px] font-semibold text-accent-600">← {t('nav.pilgrims')}</button>
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <span className="flex h-12 w-12 items-center justify-center rounded-full bg-accent-600 text-base font-semibold text-white">{pilgrim.name.split(' ').map((w) => w[0]).join('').slice(0, 2)}</span>
@@ -315,7 +326,7 @@ function Profile({ pilgrim, onBack }: { pilgrim: AdminPilgrim; onBack: () => voi
       <div className="grid gap-4 xl:grid-cols-[1.4fr_1fr]">
         <div className="grid gap-4">
           <Card className="p-5">
-            <div className="mb-4 text-sm font-bold">Journey status</div>
+            <div className="mb-4 text-sm font-bold">{t('sections.journeyStatus')}</div>
             {STAGES.map((s, i) => {
               const done = i < pilgrim.stage;
               const active = i === pilgrim.stage;
@@ -332,14 +343,14 @@ function Profile({ pilgrim, onBack }: { pilgrim: AdminPilgrim; onBack: () => voi
             })}
           </Card>
           <Card className="p-5">
-            <div className="mb-3 text-sm font-bold">Documents</div>
+            <div className="mb-3 text-sm font-bold">{t('sections.documents')}</div>
             <div className="grid gap-2.5">
               <DocRow label="Passport scan" sub="uploaded" ok />
               <DocRow label="Visa photo" sub="White background · 45×35mm" />
             </div>
           </Card>
           <Card className="p-5">
-            <div className="mb-3 text-sm font-bold">Communications</div>
+            <div className="mb-3 text-sm font-bold">{t('sections.communications')}</div>
             {['Email · Booking confirmed', 'WhatsApp · Documents reminder', 'SMS · Visa update'].map((c) => (
               <div key={c} className="border-t border-sand-100 py-2 text-[13px] text-sand-700 first:border-0">{c}</div>
             ))}
@@ -347,21 +358,21 @@ function Profile({ pilgrim, onBack }: { pilgrim: AdminPilgrim; onBack: () => voi
         </div>
         <div className="grid gap-4">
           <Card className="p-5">
-            <div className="mb-2 text-sm font-bold">Visa route</div>
+            <div className="mb-2 text-sm font-bold">{t('sections.visaRoute')}</div>
             <VisaPill nationality={pilgrim.nationality} />
             <p className="mt-2 text-[12.5px] text-sand-500">Auto-detected from the {pilgrim.nationality} passport.</p>
           </Card>
           <Card className="p-5">
-            <div className="mb-3 text-sm font-bold">Payments</div>
+            <div className="mb-3 text-sm font-bold">{t('sections.payments')}</div>
             <PayRow label="Total" value={formatMoney(pilgrim.total)} />
             <PayRow label="Paid" value={formatMoney(pilgrim.paid)} tone="text-success-fg" />
             <div className="mt-2 flex items-center justify-between border-t border-sand-200 pt-3">
-              <span className="text-sm font-bold">Balance</span>
+              <span className="text-sm font-bold">{t('sections.balance')}</span>
               <span className="font-mono text-lg font-bold text-green-800">{formatMoney(balance)}</span>
             </div>
           </Card>
           <Card className="p-5">
-            <div className="mb-2 text-sm font-bold">Group members</div>
+            <div className="mb-2 text-sm font-bold">{t('sections.groupMembers')}</div>
             <p className="text-[13px] text-sand-700">{pilgrim.name} + 3 others on {pilgrim.brn}</p>
           </Card>
         </div>
@@ -397,10 +408,11 @@ function providerTone(status: ProviderStatus): PillTone {
 }
 
 function ServiceProviders() {
+  const t = useTranslations('admin');
   return (
     <>
       <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-        <PageHead kicker="INTEGRATIONS" title="Service providers" />
+        <PageHead kicker={t('views.providersKicker')} title={t('views.providersTitle')} />
         <button type="button" className="rounded-[10px] bg-green-800 px-4 py-2 text-[13px] font-semibold text-white">+ Add provider</button>
       </div>
       <p className="mb-4 max-w-2xl text-[13px] text-sand-500">
@@ -437,12 +449,13 @@ function ServiceProviders() {
 }
 
 function Content() {
+  const t = useTranslations('admin');
   return (
     <>
-      <PageHead kicker="CMS" title="Landing content" />
+      <PageHead kicker={t('views.contentKicker')} title={t('views.contentTitle')} />
       <div className="grid gap-4 xl:grid-cols-[1fr_1.4fr]">
         <Card className="p-5">
-          <div className="mb-3 text-sm font-bold">Hero</div>
+          <div className="mb-3 text-sm font-bold">{t('sections.hero')}</div>
           <label className="text-[12px] font-medium text-sand-700">Headline</label>
           <div className="mb-3 mt-1 rounded-lg border-[1.5px] border-sand-300 bg-white px-3 py-2.5 text-sm">Begin a sacred journey, with calm.</div>
           <label className="text-[12px] font-medium text-sand-700">Sub-headline</label>
@@ -450,7 +463,7 @@ function Content() {
           <button type="button" className="rounded-[10px] bg-green-800 px-4 py-2.5 text-sm font-semibold text-white">Save &amp; publish</button>
         </Card>
         <Card className="overflow-hidden">
-          <div className="border-b border-sand-100 px-5 py-4 text-sm font-bold">Sections</div>
+          <div className="border-b border-sand-100 px-5 py-4 text-sm font-bold">{t('sections.sectionsList')}</div>
           <table className="w-full text-[13px]">
             <tbody>
               {CMS_SECTIONS.map((s) => (
@@ -490,10 +503,11 @@ function AgentApprovals() {
 
   const pending = agents.filter((a) => a.agentStatus !== 'ACTIVE');
 
+  const t = useTranslations('admin');
   return (
     <Card className="mb-4 p-5">
       <div className="mb-3 flex items-center justify-between">
-        <div className="text-sm font-bold">Agent approvals</div>
+        <div className="text-sm font-bold">{t('sections.agentApprovals')}</div>
         <span className="rounded-full bg-warning-bg px-2.5 py-0.5 text-[11.5px] font-semibold text-warning-fg">{pending.length} pending</span>
       </div>
       {err ? <p className="text-[13px] text-danger-fg">{err}</p> : null}
@@ -542,6 +556,7 @@ const NEXT_ACTIONS: Array<{ status: SpecialRequestStatus; label: string }> = [
 ];
 
 function Documents() {
+  const t = useTranslations('admin');
   const [docs, setDocs] = useState<DocRow[]>([]);
   const [busy, setBusy] = useState<string | null>(null);
   const [err, setErr] = useState<string>();
@@ -564,7 +579,7 @@ function Documents() {
 
   return (
     <>
-      <PageHead kicker="COMPLIANCE" title="Documents" />
+      <PageHead kicker={t('views.documentsKicker')} title={t('views.documentsTitle')} />
       {err ? <p className="mb-3 text-[13px] text-danger-fg">{err}</p> : null}
       <div className="mb-4 text-[13px] text-sand-500"><strong className="text-sand-ink">{pending}</strong> awaiting verification · {docs.length} total</div>
       {docs.length === 0 ? (
@@ -604,6 +619,7 @@ function Documents() {
 }
 
 function Requests() {
+  const t = useTranslations('admin');
   const [groups, setGroups] = useState<RequestGroup[]>([]);
   const [busy, setBusy] = useState<string | null>(null);
   const [err, setErr] = useState<string>();
@@ -626,7 +642,7 @@ function Requests() {
 
   return (
     <>
-      <PageHead kicker="PERSONALIZATION" title="Special requests" />
+      <PageHead kicker={t('views.requestsKicker')} title={t('views.requestsTitle')} />
       {err ? <p className="mb-3 text-[13px] text-danger-fg">{err}</p> : null}
       <div className="mb-4 text-[13px] text-sand-500"><strong className="text-sand-ink">{pending}</strong> open across <strong className="text-sand-ink">{groups.length}</strong> bookings</div>
       {groups.length === 0 ? (
@@ -662,6 +678,7 @@ function Requests() {
 const TICKET_TONE: Record<TicketStatus, PillTone> = { OPEN: 'info', PENDING: 'warning', RESOLVED: 'success', CLOSED: 'draft' };
 
 function Support() {
+  const tr = useTranslations('admin');
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [drafts, setDrafts] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState<string | null>(null);
@@ -691,7 +708,7 @@ function Support() {
 
   return (
     <>
-      <PageHead kicker="SUPPORT" title="Customer support" />
+      <PageHead kicker={tr('views.supportKicker')} title={tr('views.supportTitle')} />
       {err ? <p className="mb-3 text-[13px] text-danger-fg">{err}</p> : null}
       <div className="mb-4 text-[13px] text-sand-500"><strong className="text-sand-ink">{open}</strong> open · {tickets.length} total</div>
       {tickets.length === 0 ? (
@@ -740,11 +757,12 @@ function Support() {
 }
 
 function Users() {
+  const tr = useTranslations('admin');
   const [tab, setTab] = useState<'All' | 'Admins' | 'Agents' | 'Customers'>('All');
   const filtered = USERS.filter((u) => tab === 'All' || u.role === tab.slice(0, -1));
   return (
     <>
-      <PageHead kicker="ACCESS" title="Users & roles" />
+      <PageHead kicker={tr('views.usersKicker')} title={tr('views.usersTitle')} />
       <AgentApprovals />
       <div className="mb-4 flex gap-1 rounded-[10px] bg-sand-100 p-1">
         {(['All', 'Admins', 'Agents', 'Customers'] as const).map((t) => (

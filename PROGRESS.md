@@ -173,8 +173,98 @@ core-booking 29). Remaining: real partner SaudiPartnerClient (gated), real payme
   how-it-works steps, package name/meta/visa, all FAQ Q&A, and testimonial quotes — in the
   "landing" namespace (4 catalogs), rendered via t.raw arrays zipped with content.ts for the
   non-text bits (gradients, prices, person names). The LANDING is now 100% localized EN/LT/UR/AR + RTL.
-- Incremental follow-up: /agent + /admin staff chrome (lower priority).
 - Gate: build 13/13, lint 13/13, test 24/24 (apps/web 64).
+- [x] Staff-chrome i18n (2026-06-17): /agent + /admin chrome now localized EN/LT/UR/AR + RTL.
+  NEW "agent" + "admin" namespaces in all 4 catalogs (101 keys each, parity-checked). Agent portal
+  fully wired (Shell nav/topbar/greeting, AgentPortal headings, AgentDashboard KPIs+pipeline,
+  MultiPaxBooking table+actions, WalletView cards+table) via useTranslations('agent'). Admin console
+  chrome wired (sidebar brand/groups/nav/more/role, topbar search+CTA, all 8 view PageHeads +
+  section sub-headings) via useTranslations('admin'). Deep admin DATA tables (row cells, some table
+  headers, filter-tab labels) left EN — documented remaining. screens.test wrapped in
+  NextIntlClientProvider; new shell-i18n test asserts EN + AR render. Gate: build 14/14, lint 14/14,
+  test 26/26 (apps/web 71).
+
+## Landing feature parity with dynamic-packaging Umrah platforms (yuusr.com) — 2026-06-17
+- Analysed yuusr.com/en and added its landing feature set to AUJ's landing, in AUJ's OWN design
+  (sand/green, serif headings, Section component, Scene imagery) and fully localized EN/LT/UR/AR + RTL.
+- Search widget: added Makkah-first/Madinah-first toggle + independent Makkah/Madinah NIGHT steppers
+  (signature dynamic-packaging control) + a "flexible dates" hint + a micro-trust row (Trusted by
+  12k+ · Payment protection · EU insolvency-protected). Steppers feed /book via makkahNights/
+  madinahNights/order query params (funnel ignores unknowns — no funnel change).
+- NEW sections: "Why book with AUJ" (4 value props), "This week's exclusive deals" (3 cards w/ named
+  Makkah+Madinah hotels, nights, departure city, from-price per pilgrim, secure-booking line),
+  "Experience the difference" (4 service blocks), How-it-works expanded 4→6 steps (adds Compare/
+  filters + Customize + richer confirmation), "Popular packages" category chips (8), "Departing from
+  your city" geo directory (3 regions × cities), "24/7 multilingual support" channels (phone/WhatsApp/
+  email/live-chat), "Pay your way, protected" (instalments + 3-D Secure + EU insolvency cert +
+  payment methods + licensed-operator), and a newsletter signup in the CTA band.
+- Data (hotel names, prices, cities, support numbers, payment methods) in content.ts; all prose in the
+  landing catalog (4 locales, 71 keys each, parity-checked). content.ts: DEALS, VALUE_ICONS,
+  FEATURE_ICONS, DEPARTURES_GRID, SUPPORT_CHANNELS, PAYMENT_METHODS.
+- Tests: Landing now asserts new sections render + night steppers feed the link + 10 scene images.
+- Gate: build 14/14, lint 14/14, test 26/26 (apps/web 73).
+- Deliberately NOT copied (out of scope / AUJ-specific): yuusr's "AI platform" branding, their
+  inconsistent ATOL numbers, charity/Zakat framing. AUJ keeps EU-insolvency-certificate framing.
+  Deals/support/departure values are realistic placeholders — swap for live data when available.
+
+## Landing follow-up — real-data deals, deal-of-the-day, polish, richer FAQ (2026-06-17)
+- NOTE: declined a verbatim 1:1 clone of yuusr's content/style (their copyrighted copy + trade
+  dress; also bad for SEO/brand). Instead deepened AUJ's OWN landing across 4 chosen directions.
+- Deals wired to REAL connector data: NEW src/landing-data.ts buildDeals() pulls live Makkah +
+  Madinah hotel offers via the env-selected SaudiConnector (mock now, Maqam later), pairs them into
+  3 deal cards (cheapest→premium) with derived per-pilgrim pricing; app/page.tsx fetches them
+  server-side and passes `deals` to Landing; falls back to static DEALS offline. content.ts exports
+  a `Deal` type; Landing takes an optional deals prop.
+- NEW "Deal of the day" featured banner (missing section) using the top live deal.
+- Design polish (design-taste skill): hover lift (translateY(-2px)+shadow-lg, transform/opacity,
+  200ms ease-out-soft) on deal/value/feature cards; press (active:scale-[0.98]) on deal CTAs.
+- Richer original copy: +2 AUJ-specific FAQ entries (Hajj + general travel; agent portal) — own
+  voice, all 4 locales (faqs now 6×4). +dealOfDay label ×4. Catalogs reformatted to 2-space JSON.
+- Landing key parity 72×4. Gate: build 14/14, lint 14/14, test 26/26 (apps/web 73).
+
+## Landing design-taste polish pass (2026-06-17, design-taste skill)
+- Scroll-reveal: NEW <Reveal> wraps every <Section> — one quiet rise+fade (opacity + 8px translateY,
+  300ms ease-out-soft) when it enters the viewport, via IntersectionObserver. Guards: shown-immediately
+  when IO is absent (SSR/jsdom — tests stay green), and motion-reduce drops the transform entirely.
+- Hover lift on ALL landing cards (journeys/packages now match deals/value/features):
+  -translate-y-0.5 + shadow-lg, transform/shadow only, 200ms ease-out-soft.
+- Press + focus on every primary control (15 active:scale-[0.98] + focus-visible:shadow-focus):
+  hero CTAs, search submit, Build/View package, CTA band, newsletter, Track, + nav-link focus rings.
+- Tokens only (shadow-focus / ease-out-soft / duration-fast from @auj/ui preset) — no ad-hoc values.
+  Body sub-copy tightened to max-w-[60ch]. Verified live on :3001 (GET / 200, 12 scenes, no errors).
+- Gate: build 14/14, lint 14/14, test 26/26 (apps/web 73).
+
+## Unified site header + footer across all pages (2026-06-17)
+- NEW shared chrome lifted from the landing's own design: src/components/SiteHeader.tsx (sticky nav:
+  Logo+wordmark→/, nav links → /#section so they work off-home, LocaleSwitcher, AccountMenu/Login,
+  Book/Signup CTA — with press + focus states), SiteFooter.tsx, and SitePage.tsx (header + flexible
+  main + footer frame; `center` for auth/redeem cards).
+- Applied to EVERY public/account page: landing (refactored to use SiteHeader/SiteFooter), /book
+  (funnel's redundant brand bar removed), /journey (shared header + tabs kept as a sub-bar + footer),
+  /bookings, /bookings/[id], /support, /login, /signup, /redeem. AuthForm + RedeemForm dropped their
+  own min-h-screen wrappers so they sit inside SitePage's centred main. Per-page ad-hoc mini-headers
+  (Logo+AUJ) removed; unused Logo/Link/useLocale imports cleaned up.
+- Staff consoles /admin + /agent intentionally KEEP their dedicated app shells (sidebar/rail) — they
+  are internal dashboards per the design handoff, not part of the marketing/site chrome.
+- Verified live on :3001: / · /login · /signup · /redeem · /journey all render identical header +
+  footer + nav (HTTP 200). Gate: build 14/14, lint 14/14, test 26/26 (apps/web 73).
+
+## Rich multi-column footer (2026-06-17)
+- Expanded SiteFooter into a full dark-green (green-950) footer matching the structure of large
+  Umrah platforms but with AUJ's OWN identity & original copy (did NOT copy yuusr's ATOL number,
+  TRAVELEAP company/registration, address, contact, or legal disclaimer — those would be false +
+  infringing on an EU operator). Columns: brand + tagline + EU-insolvency-protection badge + socials;
+  Quick links; Our packages (Economy/Standard/Premium); Stay-connected newsletter + Get-in-touch
+  (email/phone/location) + accepted payment methods; legal line (own wording: licensed EU operator,
+  agent model, PTD insolvency certificate) + rights + redeem + locales.
+- NEW "footer" message namespace (22 keys) localized EN/LT/UR/AR. content.ts: AUJ_CONTACT + SOCIALS
+  (PLACEHOLDERS). Removed the duplicate landing CTA-band newsletter (footer now carries it globally).
+- Accuracy fix: landing trust badge "ATOL-style protection" → "Insolvency-protected" (4 locales) —
+  AUJ is EU, not UK-ATOL; consistent with the footer's framing.
+- ACTION REQUIRED before launch (operator to supply; do NOT ship placeholders): real support
+  email/phone, registered company number + address, the insolvency-protection provider/scheme
+  reference, and real Terms/Privacy/About/Newsroom pages (footer links currently point to #anchors).
+- Gate: build 14/14, lint 14/14, test 26/26 (apps/web 73). landing 72 + footer 22 keys ×4, parity OK.
 
 ## Real payment acquirers (2026-06-14)
 - @auj/payments: LiveStripeProvider (real Stripe PaymentIntents REST — manual-capture create,
@@ -183,9 +273,51 @@ core-booking 29). Remaining: real partner SaudiPartnerClient (gated), real payme
   offline (no network, CI stays green). `createPaymentRouter(env)` selects live when keys present
   (STRIPE_SECRET_KEY / PKR_GATEWAY_URL+KEY), else the in-memory sandbox (default).
 - apps/web book backend now builds payments via createPaymentRouter() — set the keys in infra/.env to
-  go live, no code change. Stripe NOTE: a production card flow also needs the Stripe.js client step
-  (collect+confirm the payment method) before capture — documented limitation, next step.
+  go live, no code change.
 - Gate: build 13/13, lint 13/13, test 24/24 (payments 28).
+
+## Real Stripe.js card flow (2026-06-17) — closes the payments limitation above
+- @auj/payments: PaymentIntent gains `clientSecret?`; LiveStripeProvider maps Stripe's client_secret
+  from createIntent. PaymentsService split into TWO phases: `authorize()` (create intent, no capture,
+  no ledger post) + `captureAuthorized()` (capture by intent id — amount comes from the gateway, a
+  client can't influence the charge — then post the ledger). `pay()` is now authorize+capture (the
+  single-shot path for the offline sandbox / server-only PKR gateway). 2 new tests (payments 29).
+- apps/web seam: PaymentsApi += authorize/capture; usecases split into createHeldBooking (customer +
+  pilgrims + draft + HOLD) → confirmHeldBooking (confirm + visa + Rawdah). placePilgrimageBooking now
+  composes the three; behaviour identical on the sandbox.
+- Two-phase booking actions: `startCheckoutAction` creates+holds, authorizes, and BRANCHES — if the
+  gateway returned a clientSecret AND STRIPE_PUBLISHABLE_KEY is set it returns { requires_card,
+  bookingId, clientSecret, publishableKey } and leaves the booking HELD; otherwise it captures +
+  confirms immediately (unchanged sandbox path). `finalizeBookingAction(bookingId)` is ownership-checked,
+  captures the SERVER-recorded intent (from a globalThis pending store keyed by bookingId — client never
+  supplies an intent id), then confirms. New 1 test (apps/web 66).
+- Browser: StripePaymentForm.tsx ('use client') loads Stripe.js from js.stripe.com (CDN — PCI SAQ-A
+  requires their script from their domain; no npm dep, offline gate stays green), mounts the Payment
+  Element, confirmPayment({ redirect: 'if_required' }) → intent becomes requires_capture → onConfirmed
+  → finalizeBookingAction captures. New CARD funnel step between CHECKOUT and CONFIRMED. PANs never
+  touch our code. stripe-js.ts = minimal typed loader.
+- Env: STRIPE_PUBLISHABLE_KEY documented in infra/.env.example. With no key the EUR flow stays
+  single-shot (sandbox) — zero behaviour change for dev/CI.
+- LIMITATION (remaining): pending-intent store is in-process (single instance ok; multi-instance needs
+  Redis/Postgres or webhook-driven capture); Stripe webhook signature verification still TODO for prod.
+- Gate: build 14/14, lint 14/14, test 26/26 (payments 29, apps/web 66).
+
+## Imagery seam + on-brand scene artwork (2026-06-17)
+- The design handoff (README "Assets → Imagery") shipped all hero/package/hotel visuals as
+  gradient/"PHOTO ·" placeholders. Replaced them with committed, license-free SVG scene art so
+  nothing renders as a missing image, behind a one-line swap seam for real photography.
+- NEW apps/web/public/img/scenes/: makkah-haram.svg (Kaaba + clock tower + Haram arcade),
+  madinah-nabawi.svg (green dome + twin minarets, reuses the brand skyline construction),
+  ziyarat-iraq.svg (golden Najaf/Karbala domes). All on-brand palette, well-formed XML.
+- NEW src/scenes.ts = manifest (name→file+alt) + sceneSrc()/sceneAlt(); honours
+  NEXT_PUBLIC_IMG_BASE so photos can be served from a CDN without code change. NEW
+  components/Scene.tsx = server-safe <img> (lazy, alt, priority for the hero).
+- Wired: Landing hero (makkah, priority), 3 journey-type cards + 3 featured-package cards
+  (makkah/madinah/ziyarat) — gradient kept as the underlay/fallback; funnel Results hotel cards
+  (scene by destination city). To ship real photography: replace the file under public/img/scenes
+  (+ update scenes.ts `file`) or point NEXT_PUBLIC_IMG_BASE at a mirror — NO component edits.
+- Tests: scenes manifest (2) + Landing renders ≥7 scene <img> with descriptive alt (a11y).
+- Gate: build 14/14, lint 14/14, test 26/26 (payments 29, apps/web 69).
 
 ## Design quality as a workflow (added 2026-06-13)
 - [x] .claude/skills/design-taste/SKILL.md — Emil-Kowalski-grade motion + impeccable design + typography + taste, with a finish checklist. Auto-surfaces on UI work (description match); invoke as /design-taste. THE workflow to apply on every frontend change.

@@ -44,7 +44,12 @@
     "agentPortal": "Agent portal",
     "adminConsole": "Admin console",
     "logout": "Log out",
-    "roles": { "PILGRIM": "Pilgrim", "AGENT": "Travel agent", "SUB_AGENT": "Sub-agent", "ADMIN": "Administrator" }
+    "roles": {
+      "PILGRIM": "Pilgrim",
+      "AGENT": "Travel agent",
+      "SUB_AGENT": "Sub-agent",
+      "ADMIN": "Administrator"
+    }
   },
   "support": {
     "supportOf": "Support",
@@ -70,17 +75,77 @@
   },
   "landing": {
     "sections": {
-      "journeys": { "title": "Choose your journey", "sub": "Three ways to travel — each with the right visa route and protection." },
-      "cart": { "title": "Everything in one cart", "sub": "Hotel, transport, ground services and flights — priced together, charged in EUR." },
-      "how": { "title": "How it works", "sub": "From search to a tracked, ticketed booking — in four calm steps." },
-      "packages": { "title": "Featured packages", "sub": "A few of this season’s most-booked journeys." },
-      "lang": { "title": "In your language", "sub": "EN · LT · UR · AR — Arabic and Urdu mirror to right-to-left." },
-      "track": { "title": "Track any booking", "sub": "Enter a BRN to see live status — booked, documents, visa, travel, return." },
-      "reviews": { "title": "Trusted by pilgrims across the EU" },
-      "faq": { "title": "Frequently asked" }
+      "journeys": {
+        "title": "Choose your journey",
+        "sub": "Three ways to travel — each with the right visa route and protection."
+      },
+      "cart": {
+        "title": "Everything in one cart",
+        "sub": "Hotel, transport, ground services and flights — priced together, charged in EUR."
+      },
+      "how": {
+        "title": "How it works",
+        "sub": "From search to a tracked, ticketed booking — in four calm steps."
+      },
+      "packages": {
+        "title": "Featured packages",
+        "sub": "A few of this season’s most-booked journeys."
+      },
+      "lang": {
+        "title": "In your language",
+        "sub": "EN · LT · UR · AR — Arabic and Urdu mirror to right-to-left."
+      },
+      "track": {
+        "title": "Track any booking",
+        "sub": "Enter a BRN to see live status — booked, documents, visa, travel, return."
+      },
+      "reviews": {
+        "title": "Trusted by pilgrims across the EU"
+      },
+      "faq": {
+        "title": "Frequently asked"
+      },
+      "why": {
+        "title": "Why book with AUJ",
+        "sub": "Real-time fair pricing, one cart, and protection on every booking."
+      },
+      "difference": {
+        "title": "Experience the difference",
+        "sub": "What you get on every AUJ pilgrimage."
+      },
+      "deals": {
+        "title": "This week’s exclusive deals",
+        "sub": "Handpicked packages with named hotels and live pricing — limited availability."
+      },
+      "categories": {
+        "title": "Popular packages",
+        "sub": "Jump to the journey that fits your budget and dates."
+      },
+      "departures": {
+        "title": "Departing from your city",
+        "sub": "Direct and connecting routes from across Europe."
+      },
+      "support": {
+        "title": "24/7 multilingual support",
+        "sub": "Before, during and after your journey — in your language."
+      },
+      "protection": {
+        "title": "Pay your way, protected",
+        "sub": "Flexible payment, bank-grade security and EU consumer protection."
+      }
     },
-    "trust": ["Licensed EU tour operator", "e-Visa guidance included", "EUR or PKR pricing", "ATOL-style protection"],
-    "statLabels": ["EU departure cities", "pilgrims served", "EN · LT · UR · AR", "support desk"],
+    "trust": [
+      "Licensed EU tour operator",
+      "e-Visa guidance included",
+      "EUR or PKR pricing",
+      "Insolvency-protected"
+    ],
+    "statLabels": [
+      "EU departure cities",
+      "pilgrims served",
+      "EN · LT · UR · AR",
+      "support desk"
+    ],
     "announce": "Now departing from 6 EU cities · e-Visa guidance on every booking",
     "forAgents": "For travel agents →",
     "explore": "Explore {name} →",
@@ -90,26 +155,340 @@
       "Guided visits — Najaf, Karbala and the holy sites beyond the Haramain."
     ],
     "steps": [
-      { "title": "Search & build", "desc": "Pick a package; add hotel, transport, ground & flights into one cart." },
-      { "title": "Add pilgrims", "desc": "We auto-detect each pilgrim’s visa route from their passport." },
-      { "title": "Pay securely", "desc": "Charged in EUR; PKR shown for reference at today’s rate." },
-      { "title": "Travel & track", "desc": "Live BRN + visa status, your itinerary and a digital pass." }
+      {
+        "title": "Search & build",
+        "desc": "Pick a package; add hotel, transport, ground & flights into one cart."
+      },
+      {
+        "title": "Add pilgrims",
+        "desc": "We auto-detect each pilgrim’s visa route from their passport."
+      },
+      {
+        "title": "Pay securely",
+        "desc": "Charged in EUR; PKR shown for reference at today’s rate."
+      },
+      {
+        "title": "Travel & track",
+        "desc": "Live BRN + visa status, your itinerary and a digital pass."
+      }
     ],
     "packages": [
-      { "name": "Umrah Premium", "meta": "5★ · near Haram · 14 nts", "visa": "e-Visa" },
-      { "name": "Umrah Essential", "meta": "4★ · 10 nts · flexible", "visa": "e-Visa" },
-      { "name": "Iraq Ziyarat", "meta": "Najaf & Karbala · 9 nts", "visa": "Agent" }
+      {
+        "name": "Umrah Premium",
+        "meta": "5★ · near Haram · 14 nts",
+        "visa": "e-Visa"
+      },
+      {
+        "name": "Umrah Essential",
+        "meta": "4★ · 10 nts · flexible",
+        "visa": "e-Visa"
+      },
+      {
+        "name": "Iraq Ziyarat",
+        "meta": "Najaf & Karbala · 9 nts",
+        "visa": "Agent"
+      }
     ],
     "faqs": [
-      { "q": "Which visa route applies to me?", "a": "We auto-detect it from each pilgrim’s passport: EU/EEA passports use the Saudi e-Visa; Pakistani and other passports route through a MoRA-licensed agent channel. Mixed groups are supported — each pilgrim sees their own route." },
-      { "q": "What currency am I charged in?", "a": "Always EUR. We also show an indicative PKR figure at today’s rate (1 € = ₨310.8) for reference, but the charged amount is never silently converted." },
-      { "q": "Can I book for a group?", "a": "Yes — up to 49 pilgrims in one booking, with per-pilgrim documents and visa routing. Travel agents have a dedicated portal with wallet, credit and markups." },
-      { "q": "How do I track my booking?", "a": "Every booking gets a BRN with a live status timeline (booked → documents → visa → travel → return) and a QR digital pass." }
+      {
+        "q": "Which visa route applies to me?",
+        "a": "We auto-detect it from each pilgrim’s passport: EU/EEA passports use the Saudi e-Visa; Pakistani and other passports route through a MoRA-licensed agent channel. Mixed groups are supported — each pilgrim sees their own route."
+      },
+      {
+        "q": "What currency am I charged in?",
+        "a": "Always EUR. We also show an indicative PKR figure at today’s rate (1 € = ₨310.8) for reference, but the charged amount is never silently converted."
+      },
+      {
+        "q": "Can I book for a group?",
+        "a": "Yes — up to 49 pilgrims in one booking, with per-pilgrim documents and visa routing. Travel agents have a dedicated portal with wallet, credit and markups."
+      },
+      {
+        "q": "How do I track my booking?",
+        "a": "Every booking gets a BRN with a live status timeline (booked → documents → visa → travel → return) and a QR digital pass."
+      },
+      {
+        "q": "Do you offer Hajj and general travel, not just Umrah?",
+        "a": "Yes. Alongside Umrah and Ziyarat, AUJ books Ministry-regulated Hajj and ordinary leisure travel — hotels and flights — through the same cart. The general-travel leg has no Saudi dependency."
+      },
+      {
+        "q": "Can travel agents sell through AUJ?",
+        "a": "Yes. The agent portal gives your agency a wallet, a credit limit, configurable markups, multi-pilgrim booking and reconciling statements. Register, and an administrator approves your account."
+      }
     ],
     "testimonialQuotes": [
       "The visa route was clear from the first screen — no surprises. Everything in one cart.",
       "Paid in EUR, saw the PKR figure for my family back home. Beautifully simple.",
       "Live BRN and visa tracking gave my parents real peace of mind."
-    ]
+    ],
+    "microtrust": [
+      "Trusted by 12,000+ pilgrims",
+      "Payment protection",
+      "EU insolvency-protected"
+    ],
+    "search": {
+      "makkahFirst": "Makkah first",
+      "madinahFirst": "Madinah first",
+      "makkahNights": "Nights in Makkah",
+      "madinahNights": "Nights in Madinah",
+      "flexibleHint": "Flexible on dates? Leave them open — it’s often cheaper."
+    },
+    "valueProps": [
+      {
+        "title": "Real-time fair pricing",
+        "desc": "We price hotels and flights live — no fixed agent markup."
+      },
+      {
+        "title": "Everything in one cart",
+        "desc": "Hotel, transport, ground services and flights, booked together."
+      },
+      {
+        "title": "No hidden fees",
+        "desc": "The price you see is the price you pay, charged in EUR."
+      },
+      {
+        "title": "Secure & protected",
+        "desc": "3-D Secure checkout and an EU insolvency certificate per booking."
+      }
+    ],
+    "features": [
+      {
+        "title": "Hotels near the Haram",
+        "desc": "Nusuk-approved stays, sorted by walking distance to the Haram."
+      },
+      {
+        "title": "Direct & connecting flights",
+        "desc": "From major EU cities with trusted carriers."
+      },
+      {
+        "title": "Fully customizable",
+        "desc": "Set Makkah/Madinah nights, hotel rating, board and add-ons."
+      },
+      {
+        "title": "24/7 multilingual support",
+        "desc": "EN · LT · UR · AR — by phone, WhatsApp, email and live chat."
+      }
+    ],
+    "steps6": [
+      {
+        "title": "Search packages",
+        "desc": "Pick city order and nights in Makkah and Madinah."
+      },
+      {
+        "title": "Compare & filter",
+        "desc": "By star rating, distance to Haram, price and amenities."
+      },
+      {
+        "title": "Customize",
+        "desc": "Add Rawdah, ziyarah, meals, transport and flights."
+      },
+      {
+        "title": "Add pilgrims",
+        "desc": "We auto-detect each pilgrim’s visa route from their passport."
+      },
+      {
+        "title": "Pay securely",
+        "desc": "Card, SEPA or instalments — charged in EUR, PKR for reference."
+      },
+      {
+        "title": "Get confirmed",
+        "desc": "Instant BRN; e-tickets, hotel vouchers and visa docs before you fly."
+      }
+    ],
+    "categories": [
+      "Budget",
+      "Affordable",
+      "Luxury 5★",
+      "Premium",
+      "Family",
+      "Couples",
+      "Ramadan",
+      "Last-minute"
+    ],
+    "departures": [
+      "Baltics",
+      "Central Europe",
+      "Western Europe"
+    ],
+    "dealsLabels": {
+      "from": "From",
+      "perPilgrim": "per pilgrim",
+      "nights": "{n} nts",
+      "viewDeal": "View deal",
+      "viewAll": "View all deals",
+      "secure": "Secure booking · Instant confirmation",
+      "makkah": "Makkah",
+      "madinah": "Madinah",
+      "departs": "Departs",
+      "dealOfDay": "Deal of the day"
+    },
+    "supportChannels": [
+      "24/7 phone",
+      "WhatsApp",
+      "Email",
+      "Live chat"
+    ],
+    "protection": {
+      "methods": "Accepted payment",
+      "installments": "Instalments & deposits",
+      "installmentsDesc": "Pay in full, or a deposit now and the balance later.",
+      "secure3ds": "3-D Secure & fraud monitoring",
+      "secure3dsDesc": "Bank-grade verification on every card payment.",
+      "insolvency": "EU insolvency protection",
+      "insolvencyDesc": "A consumer security certificate is issued with each package.",
+      "licensed": "Licensed EU tour operator"
+    },
+    "newsletter": {
+      "title": "Stay connected",
+      "sub": "Seasonal deals and visa updates — no spam.",
+      "placeholder": "Your email",
+      "cta": "Subscribe"
+    }
+  },
+  "agent": {
+    "nav": {
+      "home": "Home",
+      "pax": "Pax",
+      "wallet": "Wallet",
+      "markup": "Markup",
+      "quotes": "Quotes",
+      "reports": "Reports"
+    },
+    "greeting": "Salaam, {name}",
+    "walletChip": "Wallet",
+    "newBooking": "+ New booking",
+    "back": "← Back to AUJ",
+    "loading": "Loading agent…",
+    "multiPaxHeading": "Multi-passenger booking · up to {max} pax",
+    "walletCreditHeading": "Wallet & credit",
+    "booked": "Booked",
+    "paxN": "{n} pax",
+    "kpi": {
+      "walletBalance": "Wallet balance",
+      "available": "Available",
+      "bookings": "Bookings",
+      "tier": "Tier"
+    },
+    "visaPipeline": "Visa pipeline",
+    "pipeline": {
+      "eVisa": "e-Visa · submitted",
+      "review": "Agent channel · review",
+      "issued": "Issued"
+    },
+    "creditAvailable": "Credit available",
+    "passengers": "Passengers",
+    "paxOfMax": "{n} / {max} pax",
+    "seatsLeft": "{n} seats left",
+    "col": {
+      "num": "#",
+      "name": "Full name",
+      "passport": "Passport",
+      "nat": "Nat.",
+      "visaRoute": "Visa route"
+    },
+    "addPassenger": "+ Add passenger",
+    "add10": "+ Add 10 rows",
+    "routeNote": "Pakistani passports auto-route to the agent channel; EU passports get e-Visa. Mixed groups are supported.",
+    "groupSummary": "Group summary",
+    "hotelNights": "Hotel · 14 nights",
+    "clientPrice": "Client price",
+    "payFromWallet": "Pay from wallet",
+    "holdOnCredit": "Hold on credit",
+    "wallet2": {
+      "balance": "Wallet balance",
+      "topUp": "+ Top up wallet",
+      "creditLimit": "Credit limit",
+      "used": "Used",
+      "available": "available",
+      "paymentTerms": "Payment terms",
+      "net30": "Net 30 days",
+      "tier": "Tier",
+      "goldPartner": "Gold partner",
+      "transactions": "Wallet transactions",
+      "colDescription": "Description",
+      "colReference": "Reference",
+      "colDebit": "Debit",
+      "colCredit": "Credit"
+    }
+  },
+  "admin": {
+    "brandSub": "Admin · Web",
+    "groupOperate": "Operate",
+    "groupMore": "More",
+    "nav": {
+      "overview": "Overview",
+      "pilgrims": "Pilgrims · CRM",
+      "providers": "Service providers",
+      "requests": "Special requests",
+      "documents": "Documents",
+      "support": "Support",
+      "content": "Landing content",
+      "users": "Users & roles"
+    },
+    "more": {
+      "payments": "Payments",
+      "reports": "Reports",
+      "settings": "Settings"
+    },
+    "userRole": "Operations admin",
+    "search": "Search pilgrims, BRN, bookings…",
+    "newBooking": "+ New booking",
+    "viewAll": "View all",
+    "views": {
+      "overviewKicker": "OVERVIEW",
+      "overviewTitle": "Good morning, {name}.",
+      "pilgrimsKicker": "CRM · {count} ACTIVE",
+      "pilgrimsTitle": "Pilgrims & travellers",
+      "providersKicker": "INTEGRATIONS",
+      "providersTitle": "Service providers",
+      "contentKicker": "CMS",
+      "contentTitle": "Landing content",
+      "documentsKicker": "COMPLIANCE",
+      "documentsTitle": "Documents",
+      "requestsKicker": "PERSONALIZATION",
+      "requestsTitle": "Special requests",
+      "supportKicker": "SUPPORT",
+      "supportTitle": "Customer support",
+      "usersKicker": "ACCESS",
+      "usersTitle": "Users & roles"
+    },
+    "sections": {
+      "recentBookings": "Recent bookings",
+      "visaPipeline": "Visa pipeline",
+      "upcomingDepartures": "Upcoming departures",
+      "journeyStatus": "Journey status",
+      "documents": "Documents",
+      "communications": "Communications",
+      "visaRoute": "Visa route",
+      "payments": "Payments",
+      "balance": "Balance",
+      "groupMembers": "Group members",
+      "hero": "Hero",
+      "sectionsList": "Sections",
+      "agentApprovals": "Agent approvals"
+    }
+  },
+  "footer": {
+    "tagline": "Making your pilgrimage simple, protected and spiritually focused — with dedicated support at every step.",
+    "protectionTitle": "EU insolvency protection",
+    "protectionDesc": "Your bookings are financially protected — a consumer security certificate is issued with every package.",
+    "follow": "Follow us",
+    "quickLinks": "Quick links",
+    "about": "About us",
+    "contact": "Contact us",
+    "newsroom": "Newsroom",
+    "terms": "Terms & conditions",
+    "privacy": "Privacy policy",
+    "packages": "Our packages",
+    "economy": "Economy packages",
+    "standard": "Standard packages",
+    "premium": "Premium packages",
+    "payment": "Payment options",
+    "connect": "Stay connected",
+    "connectSub": "Seasonal deals and visa updates — no spam.",
+    "emailPlaceholder": "Enter your email",
+    "subscribe": "Subscribe",
+    "getInTouch": "Get in touch",
+    "legal": "AUJ is a licensed EU tour operator and acts as agent for the service provider on each booking; your contract is with that provider except where stated otherwise. Eligible packages are covered by an insolvency-protection certificate under the EU Package Travel Directive, issued before you pay. See your booking conditions for the protection that applies.",
+    "rights": "© 2026 AUJ. All rights reserved."
   }
 }

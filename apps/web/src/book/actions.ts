@@ -6,10 +6,12 @@
 import type { CateringOffer, GroundOffer, Money, PackageMode, SearchCriteria } from '@auj/contracts';
 import type { PackageItem, SpecialRequestCategory, VisaCase } from '@auj/core-booking';
 import { bookingConfirmation } from '@auj/notifications';
-import { placePilgrimageBooking, pollVisaUntilIssued, type PlacedBooking } from './usecases';
+import { confirmHeldBooking, createHeldBooking, pollVisaUntilIssued, type PlacedBooking } from './usecases';
 import type { PilgrimDraft } from './funnel';
 import { getCurrentUser } from '../auth/session';
 import { getBookingBackend as getBackend } from './backend/singleton';
+import type { Backend } from './ports';
+import { putPending, takePending } from './backend/pending';
 import { getNotifier } from '../notifications/notifier';
 
 export async function searchHotelsAction(criteria: SearchCriteria) {
@@ -28,7 +30,7 @@ export async function searchAddonsAction(
   return { ziyarah, catering };
 }
 
-export async function placeBookingAction(input: {
+export interface PlaceBookingInput {
   pilgrims: PilgrimDraft[];
   items: PackageItem[];
   total: Money;
@@ -36,20 +38,28 @@ export async function placeBookingAction(input: {
   rawdahDate?: string;
   gift?: { recipientName: string; recipientEmail?: string; message?: string };
   specialRequests?: Array<{ category: SpecialRequestCategory; note?: string }>;
-}): Promise<PlacedBooking> {
-  const user = await getCurrentUser();
-  const lead = input.pilgrims[0];
-  const customer = {
-    fullName: user?.displayName ?? (lead ? `${lead.firstName} ${lead.lastName}` : 'Guest'),
-    email: user?.email ?? 'guest@auj.example',
-  };
-  const placed = await placePilgrimageBooking(await getBackend(), { ...input, customer });
+}
 
-  // Best-effort confirmation email (never fail the booking on a notify error).
+/** Booking is placed and confirmed (single-shot path — sandbox / server-only gateway). */
+export interface CheckoutDone {
+  status: 'done';
+  placed: PlacedBooking;
+}
+/** Card needs browser confirmation (live Stripe). The booking is HELD until finalize. */
+export interface CheckoutRequiresCard {
+  status: 'requires_card';
+  bookingId: string;
+  clientSecret: string;
+  publishableKey: string;
+}
+export type CheckoutResult = CheckoutDone | CheckoutRequiresCard;
+
+/** Best-effort confirmation email — never fails the booking on a notify error. */
+async function sendConfirmation(email: string, placed: PlacedBooking): Promise<void> {
   try {
     await getNotifier().send(
       bookingConfirmation({
-        to: customer.email,
+        to: email,
         bookingRef: placed.booking.bookingRef ?? placed.booking.id.slice(0, 12),
         pilgrims: placed.booking.pilgrimIds.length,
       }),
@@ -57,6 +67,88 @@ export async function placeBookingAction(input: {
   } catch {
     /* swallow — notifications are non-critical */
   }
+}
+
+function customerFor(user: { displayName?: string; email: string } | null | undefined, lead?: PilgrimDraft) {
+  return {
+    fullName: user?.displayName ?? (lead ? `${lead.firstName} ${lead.lastName}` : 'Guest'),
+    email: user?.email ?? 'guest@auj.example',
+  };
+}
+
+/**
+ * Start checkout: create + hold the booking, then authorize the payment. When the gateway
+ * has a browser step (live Stripe) we return its clientSecret + publishable key and leave
+ * the booking HELD for finalizeBookingAction. Otherwise (offline sandbox / PKR) we capture
+ * and confirm immediately and return the placed booking.
+ */
+export async function startCheckoutAction(input: PlaceBookingInput): Promise<CheckoutResult> {
+  const user = await getCurrentUser();
+  const customer = customerFor(user, input.pilgrims[0]);
+  const backend = await getBackend();
+  const { bookingId } = await createHeldBooking(backend, { ...input, customer });
+
+  const { intentId, clientSecret } = await backend.payments.authorize({
+    amount: input.total,
+    bookingRef: bookingId,
+    idempotencyKey: `${bookingId}:pay`,
+    method: 'CARD',
+  });
+
+  const publishableKey = process.env.STRIPE_PUBLISHABLE_KEY;
+  if (clientSecret && publishableKey) {
+    putPending(bookingId, {
+      intentId,
+      currency: input.total.currency as 'EUR' | 'PKR',
+      ...(input.rawdahDate ? { rawdahDate: input.rawdahDate } : {}),
+    });
+    return { status: 'requires_card', bookingId, clientSecret, publishableKey };
+  }
+
+  // No browser step — capture now and finish.
+  const { paymentRef } = await backend.payments.capture({
+    intentId,
+    currency: input.total.currency as 'EUR' | 'PKR',
+    bookingRef: bookingId,
+    idempotencyKey: `${bookingId}:pay`,
+  });
+  const placed = await confirmHeldBooking(backend, {
+    bookingId,
+    paymentRef,
+    ...(input.rawdahDate ? { rawdahDate: input.rawdahDate } : {}),
+  });
+  await sendConfirmation(customer.email, placed);
+  return { status: 'done', placed };
+}
+
+/**
+ * Finalize a card booking after the browser confirmed it with Stripe.js: capture the
+ * server-recorded intent for this HELD booking, then confirm + open visa. Ownership-checked;
+ * the intent id comes from our pending store, never from the client.
+ */
+export async function finalizeBookingAction(bookingId: string): Promise<PlacedBooking> {
+  const user = await getCurrentUser();
+  const backend: Backend = await getBackend();
+
+  const email = user?.email ?? 'guest@auj.example';
+  const owned = await backend.booking.myBooking(email, bookingId);
+  if (!owned) throw new Error('Booking not found');
+
+  const pending = takePending(bookingId);
+  if (!pending) throw new Error('No pending payment for this booking');
+
+  const { paymentRef } = await backend.payments.capture({
+    intentId: pending.intentId,
+    currency: pending.currency,
+    bookingRef: bookingId,
+    idempotencyKey: `${bookingId}:pay`,
+  });
+  const placed = await confirmHeldBooking(backend, {
+    bookingId,
+    paymentRef,
+    ...(pending.rawdahDate ? { rawdahDate: pending.rawdahDate } : {}),
+  });
+  await sendConfirmation(email, placed);
   return placed;
 }
 

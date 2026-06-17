@@ -1,13 +1,14 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Logo, StatusPill, type PillTone } from '@auj/ui';
+import { StatusPill, type PillTone } from '@auj/ui';
 import { routeFor } from '@auj/visa-router';
 import type { Booking, BookingStatus, CrmPilgrim, Document, SpecialRequestCategory } from '@auj/core-booking';
 import { requireRole } from '../../../src/auth/session';
 import { getBookingBackend } from '../../../src/book/backend/singleton';
 import { uploadDocumentAction } from '../../../src/book/doc-actions';
 import { formatMoney } from '../../../src/currency';
+import { SitePage } from '../../../src/components/SitePage';
 
 const STATUS_TONE: Record<BookingStatus, PillTone> = {
   DRAFT: 'draft', HELD: 'info', CONFIRMED: 'info', VISA_IN_PROGRESS: 'warning',
@@ -30,18 +31,9 @@ export default async function BookingDetailPage({ params }: { params: { id: stri
   const docsByPilgrim = (id: string): Document[] => docs.filter((d) => d.pilgrimId === id);
 
   return (
-    <div className="min-h-screen bg-sand-50">
-      <header className="border-b border-sand-200 bg-white">
-        <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
-          <Link href="/" className="flex items-center gap-2 text-sand-700">
-            <Logo size={26} />
-            <span className="font-serif text-base font-semibold tracking-[0.04em]">AUJ</span>
-          </Link>
-          <Link href="/bookings" className="text-[13px] font-semibold text-accent-600">← My bookings</Link>
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-3xl px-4 py-6">
+    <SitePage user={user}>
+      <div className="mx-auto max-w-3xl px-4 py-6">
+        <Link href="/bookings" className="mb-4 inline-block text-[13px] font-semibold text-accent-600 hover:text-accent-700">← My bookings</Link>
         <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
           <div>
             <div className="font-mono text-xl font-semibold">{booking.bookingRef ?? booking.id.slice(0, 16)}</div>
@@ -140,8 +132,8 @@ export default async function BookingDetailPage({ params }: { params: { id: stri
             </div>
           </Section>
         ) : null}
-      </main>
-    </div>
+      </div>
+    </SitePage>
   );
 }
 

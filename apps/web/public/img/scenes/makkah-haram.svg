@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500" role="img" aria-label="Masjid al-Haram, Makkah — the Kaaba and the clock tower at dusk">
+  <defs>
+    <linearGradient id="msky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0A3D26"/>
+      <stop offset="0.5" stop-color="#156440"/>
+      <stop offset="1" stop-color="#2A9468"/>
+    </linearGradient>
+    <radialGradient id="mglow" cx="0.5" cy="0.95" r="0.75">
+      <stop offset="0" stop-color="#F4E6BE" stop-opacity="0.45"/>
+      <stop offset="0.7" stop-color="#F4E6BE" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="tower" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0A3D26"/>
+      <stop offset="1" stop-color="#062418"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#msky)"/>
+  <rect width="800" height="500" fill="url(#mglow)"/>
+  <!-- stars + crescent -->
+  <g fill="#F0E4C0">
+    <circle cx="100" cy="60" r="2.2" opacity="0.8"/>
+    <circle cx="300" cy="48" r="1.6" opacity="0.55"/>
+    <circle cx="520" cy="70" r="2" opacity="0.6"/>
+  </g>
+  <g transform="translate(120 78) rotate(-20)">
+    <circle cx="0" cy="0" r="18" fill="#C8A24A" opacity="0.9"/>
+    <circle cx="6" cy="-3" r="16" fill="#0A3D26"/>
+  </g>
+  <!-- Makkah Royal Clock Tower (right) -->
+  <g>
+    <rect x="560" y="120" width="120" height="320" rx="10" fill="url(#tower)"/>
+    <!-- crescent finial -->
+    <rect x="616" y="56" width="8" height="34" rx="4" fill="#C8A24A"/>
+    <circle cx="620" cy="48" r="12" fill="#C8A24A"/>
+    <!-- clock face -->
+    <rect x="588" y="150" width="64" height="64" rx="8" fill="#06281B" stroke="#C8A24A" stroke-width="3"/>
+    <circle cx="620" cy="182" r="3" fill="#C8A24A"/>
+    <line x1="620" y1="182" x2="620" y2="162" stroke="#C8A24A" stroke-width="2.5"/>
+    <line x1="620" y1="182" x2="636" y2="182" stroke="#C8A24A" stroke-width="2.5"/>
+  </g>
+  <!-- Haram arcade silhouette -->
+  <g fill="#062418">
+    <rect x="0" y="330" width="540" height="110"/>
+    <g>
+      <path d="M40 330V300a26 26 0 0 1 52 0v30z"/>
+      <path d="M120 330V300a26 26 0 0 1 52 0v30z"/>
+      <path d="M200 330V300a26 26 0 0 1 52 0v30z"/>
+      <path d="M280 330V300a26 26 0 0 1 52 0v30z"/>
+      <path d="M360 330V300a26 26 0 0 1 52 0v30z"/>
+      <path d="M440 330V300a26 26 0 0 1 52 0v30z"/>
+    </g>
+    <!-- a minaret on the arcade -->
+    <rect x="470" y="210" width="18" height="130" rx="6"/>
+    <path d="M462 214a17 17 0 0 1 34 0z"/>
+    <rect x="476" y="180" width="5" height="30" rx="2.5" fill="#C8A24A"/>
+  </g>
+  <!-- Kaaba (centre foreground) -->
+  <g>
+    <rect x="330" y="372" width="120" height="68" rx="3" fill="#0B0B0B"/>
+    <rect x="330" y="392" width="120" height="9" fill="#C8A24A"/>
+  </g>
+  <!-- ground / mataf -->
+  <rect x="0" y="438" width="800" height="62" fill="#051A12"/>
+</svg>

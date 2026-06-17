@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500" role="img" aria-label="Ziyarat — golden shrine domes of Najaf and Karbala at dusk">
+  <defs>
+    <linearGradient id="zsky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0A3D26"/>
+      <stop offset="0.55" stop-color="#13533A"/>
+      <stop offset="1" stop-color="#265D78"/>
+    </linearGradient>
+    <radialGradient id="zglow" cx="0.5" cy="1" r="0.8">
+      <stop offset="0" stop-color="#C8A24A" stop-opacity="0.5"/>
+      <stop offset="0.7" stop-color="#C8A24A" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#E7C66A"/>
+      <stop offset="1" stop-color="#B5862C"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#zsky)"/>
+  <rect width="800" height="500" fill="url(#zglow)"/>
+  <g fill="#F0E4C0">
+    <circle cx="150" cy="70" r="2.2" opacity="0.8"/>
+    <circle cx="380" cy="50" r="1.6" opacity="0.55"/>
+    <circle cx="640" cy="84" r="2" opacity="0.65"/>
+  </g>
+  <g transform="translate(680 70) rotate(-18)">
+    <circle cx="0" cy="0" r="18" fill="#C8A24A" opacity="0.9"/>
+    <circle cx="6" cy="-3" r="16" fill="#0A3D26"/>
+  </g>
+  <!-- gold minarets -->
+  <g fill="url(#gold)">
+    <rect x="214" y="210" width="20" height="230" rx="6"/>
+    <path d="M204 216a20 20 0 0 1 40 0z"/>
+    <rect x="566" y="210" width="20" height="230" rx="6"/>
+    <path d="M556 216a20 20 0 0 1 40 0z"/>
+  </g>
+  <!-- secondary dome (left) -->
+  <path d="M300 440V320a56 56 0 0 1 112 0v120z" fill="#0E4630"/>
+  <!-- main golden dome -->
+  <path d="M348 440V250a92 92 0 0 1 184 0v190z" fill="url(#gold)"/>
+  <rect x="436" y="150" width="8" height="44" rx="4" fill="#E7C66A"/>
+  <circle cx="440" cy="146" r="9" fill="#E7C66A"/>
+  <!-- arcade -->
+  <rect x="0" y="400" width="800" height="40" fill="#0A3D26"/>
+  <g fill="#0A3D26">
+    <path d="M60 400V378a20 20 0 0 1 40 0v22z"/>
+    <path d="M130 400V378a20 20 0 0 1 40 0v22z"/>
+    <path d="M630 400V378a20 20 0 0 1 40 0v22z"/>
+    <path d="M700 400V378a20 20 0 0 1 40 0v22z"/>
+  </g>
+  <rect x="0" y="438" width="800" height="62" fill="#072A1C"/>
+</svg>

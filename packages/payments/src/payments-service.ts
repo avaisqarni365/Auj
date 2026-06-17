@@ -26,7 +26,14 @@ export class PaymentsService {
     private readonly ledger: Ledger,
   ) {}
 
-  async pay(input: PayInput): Promise<{ paymentRef: string; intent: PaymentIntent }> {
+  /**
+   * Phase 1 of the two-phase card flow: create the (manual-capture) intent WITHOUT
+   * capturing. Posts nothing to the ledger yet — money only moves on capture. When the
+   * gateway has a browser step (live Stripe) the returned intent carries a `clientSecret`
+   * the app hands to Stripe.js; the sandbox returns an intent with none, so the caller can
+   * capture immediately in the same request.
+   */
+  async authorize(input: PayInput): Promise<{ intent: PaymentIntent }> {
     const provider = this.router.forCurrency(input.amount.currency);
     const intent = await provider.createIntent({
       amount: input.amount,
@@ -34,18 +41,45 @@ export class PaymentsService {
       bookingRef: input.bookingRef,
       method: input.method,
     });
-    const captured = await provider.capture(intent.id, { idempotencyKey: input.idempotencyKey });
+    return { intent };
+  }
+
+  /**
+   * Phase 2: capture an already-authorized intent (after the browser confirmed the card)
+   * and record the movement in the ledger. Capture is by intent id only — the amount comes
+   * from the gateway's captured intent, so a client cannot influence what we charge.
+   */
+  async captureAuthorized(input: {
+    intentId: string;
+    currency: Currency;
+    bookingRef: string;
+    idempotencyKey: string;
+  }): Promise<{ paymentRef: string; intent: PaymentIntent }> {
+    const provider = this.router.forCurrency(input.currency);
+    const captured = await provider.capture(input.intentId, { idempotencyKey: input.idempotencyKey });
+    const minor = captured.capturedAmount || captured.amount.amount;
 
     this.ledger.post({
       ref: input.bookingRef,
       memo: `capture ${provider.name}`,
       postings: [
-        { account: gatewayAccount(input.amount.currency), direction: 'DEBIT', amount: input.amount.amount, currency: input.amount.currency },
-        { account: REVENUE, direction: 'CREDIT', amount: input.amount.amount, currency: input.amount.currency },
+        { account: gatewayAccount(input.currency), direction: 'DEBIT', amount: minor, currency: input.currency },
+        { account: REVENUE, direction: 'CREDIT', amount: minor, currency: input.currency },
       ],
     });
 
     return { paymentRef: captured.id, intent: captured };
+  }
+
+  /** Single-shot authorize + capture — for server-only gateways and the offline sandbox. */
+  async pay(input: PayInput): Promise<{ paymentRef: string; intent: PaymentIntent }> {
+    const { intent } = await this.authorize(input);
+    return this.captureAuthorized({
+      intentId: intent.id,
+      currency: input.amount.currency,
+      bookingRef: input.bookingRef,
+      idempotencyKey: input.idempotencyKey,
+    });
   }
 
   async refund(intentId: string, currency: Currency, amount?: Money): Promise<RefundResult> {

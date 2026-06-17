@@ -1,18 +1,17 @@
 'use client';
 
 import { useReducer, useState, useTransition } from 'react';
-import Link from 'next/link';
 import { useLocale } from 'next-intl';
 import type { CateringOffer, GroundOffer, HotelOffer, SearchCriteria } from '@auj/contracts';
 import type { Booking, PackageItem, VisaCase } from '@auj/core-booking';
-import { Logo } from '@auj/ui';
 // Import from specific modules (not the barrel) so the client bundle never pulls
 // in the in-process backend, which depends on node:crypto via core-booking.
-import { Checkout, HomeSearch, MyBooking, PackageBuilder, PilgrimCapture, Results } from './screens';
+import { Checkout, HomeSearch, MyBooking, PackageBuilder, PilgrimCapture, Results, StripePaymentForm } from './screens';
 import { cartTotals, funnelReducer, initialFunnel, type FunnelState, type PilgrimDraft } from './funnel';
+import { formatMoney } from './fx';
 import { LOCALES as BOOK_LOCALES, type Locale as BookLocale } from './i18n';
 import { previewVisaRoute } from './usecases';
-import { placeBookingAction, pollVisaAction, searchAddonsAction, searchHotelsAction } from './actions';
+import { finalizeBookingAction, pollVisaAction, searchAddonsAction, searchHotelsAction, startCheckoutAction } from './actions';
 
 const SELL_PRICE = { amount: 120000, currency: 'EUR' as const }; // demo sell price, charged in EUR
 
@@ -49,6 +48,7 @@ export function BookingFunnel({
   const [pilgrims, setPilgrims] = useState<PilgrimDraft[]>([DEFAULT_PILGRIM]);
   const [booking, setBooking] = useState<Booking>();
   const [visaCase, setVisaCase] = useState<VisaCase>();
+  const [card, setCard] = useState<{ bookingId: string; clientSecret: string; publishableKey: string }>();
   const [pending, start] = useTransition();
   const loc = useLocale();
   const bookLocale: BookLocale = (BOOK_LOCALES as readonly string[]).includes(loc) ? (loc as BookLocale) : 'en';
@@ -74,9 +74,15 @@ export function BookingFunnel({
     }
   };
 
+  const confirmPlaced = (placed: { booking: Booking; visaCase: VisaCase }): void => {
+    setBooking(placed.booking);
+    setVisaCase(placed.visaCase);
+    dispatch({ type: 'SET_BOOKING', bookingId: placed.booking.id });
+  };
+
   const pay = (): void =>
     start(async () => {
-      const placed = await placeBookingAction({
+      const result = await startCheckoutAction({
         pilgrims,
         items: state.cart,
         total: SELL_PRICE,
@@ -99,9 +105,19 @@ export function BookingFunnel({
           return reqs.length > 0 ? { specialRequests: reqs } : {};
         })(),
       });
-      setBooking(placed.booking);
-      setVisaCase(placed.visaCase);
-      dispatch({ type: 'SET_BOOKING', bookingId: placed.booking.id });
+      if (result.status === 'requires_card') {
+        setCard({ bookingId: result.bookingId, clientSecret: result.clientSecret, publishableKey: result.publishableKey });
+        dispatch({ type: 'GO', step: 'CARD' });
+        return;
+      }
+      confirmPlaced(result.placed);
+    });
+
+  /** Card confirmed in the browser → capture + confirm on the server. */
+  const finalizeCard = (): void =>
+    start(async () => {
+      if (!card) return;
+      confirmPlaced(await finalizeBookingAction(card.bookingId));
     });
 
   const refreshVisa = (): void =>
@@ -109,7 +125,7 @@ export function BookingFunnel({
       if (booking) setVisaCase(await pollVisaAction(booking.id));
     });
 
-  const back = (step: 'SEARCH' | 'RESULTS' | 'BUILDER' | 'PILGRIMS'): (() => void) => () =>
+  const back = (step: 'SEARCH' | 'RESULTS' | 'BUILDER' | 'PILGRIMS' | 'CHECKOUT'): (() => void) => () =>
     dispatch({ type: 'GO', step });
 
   const blankPilgrim = (): PilgrimDraft => ({ firstName: '', lastName: '', passportNumber: '', nationality: 'PK', dob: '1990-01-01', gender: 'M' });
@@ -130,14 +146,7 @@ export function BookingFunnel({
   const removePilgrim = (index: number): void => setPilgrims((cur) => (cur.length > 1 ? cur.filter((_, i) => i !== index) : cur));
 
   return (
-    <main className="mx-auto min-h-screen max-w-md bg-sand-50 shadow-lg">
-      <div className="flex items-center justify-between border-b border-sand-200 bg-white px-4 py-3">
-        <Link href="/" className="flex items-center gap-2 text-sand-700">
-          <Logo size={26} />
-          <span className="font-serif text-base font-semibold tracking-[0.04em]">AUJ</span>
-        </Link>
-        <Link href="/journey" className="text-[13px] font-semibold text-accent-600">My journey →</Link>
-      </div>
+    <div className="mx-auto max-w-md bg-sand-50 shadow-lg">
       <div key={state.step} className="animate-rise">
       {state.step === 'SEARCH' && (
         <HomeSearch
@@ -201,6 +210,17 @@ export function BookingFunnel({
         />
       )}
 
+      {state.step === 'CARD' && card && (
+        <StripePaymentForm
+          locale={bookLocale}
+          clientSecret={card.clientSecret}
+          publishableKey={card.publishableKey}
+          amountLabel={formatMoney(SELL_PRICE)}
+          onConfirmed={finalizeCard}
+          onBack={back('CHECKOUT')}
+        />
+      )}
+
       {state.step === 'CONFIRMED' && booking && (
         <div>
           <MyBooking locale={bookLocale} booking={booking} visaCase={visaCase} />
@@ -217,6 +237,6 @@ export function BookingFunnel({
         </div>
       )}
       </div>
-    </main>
+    </div>
   );
 }

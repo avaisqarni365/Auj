@@ -41,21 +41,19 @@ export interface PlacedBooking {
 }
 
 /**
- * The full pilgrimage funnel end state: create customer + pilgrims, draft the
- * booking, hold, take payment, confirm (BRNs), then open the visa case.
- * Payments and booking are separate APIs — the app stitches them, the modules don't.
+ * Phase 1: create customer + pilgrims, draft the booking (gift/mode/requests baked in),
+ * and HOLD it — everything up to but not including payment. Returns the held draft id so
+ * the caller can authorize a payment against it.
  */
-export async function placePilgrimageBooking(
+export async function createHeldBooking(
   backend: Backend,
   input: PlaceBookingInput,
-): Promise<PlacedBooking> {
-  const { booking: api, payments } = backend;
-
+): Promise<{ bookingId: string }> {
+  const api = backend.booking;
   const customer = await api.createCustomer(input.customer);
   const pilgrims = await Promise.all(
     input.pilgrims.map((p) => api.addPilgrim({ ...p, customerId: customer.id })),
   );
-
   const draft = await api.createBooking({
     customerId: customer.id,
     channel: 'PILGRIMAGE',
@@ -65,15 +63,20 @@ export async function placePilgrimageBooking(
     ...(input.gift ? { gift: input.gift } : {}),
     ...(input.specialRequests && input.specialRequests.length > 0 ? { specialRequests: input.specialRequests } : {}),
   });
-
   await api.hold(draft.id);
-  const { paymentRef } = await payments.pay({
-    amount: input.total,
-    bookingRef: draft.id,
-    idempotencyKey: `${draft.id}:pay`,
-    method: input.method,
-  });
-  const confirmed = await api.confirm(draft.id, paymentRef);
+  return { bookingId: draft.id };
+}
+
+/**
+ * Phase 3: with payment captured, confirm the held booking (BRNs), open the visa case,
+ * and book the optional Rawdah slot. Shared by the single-shot and the card flows.
+ */
+export async function confirmHeldBooking(
+  backend: Backend,
+  input: { bookingId: string; paymentRef: string; rawdahDate?: string },
+): Promise<PlacedBooking> {
+  const api = backend.booking;
+  const confirmed = await api.confirm(input.bookingId, input.paymentRef);
   const { visaCase } = await api.startVisa(confirmed.id);
 
   let rawdah: RawdahPermit | undefined;
@@ -81,8 +84,32 @@ export async function placePilgrimageBooking(
     const slots = await api.rawdahSlots(input.rawdahDate);
     if (slots[0]) rawdah = await api.bookRawdah(confirmed.id, slots[0].slotId);
   }
-
   return { booking: confirmed, visaCase, ...(rawdah ? { rawdah } : {}) };
+}
+
+/**
+ * The full pilgrimage funnel end state in one call: create + hold → take payment →
+ * confirm (BRNs) → open the visa case. Used by the single-shot path (offline sandbox,
+ * server-only gateways). The card flow stitches the same three phases across the
+ * browser's Stripe.js confirmation step instead.
+ * Payments and booking are separate APIs — the app stitches them, the modules don't.
+ */
+export async function placePilgrimageBooking(
+  backend: Backend,
+  input: PlaceBookingInput,
+): Promise<PlacedBooking> {
+  const { bookingId } = await createHeldBooking(backend, input);
+  const { paymentRef } = await backend.payments.pay({
+    amount: input.total,
+    bookingRef: bookingId,
+    idempotencyKey: `${bookingId}:pay`,
+    method: input.method,
+  });
+  return confirmHeldBooking(backend, {
+    bookingId,
+    paymentRef,
+    ...(input.rawdahDate ? { rawdahDate: input.rawdahDate } : {}),
+  });
 }
 
 /** Poll the visa case until issued (or a guard limit), for the live tracker. */

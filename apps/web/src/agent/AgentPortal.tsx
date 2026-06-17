@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import type { Booking } from '@auj/core-booking';
 import type { JournalEntry } from '@auj/payments';
 // Import specific screen files (not the barrel) so the client bundle never pulls
@@ -18,6 +19,7 @@ import { bookGroupAction, setupAgentAction } from './actions';
 const PER_PAX_EUR = 100_000;
 
 export function AgentPortal() {
+  const t = useTranslations('agent');
   const [agent, setAgent] = useState<Agent>();
   const [balance, setBalance] = useState(0);
   const [entries, setEntries] = useState<JournalEntry[]>([]);
@@ -45,7 +47,7 @@ export function AgentPortal() {
     }
   };
 
-  if (!agent) return <main className="grid min-h-screen place-items-center bg-sand-50 text-sand-500">Loading agent…</main>;
+  if (!agent) return <main className="grid min-h-screen place-items-center bg-sand-50 text-sand-500">{t('loading')}</main>;
 
   const eur = (amount: number) => ({ amount, currency: 'EUR' as const });
   const sell = eur(paxCount * PER_PAX_EUR);
@@ -54,12 +56,12 @@ export function AgentPortal() {
     <Shell agencyName={agent.agencyName} subline={`${agent.tier} partner · ${agent.id.slice(0, 8)}`} walletLabel={formatMoney(eur(balance))}>
       <div className="grid gap-7 animate-fade-in">
         <div className="flex items-center justify-between">
-          <Link href="/" className="text-[13px] font-semibold text-accent-600">← Back to AUJ</Link>
+          <Link href="/" className="text-[13px] font-semibold text-accent-600">{t('back')}</Link>
         </div>
         <AgentDashboard agent={agent} walletBalance={eur(balance)} available={eur(balance)} bookings={booking ? 1 : 0} />
 
         <section>
-          <h3 className="mb-3 font-serif text-lg font-semibold text-sand-ink">Multi-passenger booking · up to {MAX_PAX} pax</h3>
+          <h3 className="mb-3 font-serif text-lg font-semibold text-sand-ink">{t('multiPaxHeading', { max: MAX_PAX })}</h3>
           <MultiPaxBooking
             paxCount={paxCount}
             sell={sell}
@@ -70,13 +72,13 @@ export function AgentPortal() {
           />
           {booking ? (
             <div className="mt-3 animate-pop rounded-lg bg-green-100 p-3 text-sm text-sand-ink">
-              Booked <span className="font-mono">{booking.bookingRef}</span> — {booking.pilgrimIds.length} pax
+              {t('booked')} <span className="font-mono">{booking.bookingRef}</span> — {t('paxN', { n: booking.pilgrimIds.length })}
             </div>
           ) : null}
         </section>
 
         <section>
-          <h3 className="mb-3 font-serif text-lg font-semibold text-sand-ink">Wallet &amp; credit</h3>
+          <h3 className="mb-3 font-serif text-lg font-semibold text-sand-ink">{t('walletCreditHeading')}</h3>
           <WalletView balance={eur(balance)} creditLimit={600_000} account={`wallet:${agent.id}`} entries={entries} />
         </section>
       </div>

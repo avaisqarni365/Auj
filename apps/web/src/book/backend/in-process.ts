@@ -55,6 +55,12 @@ function wire(core: CoreBooking, saudi: SaudiConnector, travel: TravelSupplier):
 
   const paymentsApi: PaymentsApi = {
     pay: (input) => payments.pay(input).then((r) => ({ paymentRef: r.paymentRef })),
+    authorize: (input) =>
+      payments.authorize(input).then((r) => ({
+        intentId: r.intent.id,
+        ...(r.intent.clientSecret ? { clientSecret: r.intent.clientSecret } : {}),
+      })),
+    capture: (input) => payments.captureAuthorized(input).then((r) => ({ paymentRef: r.paymentRef })),
   };
 
   return { booking, payments: paymentsApi };

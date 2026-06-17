@@ -39,6 +39,38 @@ describe('Landing — navigation (logged out)', () => {
     expect(href(cta)).toContain('checkIn=');
   });
 
+  it('renders scene imagery (hero + journeys + packages + deals) with descriptive alt text', () => {
+    renderLanding();
+    const scenes = screen.getAllByRole('img', { name: /Makkah|Madinah|Najaf|Karbala/ });
+    // hero (1) + 3 journey types + 3 packages + 3 deal cards = 10 scene images.
+    expect(scenes.length).toBeGreaterThanOrEqual(10);
+    expect(scenes.every((img) => (img.getAttribute('src') ?? '').includes('/img/scenes/'))).toBe(true);
+  });
+
+  it('renders the yuusr-style feature sections (deals, why, difference, support, protection)', () => {
+    renderLanding();
+    expect(screen.getByRole('heading', { name: /exclusive deals/i })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: /Why book with AUJ/i })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: /Experience the difference/i })).toBeTruthy();
+    // "multilingual support" + "protected" each appear as both a section title and a card heading.
+    expect(screen.getAllByRole('heading', { name: /multilingual support/i }).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole('heading', { name: /protected/i }).length).toBeGreaterThan(0);
+    // value props + a popular-category chip + a deal price
+    expect(screen.getByText('Real-time fair pricing')).toBeTruthy();
+    expect(screen.getByText('Luxury 5★')).toBeTruthy();
+    expect(screen.getAllByText(/per pilgrim/i).length).toBeGreaterThan(0);
+  });
+
+  it('the Makkah/Madinah night steppers feed the search link', async () => {
+    const user = userEvent.setup();
+    renderLanding();
+    const cta = () => screen.getByRole('link', { name: /Search \d+ Umrah/ });
+    expect(href(cta())).toContain('makkahNights=6');
+    expect(href(cta())).toContain('order=makkah');
+    await user.click(screen.getByLabelText('Nights in Madinah +'));
+    expect(href(cta())).toContain('madinahNights=4');
+  });
+
   it('changing the destination updates the search link', async () => {
     const user = userEvent.setup();
     renderLanding();

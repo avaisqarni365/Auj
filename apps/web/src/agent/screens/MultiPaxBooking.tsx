@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import type { Money } from '@auj/contracts';
 import { Button } from '@auj/ui';
 import { formatMoney } from '../money';
@@ -33,6 +34,7 @@ function generateRows(count: number): PaxPreview[] {
 }
 
 export function MultiPaxBooking({ paxCount, sell, canBook, onAddRow, onAdd10, onPayFromWallet, rows }: MultiPaxBookingProps) {
+  const t = useTranslations('agent');
   const full = paxCount >= MAX_PAX;
   const data = rows ?? generateRows(paxCount);
   return (
@@ -41,23 +43,23 @@ export function MultiPaxBooking({ paxCount, sell, canBook, onAddRow, onAdd10, on
       <div>
         <div className="mb-3.5 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="text-sm font-bold">Passengers</span>
+            <span className="text-sm font-bold">{t('passengers')}</span>
             <span className="rounded-full bg-green-100 px-2.5 py-1 text-xs font-semibold text-success-fg">
-              {paxCount} / {MAX_PAX} pax
+              {t('paxOfMax', { n: paxCount, max: MAX_PAX })}
             </span>
           </div>
-          <span className="text-xs text-sand-500">{MAX_PAX - paxCount} seats left</span>
+          <span className="text-xs text-sand-500">{t('seatsLeft', { n: MAX_PAX - paxCount })}</span>
         </div>
         <div className="overflow-hidden rounded-xl border border-sand-200 bg-white">
           <div className="max-h-[360px] overflow-y-auto">
             <table className="w-full text-[12.5px]">
               <thead className="sticky top-0">
                 <tr className="bg-sand-50 text-left text-sand-500">
-                  <th className="px-3.5 py-2.5 font-semibold">#</th>
-                  <th className="px-2 py-2.5 font-semibold">Full name</th>
-                  <th className="px-2 py-2.5 font-semibold">Passport</th>
-                  <th className="px-2 py-2.5 font-semibold">Nat.</th>
-                  <th className="px-2 py-2.5 font-semibold">Visa route</th>
+                  <th className="px-3.5 py-2.5 font-semibold">{t('col.num')}</th>
+                  <th className="px-2 py-2.5 font-semibold">{t('col.name')}</th>
+                  <th className="px-2 py-2.5 font-semibold">{t('col.passport')}</th>
+                  <th className="px-2 py-2.5 font-semibold">{t('col.nat')}</th>
+                  <th className="px-2 py-2.5 font-semibold">{t('col.visaRoute')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -83,36 +85,34 @@ export function MultiPaxBooking({ paxCount, sell, canBook, onAddRow, onAdd10, on
           </div>
           <div className="flex gap-2.5 border-t border-sand-100 p-3.5">
             <Button size="sm" variant="secondary" onClick={onAddRow} disabled={full}>
-              + Add passenger
+              {t('addPassenger')}
             </Button>
             <Button size="sm" variant="secondary" onClick={onAdd10} disabled={full}>
-              + Add 10 rows
+              {t('add10')}
             </Button>
           </div>
         </div>
         <div className="mt-3 flex items-center gap-2 rounded-[10px] bg-accent-100 px-3.5 py-2.5">
           <span className="text-sm">ℹ️</span>
-          <span className="text-xs leading-snug text-accent-700">
-            Pakistani passports auto-route to the <strong>agent channel</strong>; EU passports get <strong>e-Visa</strong>. Mixed groups are supported.
-          </span>
+          <span className="text-xs leading-snug text-accent-700">{t('routeNote')}</span>
         </div>
       </div>
 
       {/* group summary */}
       <div>
-        <div className="mb-3.5 text-sm font-bold">Group summary</div>
+        <div className="mb-3.5 text-sm font-bold">{t('groupSummary')}</div>
         <div className="mb-3 rounded-xl border border-sand-200 bg-white p-4">
-          <Line label="Hotel · 14 nights" value={sell} />
+          <Line label={t('hotelNights')} value={sell} />
           <div className="flex items-center justify-between pt-3">
-            <span className="text-sm font-bold">Client price</span>
+            <span className="text-sm font-bold">{t('clientPrice')}</span>
             <span className="font-mono text-lg font-bold text-green-800">{formatMoney(sell)}</span>
           </div>
         </div>
         <Button className="mb-2 w-full" onClick={onPayFromWallet} disabled={!canBook}>
-          Pay from wallet
+          {t('payFromWallet')}
         </Button>
         <Button variant="secondary" className="w-full">
-          Hold on credit
+          {t('holdOnCredit')}
         </Button>
       </div>
     </div>

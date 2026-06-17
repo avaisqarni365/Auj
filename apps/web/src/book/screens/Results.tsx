@@ -3,6 +3,13 @@ import type { HotelOffer, SearchCriteria } from '@auj/contracts';
 import { Button, StatusPill } from '@auj/ui';
 import { formatMoney } from '../fx';
 import { t, type Locale } from '../i18n';
+import { Scene } from '../../components/Scene';
+import type { SceneName } from '../../scenes';
+
+/** Themed scene by destination city (real hotel photography drops in via the scenes manifest). */
+function sceneForCity(city: string): SceneName {
+  return city.toUpperCase() === 'MADINAH' ? 'madinah' : 'makkah';
+}
 
 type Sort = 'recommended' | 'distance' | 'price';
 const SORT_LABEL: Record<Sort, string> = { recommended: 'Recommended', distance: 'Distance to Haram', price: 'Price' };
@@ -81,7 +88,8 @@ export function Results({ locale, criteria, offers, onBuild, onBack }: ResultsPr
       <div className="flex flex-col gap-3.5 px-4 pb-6">
         {sorted.map((o, i) => (
           <div key={o.id} className="overflow-hidden rounded-[18px] border border-sand-200 bg-white shadow-sm">
-            <div className={`relative h-[130px] bg-gradient-to-br ${GRADIENTS[i % GRADIENTS.length]}`}>
+            <div className={`relative h-[130px] overflow-hidden bg-gradient-to-br ${GRADIENTS[i % GRADIENTS.length]}`}>
+              <Scene name={sceneForCity(criteria.city)} className="absolute inset-0 h-full w-full object-cover" />
               {o.nusukApproved ? (
                 <span className="absolute left-2.5 top-2.5">
                   <StatusPill tone="success">Nusuk</StatusPill>

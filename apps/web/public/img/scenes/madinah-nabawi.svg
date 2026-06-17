@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500" role="img" aria-label="Masjid an-Nabawi at night — green dome and minarets">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#07301E"/>
+      <stop offset="0.55" stop-color="#0A3D26"/>
+      <stop offset="1" stop-color="#156440"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="1" r="0.7">
+      <stop offset="0" stop-color="#C8A24A" stop-opacity="0.40"/>
+      <stop offset="0.7" stop-color="#C8A24A" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="dome" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1C7A4F"/>
+      <stop offset="1" stop-color="#06281B"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#sky)"/>
+  <rect width="800" height="500" fill="url(#glow)"/>
+  <!-- stars -->
+  <g fill="#F0E4C0">
+    <circle cx="120" cy="70" r="2.4" opacity="0.85"/>
+    <circle cx="240" cy="120" r="1.8" opacity="0.6"/>
+    <circle cx="560" cy="90" r="2.2" opacity="0.7"/>
+    <circle cx="680" cy="150" r="1.6" opacity="0.6"/>
+    <circle cx="400" cy="60" r="1.8" opacity="0.5"/>
+  </g>
+  <!-- crescent -->
+  <g transform="translate(660 80) rotate(-18)">
+    <circle cx="0" cy="0" r="22" fill="#C8A24A" opacity="0.95"/>
+    <circle cx="7" cy="-3" r="20" fill="#07301E"/>
+  </g>
+  <!-- skyline -->
+  <g>
+    <!-- left minaret -->
+    <rect x="150" y="190" width="26" height="250" rx="8" fill="#051A12"/>
+    <path d="M138 196a25 25 0 0 1 50 0z" fill="#051A12"/>
+    <rect x="160" y="150" width="6" height="44" rx="3" fill="#C8A24A"/>
+    <!-- right minaret -->
+    <rect x="624" y="190" width="26" height="250" rx="8" fill="#051A12"/>
+    <path d="M612 196a25 25 0 0 1 50 0z" fill="#051A12"/>
+    <rect x="634" y="150" width="6" height="44" rx="3" fill="#C8A24A"/>
+    <!-- flanking small domes -->
+    <path d="M250 440V300a70 70 0 0 1 140 0v140z" fill="#06281B"/>
+    <path d="M410 440V300a70 70 0 0 1 140 0v140z" fill="#06281B"/>
+    <!-- central green dome -->
+    <path d="M320 440V250a80 80 0 0 1 160 0v190z" fill="url(#dome)"/>
+    <rect x="396" y="150" width="8" height="40" rx="4" fill="#C8A24A"/>
+    <circle cx="400" cy="146" r="9" fill="#C8A24A"/>
+    <!-- ground -->
+    <rect x="0" y="438" width="800" height="62" fill="#051A12"/>
+  </g>
+</svg>
