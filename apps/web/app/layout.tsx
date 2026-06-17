@@ -1,9 +1,20 @@
 import type { ReactNode } from 'react';
+import { cookies } from 'next/headers';
 import { IBM_Plex_Mono, IBM_Plex_Sans, IBM_Plex_Sans_Arabic, IBM_Plex_Serif } from 'next/font/google';
-import { NextIntlClientProvider } from 'next-intl';
-import { getLocale, getMessages } from 'next-intl/server';
-import { dirFor } from '../src/i18n/locales';
+import { NextIntlClientProvider, type AbstractIntlMessages } from 'next-intl';
+import { DEFAULT_LOCALE, LOCALE_COOKIE, dirFor, isLocale, type Locale } from '../src/i18n/locales';
+import en from '../messages/en.json';
+import lt from '../messages/lt.json';
+import ur from '../messages/ur.json';
+import ar from '../messages/ar.json';
 import './globals.css';
+
+// Messages are imported statically and passed straight to the provider here, rather than via
+// next-intl's getMessages()/request config — the request-config path returned empty messages in
+// the standalone production server (MISSING_MESSAGE 500), even though the catalogs were bundled.
+// Static import + direct prop is bulletproof: the catalog is in the server bundle and reaches
+// every client component through the provider.
+const MESSAGES = { en, lt, ur, ar } as unknown as Record<Locale, AbstractIntlMessages>;
 
 // Self-hosted via next/font (no external @import, no FOUT). Exposed as CSS variables
 // that Tailwind's font-sans/serif/mono/arabic map onto.
@@ -18,8 +29,9 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-  const locale = await getLocale();
-  const messages = await getMessages();
+  const cookie = cookies().get(LOCALE_COOKIE)?.value;
+  const locale = isLocale(cookie) ? cookie : DEFAULT_LOCALE;
+  const messages = MESSAGES[locale];
   return (
     <html lang={locale} dir={dirFor(locale)} className={`${sans.variable} ${serif.variable} ${mono.variable} ${arabic.variable}`}>
       <body className="font-sans antialiased">
