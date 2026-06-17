@@ -5,6 +5,8 @@ import { createNotifier, type Notifier } from '@auj/notifications';
 const globalForNotifier = globalThis as unknown as { __aujNotifier?: Notifier };
 
 export function getNotifier(): Notifier {
-  globalForNotifier.__aujNotifier ??= createNotifier(process.env);
+  // createNotifier defaults its env arg to process.env; passing it explicitly trips TS's
+  // weak-type check (NotifierEnv is all-optional) under `next build`. Call with no arg.
+  globalForNotifier.__aujNotifier ??= createNotifier();
   return globalForNotifier.__aujNotifier;
 }
