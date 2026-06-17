@@ -112,20 +112,20 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
           {/* right: hero scene (Makkah) + floating live-status / price cards */}
           <div className="relative min-w-0 animate-fade-in">
             <div className="relative h-[clamp(360px,42vw,520px)] overflow-hidden rounded-3xl border border-white/10 bg-[radial-gradient(120%_90%_at_68%_16%,#2A9468_0%,#0F5132_42%,#062418_100%)] shadow-[0_36px_70px_-28px_rgba(5,28,18,0.75)]">
-              <Scene name="makkah" priority className="absolute inset-0 h-full w-full object-cover" />
+              <Scene name="makkah" priority className="animate-kenburns absolute inset-0 h-full w-full object-cover" />
               <span className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-green-950/55 to-transparent" />
             </div>
-            <div className="absolute -left-2 top-5 w-[232px] max-w-[70%] rounded-2xl bg-white p-4 text-sand-ink shadow-[0_20px_44px_rgba(5,28,18,0.34)]">
+            <div className="animate-float absolute -left-2 top-5 w-[232px] max-w-[70%] rounded-2xl bg-white p-4 text-sand-ink shadow-[0_20px_44px_rgba(5,28,18,0.34)]">
               <div className="mb-2.5 flex items-center justify-between">
                 <span className="text-[11px] font-bold tracking-wider text-sand-500">LIVE VISA STATUS</span>
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-warning-bg px-2.5 py-0.5 text-[11px] font-semibold text-warning-fg">
-                  <span className="h-1.5 w-1.5 rounded-full bg-warning" />In progress
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-warning" />In progress
                 </span>
               </div>
               <div className="font-mono text-[13px] font-medium text-accent-600">BRN-26-VNO-00481</div>
               <div className="mt-1 text-[12.5px] text-sand-700">e-Visa submitted to MOFA · est. 2–3 days</div>
             </div>
-            <div className="absolute -right-2 bottom-6 rounded-xl bg-white p-3.5 text-sand-ink shadow-[0_20px_44px_rgba(5,28,18,0.34)]">
+            <div className="animate-float absolute -right-2 bottom-6 rounded-xl bg-white p-3.5 text-sand-ink shadow-[0_20px_44px_rgba(5,28,18,0.34)]" style={{ animationDelay: '-3s' }}>
               <div className="text-[11px] font-semibold text-sand-500">Umrah Premium · 14 nights</div>
               <div className="mt-1 flex items-baseline gap-2">
                 <span className="font-mono text-[22px] font-bold text-green-800">€2,480</span>

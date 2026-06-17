@@ -232,6 +232,11 @@ core-booking 29). Remaining: real partner SaudiPartnerClient (gated), real payme
   hero CTAs, search submit, Build/View package, CTA band, newsletter, Track, + nav-link focus rings.
 - Tokens only (shadow-focus / ease-out-soft / duration-fast from @auj/ui preset) — no ad-hoc values.
   Body sub-copy tightened to max-w-[60ch]. Verified live on :3001 (GET / 200, 12 scenes, no errors).
+- Dynamic "alive" pass (2026-06-17): globals.css adds transform-only keyframes — animate-float
+  (hero floating cards, 6s, staggered -3s) + animate-kenburns (hero scene, 24s slow scale drift) +
+  animate-pulse on the live-visa "in progress" dot (purposeful — signals live status). All
+  auto-disabled under prefers-reduced-motion (verified: 4 reduced-motion guards in served CSS).
+  Verified live on :3001: animate-float ×2, animate-kenburns ×1, animate-pulse ×1, keyframes shipped.
 - Gate: build 14/14, lint 14/14, test 26/26 (apps/web 73).
 
 ## Unified site header + footer across all pages (2026-06-17)

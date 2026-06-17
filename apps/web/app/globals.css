@@ -16,3 +16,32 @@ body {
 [dir='rtl'] {
   font-family: 'IBM Plex Sans Arabic', sans-serif;
 }
+
+/* Gentle, slow float for the hero's floating cards — purposeful "alive" motion, transform-only.
+   Disabled automatically for prefers-reduced-motion via @auj/ui/motion.css. */
+@keyframes auj-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+.animate-float {
+  animation: auj-float 6s ease-in-out infinite;
+}
+
+/* Very slow scale drift for the hero scene — subtle life behind the floating cards. The parent
+   clips overflow; transform-only; disabled under prefers-reduced-motion. */
+@keyframes auj-kenburns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.06);
+  }
+}
+.animate-kenburns {
+  animation: auj-kenburns 24s ease-in-out infinite alternate;
+}
