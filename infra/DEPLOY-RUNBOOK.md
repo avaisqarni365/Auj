@@ -24,7 +24,7 @@ Copy `infra/.env.example` → `infra/.env` and set:
 | Var | Required | Notes |
 |---|---|---|
 | `WEB_IMAGE` | ✅ | `ghcr.io/<owner>/<repo>-web:latest` (or a pinned `:vX.Y.Z` / `:<sha>`) |
-| `WEB_PORT` | ✅ | host port (default 3000) |
+| `WEB_PORT` | ✅ | host port (default **3080** — keep it OFF 3000 if another app uses :3000) |
 | `POSTGRES_USER/PASSWORD/DB` | ✅ | use a strong password |
 | `DATABASE_URL` | ✅ | `postgresql://USER:PASS@postgres:5432/auj?schema=public` — **enables Postgres + auto-migrates** |
 | `ADMIN_EMAIL` / `ADMIN_PASSWORD` | ✅ | seeded admin (change from the demo default!) |
@@ -57,8 +57,9 @@ sudo certbot --nginx -d auj.codes-ai.uk    # obtains + installs the cert
 sudo nginx -t && sudo systemctl reload nginx
 curl -s -o /dev/null -w '%{http_code}\n' https://auj.codes-ai.uk/   # 200
 ```
-`infra/nginx-auj.conf` is the ready vhost (proxies to 127.0.0.1:3000, forwards X-Forwarded-*,
-25 MB upload cap). Ensure `WEB_PORT=3000` in `.env`.
+`infra/nginx-auj.conf` is the ready vhost (proxies to 127.0.0.1:3080, forwards X-Forwarded-*,
+25 MB upload cap). `server-deploy.sh` rewrites that port to match `WEB_PORT`; ensure `WEB_PORT`
+in `.env` is a FREE host port (default 3080 — do not reuse a port another site already serves).
 
 ### Option B — bundled Caddy (only if 80/443 are FREE)
 If you'd rather not use the host nginx: stop it, open 80/443, set `DOMAIN` + `ACME_EMAIL` in
