@@ -28,6 +28,9 @@ echo "==> 2/6 Stop any Docker copy so it doesn't fight for port $PORT"
 
 echo "==> 3/6 Install deps + build (a few minutes)"
 pnpm install --prod=false
+# Build the workspace packages the app depends on (@auj/ui, @auj/visa-router, …) FIRST —
+# their dist/ must exist before next build can resolve them. The "..." builds deps too.
+pnpm --filter "@auj/web..." build
 pnpm --filter @auj/web build:next
 
 echo "==> 4/6 systemd service (auj) on 127.0.0.1:$PORT"
