@@ -50,8 +50,9 @@ jobs:
         run: |
           set -e
           HOST="${{ secrets.DEPLOY_USER || 'root' }}@${{ secrets.DEPLOY_HOST }}"
-          # Run through a LOGIN shell (bash -lc) so the server's full PATH (node/pnpm/corepack) loads.
-          CMD="bash -lc 'cd ${{ secrets.DEPLOY_PATH || '/root/auj' }} && bash infra/redeploy.sh'"
+          # LOGIN shell (bash -lc) so the server PATH (node/pnpm/corepack) loads. Pull FIRST so
+          # infra/redeploy.sh exists even on an older clone, then run it.
+          CMD="bash -lc 'cd ${{ secrets.DEPLOY_PATH || '/root/auj' }} && git fetch origin --quiet && git reset --hard --quiet origin/main && bash infra/redeploy.sh'"
           mkdir -p ~/.ssh
           ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
           if [ -n "${{ secrets.DEPLOY_SSH_KEY }}" ]; then
