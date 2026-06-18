@@ -492,7 +492,8 @@
     "subscribe": "Prenumeruoti",
     "getInTouch": "Susisiekite",
     "legal": "AUJ yra licencijuotas ES kelionių organizatorius ir veikia kaip paslaugų teikėjo agentas kiekvienam užsakymui; jūsų sutartis sudaroma su tuo teikėju, nebent nurodyta kitaip. Tinkami paketai apdrausti nemokumo apsaugos pažymėjimu pagal ES kelionių paketų direktyvą, išduodamu prieš apmokėjimą. Taikomą apsaugą rasite užsakymo sąlygose.",
-    "rights": "© 2026 AUJ. Visos teisės saugomos."
+    "rights": "© 2026 AUJ. Visos teisės saugomos.",
+    "companion": "Piligrimo pagalbininkas"
   },
   "smartvisit": {
     "title": "Išmaniojo vizito planuoklė",
@@ -566,7 +567,60 @@
       "body": "Mūsų komanda netrukus atsiųs pritaikytus paketus.",
       "ref": "Numeris",
       "book": "Arba sudaryti paketą dabar →",
-      "home": "Į pradžią"
+      "home": "Į pradžią",
+      "companion": "Atverti piligrimo pagalbininką"
+    }
+  },
+  "companion": {
+    "title": "Jūsų piligrimo pagalbininkas",
+    "subtitle": "Maldų laikas, dienos planas, sauga ir patarimai Mekoje ir Medinoje.",
+    "prayer": {
+      "title": "Maldų laikas",
+      "sub": "Šiandien, oficialiu Umm al-Qura metodu.",
+      "jamaatNote": "Ikama (jamaat) – kelios minutės po ezano; pasitikslinkite mečetėje.",
+      "fallback": "Laikas šiuo metu nepasiekiamas — patikrinkite Nusuk programėlėje ar artimiausioje mečetėje."
+    },
+    "day": {
+      "title": "Planuokite dieną pagal maldas",
+      "sub": "Ibaadat pirmiausia.",
+      "items": [
+        "Ateikite į Haramą prieš Fadžr ir melskitės bendruomenėje.",
+        "Po Fadžr pasilikite dhikr ir Koranui iki saulėtekio — didelis atlygis.",
+        "Pailsėkite priešpiet; gerkite Zamzam.",
+        "Grįžkite gerokai prieš Dhuhr, Asr, Magrib ir Iša, kad išvengtumėte minios.",
+        "Ramesnėmis valandomis – tavaf, zijara ir asmeninė dua.",
+        "Eikite miegoti anksti, kad Tahadžud ir Fadžr būtų lengvi."
+      ]
+    },
+    "safety": {
+      "title": "Sauga ir pagalba",
+      "sub": "Bakstelėkite numerį skambučiui.",
+      "unified": "Bendras",
+      "ambulance": "Greitoji",
+      "police": "Policija",
+      "fire": "Civilinė sauga",
+      "asefny": "Įsidiekite Saudo Raudonojo Pusmėnulio „Asefny“ programėlę — ji dalijasi GPS ir randa artimiausią ligoninę.",
+      "hospitalNote": "Turėkite viešbučio pavadinimą, adresą ir grupės vadovo numerį."
+    },
+    "transport": {
+      "title": "Susisiekimas",
+      "sub": "Tarp šventųjų miestų ir oro uostų.",
+      "items": [
+        "Meka ↔ Medina greituoju Haramain traukiniu — apie 2–2,5 val.",
+        "Traukinys aptarnauja ir Džidą bei King Abdulaziz oro uostą (KAIA).",
+        "Autobusas (SAPTCO) ir privatus automobilis – lėtesni (apie 5–6 val.).",
+        "Nemokamą Rawdah (Riyadh ul-Jannah) leidimą užsisakykite Nusuk programėlėje prieš Mediną."
+      ]
+    },
+    "tips": {
+      "title": "Naudingi patarimai",
+      "items": [
+        "Atvykę įsigykite vietinę SIM/eSIM žemėlapiams ir skambučiams.",
+        "Pažymėkite šlepetes arba naudokite mečetės batų lentynas/maišelius.",
+        "Turėkite mažą Zamzam buteliuką ir gerkite vandenį.",
+        "Abiejose mečetėse vyresniems ir ribotos judėsenos yra elektriniai vežimėliai.",
+        "Leidimams ir e-paslaugoms naudokite Nusuk programėlę."
+      ]
     }
   }
 }

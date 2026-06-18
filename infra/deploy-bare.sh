@@ -35,6 +35,8 @@ pnpm --filter @auj/web build:next
 
 echo "==> 4/6 systemd service (auj) on 127.0.0.1:$PORT"
 PNPM_BIN="$(command -v pnpm)"
+# Ensure infra/.env exists so email + other settings can be picked up by the service.
+[ -f infra/.env ] || cp infra/.env.example infra/.env
 cat > /etc/systemd/system/auj.service <<UNIT
 [Unit]
 Description=AUJ web (Next.js, no Docker)
@@ -47,8 +49,8 @@ Environment=NODE_ENV=production
 Environment=PORT=$PORT
 Environment=HOSTNAME=127.0.0.1
 Environment=APP_ORIGIN=https://$DOMAIN
-# In-memory by default. To use a database, add e.g.:
-# Environment=DATABASE_URL=postgresql://user:pass@localhost:5432/auj
+# Loads EMAIL_API_URL/KEY/FROM, LEADS_INBOX, DATABASE_URL, etc. from infra/.env (optional).
+EnvironmentFile=-$REPO_DIR/infra/.env
 ExecStart=$PNPM_BIN --filter @auj/web start
 Restart=always
 RestartSec=3

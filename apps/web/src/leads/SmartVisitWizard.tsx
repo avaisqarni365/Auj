@@ -47,6 +47,7 @@ export function SmartVisitWizard() {
         <div className="mt-4 inline-block rounded-xl bg-green-100 px-4 py-2 font-mono text-sm font-semibold text-green-800">{t('done.ref')}: {ref}</div>
         <div className="mt-6 flex flex-col gap-2">
           <Link href="/book" className="rounded-xl bg-green-800 py-2.5 text-sm font-semibold text-white hover:bg-green-700">{t('done.book')}</Link>
+          <Link href="/companion" className="rounded-xl border border-sand-300 py-2.5 text-sm font-semibold text-sand-700 hover:border-green-700 hover:text-green-800">{t('done.companion')}</Link>
           <Link href="/" className="text-sm font-semibold text-accent-600">{t('done.home')}</Link>
         </div>
       </div>

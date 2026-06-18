@@ -492,7 +492,8 @@
     "subscribe": "Subscribe",
     "getInTouch": "Get in touch",
     "legal": "AUJ is a licensed EU tour operator and acts as agent for the service provider on each booking; your contract is with that provider except where stated otherwise. Eligible packages are covered by an insolvency-protection certificate under the EU Package Travel Directive, issued before you pay. See your booking conditions for the protection that applies.",
-    "rights": "© 2026 AUJ. All rights reserved."
+    "rights": "© 2026 AUJ. All rights reserved.",
+    "companion": "Pilgrim companion"
   },
   "smartvisit": {
     "title": "Smart Visit planner",
@@ -566,7 +567,60 @@
       "body": "Our team will send you tailored packages shortly.",
       "ref": "Reference",
       "book": "Or build a package now →",
-      "home": "Back to home"
+      "home": "Back to home",
+      "companion": "Open your pilgrim companion"
+    }
+  },
+  "companion": {
+    "title": "Your pilgrim companion",
+    "subtitle": "Prayer times, a day plan, safety and tips for your time in Makkah and Madinah.",
+    "prayer": {
+      "title": "Prayer times",
+      "sub": "Today, by the official Umm al-Qura method.",
+      "jamaatNote": "Iqamah (jamaat) is a few minutes after the adhan — confirm at your mosque.",
+      "fallback": "Times unavailable right now — check the Nusuk app or your nearest mosque."
+    },
+    "day": {
+      "title": "Plan your day around the prayers",
+      "sub": "An ibaadat-first rhythm.",
+      "items": [
+        "Reach the Haram before Fajr and pray in congregation.",
+        "Stay for dhikr and Qur’an after Fajr until sunrise — great reward.",
+        "Rest mid-morning; hydrate with Zamzam.",
+        "Return well before Dhuhr, Asr, Maghrib and Isha to beat the crowds.",
+        "Use the quieter hours for tawaf, ziyarah and personal dua.",
+        "Sleep early so Tahajjud and Fajr come easily."
+      ]
+    },
+    "safety": {
+      "title": "Safety & emergencies",
+      "sub": "Tap a number to call.",
+      "unified": "Unified",
+      "ambulance": "Ambulance",
+      "police": "Police",
+      "fire": "Civil defence",
+      "asefny": "Install the Saudi Red Crescent “Asefny” app — it shares your GPS and finds the nearest hospital.",
+      "hospitalNote": "Keep your hotel name & address and your group leader’s number handy."
+    },
+    "transport": {
+      "title": "Getting around",
+      "sub": "Between the two holy cities and the airports.",
+      "items": [
+        "Makkah ↔ Madinah on the Haramain high-speed train — about 2–2.5 hours.",
+        "The train also serves Jeddah and King Abdulaziz Airport (KAIA).",
+        "Bus (SAPTCO) and private car are slower alternatives (about 5–6 hours).",
+        "Book the free Rawdah (Riyadh ul-Jannah) permit in the Nusuk app before Madinah."
+      ]
+    },
+    "tips": {
+      "title": "Helpful tips",
+      "items": [
+        "Get a local SIM/eSIM on arrival for maps and calls.",
+        "Label your sandals or use the mosque shoe racks/bags.",
+        "Carry a small Zamzam bottle and stay hydrated.",
+        "Electric carts are available at both mosques for the elderly and limited mobility.",
+        "Use the Nusuk app for permits and e-services."
+      ]
     }
   }
 }
