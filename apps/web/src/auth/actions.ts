@@ -64,6 +64,44 @@ export async function signupAction(_prev: AuthState, formData: FormData): Promis
   redirect(role === 'AGENT' ? '/agent' : '/');
 }
 
+// ── Demo accounts ──────────────────────────────────────────────────────────────
+// One-click login so anyone can explore the full product (mock connector) without signing
+// up. Idempotently provisions the demo user, then logs in. Disable for real production by
+// setting DEMO_MODE=off (the UI hides the panel; this action refuses).
+const DEMO = {
+  PILGRIM: { email: 'demo@auj.example', password: 'demo-pilgrim-2026', name: 'Demo Pilgrim', role: 'PILGRIM' as const },
+  AGENT: { email: 'demo-agent@auj.example', password: 'demo-agent-2026', name: 'Demo Travel Agency', role: 'AGENT' as const },
+  ADMIN: {
+    email: process.env.ADMIN_EMAIL ?? 'admin@auj.example',
+    password: process.env.ADMIN_PASSWORD ?? 'admin12345',
+    name: 'AUJ Admin',
+    role: 'ADMIN' as const,
+  },
+};
+
+export const demoEnabled = (): boolean => process.env.DEMO_MODE !== 'off';
+
+export async function demoLoginAction(formData: FormData): Promise<void> {
+  if (!demoEnabled()) redirect('/login');
+  const key = String(formData.get('role') ?? 'PILGRIM').toUpperCase();
+  const cfg = DEMO[key as keyof typeof DEMO] ?? DEMO.PILGRIM;
+  const auth = await getAuth();
+
+  if (cfg.role === 'ADMIN') {
+    await auth.ensureAdmin(cfg.email, cfg.password, cfg.name);
+  } else {
+    try {
+      await auth.signup({ email: cfg.email, password: cfg.password, displayName: cfg.name, role: cfg.role });
+    } catch {
+      /* already provisioned */
+    }
+  }
+  const { user, session } = await auth.login({ email: cfg.email, password: cfg.password });
+  if (cfg.role === 'AGENT' && user.agentStatus !== 'ACTIVE') await auth.approveAgent(user.id);
+  setSessionCookie(session);
+  redirect(homeForRole(user));
+}
+
 export async function logoutAction(): Promise<void> {
   const token = cookies().get(SESSION_COOKIE)?.value;
   await (await getAuth()).logout(token);
