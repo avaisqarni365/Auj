@@ -9,6 +9,7 @@ import { formatMoney, pkrIndicative } from './currency';
 import { Scene } from './components/Scene';
 import { SiteHeader } from './components/SiteHeader';
 import { SiteFooter } from './components/SiteFooter';
+import { SmartVisitWizard } from './leads/SmartVisitWizard';
 import {
   DEALS,
   type Deal,
@@ -93,9 +94,9 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
               {t('heroSubtitle')}
             </p>
             <div className="mb-10 flex flex-wrap items-center gap-3">
-              <Link href="/plan" className="inline-flex items-center gap-2 rounded-xl bg-sand-50 px-6 py-3.5 text-[15.5px] font-semibold text-green-900 shadow-[0_10px_28px_rgba(7,48,30,0.4)] transition-[transform,background-color] duration-fast hover:bg-white active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">
+              <a href="#plan" className="inline-flex items-center gap-2 rounded-xl bg-sand-50 px-6 py-3.5 text-[15.5px] font-semibold text-green-900 shadow-[0_10px_28px_rgba(7,48,30,0.4)] transition-[transform,background-color] duration-fast hover:bg-white active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">
                 {t('planPilgrimage')}
-              </Link>
+              </a>
               <a href="#how" className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-5 py-3.5 text-[15.5px] font-semibold transition-[transform,background-color] duration-fast hover:bg-white/15 active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">
                 {t('howItWorks')}
               </a>
@@ -217,6 +218,13 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
           ))}
         </div>
       </div>
+
+      {/* Smart Visit planner — embedded wizard (hero "Plan my pilgrimage" scrolls here) */}
+      <section id="plan" className="scroll-mt-24 border-y border-sand-200 bg-sand-50/70">
+        <div className="mx-auto max-w-6xl px-[clamp(16px,4vw,32px)] py-12">
+          <SmartVisitWizard />
+        </div>
+      </section>
 
       {/* why book with AUJ */}
       <Section id="why" title={tl('sections.why.title')} sub={tl('sections.why.sub')}>
@@ -532,7 +540,7 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
             <p className="mt-1 text-green-100/80">Plan a pilgrimage, or open a trade account for your agency.</p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <a href="#search" className="rounded-xl bg-sand-50 px-6 py-3 text-sm font-semibold text-green-900 transition-[transform,background-color] duration-fast hover:bg-white active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">Plan my pilgrimage</a>
+            <a href="#plan" className="rounded-xl bg-sand-50 px-6 py-3 text-sm font-semibold text-green-900 transition-[transform,background-color] duration-fast hover:bg-white active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">Plan my pilgrimage</a>
             <a href="#" className="rounded-xl border border-white/25 bg-white/10 px-6 py-3 text-sm font-semibold transition-[transform,background-color] duration-fast hover:bg-white/15 active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">For travel agents</a>
           </div>
         </div>
