@@ -50,7 +50,8 @@ jobs:
         run: |
           set -e
           HOST="${{ secrets.DEPLOY_USER || 'root' }}@${{ secrets.DEPLOY_HOST }}"
-          CMD="cd ${{ secrets.DEPLOY_PATH || '/root/auj' }} && bash infra/redeploy.sh"
+          # Run through a LOGIN shell (bash -lc) so the server's full PATH (node/pnpm/corepack) loads.
+          CMD="bash -lc 'cd ${{ secrets.DEPLOY_PATH || '/root/auj' }} && bash infra/redeploy.sh'"
           mkdir -p ~/.ssh
           ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
           if [ -n "${{ secrets.DEPLOY_SSH_KEY }}" ]; then

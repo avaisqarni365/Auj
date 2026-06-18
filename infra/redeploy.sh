@@ -10,6 +10,9 @@ PORT="${WEB_PORT:-3080}"
 # Non-login SSH shells often have a thin PATH — make sure node/pnpm are reachable.
 export PATH="/usr/local/bin:/usr/bin:/bin:${HOME:-/root}/.local/share/pnpm:$PATH"
 command -v pnpm >/dev/null 2>&1 || corepack enable 2>/dev/null || true
+command -v pnpm >/dev/null 2>&1 || corepack prepare pnpm@10.33.4 --activate 2>/dev/null || true
+command -v pnpm >/dev/null 2>&1 || { echo "!! pnpm not found (PATH=$PATH). Run infra/deploy-bare.sh once to install Node+pnpm."; exit 127; }
+echo "using $(pnpm -v) at $(command -v pnpm)"
 
 echo "==> 1/3 Pull latest (origin/main)"
 git fetch origin
