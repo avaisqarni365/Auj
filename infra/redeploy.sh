@@ -51,11 +51,16 @@ if command -v nginx >/dev/null 2>&1; then
   else
     echo "!! nginx -t failed — left unchanged (other sites safe)"
   fi
-  # First-time TLS only (idempotent; never re-issues if a live cert already exists).
-  if command -v certbot >/dev/null 2>&1 && [ ! -d "/etc/letsencrypt/live/$DOMAIN" ]; then
-    certbot --nginx -d "$DOMAIN" --non-interactive --agree-tos -m "$EMAIL" --redirect || \
-      echo "!! certbot failed — site still serves http://$DOMAIN; re-run later"
+  # Re-apply TLS every deploy: we just overwrote the HTTP-only vhost, which removes the :443
+  # server block certbot adds — so on HTTPS the domain would fall through to the default site.
+  # `certbot --nginx` re-adds the :443 block + redirect using the existing cert (or obtains one
+  # on first run); --keep-until-expiring means it never needlessly re-issues.
+  if command -v certbot >/dev/null 2>&1; then
+    certbot --nginx -d "$DOMAIN" --non-interactive --agree-tos -m "$EMAIL" --redirect --keep-until-expiring \
+      || echo "!! certbot failed — http://$DOMAIN works; check DNS + port 80/443 open"
     systemctl reload nginx || true
+  else
+    echo "!! certbot not installed — HTTPS not configured; run infra/deploy-bare.sh once"
   fi
 else
   echo "!! nginx not installed — run infra/deploy-bare.sh once to set up the reverse proxy"
