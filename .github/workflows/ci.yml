@@ -1,9 +1,9 @@
 name: CI
 
+# Pull-request checks. Pushes to main are gated + deployed by deploy-bare.yml (no double-run).
 on:
-  push:
-    branches: [main]
   pull_request:
+  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.ref }}

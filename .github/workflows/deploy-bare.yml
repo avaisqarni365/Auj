@@ -1,0 +1,58 @@
+name: Deploy to domain (no-Docker)
+
+# Push-to-deploy pipeline for the bare (Node + systemd + nginx) host. On every push to main:
+# run the full gate, then SSH to the server and redeploy (pull + rebuild + restart auj).
+# Requires repo secrets: DEPLOY_HOST, DEPLOY_SSH_KEY (private key) — optional DEPLOY_USER (root),
+# DEPLOY_PATH (/root/auj). Without them, the gate still runs and the deploy step is skipped.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-domain
+  cancel-in-progress: false
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm test
+      - run: pnpm build
+
+  deploy:
+    needs: gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Guard — require deploy secrets
+        id: guard
+        run: |
+          if [ -n "${{ secrets.DEPLOY_HOST }}" ] && [ -n "${{ secrets.DEPLOY_SSH_KEY }}" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::Set DEPLOY_HOST + DEPLOY_SSH_KEY secrets to enable auto-deploy. Skipping."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Set up SSH
+        if: steps.guard.outputs.ready == 'true'
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+      - name: Redeploy on the server
+        if: steps.guard.outputs.ready == 'true'
+        run: |
+          ssh -i ~/.ssh/id_deploy -o StrictHostKeyChecking=accept-new \
+            "${{ secrets.DEPLOY_USER || 'root' }}@${{ secrets.DEPLOY_HOST }}" \
+            "cd ${{ secrets.DEPLOY_PATH || '/root/auj' }} && bash infra/redeploy.sh"
