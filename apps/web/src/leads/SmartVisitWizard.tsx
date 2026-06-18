@@ -6,7 +6,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { Logo } from '@auj/ui';
 import { submitInquiryAction } from './actions';
 import { COUNTRIES, HOTEL_BANDS, MADINAH_ZIYARAH, MAKKAH_ZIYARAH, airportsFor } from './wizard-data';
-import type { ContactChannel, InquiryInput, PartyKind, ReturnFrom, TransferMode } from './inquiry';
+import type { ContactChannel, DiningPref, InquiryInput, PartyKind, ReturnFrom, TimeBand, TransferMode } from './inquiry';
 
 const STEPS = ['residence', 'party', 'makkah', 'transfer', 'madinah', 'return', 'contact'] as const;
 
@@ -14,9 +14,9 @@ const initial: InquiryInput = {
   country: 'LT', city: '', departureAirport: 'VNO',
   adults: 2, children: 0, infants: 0, partyKind: 'FAMILY',
   makkahNights: 6, makkahHotelBand: HOTEL_BANDS[1], makkahZiyarah: [],
-  transferMode: 'TRAIN', transferPrivate: false,
-  madinahNights: 3, madinahHotelBand: HOTEL_BANDS[1], rawdah: true, madinahZiyarah: [],
-  returnFrom: 'MADINAH', jeddahStopover: false,
+  transferMode: 'TRAIN', transferPrivate: false, transferDate: '', transferTime: 'FLEXIBLE',
+  madinahNights: 3, madinahHotelBand: HOTEL_BANDS[1], rawdah: true, rawdahDay: '', madinahZiyarah: [], dining: 'NO_PREF',
+  returnFrom: 'MADINAH', returnMode: 'TRAIN', jeddahStopover: false,
   windowFrom: '', windowTo: '', trackerOptIn: true,
   name: '', email: '', phone: '', channel: 'WHATSAPP', lang: 'en', consent: false,
 };
@@ -114,6 +114,12 @@ export function SmartVisitWizard() {
             <Field label={t('transfer.mode')}>
               <Seg<TransferMode> value={f.transferMode} onChange={(v) => set({ transferMode: v })} options={[['TRAIN', t('transfer.train')], ['BUS', t('transfer.bus')], ['CAR', t('transfer.car')], ['FLEXIBLE', t('transfer.flexible')]]} />
             </Field>
+            <Field label={t('transfer.when')}>
+              <input type="date" value={f.transferDate} onChange={(e) => set({ transferDate: e.target.value })} className={INPUT} />
+            </Field>
+            <Field label={t('transfer.time')}>
+              <Seg<TimeBand> value={f.transferTime} onChange={(v) => set({ transferTime: v })} options={[['MORNING', t('transfer.morning')], ['AFTERNOON', t('transfer.afternoon')], ['EVENING', t('transfer.evening')], ['FLEXIBLE', t('transfer.anytime')]]} />
+            </Field>
             <Toggle label={t('transfer.private')} on={f.transferPrivate} onChange={(v) => set({ transferPrivate: v })} />
           </Step>
         )}
@@ -125,8 +131,16 @@ export function SmartVisitWizard() {
               <Seg value={f.madinahHotelBand} onChange={(v) => set({ madinahHotelBand: v })} options={HOTEL_BANDS.map((b) => [b, b] as [string, string])} />
             </Field>
             <Toggle label={t('madinah.rawdah')} hint={t('madinah.rawdahHint')} on={f.rawdah} onChange={(v) => set({ rawdah: v })} />
+            {f.rawdah ? (
+              <Field label={t('madinah.rawdahDay')}>
+                <input type="date" value={f.rawdahDay} onChange={(e) => set({ rawdahDay: e.target.value })} className={INPUT} />
+              </Field>
+            ) : null}
             <Field label={t('madinah.ziyarah')}>
               <Chips selected={f.madinahZiyarah} all={MADINAH_ZIYARAH} onToggle={(v) => set({ madinahZiyarah: toggle(f.madinahZiyarah, v) })} />
+            </Field>
+            <Field label={t('madinah.dining')}>
+              <Seg<DiningPref> value={f.dining} onChange={(v) => set({ dining: v })} options={[['TOP_RATED', t('madinah.diningTop')], ['LOCAL', t('madinah.diningLocal')], ['INTERNATIONAL', t('madinah.diningIntl')], ['NO_PREF', t('madinah.diningNone')]]} />
             </Field>
           </Step>
         )}
@@ -135,6 +149,9 @@ export function SmartVisitWizard() {
           <Step title={t('return.title')}>
             <Field label={t('return.from')}>
               <Seg<ReturnFrom> value={f.returnFrom} onChange={(v) => set({ returnFrom: v })} options={[['MADINAH', t('return.fromMadinah')], ['JEDDAH', t('return.fromJeddah')]]} />
+            </Field>
+            <Field label={t('return.mode')}>
+              <Seg<TransferMode> value={f.returnMode} onChange={(v) => set({ returnMode: v })} options={[['TRAIN', t('transfer.train')], ['BUS', t('transfer.bus')], ['CAR', t('transfer.car')], ['FLEXIBLE', t('transfer.flexible')]]} />
             </Field>
             <Toggle label={t('return.jeddahStop')} on={f.jeddahStopover} onChange={(v) => set({ jeddahStopover: v })} />
             <div className="grid grid-cols-2 gap-2">

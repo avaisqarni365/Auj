@@ -294,7 +294,7 @@ function Leads() {
                     {r.name} <span className="font-normal text-sand-500">· {r.email}{r.phone ? ` · ${r.phone}` : ''}</span>
                   </div>
                   <div className="text-[12px] text-sand-500">
-                    {r.country}{r.city ? `, ${r.city}` : ''} · {r.adults}+{r.children}+{r.infants} ({r.partyKind}) · Makkah {r.makkahNights}n · Madinah {r.madinahNights}n{r.rawdah ? ' · Rawdah' : ''} · {r.transferMode} · return {r.returnFrom}
+                    {r.country}{r.city ? `, ${r.city}` : ''} · {r.adults}+{r.children}+{r.infants} ({r.partyKind}) · Makkah {r.makkahNights}n · {r.transferMode}{r.transferDate ? ` ${r.transferDate}` : ''} → Madinah {r.madinahNights}n{r.rawdah ? ` · Rawdah${r.rawdahDay ? ` ${r.rawdahDay}` : ''}` : ''} · return {r.returnFrom} via {r.returnMode}
                   </div>
                 </div>
                 <div className="flex items-center gap-2">

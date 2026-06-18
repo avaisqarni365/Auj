@@ -19,9 +19,9 @@ export async function submitInquiryAction(input: InquiryInput): Promise<{ ref: s
         `From: ${inquiry.country}${inquiry.city ? `, ${inquiry.city}` : ''} · airport ${inquiry.departureAirport ?? '—'}`,
         `Party: ${inquiry.adults} adults, ${inquiry.children} children, ${inquiry.infants} infants (${inquiry.partyKind})`,
         `Makkah: ${inquiry.makkahNights} nts, hotel ${inquiry.makkahHotelBand}`,
-        `Transfer: ${inquiry.transferMode}${inquiry.transferPrivate ? ' (private)' : ''}`,
-        `Madinah: ${inquiry.madinahNights} nts, hotel ${inquiry.madinahHotelBand}, Rawdah: ${inquiry.rawdah ? 'yes' : 'no'}`,
-        `Return: from ${inquiry.returnFrom}${inquiry.jeddahStopover ? ' (+Jeddah stop)' : ''}`,
+        `Transfer: ${inquiry.transferMode}${inquiry.transferPrivate ? ' (private)' : ''} · ${inquiry.transferDate || 'date TBD'} ${inquiry.transferTime}`,
+        `Madinah: ${inquiry.madinahNights} nts, hotel ${inquiry.madinahHotelBand}, Rawdah: ${inquiry.rawdah ? `yes${inquiry.rawdahDay ? ` (${inquiry.rawdahDay})` : ''}` : 'no'}, dining ${inquiry.dining}`,
+        `Return: from ${inquiry.returnFrom} via ${inquiry.returnMode}${inquiry.jeddahStopover ? ' (+Jeddah stop)' : ''}`,
         `Window: ${inquiry.windowFrom ?? '—'} → ${inquiry.windowTo ?? '—'}`,
       ].join('\n'),
     });

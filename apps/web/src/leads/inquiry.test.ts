@@ -6,9 +6,9 @@ const input: InquiryInput = {
   country: 'LT', city: 'Vilnius', departureAirport: 'VNO',
   adults: 2, children: 1, infants: 0, partyKind: 'FAMILY',
   makkahNights: 6, makkahHotelBand: '≤800 m', makkahZiyarah: ['Mina'],
-  transferMode: 'TRAIN', transferPrivate: false,
-  madinahNights: 3, madinahHotelBand: '≤800 m', rawdah: true, madinahZiyarah: ['Quba Mosque'],
-  returnFrom: 'MADINAH', jeddahStopover: false,
+  transferMode: 'TRAIN', transferPrivate: false, transferTime: 'FLEXIBLE',
+  madinahNights: 3, madinahHotelBand: '≤800 m', rawdah: true, madinahZiyarah: ['Quba Mosque'], dining: 'NO_PREF',
+  returnFrom: 'MADINAH', returnMode: 'TRAIN', jeddahStopover: false,
   trackerOptIn: true,
   name: 'Imran Ali', email: 'imran@example.com', phone: '+370600', channel: 'WHATSAPP', lang: 'en', consent: true,
 };

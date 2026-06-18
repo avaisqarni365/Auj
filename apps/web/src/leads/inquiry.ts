@@ -4,6 +4,8 @@
 
 export type PartyKind = 'SOLO' | 'FAMILY' | 'GROUP';
 export type TransferMode = 'TRAIN' | 'BUS' | 'CAR' | 'FLEXIBLE';
+export type TimeBand = 'MORNING' | 'AFTERNOON' | 'EVENING' | 'FLEXIBLE';
+export type DiningPref = 'TOP_RATED' | 'LOCAL' | 'INTERNATIONAL' | 'NO_PREF';
 export type ReturnFrom = 'MADINAH' | 'JEDDAH';
 export type ContactChannel = 'EMAIL' | 'WHATSAPP' | 'CALL';
 export type InquiryStatus = 'NEW' | 'CONTACTED' | 'QUOTED' | 'CONVERTED' | 'CLOSED';
@@ -22,11 +24,16 @@ export interface InquiryInput {
   makkahZiyarah: string[];
   transferMode: TransferMode;
   transferPrivate: boolean;
+  transferDate?: string;
+  transferTime: TimeBand;
   madinahNights: number;
   madinahHotelBand: string;
   rawdah: boolean;
+  rawdahDay?: string;
   madinahZiyarah: string[];
+  dining: DiningPref;
   returnFrom: ReturnFrom;
+  returnMode: TransferMode;
   jeddahStopover: boolean;
   windowFrom?: string;
   windowTo?: string;

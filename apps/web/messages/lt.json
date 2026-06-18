@@ -532,7 +532,13 @@
       "bus": "Autobusas",
       "car": "Automobilis",
       "flexible": "Lankstu",
-      "private": "Privatus (ne grupinis autobusas)"
+      "private": "Privatus (ne grupinis autobusas)",
+      "when": "Pageidaujama data",
+      "time": "Pageidaujamas laikas",
+      "morning": "Rytas",
+      "afternoon": "Popietė",
+      "evening": "Vakaras",
+      "anytime": "Bet kada"
     },
     "madinah": {
       "title": "Laikas Medinoje",
@@ -540,7 +546,13 @@
       "hotel": "Viešbučio atstumas iki Pranašo mečetės",
       "rawdah": "Noriu aplankyti Rawdah (Riyadh ul-Jannah)",
       "rawdahHint": "Leidimas nemokamas Nusuk programėlėje — padėsime.",
-      "ziyarah": "Ką aplankyti Medinoje"
+      "ziyarah": "Ką aplankyti Medinoje",
+      "rawdahDay": "Pageidaujama Rawdah diena",
+      "dining": "Maitinimo pasirinkimas",
+      "diningTop": "Aukštai vertinami",
+      "diningLocal": "Vietinė",
+      "diningIntl": "Tarptautinė",
+      "diningNone": "Nesvarbu"
     },
     "return": {
       "title": "Grįžimas",
@@ -549,7 +561,8 @@
       "fromJeddah": "Džidos (per Meką)",
       "jeddahStop": "Pridėti 1 d. Džidoje, jei reikia",
       "windowFrom": "Anksčiausia data",
-      "windowTo": "Vėliausia data"
+      "windowTo": "Vėliausia data",
+      "mode": "Grįžimo transportas"
     },
     "contact": {
       "title": "Kaip su jumis susisiekti?",

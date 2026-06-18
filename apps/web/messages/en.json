@@ -532,7 +532,13 @@
       "bus": "Bus",
       "car": "Car",
       "flexible": "Flexible",
-      "private": "Private (not a group coach)"
+      "private": "Private (not a group coach)",
+      "when": "Preferred date",
+      "time": "Preferred time",
+      "morning": "Morning",
+      "afternoon": "Afternoon",
+      "evening": "Evening",
+      "anytime": "Anytime"
     },
     "madinah": {
       "title": "Your time in Madinah",
@@ -540,7 +546,13 @@
       "hotel": "Hotel distance to the Prophet’s Mosque",
       "rawdah": "I want to visit the Rawdah (Riyadh ul-Jannah)",
       "rawdahHint": "The permit is free in the Nusuk app — we will guide you.",
-      "ziyarah": "Places to visit in Madinah"
+      "ziyarah": "Places to visit in Madinah",
+      "rawdahDay": "Preferred Rawdah day",
+      "dining": "Dining preference",
+      "diningTop": "Top-rated",
+      "diningLocal": "Local",
+      "diningIntl": "International",
+      "diningNone": "No preference"
     },
     "return": {
       "title": "Your return",
@@ -549,7 +561,8 @@
       "fromJeddah": "Jeddah (via Makkah)",
       "jeddahStop": "Add a 1-day Jeddah stop if needed",
       "windowFrom": "Earliest date",
-      "windowTo": "Latest date"
+      "windowTo": "Latest date",
+      "mode": "Return transport"
     },
     "contact": {
       "title": "How can we reach you?",
