@@ -33,6 +33,8 @@ jobs:
   deploy:
     needs: gate
     runs-on: ubuntu-latest
+    # Reads the DEPLOY_* secrets from the GitHub Environment named EN_AUJ.
+    environment: EN_AUJ
     steps:
       - name: Guard — require deploy secrets
         id: guard
