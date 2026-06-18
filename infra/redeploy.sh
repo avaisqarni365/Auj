@@ -37,3 +37,27 @@ sleep 5
 CODE="$(curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1:$PORT/" || echo down)"
 echo "redeploy -> HTTP $CODE"
 [ "$CODE" = "200" ] || { echo '!! not healthy — last logs:'; journalctl -u auj -n 20 --no-pager || true; }
+
+echo "==> 4/4 Ensure the domain routes to this app (nginx vhost + TLS; additive, idempotent)"
+DOMAIN="${DOMAIN:-auj.codes-ai.uk}"
+EMAIL="${ACME_EMAIL:-admin@codes-ai.uk}"
+if command -v nginx >/dev/null 2>&1; then
+  # Install/repoint the AUJ vhost to this port. server_name-scoped, so other sites are untouched.
+  sed "s|127\.0\.0\.1:3080|127.0.0.1:$PORT|g" infra/nginx-auj.conf > "/etc/nginx/sites-available/$DOMAIN"
+  ln -sf "/etc/nginx/sites-available/$DOMAIN" "/etc/nginx/sites-enabled/$DOMAIN"
+  if nginx -t 2>/dev/null; then
+    systemctl reload nginx
+    echo "   nginx: $DOMAIN -> 127.0.0.1:$PORT (reloaded)"
+  else
+    echo "!! nginx -t failed — left unchanged (other sites safe)"
+  fi
+  # First-time TLS only (idempotent; never re-issues if a live cert already exists).
+  if command -v certbot >/dev/null 2>&1 && [ ! -d "/etc/letsencrypt/live/$DOMAIN" ]; then
+    certbot --nginx -d "$DOMAIN" --non-interactive --agree-tos -m "$EMAIL" --redirect || \
+      echo "!! certbot failed — site still serves http://$DOMAIN; re-run later"
+    systemctl reload nginx || true
+  fi
+else
+  echo "!! nginx not installed — run infra/deploy-bare.sh once to set up the reverse proxy"
+fi
+echo "Open https://$DOMAIN"
