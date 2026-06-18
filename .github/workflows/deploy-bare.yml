@@ -37,22 +37,26 @@ jobs:
       - name: Guard — require deploy secrets
         id: guard
         run: |
-          if [ -n "${{ secrets.DEPLOY_HOST }}" ] && [ -n "${{ secrets.DEPLOY_SSH_KEY }}" ]; then
+          if [ -n "${{ secrets.DEPLOY_HOST }}" ] && { [ -n "${{ secrets.DEPLOY_SSH_KEY }}" ] || [ -n "${{ secrets.DEPLOY_PASSWORD }}" ]; }; then
             echo "ready=true" >> "$GITHUB_OUTPUT"
           else
-            echo "::notice::Set DEPLOY_HOST + DEPLOY_SSH_KEY secrets to enable auto-deploy. Skipping."
+            echo "::notice::Set DEPLOY_HOST + (DEPLOY_PASSWORD or DEPLOY_SSH_KEY) secrets to enable auto-deploy. Skipping."
             echo "ready=false" >> "$GITHUB_OUTPUT"
           fi
-      - name: Set up SSH
-        if: steps.guard.outputs.ready == 'true'
-        run: |
-          mkdir -p ~/.ssh
-          printf '%s\n' "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/id_deploy
-          chmod 600 ~/.ssh/id_deploy
-          ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
       - name: Redeploy on the server
         if: steps.guard.outputs.ready == 'true'
+        env:
+          SSHPASS: ${{ secrets.DEPLOY_PASSWORD }}
         run: |
-          ssh -i ~/.ssh/id_deploy -o StrictHostKeyChecking=accept-new \
-            "${{ secrets.DEPLOY_USER || 'root' }}@${{ secrets.DEPLOY_HOST }}" \
-            "cd ${{ secrets.DEPLOY_PATH || '/root/auj' }} && bash infra/redeploy.sh"
+          set -e
+          HOST="${{ secrets.DEPLOY_USER || 'root' }}@${{ secrets.DEPLOY_HOST }}"
+          CMD="cd ${{ secrets.DEPLOY_PATH || '/root/auj' }} && bash infra/redeploy.sh"
+          mkdir -p ~/.ssh
+          ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          if [ -n "${{ secrets.DEPLOY_SSH_KEY }}" ]; then
+            printf '%s\n' "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/id_deploy && chmod 600 ~/.ssh/id_deploy
+            ssh -i ~/.ssh/id_deploy -o StrictHostKeyChecking=accept-new "$HOST" "$CMD"
+          else
+            sudo apt-get update -qq && sudo apt-get install -y -qq sshpass
+            sshpass -e ssh -o StrictHostKeyChecking=accept-new "$HOST" "$CMD"
+          fi

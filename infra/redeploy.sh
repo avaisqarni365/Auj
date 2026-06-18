@@ -22,7 +22,15 @@ pnpm install --prod=false --frozen-lockfile || pnpm install --prod=false
 pnpm --filter "@auj/web..." build
 pnpm --filter @auj/web build:next
 
-echo "==> 3/3 Restart service"
-systemctl restart auj
+echo "==> 3/3 Restart service (free the port first — kills any stray AUJ next-server)"
+systemctl stop auj 2>/dev/null || true
+# Kill only AUJ's own Next process (scoped to this repo path) in case one was started outside systemd.
+pkill -f "$REPO_DIR/apps/web" 2>/dev/null || true
+# Free the port if anything AUJ-related still holds it.
+fuser -k "${PORT}/tcp" 2>/dev/null || true
+sleep 2
+systemctl start auj
 sleep 5
-echo "redeploy -> HTTP $(curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1:$PORT/" || echo down)"
+CODE="$(curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1:$PORT/" || echo down)"
+echo "redeploy -> HTTP $CODE"
+[ "$CODE" = "200" ] || { echo '!! not healthy — last logs:'; journalctl -u auj -n 20 --no-pager || true; }
