@@ -137,8 +137,15 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
         </div>
       </section>
 
-      {/* search card (overlapping) */}
-      <div id="search" className="relative z-20 mx-auto -mt-[clamp(88px,9vw,92px)] max-w-5xl px-[clamp(16px,4vw,32px)]">
+      {/* Smart Visit planner — primary widget, overlaps the hero (hero CTA scrolls here) */}
+      <div id="plan" className="relative z-20 mx-auto -mt-[clamp(88px,9vw,92px)] max-w-2xl scroll-mt-24 px-[clamp(16px,4vw,32px)]">
+        <div className="animate-rise rounded-[22px] border border-sand-200 bg-white px-[clamp(6px,1.4vw,16px)] shadow-[0_24px_60px_-24px_rgba(42,38,32,0.34)]">
+          <SmartVisitWizard />
+        </div>
+      </div>
+
+      {/* search card — direct booking, below the planner */}
+      <div id="search" className="relative z-10 mx-auto mt-12 max-w-5xl px-[clamp(16px,4vw,32px)]">
         <div className="animate-rise rounded-[22px] border border-sand-200 bg-white p-[clamp(18px,2.4vw,24px)] shadow-[0_24px_60px_-24px_rgba(42,38,32,0.34)]">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap gap-1 rounded-xl bg-sand-100 p-1">
@@ -218,13 +225,6 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
           ))}
         </div>
       </div>
-
-      {/* Smart Visit planner — embedded wizard (hero "Plan my pilgrimage" scrolls here) */}
-      <section id="plan" className="scroll-mt-24 border-y border-sand-200 bg-sand-50/70">
-        <div className="mx-auto max-w-6xl px-[clamp(16px,4vw,32px)] py-12">
-          <SmartVisitWizard />
-        </div>
-      </section>
 
       {/* why book with AUJ */}
       <Section id="why" title={tl('sections.why.title')} sub={tl('sections.why.sub')}>
