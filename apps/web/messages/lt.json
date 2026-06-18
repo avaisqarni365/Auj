@@ -468,7 +468,8 @@
       "hero": "Pagrindinis blokas",
       "sectionsList": "Skiltys",
       "agentApprovals": "Agentų patvirtinimai"
-    }
+    },
+    "convert": "Sudaryti paketą →"
   },
   "footer": {
     "tagline": "Kad jūsų piligrimystė būtų paprasta, apsaugota ir dvasiškai sutelkta — su pagalba kiekviename žingsnyje.",
@@ -620,6 +621,39 @@
         "Turėkite mažą Zamzam buteliuką ir gerkite vandenį.",
         "Abiejose mečetėse vyresniems ir ribotos judėsenos yra elektriniai vežimėliai.",
         "Leidimams ir e-paslaugoms naudokite Nusuk programėlę."
+      ]
+    },
+    "before": {
+      "title": "Prieš išvykstant",
+      "sub": "Greitas pasiruošimo sąrašas.",
+      "items": [
+        "Pasas galioja 6+ mėn.",
+        "Saudo viza / e. viza sutvarkyta",
+        "Sveikatos patikra ir reikalingi skiepai",
+        "Kelionių ir sveikatos draudimas",
+        "Ihram ir kuklūs drabužiai",
+        "Patogi, lengvai nusiaunama avalynė",
+        "Vietinė SIM / eSIM",
+        "Įdiegta Nusuk programėlė (leidimai ir Rawdah)",
+        "Išsaugoti pagalbos kontaktai",
+        "Reikia pagalbos? Kreipkitės į AUJ."
+      ]
+    },
+    "dining": {
+      "title": "Maitinimas netoliese",
+      "sub": "Atverkite žemėlapį aukštai vertinamoms halal vietoms.",
+      "makkah": "Restoranai prie Haramo",
+      "madinah": "Restoranai prie Pranašo mečetės"
+    },
+    "journey": {
+      "title": "Jūsų kelionė trumpai",
+      "sub": "Penki paprasti etapai.",
+      "stages": [
+        "Prieš išvykstant — dokumentai, daiktai, leidimai",
+        "Mekoje — Umra, maldos, zijara",
+        "Į Mediną — Haramain traukinys",
+        "Medinoje — Rawdah, maldos, zijara",
+        "Grįžimas — iš Medinos ar Džidos, namo"
       ]
     }
   }

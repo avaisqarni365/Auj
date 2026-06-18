@@ -59,10 +59,17 @@ export function Companion({ makkah, madinah }: { makkah: PrayerDay | null; madin
   const day = t.raw('day.items') as string[];
   const transport = t.raw('transport.items') as string[];
   const tips = t.raw('tips.items') as string[];
+  const before = t.raw('before.items') as string[];
+  const stages = t.raw('journey.stages') as string[];
+  const mapsUrl = (q: string): string => `https://www.google.com/maps/search/${encodeURIComponent(q)}`;
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
       <h1 className="font-serif text-[clamp(1.6rem,4vw,2.25rem)] font-semibold">{t('title')}</h1>
       <p className="mt-2 max-w-[60ch] text-sand-500">{t('subtitle')}</p>
+
+      <Section icon="🧭" title={t('journey.title')} sub={t('journey.sub')}>
+        <List items={stages} />
+      </Section>
 
       <Section icon="🕌" title={t('prayer.title')} sub={t('prayer.sub')}>
         <div className="grid gap-3">
@@ -74,6 +81,10 @@ export function Companion({ makkah, madinah }: { makkah: PrayerDay | null; madin
 
       <Section icon="🌅" title={t('day.title')} sub={t('day.sub')}>
         <List items={day} />
+      </Section>
+
+      <Section icon="🧳" title={t('before.title')} sub={t('before.sub')}>
+        <List items={before} />
       </Section>
 
       <Section icon="🚑" title={t('safety.title')} sub={t('safety.sub')}>
@@ -91,6 +102,20 @@ export function Companion({ makkah, madinah }: { makkah: PrayerDay | null; madin
 
       <Section icon="🚄" title={t('transport.title')} sub={t('transport.sub')}>
         <List items={transport} />
+      </Section>
+
+      <Section icon="🍽️" title={t('dining.title')} sub={t('dining.sub')}>
+        <div className="grid gap-2.5 sm:grid-cols-2">
+          {[
+            { label: t('dining.makkah'), q: 'restaurants near Masjid al-Haram Makkah' },
+            { label: t('dining.madinah'), q: "restaurants near Al-Masjid an-Nabawi Madinah" },
+          ].map((d) => (
+            <a key={d.q} href={mapsUrl(d.q)} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between rounded-xl border border-sand-200 bg-white p-3.5 text-[13.5px] font-semibold text-sand-700 transition-[transform,border-color] duration-fast hover:border-green-700 hover:text-green-800 active:scale-[0.99]">
+              <span>📍 {d.label}</span>
+              <span className="text-sand-300">↗</span>
+            </a>
+          ))}
+        </div>
       </Section>
 
       <Section icon="💡" title={t('tips.title')}>

@@ -468,7 +468,8 @@
       "hero": "Hero",
       "sectionsList": "Sections",
       "agentApprovals": "Agent approvals"
-    }
+    },
+    "convert": "Build package →"
   },
   "footer": {
     "tagline": "Making your pilgrimage simple, protected and spiritually focused — with dedicated support at every step.",
@@ -620,6 +621,39 @@
         "Carry a small Zamzam bottle and stay hydrated.",
         "Electric carts are available at both mosques for the elderly and limited mobility.",
         "Use the Nusuk app for permits and e-services."
+      ]
+    },
+    "before": {
+      "title": "Before you go",
+      "sub": "A quick readiness checklist.",
+      "items": [
+        "Passport valid 6+ months",
+        "Saudi visa / e-Visa sorted",
+        "Health checks & any required vaccinations",
+        "Travel & health insurance",
+        "Ihram and modest clothing",
+        "Comfortable, easy-to-remove footwear",
+        "Local SIM / eSIM ready",
+        "Nusuk app installed (permits & Rawdah)",
+        "Emergency contacts saved",
+        "Need help with any of these? Ask AUJ."
+      ]
+    },
+    "dining": {
+      "title": "Dining near you",
+      "sub": "Open maps for highly-rated halal options.",
+      "makkah": "Restaurants near the Haram",
+      "madinah": "Restaurants near the Prophet’s Mosque"
+    },
+    "journey": {
+      "title": "Your journey at a glance",
+      "sub": "Five simple stages.",
+      "stages": [
+        "Before you go — documents, packing, permits",
+        "In Makkah — Umrah, prayers, ziyarah",
+        "To Madinah — the Haramain train",
+        "In Madinah — Rawdah, prayers, ziyarah",
+        "Return — from Madinah or Jeddah, then home"
       ]
     }
   }

@@ -297,14 +297,22 @@ function Leads() {
                     {r.country}{r.city ? `, ${r.city}` : ''} · {r.adults}+{r.children}+{r.infants} ({r.partyKind}) · Makkah {r.makkahNights}n · Madinah {r.madinahNights}n{r.rawdah ? ' · Rawdah' : ''} · {r.transferMode} · return {r.returnFrom}
                   </div>
                 </div>
-                <select
-                  value={r.status}
-                  disabled={busy === r.id}
-                  onChange={(e) => setStatus(r.id, e.target.value as InquiryStatus)}
-                  className="rounded-lg border-[1.5px] border-sand-300 bg-white px-2.5 py-1.5 text-[12.5px] font-semibold"
-                >
-                  {INQUIRY_STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
-                </select>
+                <div className="flex items-center gap-2">
+                  <a
+                    href={`/book?city=MAKKAH&pax=${Math.min(49, Math.max(1, r.adults + r.children))}${r.windowFrom ? `&checkIn=${r.windowFrom}` : ''}${r.windowTo ? `&checkOut=${r.windowTo}` : ''}`}
+                    className="whitespace-nowrap rounded-lg bg-green-800 px-3 py-1.5 text-[12.5px] font-semibold text-white hover:bg-green-700"
+                  >
+                    {t('convert')}
+                  </a>
+                  <select
+                    value={r.status}
+                    disabled={busy === r.id}
+                    onChange={(e) => setStatus(r.id, e.target.value as InquiryStatus)}
+                    className="rounded-lg border-[1.5px] border-sand-300 bg-white px-2.5 py-1.5 text-[12.5px] font-semibold"
+                  >
+                    {INQUIRY_STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
+                  </select>
+                </div>
               </div>
             </Card>
           ))}
