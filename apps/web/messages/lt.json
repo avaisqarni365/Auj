@@ -422,7 +422,8 @@
       "documents": "Dokumentai",
       "support": "Pagalba",
       "content": "Pradinio puslapio turinys",
-      "users": "Naudotojai ir rolės"
+      "users": "Naudotojai ir rolės",
+      "leads": "Išmaniojo vizito užklausos"
     },
     "more": {
       "payments": "Mokėjimai",
@@ -449,7 +450,9 @@
       "supportKicker": "PAGALBA",
       "supportTitle": "Klientų aptarnavimas",
       "usersKicker": "PRIEIGA",
-      "usersTitle": "Naudotojai ir rolės"
+      "usersTitle": "Naudotojai ir rolės",
+      "leadsKicker": "UŽKLAUSOS",
+      "leadsTitle": "Išmaniojo vizito užklausos"
     },
     "sections": {
       "recentBookings": "Naujausi užsakymai",
@@ -490,5 +493,80 @@
     "getInTouch": "Susisiekite",
     "legal": "AUJ yra licencijuotas ES kelionių organizatorius ir veikia kaip paslaugų teikėjo agentas kiekvienam užsakymui; jūsų sutartis sudaroma su tuo teikėju, nebent nurodyta kitaip. Tinkami paketai apdrausti nemokumo apsaugos pažymėjimu pagal ES kelionių paketų direktyvą, išduodamu prieš apmokėjimą. Taikomą apsaugą rasite užsakymo sąlygose.",
     "rights": "© 2026 AUJ. Visos teisės saugomos."
+  },
+  "smartvisit": {
+    "title": "Išmaniojo vizito planuoklė",
+    "step": "Žingsnis {n} iš {total}",
+    "back": "Atgal",
+    "next": "Toliau",
+    "submit": "Siųsti užklausą",
+    "submitting": "Siunčiama…",
+    "residence": {
+      "title": "Iš kur keliaujate?",
+      "country": "Šalis",
+      "city": "Miestas (nebūtina)",
+      "airport": "Artimiausias oro uostas"
+    },
+    "party": {
+      "title": "Kas keliauja?",
+      "adults": "Suaugę",
+      "children": "Vaikai",
+      "infants": "Kūdikiai",
+      "kind": "Keliaujate kaip",
+      "solo": "Vienas",
+      "family": "Šeima",
+      "group": "Grupė"
+    },
+    "makkah": {
+      "title": "Laikas Mekoje",
+      "nights": "Naktys Mekoje",
+      "hotel": "Viešbučio atstumas iki Haramo",
+      "ziyarah": "Ką aplankyti Mekoje"
+    },
+    "transfer": {
+      "title": "Kelionė į Mediną",
+      "mode": "Kaip keliausite?",
+      "train": "Traukinys",
+      "bus": "Autobusas",
+      "car": "Automobilis",
+      "flexible": "Lankstu",
+      "private": "Privatus (ne grupinis autobusas)"
+    },
+    "madinah": {
+      "title": "Laikas Medinoje",
+      "nights": "Naktys Medinoje",
+      "hotel": "Viešbučio atstumas iki Pranašo mečetės",
+      "rawdah": "Noriu aplankyti Rawdah (Riyadh ul-Jannah)",
+      "rawdahHint": "Leidimas nemokamas Nusuk programėlėje — padėsime.",
+      "ziyarah": "Ką aplankyti Medinoje"
+    },
+    "return": {
+      "title": "Grįžimas",
+      "from": "Skristi namo iš",
+      "fromMadinah": "Medinos",
+      "fromJeddah": "Džidos (per Meką)",
+      "jeddahStop": "Pridėti 1 d. Džidoje, jei reikia",
+      "windowFrom": "Anksčiausia data",
+      "windowTo": "Vėliausia data"
+    },
+    "contact": {
+      "title": "Kaip su jumis susisiekti?",
+      "name": "Vardas",
+      "email": "El. paštas",
+      "phone": "Telefonas (nebūtina)",
+      "channel": "Patogiausias būdas",
+      "whatsapp": "WhatsApp",
+      "emailC": "El. paštas",
+      "call": "Skambutis",
+      "tracker": "Informuokite mane kasdien",
+      "consent": "Sutinku, kad AUJ susisiektų dėl mano kelionės."
+    },
+    "done": {
+      "title": "Užklausa gauta!",
+      "body": "Mūsų komanda netrukus atsiųs pritaikytus paketus.",
+      "ref": "Numeris",
+      "book": "Arba sudaryti paketą dabar →",
+      "home": "Į pradžią"
+    }
   }
 }

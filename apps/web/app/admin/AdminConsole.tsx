@@ -11,6 +11,8 @@ import { formatMoney } from '../../src/currency';
 import { approveAgentAction, listAgentsAction } from '../../src/auth/admin-actions';
 import { listAllTicketsAction, setTicketStatusAction, staffReplyAction } from '../../src/support/admin-actions';
 import { listDocumentsAction, listSpecialRequestsAction, setRequestStatusAction, verifyDocumentAction, type DocRow, type RequestGroup } from '../../src/book/admin-actions';
+import { listInquiriesAction, setInquiryStatusAction } from '../../src/leads/actions';
+import { INQUIRY_STATUSES, type Inquiry, type InquiryStatus } from '../../src/leads/inquiry';
 import {
   ADMIN_KPIS,
   CMS_SECTIONS,
@@ -25,10 +27,11 @@ import {
   type ProviderStatus,
 } from '../../src/admin-content';
 
-type View = 'overview' | 'pilgrims' | 'providers' | 'requests' | 'documents' | 'content' | 'users' | 'support';
+type View = 'overview' | 'leads' | 'pilgrims' | 'providers' | 'requests' | 'documents' | 'content' | 'users' | 'support';
 
 const NAV: Array<{ key: View; icon: string; badge?: string }> = [
   { key: 'overview', icon: '▦' },
+  { key: 'leads', icon: '📨' },
   { key: 'pilgrims', icon: '👥', badge: '1.3k' },
   { key: 'providers', icon: '🔌' },
   { key: 'requests', icon: '🧩' },
@@ -117,6 +120,8 @@ export function AdminConsole() {
               <Profile pilgrim={selected} onBack={() => setSelected(null)} />
             ) : view === 'overview' ? (
               <Overview onViewAll={() => go('pilgrims')} />
+            ) : view === 'leads' ? (
+              <Leads />
             ) : view === 'pilgrims' ? (
               <Pilgrims onSelect={setSelected} />
             ) : view === 'providers' ? (
@@ -247,6 +252,64 @@ function Overview({ onViewAll }: { onViewAll: () => void }) {
           </Card>
         </div>
       </div>
+    </>
+  );
+}
+
+function Leads() {
+  const t = useTranslations('admin');
+  const [rows, setRows] = useState<Inquiry[]>([]);
+  const [busy, setBusy] = useState<string | null>(null);
+  const [err, setErr] = useState<string>();
+  useEffect(() => {
+    void listInquiriesAction()
+      .then(setRows)
+      .catch((e: unknown) => setErr(e instanceof Error ? e.message : 'Failed to load leads'));
+  }, []);
+  const setStatus = (id: string, status: InquiryStatus): void => {
+    setBusy(id);
+    void setInquiryStatusAction(id, status)
+      .then(setRows)
+      .catch((e: unknown) => setErr(e instanceof Error ? e.message : 'Update failed'))
+      .finally(() => setBusy(null));
+  };
+  const newCount = rows.filter((r) => r.status === 'NEW').length;
+  return (
+    <>
+      <PageHead kicker={t('views.leadsKicker')} title={t('views.leadsTitle')} />
+      {err ? <p className="mb-3 text-[13px] text-danger-fg">{err}</p> : null}
+      <div className="mb-4 text-[13px] text-sand-500">
+        <strong className="text-sand-ink">{newCount}</strong> new · {rows.length} total
+      </div>
+      {rows.length === 0 ? (
+        <Card className="p-6 text-center text-sm text-sand-500">No Smart Visit inquiries yet.</Card>
+      ) : (
+        <div className="grid gap-3">
+          {rows.map((r) => (
+            <Card key={r.id} className="p-4">
+              <div className="flex flex-wrap items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <div className="font-mono text-[13px] font-semibold text-accent-600">{r.ref}</div>
+                  <div className="font-semibold">
+                    {r.name} <span className="font-normal text-sand-500">· {r.email}{r.phone ? ` · ${r.phone}` : ''}</span>
+                  </div>
+                  <div className="text-[12px] text-sand-500">
+                    {r.country}{r.city ? `, ${r.city}` : ''} · {r.adults}+{r.children}+{r.infants} ({r.partyKind}) · Makkah {r.makkahNights}n · Madinah {r.madinahNights}n{r.rawdah ? ' · Rawdah' : ''} · {r.transferMode} · return {r.returnFrom}
+                  </div>
+                </div>
+                <select
+                  value={r.status}
+                  disabled={busy === r.id}
+                  onChange={(e) => setStatus(r.id, e.target.value as InquiryStatus)}
+                  className="rounded-lg border-[1.5px] border-sand-300 bg-white px-2.5 py-1.5 text-[12.5px] font-semibold"
+                >
+                  {INQUIRY_STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
+                </select>
+              </div>
+            </Card>
+          ))}
+        </div>
+      )}
     </>
   );
 }

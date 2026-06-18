@@ -93,9 +93,9 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
               {t('heroSubtitle')}
             </p>
             <div className="mb-10 flex flex-wrap items-center gap-3">
-              <a href="#search" className="inline-flex items-center gap-2 rounded-xl bg-sand-50 px-6 py-3.5 text-[15.5px] font-semibold text-green-900 shadow-[0_10px_28px_rgba(7,48,30,0.4)] transition-[transform,background-color] duration-fast hover:bg-white active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">
+              <Link href="/plan" className="inline-flex items-center gap-2 rounded-xl bg-sand-50 px-6 py-3.5 text-[15.5px] font-semibold text-green-900 shadow-[0_10px_28px_rgba(7,48,30,0.4)] transition-[transform,background-color] duration-fast hover:bg-white active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">
                 {t('planPilgrimage')}
-              </a>
+              </Link>
               <a href="#how" className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-5 py-3.5 text-[15.5px] font-semibold transition-[transform,background-color] duration-fast hover:bg-white/15 active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">
                 {t('howItWorks')}
               </a>

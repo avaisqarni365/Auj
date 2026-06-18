@@ -422,7 +422,8 @@
       "documents": "Documents",
       "support": "Support",
       "content": "Landing content",
-      "users": "Users & roles"
+      "users": "Users & roles",
+      "leads": "Smart Visit leads"
     },
     "more": {
       "payments": "Payments",
@@ -449,7 +450,9 @@
       "supportKicker": "SUPPORT",
       "supportTitle": "Customer support",
       "usersKicker": "ACCESS",
-      "usersTitle": "Users & roles"
+      "usersTitle": "Users & roles",
+      "leadsKicker": "LEADS",
+      "leadsTitle": "Smart Visit inquiries"
     },
     "sections": {
       "recentBookings": "Recent bookings",
@@ -490,5 +493,80 @@
     "getInTouch": "Get in touch",
     "legal": "AUJ is a licensed EU tour operator and acts as agent for the service provider on each booking; your contract is with that provider except where stated otherwise. Eligible packages are covered by an insolvency-protection certificate under the EU Package Travel Directive, issued before you pay. See your booking conditions for the protection that applies.",
     "rights": "© 2026 AUJ. All rights reserved."
+  },
+  "smartvisit": {
+    "title": "Smart Visit planner",
+    "step": "Step {n} of {total}",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Send my inquiry",
+    "submitting": "Sending…",
+    "residence": {
+      "title": "Where do you start from?",
+      "country": "Country",
+      "city": "City (optional)",
+      "airport": "Nearest airport"
+    },
+    "party": {
+      "title": "Who is travelling?",
+      "adults": "Adults",
+      "children": "Children",
+      "infants": "Infants",
+      "kind": "Travelling as",
+      "solo": "Solo",
+      "family": "Family",
+      "group": "Group"
+    },
+    "makkah": {
+      "title": "Your time in Makkah",
+      "nights": "Nights in Makkah",
+      "hotel": "Hotel distance to the Haram",
+      "ziyarah": "Places to visit in Makkah"
+    },
+    "transfer": {
+      "title": "Travel to Madinah",
+      "mode": "How will you travel?",
+      "train": "Train",
+      "bus": "Bus",
+      "car": "Car",
+      "flexible": "Flexible",
+      "private": "Private (not a group coach)"
+    },
+    "madinah": {
+      "title": "Your time in Madinah",
+      "nights": "Nights in Madinah",
+      "hotel": "Hotel distance to the Prophet’s Mosque",
+      "rawdah": "I want to visit the Rawdah (Riyadh ul-Jannah)",
+      "rawdahHint": "The permit is free in the Nusuk app — we will guide you.",
+      "ziyarah": "Places to visit in Madinah"
+    },
+    "return": {
+      "title": "Your return",
+      "from": "Fly home from",
+      "fromMadinah": "Madinah",
+      "fromJeddah": "Jeddah (via Makkah)",
+      "jeddahStop": "Add a 1-day Jeddah stop if needed",
+      "windowFrom": "Earliest date",
+      "windowTo": "Latest date"
+    },
+    "contact": {
+      "title": "How can we reach you?",
+      "name": "Your name",
+      "email": "Email",
+      "phone": "Phone (optional)",
+      "channel": "Best way to reach you",
+      "whatsapp": "WhatsApp",
+      "emailC": "Email",
+      "call": "Call",
+      "tracker": "Keep me updated day-by-day",
+      "consent": "I agree to be contacted by AUJ about my pilgrimage."
+    },
+    "done": {
+      "title": "Your inquiry is in!",
+      "body": "Our team will send you tailored packages shortly.",
+      "ref": "Reference",
+      "book": "Or build a package now →",
+      "home": "Back to home"
+    }
   }
 }
