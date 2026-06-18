@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { createInquiry, listInquiries, setInquiryStatus, type InquiryInput } from './inquiry';
+import { InMemoryLeads } from './store';
+import type { InquiryInput } from './inquiry';
 
 const input: InquiryInput = {
   country: 'LT', city: 'Vilnius', departureAirport: 'VNO',
@@ -12,19 +13,19 @@ const input: InquiryInput = {
   name: 'Imran Ali', email: 'imran@example.com', phone: '+370600', channel: 'WHATSAPP', lang: 'en', consent: true,
 };
 
-describe('Smart Visit inquiry store', () => {
-  it('creates a lead with a ref + NEW status, lists it, and advances status', () => {
-    const created = createInquiry(input, '2026-06-18T10:00:00Z');
+describe('Smart Visit leads store (in-memory)', () => {
+  it('creates a lead with a ref + NEW status, lists it, and advances status', async () => {
+    const store = new InMemoryLeads();
+    const created = await store.create(input);
     expect(created.ref).toMatch(/^INQ-[0-9A-F]{4}$/);
     expect(created.status).toBe('NEW');
     expect(created.name).toBe('Imran Ali');
 
-    const listed = listInquiries().find((i) => i.id === created.id);
-    expect(listed).toBeDefined();
+    const listed = (await store.list()).find((i) => i.id === created.id);
     expect(listed?.makkahZiyarah).toEqual(['Mina']);
 
-    const updated = setInquiryStatus(created.id, 'CONTACTED');
+    const updated = await store.setStatus(created.id, 'CONTACTED');
     expect(updated?.status).toBe('CONTACTED');
-    expect(setInquiryStatus('no-such-id', 'QUOTED')).toBeUndefined();
+    expect(await store.setStatus('no-such-id', 'QUOTED')).toBeUndefined();
   });
 });

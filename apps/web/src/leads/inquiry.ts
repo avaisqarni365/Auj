@@ -47,31 +47,13 @@ export interface Inquiry extends InquiryInput {
   status: InquiryStatus;
 }
 
-type Store = Map<string, Inquiry>;
-const KEY = Symbol.for('auj.leads.store');
-const g = globalThis as unknown as { [KEY]?: Store };
-const store: Store = (g[KEY] ??= new Map());
-
 const rid = (): string => {
   const u = (globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.round(Math.random() * 1e6)}`).replace(/-/g, '');
   return u.slice(0, 8);
 };
 
-export function createInquiry(input: InquiryInput, now: string): Inquiry {
+/** Pure constructor — used by both the in-memory and Postgres leads stores (see store.ts). */
+export function buildInquiry(input: InquiryInput, now: string): Inquiry {
   const id = rid();
-  const inquiry: Inquiry = { ...input, id, ref: `INQ-${id.slice(0, 4).toUpperCase()}`, createdAt: now, status: 'NEW' };
-  store.set(id, inquiry);
-  return inquiry;
-}
-
-export function listInquiries(): Inquiry[] {
-  return [...store.values()].sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
-}
-
-export function setInquiryStatus(id: string, status: InquiryStatus): Inquiry | undefined {
-  const i = store.get(id);
-  if (!i) return undefined;
-  i.status = status;
-  store.set(id, i);
-  return i;
+  return { ...input, id, ref: `INQ-${id.slice(0, 4).toUpperCase()}`, createdAt: now, status: 'NEW' };
 }

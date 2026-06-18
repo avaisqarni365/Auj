@@ -37,6 +37,9 @@ echo "==> 4/6 systemd service (auj) on 127.0.0.1:$PORT"
 PNPM_BIN="$(command -v pnpm)"
 # Ensure infra/.env exists so email + other settings can be picked up by the service.
 [ -f infra/.env ] || cp infra/.env.example infra/.env
+# Bare (no-Docker) can't reach the Docker 'postgres' host — comment out that default so the app
+# runs in-memory until infra/setup-postgres.sh points DATABASE_URL at a host Postgres (localhost).
+sed -i 's|^DATABASE_URL=postgresql://[^@]*@postgres:|# &|' infra/.env 2>/dev/null || true
 cat > /etc/systemd/system/auj.service <<UNIT
 [Unit]
 Description=AUJ web (Next.js, no Docker)

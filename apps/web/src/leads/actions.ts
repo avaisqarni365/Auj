@@ -2,18 +2,12 @@
 
 import { requireRole } from '../auth/session';
 import { getNotifier } from '../notifications/notifier';
-import {
-  createInquiry,
-  listInquiries,
-  setInquiryStatus,
-  type Inquiry,
-  type InquiryInput,
-  type InquiryStatus,
-} from './inquiry';
+import type { Inquiry, InquiryInput, InquiryStatus } from './inquiry';
+import { getLeads } from './store';
 
 /** Public — anyone can submit a Smart Visit inquiry (lead). No login required. */
 export async function submitInquiryAction(input: InquiryInput): Promise<{ ref: string }> {
-  const inquiry = createInquiry(input, new Date().toISOString());
+  const inquiry = await (await getLeads()).create(input);
   // Best-effort: notify the AUJ team so they can follow up with a package (never fail the submit).
   try {
     await getNotifier().send({
@@ -40,12 +34,13 @@ export async function submitInquiryAction(input: InquiryInput): Promise<{ ref: s
 /** Admin — list every inquiry. */
 export async function listInquiriesAction(): Promise<Inquiry[]> {
   await requireRole(['ADMIN'], '/admin');
-  return listInquiries();
+  return (await getLeads()).list();
 }
 
 /** Admin — move a lead through the pipeline. */
 export async function setInquiryStatusAction(id: string, status: InquiryStatus): Promise<Inquiry[]> {
   await requireRole(['ADMIN'], '/admin');
-  setInquiryStatus(id, status);
-  return listInquiries();
+  const leads = await getLeads();
+  await leads.setStatus(id, status);
+  return leads.list();
 }
