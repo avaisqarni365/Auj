@@ -20,8 +20,19 @@ git reset --hard origin/main
 # Bare host can't reach a Docker '@postgres' DATABASE_URL — neutralize it (localhost stays).
 sed -i 's|^DATABASE_URL=postgresql://[^@]*@postgres:|# &|' infra/.env 2>/dev/null || true
 
-# Ensure PostgreSQL persistence the first time (idempotent; the marker keeps later deploys fast).
-# Without this the app runs in-memory and loses data (bookings, leads, content edits) on restart.
+# A remote/managed Postgres URL (passed from the deploy secret AUJ_DATABASE_URL) takes precedence
+# and means we never install Postgres locally. Rewrite the DATABASE_URL line safely (no sed escaping).
+if [ -n "${AUJ_DATABASE_URL:-}" ]; then
+  [ -f infra/.env ] || cp infra/.env.example infra/.env
+  grep -v '^DATABASE_URL=' infra/.env > infra/.env.tmp 2>/dev/null || true
+  echo "DATABASE_URL=${AUJ_DATABASE_URL}" >> infra/.env.tmp
+  mv infra/.env.tmp infra/.env
+  touch infra/.postgres-ready
+  echo "==> Using remote DATABASE_URL from deploy secret"
+fi
+
+# Otherwise, ensure a local PostgreSQL the first time (idempotent; the marker keeps later deploys fast).
+# Without persistence the app runs in-memory and loses data (bookings, leads, content edits) on restart.
 if [ ! -f infra/.postgres-ready ]; then
   echo "==> Ensuring PostgreSQL (first deploy)"
   if bash infra/setup-postgres.sh; then touch infra/.postgres-ready; else echo "!! postgres setup failed — app continues in-memory; will retry next deploy"; fi
