@@ -38,11 +38,11 @@ export function SiteFooter() {
           <div>
             <Link href="/" className="inline-flex items-center rounded-xl focus-visible:outline-none focus-visible:shadow-focus" aria-label="AUJ Travelers — home">
               <img
-                src="/img/brand/auj-logo.webp"
+                src="/img/brand/auj-logo-simple.webp"
                 alt="AUJ Travelers"
-                width={80}
-                height={80}
-                className="h-20 w-20 rounded-xl bg-white/95 object-contain p-1"
+                width={96}
+                height={96}
+                className="h-24 w-auto rounded-xl bg-white/95 object-contain p-1.5"
               />
             </Link>
             <p className="mt-3 max-w-[42ch] text-[13px] leading-relaxed">{t('tagline')}</p>

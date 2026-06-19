@@ -29,9 +29,9 @@ export function SiteHeader({ user }: { user?: PublicUser }) {
           <img
             src="/img/brand/auj-logo-simple.webp"
             alt="AUJ Travelers"
-            width={64}
-            height={64}
-            className="h-16 w-auto object-contain"
+            width={88}
+            height={88}
+            className="h-[72px] w-auto object-contain"
           />
         </Link>
         <nav className="hidden flex-wrap items-center gap-0.5 md:flex">
