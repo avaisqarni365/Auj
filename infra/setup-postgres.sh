@@ -14,6 +14,13 @@ DB="${PGDATABASE:-auj}"
 DBUSER="${PGUSER:-auj}"
 PORT="${WEB_PORT:-3080}"
 
+# Run a command as the postgres user without interactive sudo (sudo may be disabled; we're root).
+as_postgres() {
+  if command -v runuser >/dev/null 2>&1; then runuser -u postgres -- "$@";
+  elif command -v sudo >/dev/null 2>&1; then sudo -u postgres "$@";
+  else su -s /bin/sh postgres -c "$(printf '%q ' "$@")"; fi
+}
+
 echo "==> 1/4 Install PostgreSQL"
 command -v psql >/dev/null 2>&1 || { apt-get update && apt-get install -y postgresql; }
 systemctl enable --now postgresql
@@ -23,7 +30,7 @@ echo "==> 2/4 Create database + user (idempotent)"
 # Reuse the existing password if DATABASE_URL is already configured, else generate a new one.
 EXISTING="$(grep -E '^DATABASE_URL=' infra/.env 2>/dev/null | sed -E 's#.*://[^:]+:([^@]+)@.*#\1#')"
 PASS="${EXISTING:-$(openssl rand -hex 16)}"
-sudo -u postgres psql -v ON_ERROR_STOP=1 <<SQL
+as_postgres psql -v ON_ERROR_STOP=1 <<SQL
 DO \$\$ BEGIN
   IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname='${DBUSER}') THEN
     CREATE ROLE ${DBUSER} LOGIN PASSWORD '${PASS}';
@@ -32,8 +39,8 @@ DO \$\$ BEGIN
   END IF;
 END \$\$;
 SQL
-sudo -u postgres psql -tAc "SELECT 1 FROM pg_database WHERE datname='${DB}'" | grep -q 1 \
-  || sudo -u postgres createdb -O "${DBUSER}" "${DB}"
+as_postgres psql -tAc "SELECT 1 FROM pg_database WHERE datname='${DB}'" | grep -q 1 \
+  || as_postgres createdb -O "${DBUSER}" "${DB}"
 
 echo "==> 3/4 Wire DATABASE_URL into infra/.env"
 URL="postgresql://${DBUSER}:${PASS}@localhost:5432/${DB}"

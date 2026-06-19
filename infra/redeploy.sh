@@ -20,6 +20,13 @@ git reset --hard origin/main
 # Bare host can't reach a Docker '@postgres' DATABASE_URL — neutralize it (localhost stays).
 sed -i 's|^DATABASE_URL=postgresql://[^@]*@postgres:|# &|' infra/.env 2>/dev/null || true
 
+# Ensure PostgreSQL persistence the first time (idempotent; the marker keeps later deploys fast).
+# Without this the app runs in-memory and loses data (bookings, leads, content edits) on restart.
+if [ ! -f infra/.postgres-ready ]; then
+  echo "==> Ensuring PostgreSQL (first deploy)"
+  if bash infra/setup-postgres.sh; then touch infra/.postgres-ready; else echo "!! postgres setup failed — app continues in-memory; will retry next deploy"; fi
+fi
+
 echo "==> 2/3 Build (workspace deps first, then the app)"
 pnpm install --prod=false --frozen-lockfile || pnpm install --prod=false
 pnpm --filter "@auj/web..." build
