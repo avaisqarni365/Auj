@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
-import { Logo } from '@auj/ui';
 import type { PublicUser } from '@auj/auth';
 import { AccountMenu } from '../auth/AccountMenu';
 import { LocaleSwitcher } from '../i18n/LocaleSwitcher';
@@ -26,12 +25,14 @@ export function SiteHeader({ user }: { user?: PublicUser }) {
   return (
     <header className="sticky top-0 z-50 border-b border-sand-200 bg-sand-50/85 backdrop-blur">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-[clamp(16px,4vw,32px)] py-3">
-        <Link href="/" className="flex items-center gap-2.5 rounded-lg focus-visible:outline-none focus-visible:shadow-focus">
-          <Logo size={38} />
-          <div>
-            <div className="font-serif text-xl font-semibold leading-none tracking-[0.05em] text-sand-ink">AUJ</div>
-            <div className="mt-0.5 text-[10.5px] uppercase tracking-[0.14em] text-sand-500">Pilgrimage &amp; travel</div>
-          </div>
+        <Link href="/" className="flex items-center rounded-lg focus-visible:outline-none focus-visible:shadow-focus" aria-label="AUJ Travelers — home">
+          <img
+            src="/img/brand/auj-logo.png"
+            alt="AUJ Travelers"
+            width={48}
+            height={48}
+            className="h-12 w-12 rounded-lg object-contain"
+          />
         </Link>
         <nav className="hidden flex-wrap items-center gap-0.5 md:flex">
           {NAV_LINKS.map((n) => (

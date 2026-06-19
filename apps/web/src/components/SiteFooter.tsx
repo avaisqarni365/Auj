@@ -3,7 +3,6 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { Logo } from '@auj/ui';
 import { AUJ_CONTACT, PAYMENT_METHODS, SOCIALS } from '../content';
 
 // Shared site footer — identical on every page. AUJ's own identity (EU operator, insolvency
@@ -37,9 +36,14 @@ export function SiteFooter() {
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1.4fr]">
           {/* brand + protection + social */}
           <div>
-            <Link href="/" className="inline-flex items-center gap-2.5 rounded-lg focus-visible:outline-none focus-visible:shadow-focus">
-              <Logo size={36} variant="onDark" />
-              <span className="font-serif text-lg font-semibold tracking-[0.05em] text-white">AUJ</span>
+            <Link href="/" className="inline-flex items-center rounded-xl focus-visible:outline-none focus-visible:shadow-focus" aria-label="AUJ Travelers — home">
+              <img
+                src="/img/brand/auj-logo.png"
+                alt="AUJ Travelers"
+                width={80}
+                height={80}
+                className="h-20 w-20 rounded-xl bg-white/95 object-contain p-1"
+              />
             </Link>
             <p className="mt-3 max-w-[42ch] text-[13px] leading-relaxed">{t('tagline')}</p>
             <div className="mt-5 rounded-xl border border-white/10 bg-white/5 p-3.5">
