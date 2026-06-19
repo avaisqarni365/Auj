@@ -79,61 +79,50 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
       {/* nav */}
       <SiteHeader user={user} />
 
-      {/* hero — white background, big image on top, headline + subtitle below (high contrast) */}
-      <section className="bg-white px-[clamp(16px,4vw,32px)] pb-[clamp(36px,5vw,64px)] pt-[clamp(20px,3vw,36px)]">
-        <div className="mx-auto max-w-6xl">
-          {/* big image + floating live-status / price cards */}
-          <div className="relative animate-fade-in">
-            <div className="relative h-[clamp(300px,52vw,600px)] overflow-hidden rounded-[28px] border border-sand-200 shadow-[0_40px_80px_-34px_rgba(5,28,18,0.45)]">
-              <Scene name="makkah" priority className="animate-kenburns absolute inset-0 h-full w-full object-cover" />
-              <span className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-green-950/35 to-transparent" />
-            </div>
-            <div className="animate-float absolute -left-1 top-5 w-[232px] max-w-[62%] rounded-2xl bg-white p-4 text-sand-ink shadow-[0_20px_44px_rgba(5,28,18,0.28)]">
-              <div className="mb-2.5 flex items-center justify-between">
-                <span className="text-[11px] font-bold tracking-wider text-sand-500">LIVE VISA STATUS</span>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-warning-bg px-2.5 py-0.5 text-[11px] font-semibold text-warning-fg">
-                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-warning" />In progress
-                </span>
-              </div>
-              <div className="font-mono text-[13px] font-medium text-accent-600">BRN-26-VNO-00481</div>
-              <div className="mt-1 text-[12.5px] text-sand-700">e-Visa submitted to MOFA · est. 2–3 days</div>
-            </div>
-            <div className="animate-float absolute -right-1 bottom-6 rounded-xl bg-white p-3.5 text-sand-ink shadow-[0_20px_44px_rgba(5,28,18,0.28)]" style={{ animationDelay: '-3s' }}>
-              <div className="text-[11px] font-semibold text-sand-500">Umrah Premium · 14 nights</div>
-              <div className="mt-1 flex items-baseline gap-2">
-                <span className="font-mono text-[22px] font-bold text-green-800">€2,480</span>
-                <span className="font-mono text-[11px] text-sand-500">≈ ₨771k</span>
-              </div>
-            </div>
-          </div>
-
-          {/* headline + subtitle below the image */}
-          <div className="mx-auto mt-[clamp(28px,4vw,44px)] max-w-3xl animate-rise text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-sand-200 bg-sand-50 px-3.5 py-1.5 text-[13px] font-medium text-green-800">
+      {/* hero — calm two-column, fills the first screen (no scroll), white + high contrast */}
+      <section className="flex min-h-[calc(100svh-128px)] items-center bg-white px-[clamp(16px,4vw,32px)] py-[clamp(20px,3vw,40px)]">
+        <div className="mx-auto grid w-full max-w-6xl items-center gap-[clamp(28px,5vw,64px)] md:grid-cols-[1.05fr_0.95fr]">
+          {/* text */}
+          <div className="animate-rise">
+            <span className="inline-flex items-center gap-2 rounded-full border border-sand-200 bg-sand-50 px-3.5 py-1.5 text-[12.5px] font-medium text-green-800">
               <span className="h-1.5 w-1.5 rounded-full bg-green-600" />
               {t('heroBadge')}
             </span>
-            <h1 className="mt-5 font-serif text-[clamp(2.25rem,5.6vw,3.9rem)] font-semibold leading-[1.04] tracking-[-0.022em] text-sand-ink">
+            <h1 className="mt-6 font-serif text-[clamp(2.4rem,5.2vw,4rem)] font-semibold leading-[1.02] tracking-[-0.025em] text-sand-ink">
               {t('heroTitle')}
             </h1>
-            <p className="mx-auto mt-5 max-w-[640px] text-[clamp(1rem,1.6vw,1.2rem)] leading-relaxed text-sand-600">
+            <p className="mt-5 max-w-[52ch] text-[clamp(1.02rem,1.5vw,1.2rem)] leading-relaxed text-sand-600">
               {t('heroSubtitle')}
             </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-3">
-              <a href="#plan" className="inline-flex items-center gap-2 rounded-xl bg-green-800 px-6 py-3.5 text-[15.5px] font-semibold text-white shadow-[0_10px_28px_rgba(15,81,50,0.28)] transition-[transform,background-color] duration-fast hover:bg-green-700 active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <a href="#plan" className="inline-flex items-center gap-2 rounded-xl bg-green-800 px-6 py-3.5 text-[15.5px] font-semibold text-white shadow-[0_10px_28px_rgba(15,81,50,0.26)] transition-[transform,background-color] duration-fast hover:bg-green-700 active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">
                 {t('planPilgrimage')}
               </a>
-              <a href="#how" className="inline-flex items-center gap-2 rounded-xl border border-sand-300 bg-white px-5 py-3.5 text-[15.5px] font-semibold text-green-800 transition-[transform,background-color] duration-fast hover:bg-sand-50 active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">
-                {t('howItWorks')}
+              <a href="#how" className="inline-flex items-center gap-1.5 rounded-xl px-4 py-3.5 text-[15.5px] font-semibold text-green-800 transition-colors duration-fast hover:bg-sand-50 focus-visible:outline-none focus-visible:shadow-focus">
+                {t('howItWorks')} <span aria-hidden>→</span>
               </a>
             </div>
-            <div className="mt-9 flex flex-wrap justify-center gap-x-9 gap-y-5 border-t border-sand-200 pt-7">
+            <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-3 border-t border-sand-100 pt-6 text-[13px] text-sand-500">
               {HERO_STATS.map((s, i) => (
-                <div key={s.label}>
-                  <div className="font-mono text-[22px] font-semibold text-green-800">{s.value}</div>
-                  <div className="mt-0.5 text-[12.5px] text-sand-500">{statLabels[i] ?? s.label}</div>
-                </div>
+                <span key={s.label} className="inline-flex items-baseline gap-1.5">
+                  <span className="font-mono text-[15px] font-semibold text-green-800">{s.value}</span>
+                  {statLabels[i] ?? s.label}
+                </span>
               ))}
+            </div>
+          </div>
+          {/* image — portrait, capped to the viewport so the whole hero fits one screen */}
+          <div className="relative animate-fade-in">
+            <div className="relative max-h-[68svh] overflow-hidden rounded-[24px] border border-sand-200 shadow-[0_40px_80px_-38px_rgba(5,28,18,0.4)] [aspect-ratio:4/5]">
+              <Scene name="makkah" priority className="animate-kenburns absolute inset-0 h-full w-full object-cover" />
+              <span className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-green-950/30 to-transparent" />
+            </div>
+            <div className="animate-float absolute -left-3 bottom-6 rounded-2xl bg-white/95 p-3.5 shadow-[0_18px_40px_rgba(5,28,18,0.2)] backdrop-blur">
+              <div className="text-[11px] font-semibold text-sand-500">Umrah Premium · 14 nights</div>
+              <div className="mt-1 flex items-baseline gap-2">
+                <span className="font-mono text-[20px] font-bold text-green-800">€2,480</span>
+                <span className="font-mono text-[11px] text-sand-500">≈ ₨771k</span>
+              </div>
             </div>
           </div>
         </div>
