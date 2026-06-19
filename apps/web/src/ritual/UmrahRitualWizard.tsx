@@ -9,6 +9,7 @@ import { RecordingPanel } from './RecordingPanel';
 import { PersonalDuaPanel } from './PersonalDuaPanel';
 import { RITUAL_LOCALES, isRtlLang, localizedTitle, ui } from './i18n';
 import { useRitualLang } from './useRitualLang';
+import { ListenButton } from './ListenButton';
 
 const STORAGE_KEY = 'auj.ritual.v1';
 
@@ -69,7 +70,6 @@ function ZImg({ img, className }: { img: ResolvedImage; className?: string }) {
 }
 
 function DuaBlock({ dua, lang }: { dua: Dua; lang: string }) {
-  const [audioOk, setAudioOk] = useState(true);
   const sel = dua.translations.find((x) => x.code === lang);
   return (
     <div className="mt-4 rounded-2xl border border-green-100 bg-green-50 p-5">
@@ -83,11 +83,7 @@ function DuaBlock({ dua, lang }: { dua: Dua; lang: string }) {
         </p>
       ) : null}
       <div className="mt-3 flex flex-wrap items-center gap-3">
-        {dua.audio && audioOk ? (
-          <audio controls preload="none" className="h-8" src={ritualAudioSrc(dua.audio)} onError={() => setAudioOk(false)}>
-            <track kind="captions" />
-          </audio>
-        ) : null}
+        <ListenButton audioSrc={dua.audio ? ritualAudioSrc(dua.audio) : undefined} text={dua.arabic} lang="ar" />
         <span className="text-[11.5px] text-sand-500">Source: {dua.source}</span>
       </div>
       <details className="mt-3 [&_summary]:cursor-pointer">
@@ -445,7 +441,14 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
           <p className="mt-4 rounded-lg bg-sand-100 px-3 py-2 text-[12px] text-sand-500">{t.langNote}</p>
         ) : null}
 
-        {cur.intro ? <p className="mt-4 text-[15px] leading-relaxed text-sand-700">{cur.intro}</p> : null}
+        {cur.intro ? (
+          <div className="mt-4">
+            <p className="text-[15px] leading-relaxed text-sand-700">{cur.intro}</p>
+            <div className="mt-2">
+              <ListenButton text={cur.intro} lang="en" />
+            </div>
+          </div>
+        ) : null}
 
         {cur.forMen || cur.forWomen ? (
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
