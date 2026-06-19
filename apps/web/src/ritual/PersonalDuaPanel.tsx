@@ -2,21 +2,19 @@
 
 import { useEffect, useState } from 'react';
 import { deleteDua, exportDuas, listDuas, saveDua, togglePin, type PersonalDua } from './personal-duas-store';
+import { ui } from './i18n';
 
 const LANGS: { code: string; label: string; rtl?: boolean }[] = [
   { code: 'en', label: 'English' },
   { code: 'ar', label: 'العربية', rtl: true },
   { code: 'ur', label: 'اردو', rtl: true },
-  { code: 'fr', label: 'Français' },
   { code: 'tr', label: 'Türkçe' },
-  { code: 'id', label: 'Indonesia' },
-  { code: 'bn', label: 'বাংলা' },
   { code: 'de', label: 'Deutsch' },
 ];
 
 const isRtl = (code: string): boolean => code === 'ar' || code === 'ur';
 
-export function PersonalDuaPanel({ stepKey }: { stepKey: string }) {
+export function PersonalDuaPanel({ stepKey, uiLang = 'en' }: { stepKey: string; uiLang?: string }) {
   const [list, setList] = useState<PersonalDua[]>([]);
   const [text, setText] = useState('');
   const [lang, setLang] = useState('en');
@@ -72,7 +70,7 @@ export function PersonalDuaPanel({ stepKey }: { stepKey: string }) {
   return (
     <div className="mt-4 rounded-2xl border border-sand-200 bg-sand-50 p-4">
       <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2 text-[13px] font-bold text-sand-ink">📿 My personal du‘as</div>
+        <div className="flex items-center gap-2 text-[13px] font-bold text-sand-ink">📿 {ui(uiLang).myDuas}</div>
         {listDuas().length > 0 ? (
           <button type="button" onClick={download} className="text-[12px] font-semibold text-accent-600 hover:underline">
             Export all

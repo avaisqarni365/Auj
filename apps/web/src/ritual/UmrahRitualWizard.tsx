@@ -3,10 +3,12 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import type { PublicUser } from '@auj/auth';
-import { RITUAL_STEPS, ZIYARAT, type ApproxMin, type Dua, type RitualStep } from './ritual-content';
+import { RITUAL_STEPS, ZIYARAT, type Dua, type RitualStep } from './ritual-content';
 import { ritualAudioSrc, stepDesignImage, ziyaratImage, type ResolvedImage } from './ritual-images';
 import { RecordingPanel } from './RecordingPanel';
 import { PersonalDuaPanel } from './PersonalDuaPanel';
+import { RITUAL_LOCALES, isRtlLang, localizedTitle, ui } from './i18n';
+import { useRitualLang } from './useRitualLang';
 
 const STORAGE_KEY = 'auj.ritual.v1';
 
@@ -27,12 +29,6 @@ function fmtClock(sec: number): string {
   const s = sec % 60;
   const pad = (n: number): string => String(n).padStart(2, '0');
   return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${m}:${pad(s)}`;
-}
-
-function approxBadge(a: ApproxMin): string | null {
-  if (a === 'ongoing') return 'Recite continuously';
-  if (typeof a === 'number') return `≈ ${a} min`;
-  return null;
 }
 
 function remainingMin(fromIndex: number): number {
@@ -72,14 +68,20 @@ function ZImg({ img, className }: { img: ResolvedImage; className?: string }) {
   );
 }
 
-function DuaBlock({ dua }: { dua: Dua }) {
+function DuaBlock({ dua, lang }: { dua: Dua; lang: string }) {
   const [audioOk, setAudioOk] = useState(true);
+  const sel = dua.translations.find((x) => x.code === lang);
   return (
     <div className="mt-4 rounded-2xl border border-green-100 bg-green-50 p-5">
       <p dir="rtl" lang="ar" className="text-right font-arabic text-[24px] leading-[1.95] text-green-900">
         {dua.arabic}
       </p>
       <p className="mt-2.5 text-[14px] font-semibold italic text-sand-700">{dua.translit}</p>
+      {sel ? (
+        <p dir={lang === 'ur' ? 'rtl' : 'ltr'} className={`mt-1.5 text-[14px] leading-relaxed text-sand-700 ${lang === 'ur' ? 'text-right font-arabic' : ''}`}>
+          “{sel.text}”
+        </p>
+      ) : null}
       <div className="mt-3 flex flex-wrap items-center gap-3">
         {dua.audio && audioOk ? (
           <audio controls preload="none" className="h-8" src={ritualAudioSrc(dua.audio)} onError={() => setAudioOk(false)}>
@@ -89,7 +91,7 @@ function DuaBlock({ dua }: { dua: Dua }) {
         <span className="text-[11.5px] text-sand-500">Source: {dua.source}</span>
       </div>
       <details className="mt-3 [&_summary]:cursor-pointer">
-        <summary className="text-[12px] font-semibold text-green-800">🌐 Show meaning in other languages</summary>
+        <summary className="text-[12px] font-semibold text-green-800">🌐 {ui(lang).showMeaning}</summary>
         <div className="mt-2.5 grid gap-2 sm:grid-cols-2">
           {dua.translations.map((t) => {
             const rtl = t.code === 'ur';
@@ -247,6 +249,9 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
   const [completedAt, setCompletedAt] = useState<number | null>(null);
   const [hydrated, setHydrated] = useState(false);
   const [resume, setResume] = useState<Persisted | null>(null);
+  const [lang, setLang] = useRitualLang();
+  const t = ui(lang);
+  const rtl = isRtlLang(lang);
 
   useEffect(() => {
     try {
@@ -330,7 +335,8 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
   const resetCounter = (kind: 'tawaf' | 'sai'): void => setCounters((c) => ({ ...c, [kind]: 0 }));
 
   const progressPct = Math.round(((step + 1) / TOTAL) * 100);
-  const badge = approxBadge(cur.approxMin);
+  const badge =
+    cur.approxMin === 'ongoing' ? t.reciteOngoing : typeof cur.approxMin === 'number' ? `≈ ${cur.approxMin} ${t.min}` : null;
   const remaining = remainingMin(step);
   const counter = cur.counter;
 
@@ -367,13 +373,26 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-4 pb-16 pt-6">
-      <div className="mb-3 flex justify-end">
+    <div dir={rtl ? 'rtl' : 'ltr'} className="mx-auto max-w-3xl px-4 pb-16 pt-6">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <label className="inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-sand-600">
+          🌐
+          <select
+            value={lang}
+            onChange={(e) => setLang(e.target.value)}
+            aria-label="Language"
+            className="rounded-lg border border-sand-300 bg-white px-2 py-1 text-[12.5px] font-semibold text-sand-700"
+          >
+            {RITUAL_LOCALES.map((l) => (
+              <option key={l.code} value={l.code}>{l.label}</option>
+            ))}
+          </select>
+        </label>
         <Link
           href="/guide/tour"
           className="rounded-full border border-sand-300 bg-white px-3.5 py-1.5 text-[12.5px] font-semibold text-green-800 transition-colors duration-fast hover:bg-sand-50"
         >
-          🧭 Virtual tour →
+          🧭 {t.virtualTour} →
         </Link>
       </div>
 
@@ -381,7 +400,7 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
       <div className="mb-4">
         <div className="flex items-center justify-between text-[12.5px] font-semibold text-sand-500">
           <span className="uppercase tracking-wider text-green-800">{cur.phase}</span>
-          <span>Step {cur.step} / {TOTAL}</span>
+          <span>{t.step} {cur.step} / {TOTAL}</span>
         </div>
         <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-sand-100">
           <div className="h-full rounded-full bg-green-700 transition-[width] duration-200 ease-out-soft" style={{ width: `${progressPct}%` }} />
@@ -390,26 +409,26 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
           {badge ? <span className="font-semibold text-sand-700">{badge}</span> : null}
           {running || elapsedSec > 0 ? (
             <span className="inline-flex items-center gap-1.5">
-              <span className="font-mono font-semibold text-green-800">{fmtClock(elapsedSec)}</span> elapsed
+              <span className="font-mono font-semibold text-green-800">{fmtClock(elapsedSec)}</span> {t.elapsed}
               {!completedAt ? (
                 <button
                   type="button"
                   onClick={() => setRunning((r) => !r)}
                   className="ms-1 rounded-md border border-sand-300 bg-white px-2 py-0.5 text-[11px] font-semibold text-sand-600 hover:bg-sand-50"
                 >
-                  {running ? 'Pause' : 'Resume'}
+                  {running ? t.pause : t.resume}
                 </button>
               ) : null}
             </span>
           ) : null}
-          {!completedAt && remaining > 0 ? <span>≈ {remaining} min to complete</span> : null}
+          {!completedAt && remaining > 0 ? <span>≈ {remaining} {t.min} {t.toComplete}</span> : null}
         </div>
       </div>
 
       {/* title */}
       <div className="mb-3">
         <h1 className="font-serif text-[clamp(1.4rem,3vw,1.9rem)] font-semibold leading-tight text-sand-ink">
-          <span className="text-green-800">{cur.step}.</span> {cur.title}
+          <span className="text-green-800">{cur.step}.</span> {localizedTitle(cur, lang)}
         </h1>
         {cur.subtitle ? <p className="mt-0.5 text-[14px] font-medium text-accent-600">{cur.subtitle}</p> : null}
       </div>
@@ -422,6 +441,10 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
           <p className="mt-4 text-[14px] font-medium text-green-800">Assalamu alaikum, {user.displayName.trim().split(/\s+/)[0]}.</p>
         ) : null}
 
+        {lang !== 'en' ? (
+          <p className="mt-4 rounded-lg bg-sand-100 px-3 py-2 text-[12px] text-sand-500">{t.langNote}</p>
+        ) : null}
+
         {cur.intro ? <p className="mt-4 text-[15px] leading-relaxed text-sand-700">{cur.intro}</p> : null}
 
         {cur.forMen || cur.forWomen ? (
@@ -431,7 +454,7 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
           </div>
         ) : null}
 
-        {cur.duas?.map((d, i) => <DuaBlock key={i} dua={d} />)}
+        {cur.duas?.map((d, i) => <DuaBlock key={i} dua={d} lang={lang} />)}
 
         {counter ? (
           <Counter
@@ -464,9 +487,9 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
           </div>
         ) : null}
 
-        <PersonalDuaPanel stepKey={cur.key} />
+        <PersonalDuaPanel stepKey={cur.key} uiLang={lang} />
 
-        <RecordingPanel stepKey={cur.key} stepTitle={cur.title} />
+        <RecordingPanel stepKey={cur.key} stepTitle={cur.title} lang={lang} />
 
         {/* Completion extras */}
         {cur.key === 'umrah-complete' ? (
@@ -528,7 +551,7 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
             onClick={goBack}
             className="rounded-xl border border-sand-300 bg-white px-5 py-3 text-[14px] font-semibold text-sand-600 transition-colors duration-fast hover:bg-sand-50"
           >
-            Back
+            {t.back}
           </button>
         ) : null}
         {step < TOTAL - 1 ? (
@@ -540,14 +563,11 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
             {cur.next}
           </button>
         ) : (
-          <span className="flex-1 text-center text-[13px] text-sand-500">Your progress is saved on this device.</span>
+          <span className="flex-1 text-center text-[13px] text-sand-500">{t.progressSaved}</span>
         )}
       </div>
 
-      <p className="mt-5 text-center text-[11.5px] leading-relaxed text-sand-500">
-        Guidance for convenience only — follow your group’s scholar and official sources. Rulings can differ between
-        schools of thought.
-      </p>
+      <p className="mt-5 text-center text-[11.5px] leading-relaxed text-sand-500">{t.disclaimer}</p>
     </div>
   );
 }

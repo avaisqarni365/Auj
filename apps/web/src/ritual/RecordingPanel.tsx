@@ -10,6 +10,7 @@ import {
   type RecordingRecord,
   type Visibility,
 } from './recordings-store';
+import { ui } from './i18n';
 
 function mmss(sec: number): string {
   const m = Math.floor(sec / 60);
@@ -82,7 +83,8 @@ function RecordingItem({
   );
 }
 
-export function RecordingPanel({ stepKey, stepTitle }: { stepKey: string; stepTitle: string }) {
+export function RecordingPanel({ stepKey, stepTitle, lang = 'en' }: { stepKey: string; stepTitle: string; lang?: string }) {
+  const t = ui(lang);
   const [supported, setSupported] = useState(false);
   const [list, setList] = useState<RecordingRecord[]>([]);
   const [recording, setRecording] = useState(false);
@@ -199,7 +201,7 @@ export function RecordingPanel({ stepKey, stepTitle }: { stepKey: string; stepTi
 
   return (
     <div className="mt-4 rounded-2xl border border-sand-200 bg-sand-50 p-4">
-      <div className="flex items-center gap-2 text-[13px] font-bold text-sand-ink">🎙️ Your reflections & practice</div>
+      <div className="flex items-center gap-2 text-[13px] font-bold text-sand-ink">🎙️ {t.reflections}</div>
       <p className="mt-0.5 text-[12px] text-sand-500">
         Record a personal du‘a, a reflection, or practise the recitation. Saved only on this device — private by default.
       </p>
@@ -235,7 +237,7 @@ export function RecordingPanel({ stepKey, stepTitle }: { stepKey: string; stepTi
                   onClick={save}
                   className="rounded-lg bg-green-800 px-4 py-1.5 text-[13px] font-semibold text-white transition-[transform,background-color] duration-fast hover:bg-green-700 active:scale-[0.98]"
                 >
-                  Save
+                  {t.save}
                 </button>
                 <button
                   type="button"
@@ -256,11 +258,11 @@ export function RecordingPanel({ stepKey, stepTitle }: { stepKey: string; stepTi
             >
               {recording ? (
                 <>
-                  <span className="h-2.5 w-2.5 rounded-sm bg-white" /> Stop · {mmss(elapsed)}
+                  <span className="h-2.5 w-2.5 rounded-sm bg-white" /> {t.stop} · {mmss(elapsed)}
                 </>
               ) : (
                 <>
-                  <span className="h-2.5 w-2.5 rounded-full bg-white" /> Record
+                  <span className="h-2.5 w-2.5 rounded-full bg-white" /> {t.record}
                 </>
               )}
             </button>

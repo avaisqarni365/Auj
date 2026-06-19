@@ -36,7 +36,7 @@ describe('Umrah Guide content', () => {
       expect(d.arabic.trim().length).toBeGreaterThan(0);
       expect(d.translit.trim().length).toBeGreaterThan(0);
       expect(d.source.trim().length).toBeGreaterThan(0);
-      expect(d.translations.map((t) => t.code)).toEqual(['en', 'ur', 'fr', 'id', 'tr', 'bn']);
+      expect(d.translations.map((t) => t.code)).toEqual(['en', 'ur', 'tr', 'de']);
     }
   });
 

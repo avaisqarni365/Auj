@@ -56,10 +56,8 @@ const NIYYAH_DUA: Dua = {
   translations: [
     { code: 'en', label: 'English', text: 'Here I am, O Allah, (in answer to Your call) for Umrah.' },
     { code: 'ur', label: 'اردو', text: 'میں حاضر ہوں اے اللہ، عمرہ کے لیے۔' },
-    { code: 'fr', label: 'Français', text: 'Me voici, ô Allah, pour la Omra.' },
-    { code: 'id', label: 'Indonesia', text: 'Aku penuhi panggilan-Mu ya Allah, untuk Umrah.' },
     { code: 'tr', label: 'Türkçe', text: 'Buyur Allah’ım, Umre için emrindeyim.' },
-    { code: 'bn', label: 'বাংলা', text: 'আমি হাজির, হে আল্লাহ, উমরাহর জন্য।' },
+    { code: 'de', label: 'Deutsch', text: 'Hier bin ich, o Allah, für die Umrah.' },
   ],
 };
 
@@ -77,10 +75,8 @@ const TALBIYAH_DUA: Dua = {
       text: 'Here I am, O Allah, here I am. You have no partner, here I am. Truly all praise, grace and dominion are Yours. You have no partner.',
     },
     { code: 'ur', label: 'اردو', text: 'میں حاضر ہوں اے اللہ، تیرا کوئی شریک نہیں۔ تمام تعریف، نعمت اور بادشاہی تیری ہی ہے، تیرا کوئی شریک نہیں۔' },
-    { code: 'fr', label: 'Français', text: 'Me voici, ô Allah. Tu n’as pas d’associé. À Toi la louange, le bienfait et la royauté. Tu n’as pas d’associé.' },
-    { code: 'id', label: 'Indonesia', text: 'Aku penuhi panggilan-Mu ya Allah. Tiada sekutu bagi-Mu. Segala puji, nikmat dan kerajaan milik-Mu. Tiada sekutu bagi-Mu.' },
     { code: 'tr', label: 'Türkçe', text: 'Buyur Allah’ım. Senin ortağın yoktur. Hamd, nimet ve mülk Senindir. Senin ortağın yoktur.' },
-    { code: 'bn', label: 'বাংলা', text: 'আমি হাজির, হে আল্লাহ। তোমার কোনো শরিক নেই। সমস্ত প্রশংসা, নিয়ামত ও রাজত্ব তোমারই। তোমার কোনো শরিক নেই।' },
+    { code: 'de', label: 'Deutsch', text: 'Hier bin ich, o Allah, hier bin ich. Du hast keinen Partner, hier bin ich. Wahrlich, Lob, Gnade und Herrschaft gebühren Dir. Du hast keinen Partner.' },
   ],
 };
 
@@ -91,10 +87,8 @@ const ENTRY_DUA: Dua = {
   translations: [
     { code: 'en', label: 'English', text: 'O Allah, open for me the doors of Your mercy.' },
     { code: 'ur', label: 'اردو', text: 'اے اللہ، میرے لیے اپنی رحمت کے دروازے کھول دے۔' },
-    { code: 'fr', label: 'Français', text: 'Ô Allah, ouvre-moi les portes de Ta miséricorde.' },
-    { code: 'id', label: 'Indonesia', text: 'Ya Allah, bukakanlah untukku pintu-pintu rahmat-Mu.' },
     { code: 'tr', label: 'Türkçe', text: 'Allah’ım, bana rahmet kapılarını aç.' },
-    { code: 'bn', label: 'বাংলা', text: 'হে আল্লাহ, আমার জন্য তোমার রহমতের দরজাসমূহ খুলে দাও।' },
+    { code: 'de', label: 'Deutsch', text: 'O Allah, öffne mir die Tore Deiner Barmherzigkeit.' },
   ],
 };
 
@@ -105,10 +99,8 @@ const SAFA_DUA: Dua = {
   translations: [
     { code: 'en', label: 'English', text: 'Indeed, Safa and Marwah are among the symbols of Allah.' },
     { code: 'ur', label: 'اردو', text: 'بے شک صفا اور مروہ اللہ کی نشانیوں میں سے ہیں۔' },
-    { code: 'fr', label: 'Français', text: 'As-Safa et al-Marwah font partie des symboles d’Allah.' },
-    { code: 'id', label: 'Indonesia', text: 'Sesungguhnya Safa dan Marwah termasuk syiar-syiar Allah.' },
     { code: 'tr', label: 'Türkçe', text: 'Şüphesiz Safa ile Merve, Allah’ın işaretlerindendir.' },
-    { code: 'bn', label: 'বাংলা', text: 'নিশ্চয় সাফা ও মারওয়া আল্লাহর নিদর্শনসমূহের অন্তর্ভুক্ত।' },
+    { code: 'de', label: 'Deutsch', text: 'Wahrlich, Safa und Marwah gehören zu den Symbolen Allahs.' },
   ],
 };
 
