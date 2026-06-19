@@ -5,6 +5,7 @@ import type { PublicUser } from '@auj/auth';
 import { RITUAL_STEPS, ZIYARAT, type ApproxMin, type Dua, type RitualStep } from './ritual-content';
 import { ritualAudioSrc, stepDesignImage, ziyaratImage, type ResolvedImage } from './ritual-images';
 import { RecordingPanel } from './RecordingPanel';
+import { PersonalDuaPanel } from './PersonalDuaPanel';
 
 const STORAGE_KEY = 'auj.ritual.v1';
 
@@ -452,6 +453,8 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
             </div>
           </div>
         ) : null}
+
+        <PersonalDuaPanel stepKey={cur.key} />
 
         <RecordingPanel stepKey={cur.key} stepTitle={cur.title} />
 

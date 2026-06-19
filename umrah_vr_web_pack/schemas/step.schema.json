@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Umrah Wizard Step",
+  "type": "object",
+  "required": ["id", "slug", "order", "media", "translations", "checklist"],
+  "properties": {
+    "id": {"type": "string"},
+    "slug": {"type": "string"},
+    "order": {"type": "integer"},
+    "media": {
+      "type": "object",
+      "properties": {
+        "imageUrl": {"type": "string"},
+        "scene360Url": {"type": "string"},
+        "audio": {"type": "object"}
+      }
+    },
+    "translations": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["title", "subtitle", "explanation", "audioScript"],
+        "properties": {
+          "title": {"type": "string"},
+          "subtitle": {"type": "string"},
+          "explanation": {"type": "string"},
+          "audioScript": {"type": "string"},
+          "dua": {"type": "string"},
+          "tip": {"type": "string"}
+        }
+      }
+    },
+    "checklist": {
+      "type": "array",
+      "items": {"type": "string"}
+    }
+  }
+}

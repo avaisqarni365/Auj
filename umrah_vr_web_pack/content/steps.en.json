@@ -1,0 +1,152 @@
+[
+  {
+    "id": "step-01",
+    "slug": "welcome-setup",
+    "order": 1,
+    "title": "Welcome and Journey Setup",
+    "subtitle": "Prepare your Umrah learning journey",
+    "explanation": "Choose your language, review the journey, and prepare your heart for learning the steps of Umrah.",
+    "checklist": ["Select language", "Choose listening mode", "Start journey"],
+    "audioScript": "Welcome. This guide will help you understand the main steps of Umrah. Move slowly, learn carefully, and ask Allah for acceptance."
+  },
+  {
+    "id": "step-02",
+    "slug": "prepare-ihram",
+    "order": 2,
+    "title": "Prepare for Ihram",
+    "subtitle": "Enter a state of purity and humility",
+    "explanation": "Before crossing the Miqat, prepare for Ihram. Men wear two unstitched cloths. Women wear modest Islamic clothing. Avoid restricted acts after entering Ihram.",
+    "checklist": ["Perform ghusl if possible", "Wear Ihram clothing", "Avoid perfume and restricted acts"],
+    "audioScript": "Now prepare for Ihram. This is not only clothing; it is a state of worship, humility, and obedience."
+  },
+  {
+    "id": "step-03",
+    "slug": "niyyah",
+    "order": 3,
+    "title": "Make Niyyah",
+    "subtitle": "Make the intention for Umrah",
+    "explanation": "At the Miqat or before crossing it, make the intention in your heart for Umrah and say: Labbayka Allahumma Umrah.",
+    "checklist": ["Reached or approaching Miqat", "Made intention", "Said Labbayka Allahumma Umrah"],
+    "audioScript": "Make your intention sincerely for Allah. Say: Labbayka Allahumma Umrah."
+  },
+  {
+    "id": "step-04",
+    "slug": "talbiyah",
+    "order": 4,
+    "title": "Recite Talbiyah",
+    "subtitle": "Declare your response to Allah's call",
+    "explanation": "After making intention, recite the Talbiyah frequently until reaching Masjid al-Haram.",
+    "checklist": ["Started Talbiyah", "Continue during travel", "Stay focused and calm"],
+    "audioScript": "Recite: Labbayka Allahumma Labbayk. Labbayka la sharika laka labbayk. Innal hamda wan ni'mata laka wal mulk. La sharika lak."
+  },
+  {
+    "id": "step-05",
+    "slug": "enter-haram",
+    "order": 5,
+    "title": "Enter Masjid al-Haram",
+    "subtitle": "Arrive at the House of Allah",
+    "explanation": "Enter respectfully, with calmness and gratitude. When you see the Kaaba, make personal dua.",
+    "checklist": ["Enter respectfully", "Look at the Kaaba", "Make dua"],
+    "audioScript": "You have reached Masjid al-Haram. Enter with respect and gratitude. Make dua from your heart."
+  },
+  {
+    "id": "step-06",
+    "slug": "start-tawaf",
+    "order": 6,
+    "title": "Start Tawaf",
+    "subtitle": "Begin walking around the Kaaba",
+    "explanation": "Start near the Black Stone area. Walk anti-clockwise, keeping the Kaaba on your left.",
+    "checklist": ["Stand near starting point", "Keep Kaaba on left", "Begin round 1"],
+    "audioScript": "Begin Tawaf from the Black Stone area. Walk gently and keep the Kaaba on your left."
+  },
+  {
+    "id": "step-07",
+    "slug": "complete-tawaf",
+    "order": 7,
+    "title": "Complete 7 Rounds of Tawaf",
+    "subtitle": "Complete all seven circuits",
+    "explanation": "Continue until you complete seven full rounds around the Kaaba. Make dua and dhikr while walking.",
+    "checklist": ["Round 1", "Round 2", "Round 3", "Round 4", "Round 5", "Round 6", "Round 7"],
+    "audioScript": "Continue Tawaf until you complete seven rounds. Be patient, avoid pushing, and remember Allah."
+  },
+  {
+    "id": "step-08",
+    "slug": "pray-two-rakahs",
+    "order": 8,
+    "title": "Pray 2 Rak'ahs",
+    "subtitle": "Pray after Tawaf",
+    "explanation": "After Tawaf, pray two Rak'ahs if possible behind Maqam Ibrahim. If crowded, pray anywhere suitable in Masjid al-Haram.",
+    "checklist": ["Find safe place", "Pray 2 Rak'ahs", "Make dua"],
+    "audioScript": "After completing Tawaf, pray two Rak'ahs if possible. If crowded, choose a safe place."
+  },
+  {
+    "id": "step-09",
+    "slug": "zamzam",
+    "order": 9,
+    "title": "Drink Zamzam",
+    "subtitle": "Drink blessed water and make dua",
+    "explanation": "Drink Zamzam water and make sincere dua for yourself, your family, and the Ummah.",
+    "checklist": ["Drink Zamzam", "Make dua", "Prepare for Sa'i"],
+    "audioScript": "Drink Zamzam with gratitude. Ask Allah for goodness, healing, guidance, and acceptance."
+  },
+  {
+    "id": "step-10",
+    "slug": "sai",
+    "order": 10,
+    "title": "Sa'i Between Safa and Marwa",
+    "subtitle": "Walk seven passages",
+    "explanation": "Start at Safa and walk to Marwa. Continue until seven passages are complete, ending at Marwa.",
+    "checklist": ["Start at Safa", "Walk to Marwa", "Complete seven passages", "End at Marwa"],
+    "audioScript": "Begin Sa'i at Safa. Walk between Safa and Marwa seven times, ending at Marwa."
+  },
+  {
+    "id": "step-11",
+    "slug": "haircut",
+    "order": 11,
+    "title": "Trim or Shave Hair",
+    "subtitle": "Complete the required acts of Umrah",
+    "explanation": "After Sa'i, men shave or trim their hair. Women cut a small portion from the ends of the hair. This completes Umrah.",
+    "checklist": ["Complete Sa'i", "Trim or shave hair", "Confirm Umrah complete"],
+    "audioScript": "Now trim or shave the hair according to the guidance. With this, the required acts of Umrah are complete."
+  },
+  {
+    "id": "step-12",
+    "slug": "umrah-complete",
+    "order": 12,
+    "title": "Umrah Complete",
+    "subtitle": "Exit Ihram and thank Allah",
+    "explanation": "Alhamdulillah, your Umrah is complete. Thank Allah and ask Him to accept it from you.",
+    "checklist": ["Exit Ihram", "Make dua", "Save completion date"],
+    "audioScript": "Alhamdulillah. You have completed Umrah. Ask Allah to accept it and keep your heart connected to Him."
+  },
+  {
+    "id": "step-13",
+    "slug": "recommended-deeds",
+    "order": 13,
+    "title": "Optional Recommended Deeds",
+    "subtitle": "Use your time in worship",
+    "explanation": "Pray extra voluntary prayers, read Qur'an, make dhikr, give charity, and show kindness to others.",
+    "checklist": ["Read Qur'an", "Make dhikr", "Give charity", "Help others"],
+    "audioScript": "Use your time in the holy places wisely. Small sincere deeds are beloved to Allah."
+  },
+  {
+    "id": "step-14",
+    "slug": "final-dua-depart",
+    "order": 14,
+    "title": "Make Final Dua and Depart",
+    "subtitle": "Leave with gratitude",
+    "explanation": "Before leaving Makkah, make heartfelt dua, thank Allah, and depart with good manners.",
+    "checklist": ["Make final dua", "Thank Allah", "Depart calmly"],
+    "audioScript": "Before leaving, make final dua with a sincere heart. Ask Allah to accept your Umrah and invite you again."
+  },
+  {
+    "id": "step-15",
+    "slug": "madinah-reflection",
+    "order": 15,
+    "title": "Visit Madinah and Reflect",
+    "subtitle": "Continue the journey with love and consistency",
+    "explanation": "If possible, visit Masjid an-Nabawi in Madinah. Continue good deeds after returning home.",
+    "checklist": ["Visit Madinah if possible", "Reflect on lessons", "Continue good deeds"],
+    "audioScript": "Your journey continues after Umrah. Keep your heart connected to Allah and carry the lessons into your daily life."
+  }
+]
