@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import type { PublicUser } from '@auj/auth';
 import { RITUAL_STEPS, ZIYARAT, type ApproxMin, type Dua, type RitualStep } from './ritual-content';
 import { ritualAudioSrc, stepDesignImage, ziyaratImage, type ResolvedImage } from './ritual-images';
@@ -367,6 +368,15 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
 
   return (
     <div className="mx-auto max-w-3xl px-4 pb-16 pt-6">
+      <div className="mb-3 flex justify-end">
+        <Link
+          href="/guide/tour"
+          className="rounded-full border border-sand-300 bg-white px-3.5 py-1.5 text-[12.5px] font-semibold text-green-800 transition-colors duration-fast hover:bg-sand-50"
+        >
+          🧭 Virtual tour →
+        </Link>
+      </div>
+
       {/* progress + timer header */}
       <div className="mb-4">
         <div className="flex items-center justify-between text-[12.5px] font-semibold text-sand-500">

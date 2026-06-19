@@ -228,23 +228,31 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
 
       {/* Umrah Guide — step-by-step ritual companion (distinct from the Smart Visit planner) */}
       <section className="mx-auto max-w-6xl px-[clamp(16px,4vw,32px)] py-4">
-        <Link
-          href="/guide"
-          className="group flex flex-col items-start gap-4 overflow-hidden rounded-[20px] border border-green-100 bg-gradient-to-br from-green-50 to-sand-50 p-[clamp(20px,3vw,30px)] transition-shadow duration-fast hover:shadow-lg sm:flex-row sm:items-center"
-        >
+        <div className="flex flex-col items-start gap-4 overflow-hidden rounded-[20px] border border-green-100 bg-gradient-to-br from-green-50 to-sand-50 p-[clamp(20px,3vw,30px)] sm:flex-row sm:items-center">
           <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-green-800 text-3xl">🕋</div>
           <div className="flex-1">
             <div className="font-serif text-[clamp(1.25rem,2.4vw,1.6rem)] font-semibold leading-tight text-sand-ink">
               Performing Umrah? Follow our free step-by-step guide
             </div>
             <p className="mt-1 max-w-[60ch] text-[14.5px] leading-relaxed text-sand-600">
-              Ihram, Niyyah, Talbiyah, Tawaf &amp; Sa‘i counters, the duas, and a timer — one calm instruction at a time. No login needed.
+              15 steps with duas, Tawaf &amp; Sa‘i counters, a timer, personal du‘as and voice notes — plus a virtual tour. No login needed.
             </p>
           </div>
-          <span className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-green-800 px-5 py-3 text-[14.5px] font-semibold text-white transition-[transform,background-color] duration-fast group-hover:bg-green-700 group-active:scale-[0.98]">
-            Open the guide →
-          </span>
-        </Link>
+          <div className="flex shrink-0 flex-wrap gap-2">
+            <Link
+              href="/guide"
+              className="inline-flex items-center gap-2 rounded-xl bg-green-800 px-5 py-3 text-[14.5px] font-semibold text-white transition-[transform,background-color] duration-fast hover:bg-green-700 active:scale-[0.98]"
+            >
+              Open the guide →
+            </Link>
+            <Link
+              href="/guide/tour"
+              className="inline-flex items-center gap-2 rounded-xl border border-green-700/30 bg-white px-5 py-3 text-[14.5px] font-semibold text-green-800 transition-colors duration-fast hover:bg-green-50"
+            >
+              🧭 Virtual tour
+            </Link>
+          </div>
+        </div>
       </section>
 
       {/* why book with AUJ */}
