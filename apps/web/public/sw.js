@@ -1,8 +1,7 @@
-/* AUJ service worker — conservative offline support.
- * Pages: network-first (so online behaviour is unchanged; offline falls back to cache, then a
- * friendly offline page). Static assets (Next build output, images, audio, fonts): stale-while-
- * revalidate. Bump CACHE to invalidate everything on the next visit. */
-const CACHE = 'auj-v1';
+/* AUJ service worker — offline support WITHOUT ever showing stale content online.
+ * Strategy: network-first for everything. When online you always get the freshest build; the cache
+ * is only a fallback when the network fails (offline). Bumping CACHE evicts everything on next load. */
+const CACHE = 'auj-v2';
 const OFFLINE_URL = '/offline.html';
 
 self.addEventListener('install', (event) => {
@@ -18,43 +17,23 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-function putInCache(request, response) {
-  const copy = response.clone();
-  caches.open(CACHE).then((c) => c.put(request, copy));
-  return response;
-}
-
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET') return;
-
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return; // never touch third-party / API origins
 
-  // Navigations → network-first, fall back to cached page, then the offline page.
-  if (request.mode === 'navigate') {
-    event.respondWith(
-      fetch(request)
-        .then((res) => putInCache(request, res))
-        .catch(() => caches.match(request).then((m) => m || caches.match(OFFLINE_URL))),
-    );
-    return;
-  }
-
-  // Static assets → stale-while-revalidate.
-  const isStatic =
-    url.pathname.startsWith('/_next/static') ||
-    url.pathname.startsWith('/img/') ||
-    url.pathname.startsWith('/audio/') ||
-    url.pathname.startsWith('/icon');
-  if (isStatic) {
-    event.respondWith(
-      caches.match(request).then((cached) => {
-        const network = fetch(request)
-          .then((res) => putInCache(request, res))
-          .catch(() => cached);
-        return cached || network;
-      }),
-    );
-  }
+  // Network-first: always try the live network; cache the result; fall back to cache (then the
+  // offline page for navigations) only when the network is unavailable.
+  event.respondWith(
+    fetch(request)
+      .then((res) => {
+        const copy = res.clone();
+        caches.open(CACHE).then((c) => c.put(request, copy));
+        return res;
+      })
+      .catch(() =>
+        caches.match(request).then((cached) => cached || (request.mode === 'navigate' ? caches.match(OFFLINE_URL) : undefined)),
+      ),
+  );
 });
