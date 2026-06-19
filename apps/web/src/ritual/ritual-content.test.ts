@@ -3,11 +3,13 @@ import { RITUAL_STEPS, ZIYARAT } from './ritual-content';
 import { ritualImage } from './ritual-images';
 
 describe('Umrah Guide content', () => {
-  it('has 15 ordered screens matching the master grid (Niyyah → … → Umrah complete)', () => {
-    expect(RITUAL_STEPS).toHaveLength(15);
+  it('has ordered screens from Niyyah → … → Umrah complete with sequential step numbers', () => {
+    expect(RITUAL_STEPS.length).toBeGreaterThanOrEqual(15);
     expect(RITUAL_STEPS[0]?.key).toBe('niyyah');
     expect(RITUAL_STEPS.at(-1)?.key).toBe('umrah-complete');
-    expect(RITUAL_STEPS.map((s) => s.step)).toEqual(Array.from({ length: 15 }, (_, i) => i + 1));
+    expect(RITUAL_STEPS.map((s) => s.step)).toEqual(RITUAL_STEPS.map((_, i) => i + 1));
+    // Talbiyah and the Masjid al-Haram arrival are their own screens (from the detailed designs).
+    expect(RITUAL_STEPS.map((s) => s.key)).toEqual(expect.arrayContaining(['talbiyah', 'enter-haram']));
   });
 
   it('keys are unique and every step has a title, image and next label', () => {

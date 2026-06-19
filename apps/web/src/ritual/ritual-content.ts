@@ -1,7 +1,8 @@
-// Umrah Guide — ritual content as data (pure; unit-tested). Ordered to match the master 15-step
-// design grid (0_complete.png): Niyyah → Ihram → Tawaf → … → Umrah complete. English copy + Arabic
-// duas (verbatim) with per-language meanings (EN/UR/FR/ID/TR/BN). All ritual text and translations
-// are flagged for scholarly + professional-translation review (see /docs/assumptions.md A6/A7).
+// Umrah Guide — ritual content as data (pure; unit-tested). Ordered along the master design grid
+// (0_complete.png) with Talbiyah and "Enter Masjid al-Haram" restored as their own screens (they were
+// prominent in the detailed uploads 4_Umrah / 5_Umrah): Niyyah → Ihram → Talbiyah → Enter al-Haram →
+// Tawaf → … → Umrah complete. English copy + Arabic duas (verbatim) with per-language meanings
+// (EN/UR/FR/ID/TR/BN). All ritual text + translations flagged for review (/docs/assumptions.md A6/A7).
 
 export type ApproxMin = number | 'ongoing' | null;
 
@@ -30,7 +31,7 @@ export interface RitualCounter {
 
 export interface RitualStep {
   key: string;
-  /** Display number 1–15 (matches the step bar in the design). */
+  /** Display number (matches the step bar in the design). */
   step: number;
   phase: string;
   title: string;
@@ -89,6 +90,20 @@ const TALBIYAH_DUA: Dua = {
   ],
 };
 
+const ENTRY_DUA: Dua = {
+  arabic: 'اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ',
+  translit: 'Allāhumma-ftaḥ lī abwāba raḥmatik',
+  source: 'Mosque-entry supplication — Sahih Muslim.',
+  translations: [
+    { code: 'en', label: 'English', text: 'O Allah, open for me the doors of Your mercy.' },
+    { code: 'ur', label: 'اردو', text: 'اے اللہ، میرے لیے اپنی رحمت کے دروازے کھول دے۔' },
+    { code: 'fr', label: 'Français', text: 'Ô Allah, ouvre-moi les portes de Ta miséricorde.' },
+    { code: 'id', label: 'Indonesia', text: 'Ya Allah, bukakanlah untukku pintu-pintu rahmat-Mu.' },
+    { code: 'tr', label: 'Türkçe', text: 'Allah’ım, bana rahmet kapılarını aç.' },
+    { code: 'bn', label: 'বাংলা', text: 'হে আল্লাহ, আমার জন্য তোমার রহমতের দরজাসমূহ খুলে দাও।' },
+  ],
+};
+
 const SAFA_DUA: Dua = {
   arabic: 'إِنَّ الصَّفَا وَالْمَرْوَةَ مِنْ شَعَائِرِ اللَّهِ',
   translit: 'Inna ṣ-Ṣafā wal-Marwata min sha‘ā’irillāh',
@@ -111,9 +126,8 @@ export const RITUAL_STEPS: RitualStep[] = [
     title: 'Niyyah (Intention)',
     subtitle: 'The first and most important step',
     approxMin: 2,
-    intro:
-      'At or just before the Miqat, make the intention for Umrah in your heart and say the words below. Then begin the Talbiyah and keep reciting it until you reach Masjid al-Haram.',
-    duas: [NIYYAH_DUA, TALBIYAH_DUA],
+    intro: 'At or just before the Miqat, make the intention for Umrah in your heart and say the words below.',
+    duas: [NIYYAH_DUA],
     checklist: ['I have made my intention (Niyyah) for Umrah'],
     hadith: '“Actions are but by intentions, and every person shall have but that which they intended.” — Sahih Bukhari 1',
     tip: 'Sincerity is hidden in the heart. Make your Niyyah only for Allah, seeking His pleasure and reward.',
@@ -145,14 +159,48 @@ export const RITUAL_STEPS: RitualStep[] = [
     next: 'I have prepared for Ihram',
   },
   {
-    key: 'tawaf',
+    key: 'talbiyah',
     step: 3,
-    phase: 'In Masjid al-Haram',
+    phase: 'Entering Ihram',
+    title: 'Talbiyah',
+    subtitle: 'Declare your response to Allah’s call',
+    approxMin: 'ongoing',
+    intro:
+      'After making your intention, begin reciting the Talbiyah and continue often (men raising the voice) until you reach Masjid al-Haram in Makkah.',
+    duas: [TALBIYAH_DUA],
+    tip: 'Talbiyah is your declaration that you have answered Allah’s call — recite it with love, humility and eagerness.',
+    image: 'talbiyah',
+    next: 'I have started the Talbiyah',
+  },
+  {
+    key: 'enter-haram',
+    step: 4,
+    phase: 'Arrival in Makkah',
+    title: 'Enter Masjid al-Haram',
+    subtitle: 'Arrive at the House of Allah',
+    approxMin: null,
+    intro:
+      'Enter with respect and humility. Step in with your right foot and recite the entry du‘a. At your first sight of the Kaaba, pause — a moment when du‘a is hoped to be accepted.',
+    duas: [ENTRY_DUA],
+    instructions: [
+      'First sight of the Kaaba — look with love and awe.',
+      'Raise your hands and make du‘a for yourself, your family and the Ummah.',
+      'Stay calm and grateful; maintain adab — speak softly and avoid crowding.',
+    ],
+    checklist: ['Entered Masjid al-Haram', 'Saw the Kaaba & made du‘a'],
+    tip: 'You have reached the House of Allah. Every step here is an act of worship.',
+    image: 'kaaba-arrival',
+    next: 'Begin Tawaf',
+  },
+  {
+    key: 'tawaf',
+    step: 5,
+    phase: 'Tawaf',
     title: 'Tawaf (Circumambulation)',
     subtitle: 'Walk around the Kaaba 7 times',
     approxMin: 40,
     intro:
-      'Enter the mosque with your right foot. At your first sight of the Kaaba, pause and make du‘a. Then begin Tawaf at the Black Stone (Hajar al-Aswad) corner, keeping the Kaaba on your left, anti-clockwise. Tap “+1 round” for each circuit. Time varies a lot with the crowd.',
+      'Begin Tawaf at the Black Stone (Hajar al-Aswad) corner, keeping the Kaaba on your left, anti-clockwise. Tap “+1 round” for each circuit. Time varies a lot with the crowd.',
     instructions: [
       'Face / gesture to the Black Stone to begin, saying “Bismillah, Allāhu Akbar”.',
       'Men: uncover the right shoulder (idtiba‘) and walk briskly (raml) in the first three rounds.',
@@ -166,7 +214,7 @@ export const RITUAL_STEPS: RitualStep[] = [
   },
   {
     key: 'maqam-ibrahim',
-    step: 4,
+    step: 6,
     phase: 'In Masjid al-Haram',
     title: 'Prayer behind Maqam Ibrahim',
     subtitle: 'Pray two Rak‘ahs',
@@ -179,7 +227,7 @@ export const RITUAL_STEPS: RitualStep[] = [
   },
   {
     key: 'zamzam',
-    step: 5,
+    step: 7,
     phase: 'In Masjid al-Haram',
     title: 'Drink Zamzam Water',
     subtitle: 'Drink and make du‘a',
@@ -191,7 +239,7 @@ export const RITUAL_STEPS: RitualStep[] = [
   },
   {
     key: 'safa',
-    step: 6,
+    step: 8,
     phase: 'Sa‘i',
     title: 'Go to Safa',
     subtitle: 'Begin from Mount Safa',
@@ -204,7 +252,7 @@ export const RITUAL_STEPS: RitualStep[] = [
   },
   {
     key: 'sai',
-    step: 7,
+    step: 9,
     phase: 'Sa‘i',
     title: 'Sa‘i (between Safa & Marwah)',
     subtitle: 'Walk seven times between the two hills',
@@ -221,7 +269,7 @@ export const RITUAL_STEPS: RitualStep[] = [
   },
   {
     key: 'complete-sai',
-    step: 8,
+    step: 10,
     phase: 'Sa‘i',
     title: 'Complete Sa‘i',
     subtitle: 'Confirm your seven passages',
@@ -233,7 +281,7 @@ export const RITUAL_STEPS: RitualStep[] = [
   },
   {
     key: 'halq',
-    step: 9,
+    step: 11,
     phase: 'Completing Umrah',
     title: 'Hair Cutting / Shaving',
     subtitle: 'Halq or Taqsir',
@@ -247,7 +295,7 @@ export const RITUAL_STEPS: RitualStep[] = [
   },
   {
     key: 'end-ihram',
-    step: 10,
+    step: 12,
     phase: 'Completing Umrah',
     title: 'End of Ihram',
     subtitle: 'The restrictions are lifted',
@@ -259,7 +307,7 @@ export const RITUAL_STEPS: RitualStep[] = [
   },
   {
     key: 'visit-makkah',
-    step: 11,
+    step: 13,
     phase: 'After Umrah',
     title: 'Visit Important Places (Makkah)',
     subtitle: 'Ziyarah around Makkah',
@@ -271,7 +319,7 @@ export const RITUAL_STEPS: RitualStep[] = [
   },
   {
     key: 'make-dua',
-    step: 12,
+    step: 14,
     phase: 'After Umrah',
     title: 'Make Du‘a',
     subtitle: 'For yourself, your family and the Ummah',
@@ -283,7 +331,7 @@ export const RITUAL_STEPS: RitualStep[] = [
   },
   {
     key: 'visit-madinah',
-    step: 13,
+    step: 15,
     phase: 'After Umrah',
     title: 'Optional: Visit Madinah',
     subtitle: 'The City of the Prophet ﷺ',
@@ -296,7 +344,7 @@ export const RITUAL_STEPS: RitualStep[] = [
   },
   {
     key: 'good-deeds',
-    step: 14,
+    step: 16,
     phase: 'After Umrah',
     title: 'Continue Good Deeds',
     subtitle: 'Keep the spirit of Umrah alive',
@@ -308,7 +356,7 @@ export const RITUAL_STEPS: RitualStep[] = [
   },
   {
     key: 'umrah-complete',
-    step: 15,
+    step: 17,
     phase: 'Umrah Complete',
     title: 'Umrah Complete',
     subtitle: 'May Allah accept your Umrah',
