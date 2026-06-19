@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { IBM_Plex_Mono, IBM_Plex_Sans, IBM_Plex_Sans_Arabic, IBM_Plex_Serif } from 'next/font/google';
 import { NextIntlClientProvider, type AbstractIntlMessages } from 'next-intl';
 import { DEFAULT_LOCALE, LOCALE_COOKIE, dirFor, isLocale, type Locale } from '../src/i18n/locales';
+import { ServiceWorkerRegister } from '../src/components/ServiceWorkerRegister';
 import en from '../messages/en.json';
 import lt from '../messages/lt.json';
 import ur from '../messages/ur.json';
@@ -26,6 +27,12 @@ const arabic = IBM_Plex_Sans_Arabic({ subsets: ['arabic'], weight: ['400', '500'
 export const metadata = {
   title: 'AUJ — Pilgrimage & travel',
   description: 'Umrah, Hajj & Ziyarat for the EU and the Pakistani diaspora — one cart, e-Visa guidance, EUR/PKR pricing.',
+  manifest: '/manifest.webmanifest',
+  appleWebApp: { capable: true, title: 'AUJ', statusBarStyle: 'default' as const },
+};
+
+export const viewport = {
+  themeColor: '#0f5132',
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
@@ -36,6 +43,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     <html lang={locale} dir={dirFor(locale)} className={`${sans.variable} ${serif.variable} ${mono.variable} ${arabic.variable}`}>
       <body className="font-sans antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>{children}</NextIntlClientProvider>
+        <ServiceWorkerRegister />
       </body>
     </html>
   );
