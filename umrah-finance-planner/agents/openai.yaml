@@ -1,0 +1,5 @@
+interface:
+  display_name: Umrah Finance Planner
+  short_description: Build admin finance calculators and B2B Umrah trip planning workflows.
+  icon: 💼
+  accent_color: '#064E3B'
