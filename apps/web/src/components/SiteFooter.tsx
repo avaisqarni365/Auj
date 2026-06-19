@@ -38,7 +38,7 @@ export function SiteFooter() {
           <div>
             <Link href="/" className="inline-flex items-center rounded-xl focus-visible:outline-none focus-visible:shadow-focus" aria-label="AUJ Travelers — home">
               <img
-                src="/img/brand/auj-logo.png"
+                src="/img/brand/auj-logo.webp"
                 alt="AUJ Travelers"
                 width={80}
                 height={80}

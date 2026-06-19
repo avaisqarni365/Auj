@@ -67,21 +67,21 @@ export function ritualAudioSrc(key: string): string {
 // provided, hence the mixed casing). Each wizard step shows this as its hero. Step keys match
 // RITUAL_STEPS in ritual-content.ts.
 const STEP_DESIGN: Record<string, string> = {
-  niyyah: '1_Umrah.png',
-  ihram: '2_Umrah.png',
-  'niyyah-miqat': '3_Umrah.png',
-  talbiyah: '4_umrah.png',
-  'enter-haram': '5_Umrah.png',
-  'tawaf-start': 'Umrah_6.png',
-  'tawaf-complete': 'Umrah_7.png',
-  'two-rakahs': 'Umrah_8.png',
-  'sai-start': 'Umrah_9.png',
-  'sai-complete': 'Umrah_10.png',
-  halq: '11_Umrah.png',
-  'umrah-complete': '12_Umrah.png',
-  'optional-acts': '13_umrah.png',
-  'final-dua': '14_Umrah.png',
-  'visit-madinah': '15_Umrah.png',
+  niyyah: '1_Umrah.webp',
+  ihram: '2_Umrah.webp',
+  'niyyah-miqat': '3_Umrah.webp',
+  talbiyah: '4_umrah.webp',
+  'enter-haram': '5_Umrah.webp',
+  'tawaf-start': 'Umrah_6.webp',
+  'tawaf-complete': 'Umrah_7.webp',
+  'two-rakahs': 'Umrah_8.webp',
+  'sai-start': 'Umrah_9.webp',
+  'sai-complete': 'Umrah_10.webp',
+  halq: '11_Umrah.webp',
+  'umrah-complete': '12_Umrah.webp',
+  'optional-acts': '13_umrah.webp',
+  'final-dua': '14_Umrah.webp',
+  'visit-madinah': '15_Umrah.webp',
 };
 
 /** Full designed step image URL (or null if none mapped — then the wizard shows no poster). */

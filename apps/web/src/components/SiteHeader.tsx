@@ -27,7 +27,7 @@ export function SiteHeader({ user }: { user?: PublicUser }) {
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-[clamp(16px,4vw,32px)] py-3">
         <Link href="/" className="flex items-center rounded-lg focus-visible:outline-none focus-visible:shadow-focus" aria-label="AUJ Travelers — home">
           <img
-            src="/img/brand/auj-logo.png"
+            src="/img/brand/auj-logo.webp"
             alt="AUJ Travelers"
             width={48}
             height={48}

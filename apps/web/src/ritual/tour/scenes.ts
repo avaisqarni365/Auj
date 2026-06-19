@@ -3,7 +3,7 @@
 // exist each scene falls back to a real wide Makkah/Madinah photo so the viewer is never empty.
 
 const BASE = (process.env.NEXT_PUBLIC_IMG_BASE ?? '').replace(/\/$/, '');
-const FALLBACK = `${BASE}/img/scenes/makkah-madinah.png`;
+const FALLBACK = `${BASE}/img/scenes/makkah-madinah.webp`;
 
 interface SceneDef {
   id: string;

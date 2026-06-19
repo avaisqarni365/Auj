@@ -17,8 +17,8 @@ interface Scene {
 }
 
 export const SCENES: Record<SceneName, Scene> = {
-  makkah: { file: 'makkah-haram.svg', alt: 'Masjid al-Haram, Makkah — the Kaaba at dusk' },
-  madinah: { file: 'madinah-nabawi.svg', alt: 'Masjid an-Nabawi, Madinah — the green dome at night' },
+  makkah: { file: 'makkah.webp', alt: 'Masjid al-Haram, Makkah — the Kaaba at dusk' },
+  madinah: { file: 'madinah.webp', alt: 'Masjid an-Nabawi, Madinah — the green dome at sunset' },
   ziyarat: { file: 'ziyarat-iraq.svg', alt: 'Ziyarat — the golden shrine domes of Najaf and Karbala' },
 };
 
