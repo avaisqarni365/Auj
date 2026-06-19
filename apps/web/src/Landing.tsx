@@ -113,7 +113,14 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
           {/* right: hero scene (Makkah) + floating live-status / price cards */}
           <div className="relative min-w-0 animate-fade-in">
             <div className="relative h-[clamp(360px,42vw,520px)] overflow-hidden rounded-3xl border border-white/10 bg-[radial-gradient(120%_90%_at_68%_16%,#2A9468_0%,#0F5132_42%,#062418_100%)] shadow-[0_36px_70px_-28px_rgba(5,28,18,0.75)]">
-              <Scene name="makkah" priority className="animate-kenburns absolute inset-0 h-full w-full object-cover" />
+              <img
+                src="/img/scenes/makkah-madinah.png"
+                alt="Masjid al-Haram, Makkah and Masjid an-Nabawi, Madinah at dusk"
+                loading="eager"
+                decoding="async"
+                draggable={false}
+                className="animate-kenburns absolute inset-0 h-full w-full object-cover object-left"
+              />
               <span className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-green-950/55 to-transparent" />
             </div>
             <div className="animate-float absolute -left-2 top-5 w-[232px] max-w-[70%] rounded-2xl bg-white p-4 text-sand-ink shadow-[0_20px_44px_rgba(5,28,18,0.34)]">
@@ -563,12 +570,22 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
 
       {/* CTA band */}
       <div id="agents" className="mx-auto max-w-6xl px-[clamp(16px,4vw,32px)] py-10">
-        <div className="flex flex-wrap items-center justify-between gap-6 rounded-3xl bg-green-800 p-[clamp(24px,4vw,44px)] text-green-50">
-          <div>
+        <div className="relative flex flex-wrap items-center justify-between gap-6 overflow-hidden rounded-3xl bg-green-800 p-[clamp(24px,4vw,44px)] text-green-50">
+          <img
+            src="/img/scenes/makkah-madinah.png"
+            alt=""
+            aria-hidden
+            loading="lazy"
+            decoding="async"
+            draggable={false}
+            className="absolute inset-0 h-full w-full object-cover object-right"
+          />
+          <span aria-hidden className="absolute inset-0 bg-gradient-to-r from-green-950/92 via-green-900/80 to-green-900/55" />
+          <div className="relative">
             <h2 className="font-serif text-[clamp(1.5rem,3vw,2rem)] font-semibold">Ready to begin?</h2>
             <p className="mt-1 text-green-100/80">Plan a pilgrimage, or open a trade account for your agency.</p>
           </div>
-          <div className="flex flex-wrap gap-3">
+          <div className="relative flex flex-wrap gap-3">
             <a href="#plan" className="rounded-xl bg-sand-50 px-6 py-3 text-sm font-semibold text-green-900 transition-[transform,background-color] duration-fast hover:bg-white active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">Plan my pilgrimage</a>
             <a href="#" className="rounded-xl border border-white/25 bg-white/10 px-6 py-3 text-sm font-semibold transition-[transform,background-color] duration-fast hover:bg-white/15 active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">For travel agents</a>
           </div>
