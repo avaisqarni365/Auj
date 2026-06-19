@@ -24,15 +24,19 @@ export function SiteHeader({ user }: { user?: PublicUser }) {
   const locale = useLocale();
   return (
     <header className="sticky top-0 z-50 border-b border-sand-200 bg-sand-50/85 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-[clamp(16px,4vw,32px)] py-3">
-        <Link href="/" className="flex items-center rounded-lg focus-visible:outline-none focus-visible:shadow-focus" aria-label="AUJ Travelers — home">
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-[clamp(16px,4vw,32px)] py-2.5">
+        <Link href="/" className="flex items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:shadow-focus" aria-label="AUJ Travelers — home">
           <img
             src="/img/brand/auj-logo-simple.webp"
             alt="AUJ Travelers"
-            width={88}
-            height={88}
-            className="h-[72px] w-auto object-contain"
+            width={120}
+            height={120}
+            className="h-[88px] w-auto object-contain"
           />
+          <span className="leading-tight">
+            <span className="block font-serif text-[26px] font-semibold tracking-[0.04em] text-green-900">AUJ Travelers</span>
+            <span className="block text-[11px] font-semibold uppercase tracking-[0.18em] text-sand-500">Umrah · Hajj · Travel</span>
+          </span>
         </Link>
         <nav className="hidden flex-wrap items-center gap-0.5 md:flex">
           {NAV_LINKS.map((n) => (

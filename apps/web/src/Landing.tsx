@@ -61,7 +61,7 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
   const supportChannels = tl.raw('supportChannels') as string[];
 
   return (
-    <div className="overflow-x-hidden bg-white text-sand-ink">
+    <div className="overflow-x-hidden bg-sand-50 text-sand-ink">
       {/* announcement */}
       <div className="bg-green-950 text-[13px] text-green-100">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-[clamp(16px,4vw,32px)] py-2.5">
@@ -79,9 +79,9 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
       {/* nav */}
       <SiteHeader user={user} />
 
-      {/* hero — calm two-column, fills the first screen (no scroll), white + high contrast */}
-      <section className="flex min-h-[calc(100svh-128px)] items-center bg-white px-[clamp(16px,4vw,32px)] py-[clamp(20px,3vw,40px)]">
-        <div className="mx-auto grid w-full max-w-6xl items-center gap-[clamp(28px,5vw,64px)] md:grid-cols-[1.05fr_0.95fr]">
+      {/* hero — calm two-column, fills the first screen (no scroll), warm white + high contrast */}
+      <section className="flex min-h-[calc(100svh-150px)] items-center bg-sand-50 px-[clamp(16px,4vw,32px)] py-[clamp(20px,3vw,40px)]">
+        <div className="mx-auto grid w-full max-w-6xl items-center gap-[clamp(28px,5vw,56px)] md:grid-cols-[1.32fr_0.68fr]">
           {/* text */}
           <div className="animate-rise">
             <span className="inline-flex items-center gap-2 rounded-full border border-sand-200 bg-sand-50 px-3.5 py-1.5 text-[12.5px] font-medium text-green-800">
@@ -111,17 +111,17 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
               ))}
             </div>
           </div>
-          {/* image — portrait, capped to the viewport so the whole hero fits one screen */}
-          <div className="relative animate-fade-in">
-            <div className="relative max-h-[68svh] overflow-hidden rounded-[24px] border border-sand-200 shadow-[0_40px_80px_-38px_rgba(5,28,18,0.4)] [aspect-ratio:4/5]">
+          {/* image — smaller, right-aligned portrait */}
+          <div className="relative ms-auto w-full max-w-[300px] animate-fade-in">
+            <div className="relative max-h-[52svh] overflow-hidden rounded-[22px] border border-sand-200 shadow-[0_34px_70px_-36px_rgba(5,28,18,0.4)] [aspect-ratio:4/5]">
               <Scene name="makkah" priority className="animate-kenburns absolute inset-0 h-full w-full object-cover" />
-              <span className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-green-950/30 to-transparent" />
+              <span className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-green-950/30 to-transparent" />
             </div>
-            <div className="animate-float absolute -left-3 bottom-6 rounded-2xl bg-white/95 p-3.5 shadow-[0_18px_40px_rgba(5,28,18,0.2)] backdrop-blur">
-              <div className="text-[11px] font-semibold text-sand-500">Umrah Premium · 14 nights</div>
-              <div className="mt-1 flex items-baseline gap-2">
-                <span className="font-mono text-[20px] font-bold text-green-800">€2,480</span>
-                <span className="font-mono text-[11px] text-sand-500">≈ ₨771k</span>
+            <div className="animate-float absolute -left-3 bottom-5 rounded-2xl bg-white/95 p-3 shadow-[0_18px_40px_rgba(5,28,18,0.2)] backdrop-blur">
+              <div className="text-[10.5px] font-semibold text-sand-500">Umrah Premium · 14 nights</div>
+              <div className="mt-0.5 flex items-baseline gap-2">
+                <span className="font-mono text-[18px] font-bold text-green-800">€2,480</span>
+                <span className="font-mono text-[10.5px] text-sand-500">≈ ₨771k</span>
               </div>
             </div>
           </div>
