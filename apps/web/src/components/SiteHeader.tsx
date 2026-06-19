@@ -27,11 +27,11 @@ export function SiteHeader({ user }: { user?: PublicUser }) {
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-[clamp(16px,4vw,32px)] py-3">
         <Link href="/" className="flex items-center rounded-lg focus-visible:outline-none focus-visible:shadow-focus" aria-label="AUJ Travelers — home">
           <img
-            src="/img/brand/auj-logo.webp"
+            src="/img/brand/auj-logo-simple.webp"
             alt="AUJ Travelers"
-            width={48}
-            height={48}
-            className="h-12 w-12 rounded-lg object-contain"
+            width={64}
+            height={64}
+            className="h-16 w-auto object-contain"
           />
         </Link>
         <nav className="hidden flex-wrap items-center gap-0.5 md:flex">

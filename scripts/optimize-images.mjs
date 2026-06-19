@@ -28,6 +28,7 @@ await webp(combined, path.join(scenes, 'madinah.webp'), 1000, 80, { left: 768, t
 
 console.log('Brand logo:');
 await webp(path.join(brand, 'auj-logo.png'), path.join(brand, 'auj-logo.webp'), 256, 88);
+await webp(path.join(scenes, 'Logo -Simple.png'), path.join(brand, 'auj-logo-simple.webp'), 480, 90);
 
 console.log('Umrah step infographics:');
 const steps = [
