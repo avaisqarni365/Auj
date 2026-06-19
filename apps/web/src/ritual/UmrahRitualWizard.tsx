@@ -384,12 +384,20 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
             ))}
           </select>
         </label>
-        <Link
-          href="/guide/tour"
-          className="rounded-full border border-sand-300 bg-white px-3.5 py-1.5 text-[12.5px] font-semibold text-green-800 transition-colors duration-fast hover:bg-sand-50"
-        >
-          🧭 {t.virtualTour} →
-        </Link>
+        <span className="flex flex-wrap items-center gap-2">
+          <Link
+            href="/guide/profile"
+            className="rounded-full border border-sand-300 bg-white px-3.5 py-1.5 text-[12.5px] font-semibold text-green-800 transition-colors duration-fast hover:bg-sand-50"
+          >
+            🧭 My journey
+          </Link>
+          <Link
+            href="/guide/tour"
+            className="rounded-full border border-sand-300 bg-white px-3.5 py-1.5 text-[12.5px] font-semibold text-green-800 transition-colors duration-fast hover:bg-sand-50"
+          >
+            {t.virtualTour} →
+          </Link>
+        </span>
       </div>
 
       {/* progress + timer header */}

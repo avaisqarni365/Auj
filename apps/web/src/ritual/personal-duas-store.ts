@@ -6,8 +6,12 @@ export interface PersonalDua {
   id: string;
   stepKey: string;
   text: string;
-  /** Language code the pilgrim wrote in (en, ar, ur, fr, tr, id, bn, de…). */
+  /** Language code the pilgrim wrote in (en, ar, ur, tr, de…). */
   lang: string;
+  /** Optional transliteration (how to say it) + meaning (translation). */
+  translit?: string;
+  meaning?: string;
+  /** Family names / personal note attached to this du'a. */
   note?: string;
   pinned: boolean;
   createdAt: number;
@@ -55,6 +59,8 @@ export function saveDua(input: {
   stepKey: string;
   text: string;
   lang: string;
+  translit?: string;
+  meaning?: string;
   note?: string;
   pinned?: boolean;
 }): PersonalDua | null {
@@ -64,7 +70,14 @@ export function saveDua(input: {
     const idx = all.findIndex((d) => d.id === input.id);
     if (idx >= 0) {
       const existing = all[idx]!;
-      const updated: PersonalDua = { ...existing, text: input.text, lang: input.lang, note: input.note };
+      const updated: PersonalDua = {
+        ...existing,
+        text: input.text,
+        lang: input.lang,
+        translit: input.translit,
+        meaning: input.meaning,
+        note: input.note,
+      };
       all[idx] = updated;
       writeAll(all);
       return updated;
@@ -75,6 +88,8 @@ export function saveDua(input: {
     stepKey: input.stepKey,
     text: input.text,
     lang: input.lang,
+    translit: input.translit,
+    meaning: input.meaning,
     note: input.note,
     pinned: input.pinned ?? false,
     createdAt: Date.now(),

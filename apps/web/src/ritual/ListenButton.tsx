@@ -10,13 +10,20 @@ function ttsAvailable(): boolean {
 }
 
 /**
- * Plays an audio file if `audioSrc` is given and loads; otherwise falls back to the browser's
- * speech synthesis to read `text` in `lang`. Offers normal + slow playback and a stop control.
- * Icon-only (aria-labelled) so it needs no per-language label text.
+ * Plays an audio file if `audioSrc` is given and loads; otherwise reads `text` aloud via the
+ * browser's speech synthesis. Normal + slow playback, a repeat/loop toggle, a stop control, and a
+ * transcript shown while it plays. Icon-only buttons so no per-language label text is needed.
  */
 export function ListenButton({ audioSrc, text, lang }: { audioSrc?: string; text: string; lang: string }) {
   const [playing, setPlaying] = useState(false);
+  const [loop, setLoop] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const loopRef = useRef(false);
+  const rateRef = useRef(1);
+  useEffect(() => {
+    loopRef.current = loop;
+    if (audioRef.current) audioRef.current.loop = loop;
+  }, [loop]);
 
   const stop = (): void => {
     if (audioRef.current) {
@@ -36,7 +43,10 @@ export function ListenButton({ audioSrc, text, lang }: { audioSrc?: string; text
     const u = new SpeechSynthesisUtterance(text);
     u.lang = BCP47[lang] ?? 'en-US';
     u.rate = rate;
-    u.onend = () => setPlaying(false);
+    u.onend = () => {
+      if (loopRef.current) speak(rate);
+      else setPlaying(false);
+    };
     u.onerror = () => setPlaying(false);
     setPlaying(true);
     window.speechSynthesis.speak(u);
@@ -44,10 +54,14 @@ export function ListenButton({ audioSrc, text, lang }: { audioSrc?: string; text
 
   const play = (rate: number): void => {
     stop();
+    rateRef.current = rate;
     if (audioSrc) {
       const a = new Audio(audioSrc);
       a.playbackRate = rate;
-      a.onended = () => setPlaying(false);
+      a.loop = loopRef.current;
+      a.onended = () => {
+        if (!loopRef.current) setPlaying(false);
+      };
       a.onerror = () => {
         audioRef.current = null;
         speak(rate); // missing/blocked file → speak the text instead
@@ -65,38 +79,41 @@ export function ListenButton({ audioSrc, text, lang }: { audioSrc?: string; text
 
   useEffect(() => () => stop(), []);
 
+  const btn = 'inline-flex h-8 items-center gap-1 rounded-lg border px-2.5 text-[12.5px] font-semibold';
+
   return (
-    <span className="inline-flex items-center gap-1">
-      {playing ? (
+    <span className="inline-flex flex-col gap-1.5">
+      <span className="inline-flex flex-wrap items-center gap-1">
+        {playing ? (
+          <button type="button" onClick={stop} aria-label="Stop" className={`${btn} border-sand-300 bg-white text-sand-700 hover:bg-sand-50`}>
+            ⏹ Stop
+          </button>
+        ) : (
+          <>
+            <button type="button" onClick={() => play(1)} aria-label="Listen" className={`${btn} border-green-700/30 bg-white text-green-800 hover:bg-green-50`}>
+              ▶ Listen
+            </button>
+            <button type="button" onClick={() => play(0.7)} aria-label="Listen slowly" title="Slow" className={`${btn} border-sand-300 bg-white text-sand-600 hover:bg-sand-50`}>
+              🐢
+            </button>
+          </>
+        )}
         <button
           type="button"
-          onClick={stop}
-          aria-label="Stop"
-          className="inline-flex h-8 items-center gap-1 rounded-lg border border-sand-300 bg-white px-2.5 text-[12.5px] font-semibold text-sand-700 hover:bg-sand-50"
+          onClick={() => setLoop((v) => !v)}
+          aria-pressed={loop}
+          aria-label="Repeat"
+          title="Repeat"
+          className={`${btn} ${loop ? 'border-green-800 bg-green-800 text-white' : 'border-sand-300 bg-white text-sand-600 hover:bg-sand-50'}`}
         >
-          ⏹ Stop
+          🔁
         </button>
-      ) : (
-        <>
-          <button
-            type="button"
-            onClick={() => play(1)}
-            aria-label="Listen"
-            className="inline-flex h-8 items-center gap-1 rounded-lg border border-green-700/30 bg-white px-2.5 text-[12.5px] font-semibold text-green-800 hover:bg-green-50"
-          >
-            ▶ Listen
-          </button>
-          <button
-            type="button"
-            onClick={() => play(0.7)}
-            aria-label="Listen slowly"
-            title="Slow"
-            className="inline-flex h-8 items-center rounded-lg border border-sand-300 bg-white px-2 text-[12.5px] font-semibold text-sand-600 hover:bg-sand-50"
-          >
-            🐢
-          </button>
-        </>
-      )}
+      </span>
+      {playing ? (
+        <span dir={lang === 'ar' || lang === 'ur' ? 'rtl' : 'ltr'} className="max-w-[36ch] text-[11.5px] leading-snug text-sand-500">
+          🔊 {text}
+        </span>
+      ) : null}
     </span>
   );
 }

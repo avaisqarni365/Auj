@@ -11,8 +11,8 @@ import {
   type CostBasis,
   type FinanceInputs,
 } from './calc';
-import { saveCalculationAction } from './actions';
-import type { SavedCalc } from './store';
+import { listActivityAction, saveCalculationAction } from './actions';
+import { FINANCE_STATUSES, type ActivityEntry, type FinanceStatus, type SavedCalc } from './types';
 
 const INPUT =
   'w-full rounded-lg border-[1.5px] border-sand-300 bg-white px-3 py-2 text-[14px] focus:border-green-700 focus:outline-none';
@@ -89,10 +89,13 @@ function Row({ label, value, strong, tone }: { label: string; value: string; str
   );
 }
 
-export function FinanceCalculator({ saved }: { saved: SavedCalc[] }) {
+export function FinanceCalculator({ saved, activity }: { saved: SavedCalc[]; activity: ActivityEntry[] }) {
   const [i, setI] = useState<FinanceInputs>(defaultInputs);
   const [name, setName] = useState('');
+  const [status, setStatus] = useState<FinanceStatus>('draft');
+  const [note, setNote] = useState('');
   const [list, setList] = useState<SavedCalc[]>(saved);
+  const [acts, setActs] = useState<ActivityEntry[]>(activity);
   const [savedRef, setSavedRef] = useState<string>();
   const [pending, start] = useTransition();
 
@@ -104,8 +107,10 @@ export function FinanceCalculator({ saved }: { saved: SavedCalc[] }) {
 
   const save = (): void =>
     start(async () => {
-      const result = await saveCalculationAction(name, i);
+      const result = await saveCalculationAction(name, i, status, note);
       setList((cur2) => [result, ...cur2]);
+      setActs(await listActivityAction());
+      setNote('');
       setSavedRef(result.ref);
     });
 
@@ -225,6 +230,12 @@ export function FinanceCalculator({ saved }: { saved: SavedCalc[] }) {
 
           <Card title="Save calculation">
             <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Name (defaults to package name)" className={INPUT} />
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              <select value={status} onChange={(e) => setStatus(e.target.value as FinanceStatus)} className={`${INPUT} capitalize`}>
+                {FINANCE_STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
+              </select>
+              <input value={note} onChange={(e) => setNote(e.target.value)} placeholder="Reason / note" className={INPUT} />
+            </div>
             <button type="button" onClick={save} disabled={pending} className="mt-3 w-full rounded-xl bg-green-800 py-2.5 text-sm font-semibold text-white transition-[transform,background-color] duration-fast hover:bg-green-700 active:scale-[0.98] disabled:opacity-50">
               {pending ? 'Saving…' : 'Save to database'}
             </button>
@@ -242,7 +253,7 @@ export function FinanceCalculator({ saved }: { saved: SavedCalc[] }) {
               <thead>
                 <tr className="border-b border-sand-100 text-left text-[11px] uppercase tracking-wider text-sand-400">
                   <th className="px-4 py-2.5">Ref</th><th className="px-4 py-2.5">Package</th><th className="px-4 py-2.5">Pax</th>
-                  <th className="px-4 py-2.5 text-right">Selling</th><th className="px-4 py-2.5 text-right">Profit</th>
+                  <th className="px-4 py-2.5">Status</th><th className="px-4 py-2.5 text-right">Selling</th><th className="px-4 py-2.5 text-right">Profit</th>
                 </tr>
               </thead>
               <tbody>
@@ -251,8 +262,38 @@ export function FinanceCalculator({ saved }: { saved: SavedCalc[] }) {
                     <td className="px-4 py-2.5 font-mono text-[12.5px] text-sand-500">{s.ref}</td>
                     <td className="px-4 py-2.5 font-semibold">{s.name}</td>
                     <td className="px-4 py-2.5">{s.travellers}</td>
+                    <td className="px-4 py-2.5 capitalize text-sand-600">{s.status}</td>
                     <td className="px-4 py-2.5 text-right font-mono">{fmt(s.sellingPriceCents, s.currency)}</td>
                     <td className="px-4 py-2.5 text-right font-mono text-success-fg">{fmt(s.profitCents, s.currency)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ) : null}
+
+      {/* activity / audit log */}
+      {acts.length > 0 ? (
+        <div className="mt-8">
+          <h2 className="mb-3 text-[15px] font-bold text-sand-ink">Activity log</h2>
+          <div className="overflow-x-auto rounded-2xl border border-sand-200 bg-white">
+            <table className="w-full text-[13px]">
+              <thead>
+                <tr className="border-b border-sand-100 text-left text-[11px] uppercase tracking-wider text-sand-400">
+                  <th className="px-4 py-2.5">When</th><th className="px-4 py-2.5">Ref</th><th className="px-4 py-2.5">By</th>
+                  <th className="px-4 py-2.5">Action</th><th className="px-4 py-2.5">Status</th><th className="px-4 py-2.5">Note</th>
+                </tr>
+              </thead>
+              <tbody>
+                {acts.map((a) => (
+                  <tr key={a.id} className="border-t border-sand-100">
+                    <td className="whitespace-nowrap px-4 py-2.5 text-sand-500">{new Date(a.at).toLocaleString()}</td>
+                    <td className="px-4 py-2.5 font-mono text-[12.5px] text-sand-500">{a.ref}</td>
+                    <td className="px-4 py-2.5">{a.actor}</td>
+                    <td className="px-4 py-2.5">{a.action}</td>
+                    <td className="px-4 py-2.5 capitalize text-sand-600">{a.status}</td>
+                    <td className="px-4 py-2.5 text-sand-600">{a.note ?? '—'}</td>
                   </tr>
                 ))}
               </tbody>

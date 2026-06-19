@@ -70,6 +70,18 @@ export async function listByStep(stepKey: string): Promise<RecordingRecord[]> {
   return out.sort((a, b) => b.createdAt - a.createdAt);
 }
 
+export async function listAllRecordings(): Promise<RecordingRecord[]> {
+  const db = await openDb();
+  const out = await new Promise<RecordingRecord[]>((resolve, reject) => {
+    const tx = db.transaction(STORE, 'readonly');
+    const req = tx.objectStore(STORE).getAll();
+    req.onsuccess = () => resolve((req.result as RecordingRecord[]) ?? []);
+    req.onerror = () => reject(req.error);
+  });
+  db.close();
+  return out.sort((a, b) => b.createdAt - a.createdAt);
+}
+
 export async function deleteRecording(id: string): Promise<void> {
   const db = await openDb();
   await new Promise<void>((resolve, reject) => {

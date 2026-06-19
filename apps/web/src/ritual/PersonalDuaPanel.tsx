@@ -17,22 +17,39 @@ const isRtl = (code: string): boolean => code === 'ar' || code === 'ur';
 export function PersonalDuaPanel({ stepKey, uiLang = 'en' }: { stepKey: string; uiLang?: string }) {
   const [list, setList] = useState<PersonalDua[]>([]);
   const [text, setText] = useState('');
+  const [translit, setTranslit] = useState('');
+  const [meaning, setMeaning] = useState('');
+  const [note, setNote] = useState('');
   const [lang, setLang] = useState('en');
   const [editingId, setEditingId] = useState<string | undefined>();
 
   const reload = (): void => setList(listDuas(stepKey));
 
+  const clearForm = (): void => {
+    setText('');
+    setTranslit('');
+    setMeaning('');
+    setNote('');
+    setEditingId(undefined);
+  };
+
   useEffect(() => {
     reload();
-    setText('');
-    setEditingId(undefined);
+    clearForm();
   }, [stepKey]);
 
   const submit = (): void => {
-    const saved = saveDua({ id: editingId, stepKey, text, lang });
+    const saved = saveDua({
+      id: editingId,
+      stepKey,
+      text,
+      lang,
+      translit: translit.trim() || undefined,
+      meaning: meaning.trim() || undefined,
+      note: note.trim() || undefined,
+    });
     if (!saved) return;
-    setText('');
-    setEditingId(undefined);
+    clearForm();
     reload();
   };
 
@@ -40,14 +57,14 @@ export function PersonalDuaPanel({ stepKey, uiLang = 'en' }: { stepKey: string; 
     setEditingId(d.id);
     setText(d.text);
     setLang(d.lang);
+    setTranslit(d.translit ?? '');
+    setMeaning(d.meaning ?? '');
+    setNote(d.note ?? '');
   };
 
   const remove = (id: string): void => {
     deleteDua(id);
-    if (editingId === id) {
-      setEditingId(undefined);
-      setText('');
-    }
+    if (editingId === id) clearForm();
     reload();
   };
 
@@ -88,6 +105,9 @@ export function PersonalDuaPanel({ stepKey, uiLang = 'en' }: { stepKey: string; 
           placeholder="Write your du‘a, intention, or a name to pray for…"
           className={`w-full rounded-lg border-[1.5px] border-sand-300 px-3 py-2 text-[14px] focus:border-green-700 focus:outline-none ${isRtl(lang) ? 'text-right font-arabic' : ''}`}
         />
+        <input value={translit} onChange={(e) => setTranslit(e.target.value)} placeholder="Transliteration (optional)" className="mt-2 w-full rounded-lg border-[1.5px] border-sand-300 px-3 py-2 text-[13.5px] italic focus:border-green-700 focus:outline-none" />
+        <input value={meaning} onChange={(e) => setMeaning(e.target.value)} placeholder="Meaning / translation (optional)" className="mt-2 w-full rounded-lg border-[1.5px] border-sand-300 px-3 py-2 text-[13.5px] focus:border-green-700 focus:outline-none" />
+        <input value={note} onChange={(e) => setNote(e.target.value)} placeholder="Family names / personal note (optional)" className="mt-2 w-full rounded-lg border-[1.5px] border-sand-300 px-3 py-2 text-[13.5px] focus:border-green-700 focus:outline-none" />
         <div className="mt-2 flex flex-wrap items-center gap-2">
           <select
             value={lang}
@@ -109,10 +129,7 @@ export function PersonalDuaPanel({ stepKey, uiLang = 'en' }: { stepKey: string; 
           {editingId ? (
             <button
               type="button"
-              onClick={() => {
-                setEditingId(undefined);
-                setText('');
-              }}
+              onClick={clearForm}
               className="rounded-lg border border-sand-300 bg-white px-3 py-1.5 text-[13px] font-semibold text-sand-600 hover:bg-sand-100"
             >
               Cancel
@@ -131,6 +148,9 @@ export function PersonalDuaPanel({ stepKey, uiLang = 'en' }: { stepKey: string; 
                   {d.pinned ? '📌 ' : ''}
                   {d.text}
                 </p>
+                {d.translit ? <p className="mt-1 text-[12.5px] italic text-sand-600">{d.translit}</p> : null}
+                {d.meaning ? <p className="mt-0.5 text-[12.5px] text-sand-600">“{d.meaning}”</p> : null}
+                {d.note ? <p className="mt-1 text-[11.5px] text-sand-500">📝 {d.note}</p> : null}
                 <div className="mt-1.5 flex flex-wrap items-center gap-3 text-[12px]">
                   <span className="uppercase tracking-wider text-sand-400">{d.lang}</span>
                   <button type="button" onClick={() => pin(d.id)} className="font-semibold text-sand-600 hover:text-green-800">

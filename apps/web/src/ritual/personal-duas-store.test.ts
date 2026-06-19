@@ -28,6 +28,14 @@ describe('Personal duas store', () => {
     expect(listDuas('niyyah').map((d) => d.id)).toEqual([a.id]);
   });
 
+  it('persists transliteration, meaning and note', () => {
+    saveDua({ stepKey: 'niyyah', text: 'لبيك', lang: 'ar', translit: 'labbayk', meaning: 'here I am', note: 'for my mother' });
+    const got = listDuas('niyyah')[0]!;
+    expect(got.translit).toBe('labbayk');
+    expect(got.meaning).toBe('here I am');
+    expect(got.note).toBe('for my mother');
+  });
+
   it('exports valid JSON of all duas', () => {
     saveDua({ stepKey: 'niyyah', text: 'x', lang: 'en' });
     const parsed = JSON.parse(exportDuas());
