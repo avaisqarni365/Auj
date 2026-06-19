@@ -25,6 +25,12 @@ const RITUAL_IMAGES: Record<string, RitualImg> = {
   safa: { file: 'safa.webp', fallback: 'makkah', alt: 'Mount Safa' },
   sai: { file: 'sai.webp', fallback: 'makkah', alt: 'Sa‘i between Safa and Marwah' },
   halq: { file: 'halq.webp', fallback: 'makkah', alt: 'Hair-cutting to complete Umrah' },
+  'end-ihram': { file: 'end-ihram.webp', fallback: 'makkah', alt: 'Exiting the state of Ihram' },
+  'visit-makkah': { file: 'visit-makkah.webp', fallback: 'makkah', alt: 'Places of ziyarah in Makkah' },
+  'make-dua': { file: 'make-dua.webp', fallback: 'makkah', alt: 'Making du‘a' },
+  'visit-madinah': { file: 'visit-madinah.webp', fallback: 'madinah', alt: 'Masjid an-Nabawi, Madinah' },
+  'good-deeds': { file: 'good-deeds.webp', fallback: 'madinah', alt: 'Continuing good deeds' },
+  'umrah-complete': { file: 'umrah-complete.webp', fallback: 'madinah', alt: 'Umrah complete' },
   complete: { file: 'complete.webp', fallback: 'madinah', alt: 'Umrah complete' },
   ziyarat: { file: 'ziyarat.webp', fallback: 'madinah', alt: 'Places of ziyarah' },
 };

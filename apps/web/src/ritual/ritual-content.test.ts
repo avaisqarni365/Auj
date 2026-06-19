@@ -3,11 +3,11 @@ import { RITUAL_STEPS, ZIYARAT } from './ritual-content';
 import { ritualImage } from './ritual-images';
 
 describe('Umrah Guide content', () => {
-  it('has the 15 ordered screens ending at the Ziyarat guide', () => {
+  it('has 15 ordered screens matching the master grid (Niyyah → … → Umrah complete)', () => {
     expect(RITUAL_STEPS).toHaveLength(15);
-    expect(RITUAL_STEPS[0].key).toBe('welcome');
-    expect(RITUAL_STEPS.at(-1)?.key).toBe('ziyarat');
-    expect(RITUAL_STEPS.map((s) => s.key)).toContain('complete');
+    expect(RITUAL_STEPS[0]?.key).toBe('niyyah');
+    expect(RITUAL_STEPS.at(-1)?.key).toBe('umrah-complete');
+    expect(RITUAL_STEPS.map((s) => s.step)).toEqual(Array.from({ length: 15 }, (_, i) => i + 1));
   });
 
   it('keys are unique and every step has a title, image and next label', () => {
@@ -16,7 +16,6 @@ describe('Umrah Guide content', () => {
     for (const s of RITUAL_STEPS) {
       expect(s.title.length).toBeGreaterThan(0);
       expect(s.next.length).toBeGreaterThan(0);
-      // every image key resolves to a real src (never empty / broken)
       expect(ritualImage(s.image).src).toMatch(/\/img\/ritual\//);
       expect(ritualImage(s.image).fallbackSrc.length).toBeGreaterThan(0);
     }
@@ -28,20 +27,25 @@ describe('Umrah Guide content', () => {
     for (const c of counters) expect(c.total).toBe(7);
   });
 
-  it('every dua carries Arabic, transliteration, translation and a source', () => {
-    for (const s of RITUAL_STEPS) {
-      if (!s.dua) continue;
-      expect(s.dua.arabic.trim().length).toBeGreaterThan(0);
-      expect(s.dua.translit.trim().length).toBeGreaterThan(0);
-      expect(s.dua.translation.trim().length).toBeGreaterThan(0);
-      expect(s.dua.source.trim().length).toBeGreaterThan(0);
+  it('every dua has Arabic, transliteration, a source, and per-language meanings (6 languages)', () => {
+    const duas = RITUAL_STEPS.flatMap((s) => s.duas ?? []);
+    expect(duas.length).toBeGreaterThanOrEqual(3);
+    for (const d of duas) {
+      expect(d.arabic.trim().length).toBeGreaterThan(0);
+      expect(d.translit.trim().length).toBeGreaterThan(0);
+      expect(d.source.trim().length).toBeGreaterThan(0);
+      const codes = d.translations.map((t) => t.code);
+      expect(codes).toEqual(['en', 'ur', 'fr', 'id', 'tr', 'bn']);
+      for (const t of d.translations) expect(t.text.trim().length).toBeGreaterThan(0);
     }
   });
 
-  it('lists Makkah and Madinah ziyarat places with unique slugs', () => {
-    expect(ZIYARAT.makkah.length).toBeGreaterThanOrEqual(11);
-    expect(ZIYARAT.madinah.length).toBeGreaterThanOrEqual(8);
+  it('ziyarat steps reference real city lists with unique slugs', () => {
+    const cities = RITUAL_STEPS.filter((s) => s.ziyarat).map((s) => s.ziyarat);
+    expect(cities.sort()).toEqual(['madinah', 'makkah']);
     const slugs = [...ZIYARAT.makkah, ...ZIYARAT.madinah].map((p) => p.slug);
     expect(new Set(slugs).size).toBe(slugs.length);
+    expect(ZIYARAT.makkah.length).toBeGreaterThanOrEqual(11);
+    expect(ZIYARAT.madinah.length).toBeGreaterThanOrEqual(8);
   });
 });
