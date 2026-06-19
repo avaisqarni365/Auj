@@ -145,8 +145,10 @@ export function BookingFunnel({
   const addPilgrim = (): void => setPilgrims((cur) => [...cur, blankPilgrim()]);
   const removePilgrim = (index: number): void => setPilgrims((cur) => (cur.length > 1 ? cur.filter((_, i) => i !== index) : cur));
 
+  // Results is a multi-column grid on desktop; the other steps read best as a centered column.
+  const wide = state.step === 'RESULTS';
   return (
-    <div className="mx-auto max-w-md bg-sand-50 shadow-lg">
+    <div className={`mx-auto w-full ${wide ? 'max-w-6xl' : 'max-w-3xl'} bg-sand-50 shadow-sm`}>
       <div key={state.step} className="animate-rise">
       {state.step === 'SEARCH' && (
         <HomeSearch

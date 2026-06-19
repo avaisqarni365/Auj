@@ -85,7 +85,7 @@ export function Results({ locale, criteria, offers, onBuild, onBack }: ResultsPr
         </label>
       </div>
 
-      <div className="flex flex-col gap-3.5 px-4 pb-6">
+      <div className="grid gap-4 px-4 pb-6 sm:grid-cols-2 xl:grid-cols-3">
         {sorted.map((o, i) => (
           <div key={o.id} className="overflow-hidden rounded-[18px] border border-sand-200 bg-white shadow-sm">
             <div className={`relative h-[130px] overflow-hidden bg-gradient-to-br ${GRADIENTS[i % GRADIENTS.length]}`}>
