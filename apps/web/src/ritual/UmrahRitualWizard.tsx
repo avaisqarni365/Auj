@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import type { PublicUser } from '@auj/auth';
 import { RITUAL_STEPS, ZIYARAT, type ApproxMin, type Dua, type RitualStep } from './ritual-content';
 import { ritualAudioSrc, stepDesignImage, ziyaratImage, type ResolvedImage } from './ritual-images';
+import { RecordingPanel } from './RecordingPanel';
 
 const STORAGE_KEY = 'auj.ritual.v1';
 
@@ -451,6 +452,8 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
             </div>
           </div>
         ) : null}
+
+        <RecordingPanel stepKey={cur.key} stepTitle={cur.title} />
 
         {/* Completion extras */}
         {cur.key === 'umrah-complete' ? (
