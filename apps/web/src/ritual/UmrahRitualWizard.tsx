@@ -7,9 +7,10 @@ import { RITUAL_STEPS, ZIYARAT, type Dua, type RitualStep } from './ritual-conte
 import { ritualAudioSrc, stepDesignImage, ziyaratImage, type ResolvedImage } from './ritual-images';
 import { RecordingPanel } from './RecordingPanel';
 import { PersonalDuaPanel } from './PersonalDuaPanel';
-import { RITUAL_LOCALES, isRtlLang, localizedTitle, ui } from './i18n';
+import { RITUAL_LOCALES, isRtlLang, ui } from './i18n';
 import { useRitualLang } from './useRitualLang';
 import { ListenButton } from './ListenButton';
+import { effectiveContent, type ContentOverrides } from './content-overrides';
 
 const STORAGE_KEY = 'auj.ritual.v1';
 
@@ -235,7 +236,7 @@ function ZiyaratGrid({ city }: { city: 'makkah' | 'madinah' }) {
   );
 }
 
-export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
+export function UmrahRitualWizard({ user, overrides = {} }: { user?: PublicUser; overrides?: ContentOverrides }) {
   const [step, setStep] = useState(0);
   const [checked, setChecked] = useState<Record<string, boolean>>({});
   const [counters, setCounters] = useState<{ tawaf: number; sai: number }>({ tawaf: 0, sai: 0 });
@@ -335,6 +336,7 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
     cur.approxMin === 'ongoing' ? t.reciteOngoing : typeof cur.approxMin === 'number' ? `≈ ${cur.approxMin} ${t.min}` : null;
   const remaining = remainingMin(step);
   const counter = cur.counter;
+  const ec = effectiveContent(cur, lang, overrides);
 
   // --- Resume prompt ------------------------------------------------------
   if (hydrated && resume) {
@@ -432,9 +434,9 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
       {/* title */}
       <div className="mb-3">
         <h1 className="font-serif text-[clamp(1.4rem,3vw,1.9rem)] font-semibold leading-tight text-sand-ink">
-          <span className="text-green-800">{cur.step}.</span> {localizedTitle(cur, lang)}
+          <span className="text-green-800">{cur.step}.</span> {ec.title}
         </h1>
-        {cur.subtitle ? <p className="mt-0.5 text-[14px] font-medium text-accent-600">{cur.subtitle}</p> : null}
+        {ec.subtitle ? <p className="mt-0.5 text-[14px] font-medium text-accent-600">{ec.subtitle}</p> : null}
       </div>
 
       {/* the designed step image (tap to view full) */}
@@ -445,15 +447,15 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
           <p className="mt-4 text-[14px] font-medium text-green-800">Assalamu alaikum, {user.displayName.trim().split(/\s+/)[0]}.</p>
         ) : null}
 
-        {lang !== 'en' ? (
+        {lang !== 'en' && !ec.introTranslated ? (
           <p className="mt-4 rounded-lg bg-sand-100 px-3 py-2 text-[12px] text-sand-500">{t.langNote}</p>
         ) : null}
 
-        {cur.intro ? (
+        {ec.intro ? (
           <div className="mt-4">
-            <p className="text-[15px] leading-relaxed text-sand-700">{cur.intro}</p>
+            <p className="text-[15px] leading-relaxed text-sand-700">{ec.intro}</p>
             <div className="mt-2">
-              <ListenButton text={cur.intro} lang="en" />
+              <ListenButton text={ec.intro} lang={ec.introTranslated ? lang : 'en'} />
             </div>
           </div>
         ) : null}

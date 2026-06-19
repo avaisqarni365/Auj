@@ -1,26 +1,25 @@
 'use client';
 
+import { useEffect, useState, useTransition } from 'react';
 import { RITUAL_STEPS } from './ritual-content';
 import { RITUAL_LOCALES, localizedTitle } from './i18n';
-
-// Read-only content + translation-coverage overview for admins. Ritual content lives in code
-// (ritual-content.ts / i18n.ts), so this shows WHAT exists and WHAT still needs translating, and
-// exports a fill-in template for a translator. (Live editing would need a content DB — a later phase.)
+import { effectiveContent, type ContentOverrides } from './content-overrides';
+import { saveOverrideAction } from './content-actions';
 
 const LANGS = RITUAL_LOCALES.filter((l) => l.code !== 'en');
+const INPUT = 'w-full rounded-lg border-[1.5px] border-sand-300 bg-white px-3 py-2 text-[14px] focus:border-green-700 focus:outline-none';
+const isRtl = (c: string): boolean => c === 'ar' || c === 'ur';
 
 function exportTemplate(): void {
   if (typeof window === 'undefined') return;
   const payload = {
-    note: 'Fill the empty title/subtitle/intro strings per language, have a scholar review, then send back.',
+    note: 'Fill the empty title/subtitle/intro strings per language, have a scholar review, then paste them into the in-app editor.',
     languages: LANGS.map((l) => l.code),
     steps: RITUAL_STEPS.map((s) => ({
       key: s.key,
       step: s.step,
       en: { title: s.title, subtitle: s.subtitle ?? '', intro: s.intro ?? '' },
-      translations: Object.fromEntries(
-        LANGS.map((l) => [l.code, { title: localizedTitle(s, l.code) === s.title ? '' : localizedTitle(s, l.code), subtitle: '', intro: '' }]),
-      ),
+      translations: Object.fromEntries(LANGS.map((l) => [l.code, { title: localizedTitle(s, l.code) === s.title ? '' : localizedTitle(s, l.code), subtitle: '', intro: '' }])),
     })),
   };
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
@@ -32,44 +31,89 @@ function exportTemplate(): void {
   URL.revokeObjectURL(url);
 }
 
-export function UmrahContentAdmin() {
-  // Title coverage: a non-EN title counts as translated if it differs from the English title.
-  const titleCov = LANGS.map((l) => ({
-    code: l.code,
-    label: l.label,
-    done: RITUAL_STEPS.filter((s) => localizedTitle(s, l.code) !== s.title).length,
-  }));
-  const duas = RITUAL_STEPS.flatMap((s) => (s.duas ?? []).map((d) => ({ stepKey: s.key, translit: d.translit, codes: d.translations.map((t) => t.code) })));
-  const uniqueDuas = duas.filter((d, idx) => duas.findIndex((x) => x.translit === d.translit) === idx);
+export function UmrahContentAdmin({ overrides }: { overrides: ContentOverrides }) {
+  const [ov, setOv] = useState<ContentOverrides>(overrides);
+  const [stepKey, setStepKey] = useState<string>(RITUAL_STEPS[0]?.key ?? 'niyyah');
+  const [lang, setLang] = useState<string>('ar');
+  const [title, setTitle] = useState('');
+  const [subtitle, setSubtitle] = useState('');
+  const [intro, setIntro] = useState('');
+  const [savedMsg, setSavedMsg] = useState('');
+  const [pending, start] = useTransition();
+
+  const step = RITUAL_STEPS.find((s) => s.key === stepKey) ?? RITUAL_STEPS[0]!;
+
+  // Prefill the form with the current effective content (override if any, else the code default).
+  useEffect(() => {
+    const eff = effectiveContent(step, lang, ov);
+    setTitle(eff.title);
+    setSubtitle(eff.subtitle ?? '');
+    setIntro(eff.intro ?? '');
+    setSavedMsg('');
+  }, [stepKey, lang, ov, step]);
+
+  const save = (): void =>
+    start(async () => {
+      const updated = await saveOverrideAction(stepKey, lang, { title, subtitle, intro });
+      setOv(updated);
+      setSavedMsg(`Saved · ${step.title} (${lang})`);
+    });
+
+  const titleDone = (s: typeof step, code: string): boolean => localizedTitle(s, code) !== s.title || !!ov[s.key]?.[code]?.title;
 
   return (
     <div className="mx-auto max-w-5xl px-[clamp(16px,4vw,32px)] py-8">
       <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="font-serif text-[clamp(1.6rem,3vw,2.1rem)] font-semibold text-sand-ink">Umrah Guide — content</h1>
-          <p className="mt-1 text-[14px] text-sand-500">15 steps · {RITUAL_LOCALES.length} languages. Translation coverage and a translator export.</p>
+          <h1 className="font-serif text-[clamp(1.6rem,3vw,2.1rem)] font-semibold text-sand-ink">Umrah Guide — content editor</h1>
+          <p className="mt-1 text-[14px] text-sand-500">Edit & translate step text live. Changes layer over the defaults and show in the guide immediately.</p>
         </div>
-        <button type="button" onClick={exportTemplate} className="rounded-xl bg-green-800 px-4 py-2.5 text-sm font-semibold text-white hover:bg-green-700">
-          ⬇ Export translation template
+        <button type="button" onClick={exportTemplate} className="rounded-xl border border-sand-300 bg-white px-4 py-2.5 text-sm font-semibold text-green-800 hover:bg-sand-50">
+          ⬇ Export template
         </button>
       </div>
 
-      {/* coverage summary */}
-      <div className="mb-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {titleCov.map((c) => (
-          <div key={c.code} className="rounded-2xl border border-sand-200 bg-white p-4">
-            <div className="text-[12px] font-bold uppercase tracking-wider text-sand-500">{c.label}</div>
-            <div className="mt-1 font-mono text-2xl font-bold text-green-800">{c.done}/{RITUAL_STEPS.length}</div>
-            <div className="text-[12px] text-sand-500">step titles translated</div>
-          </div>
-        ))}
+      {/* editor */}
+      <div className="mb-8 rounded-2xl border border-sand-200 bg-white p-5">
+        <div className="grid gap-3 sm:grid-cols-2">
+          <label className="block">
+            <span className="mb-1 block text-[12px] font-semibold uppercase tracking-wider text-sand-500">Step</span>
+            <select value={stepKey} onChange={(e) => setStepKey(e.target.value)} className={INPUT}>
+              {RITUAL_STEPS.map((s) => <option key={s.key} value={s.key}>{s.step}. {s.title}</option>)}
+            </select>
+          </label>
+          <label className="block">
+            <span className="mb-1 block text-[12px] font-semibold uppercase tracking-wider text-sand-500">Language</span>
+            <select value={lang} onChange={(e) => setLang(e.target.value)} className={INPUT}>
+              {RITUAL_LOCALES.map((l) => <option key={l.code} value={l.code}>{l.label}</option>)}
+            </select>
+          </label>
+        </div>
+        <div className="mt-3 grid gap-3">
+          <label className="block">
+            <span className="mb-1 block text-[12px] font-semibold uppercase tracking-wider text-sand-500">Title</span>
+            <input value={title} onChange={(e) => setTitle(e.target.value)} dir={isRtl(lang) ? 'rtl' : 'ltr'} className={`${INPUT} ${isRtl(lang) ? 'text-right font-arabic' : ''}`} />
+          </label>
+          <label className="block">
+            <span className="mb-1 block text-[12px] font-semibold uppercase tracking-wider text-sand-500">Subtitle</span>
+            <input value={subtitle} onChange={(e) => setSubtitle(e.target.value)} dir={isRtl(lang) ? 'rtl' : 'ltr'} className={`${INPUT} ${isRtl(lang) ? 'text-right font-arabic' : ''}`} />
+          </label>
+          <label className="block">
+            <span className="mb-1 block text-[12px] font-semibold uppercase tracking-wider text-sand-500">Intro / explanation</span>
+            <textarea value={intro} onChange={(e) => setIntro(e.target.value)} rows={4} dir={isRtl(lang) ? 'rtl' : 'ltr'} className={`${INPUT} ${isRtl(lang) ? 'text-right font-arabic' : ''}`} />
+          </label>
+        </div>
+        <div className="mt-3 flex items-center gap-3">
+          <button type="button" onClick={save} disabled={pending} className="rounded-xl bg-green-800 px-5 py-2.5 text-sm font-semibold text-white hover:bg-green-700 active:scale-[0.98] disabled:opacity-50">
+            {pending ? 'Saving…' : 'Save & publish'}
+          </button>
+          {savedMsg ? <span className="text-[13px] font-semibold text-success-fg">{savedMsg}</span> : null}
+        </div>
+        <p className="mt-2 text-[12px] text-sand-500">Clear a field and save to revert it to the built-in default. Drafts should still be scholar-reviewed before launch.</p>
       </div>
 
-      <div className="mb-3 rounded-xl border border-warning-bg bg-warning-bg/40 px-4 py-3 text-[13px] text-warning-fg">
-        Step <strong>bodies</strong> (intro/instructions) are English‑only — they show a “shown in English” note in non‑EN. Duas, titles and UI chrome are translated (drafts, pending scholarly review).
-      </div>
-
-      {/* per-step title coverage */}
+      {/* coverage */}
+      <h2 className="mb-3 text-[15px] font-bold text-sand-ink">Title translation coverage</h2>
       <div className="overflow-x-auto rounded-2xl border border-sand-200 bg-white">
         <table className="w-full text-[13.5px]">
           <thead>
@@ -85,31 +129,7 @@ export function UmrahContentAdmin() {
                 <td className="px-4 py-2.5 font-mono text-sand-500">{s.step}</td>
                 <td className="px-4 py-2.5 font-semibold">{s.title}</td>
                 {LANGS.map((l) => {
-                  const done = localizedTitle(s, l.code) !== s.title;
-                  return <td key={l.code} className={`px-3 py-2.5 text-center ${done ? 'text-success' : 'text-sand-300'}`}>{done ? '✓' : '—'}</td>;
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* dua coverage */}
-      <h2 className="mb-3 mt-8 text-[15px] font-bold text-sand-ink">Du'a meanings ({uniqueDuas.length})</h2>
-      <div className="overflow-x-auto rounded-2xl border border-sand-200 bg-white">
-        <table className="w-full text-[13.5px]">
-          <thead>
-            <tr className="border-b border-sand-100 text-left text-[11px] uppercase tracking-wider text-sand-400">
-              <th className="px-4 py-2.5">Du'a</th>
-              {LANGS.map((l) => <th key={l.code} className="px-3 py-2.5 text-center">{l.label}</th>)}
-            </tr>
-          </thead>
-          <tbody>
-            {uniqueDuas.map((d) => (
-              <tr key={d.translit} className="border-t border-sand-100">
-                <td className="px-4 py-2.5 italic text-sand-700">{d.translit}</td>
-                {LANGS.map((l) => {
-                  const done = l.code === 'ar' || d.codes.includes(l.code);
+                  const done = titleDone(s, l.code);
                   return <td key={l.code} className={`px-3 py-2.5 text-center ${done ? 'text-success' : 'text-sand-300'}`}>{done ? '✓' : '—'}</td>;
                 })}
               </tr>
