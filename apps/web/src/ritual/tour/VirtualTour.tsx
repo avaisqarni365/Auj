@@ -3,27 +3,32 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { PanoramaViewer } from './PanoramaViewer';
-import { tourScenes } from './scenes';
+import { tourChrome, tourScenes } from './scenes';
+import { isRtlLang, ui } from '../i18n';
+import { useRitualLang } from '../useRitualLang';
 
 export function VirtualTour() {
-  const scenes = tourScenes();
+  const [lang] = useRitualLang();
+  const rtl = isRtlLang(lang);
+  const scenes = tourScenes(lang);
+  const chrome = tourChrome(lang);
   const [idx, setIdx] = useState(0);
   const scene = scenes[idx] ?? scenes[0];
   if (!scene) return null;
 
   return (
-    <div className="mx-auto max-w-3xl px-4 pb-16 pt-6">
+    <div dir={rtl ? 'rtl' : 'ltr'} className="mx-auto max-w-3xl px-4 pb-16 pt-6">
       <div className="mb-3 flex items-center justify-between gap-3">
         <div>
-          <h1 className="font-serif text-[clamp(1.5rem,3.4vw,2rem)] font-semibold leading-tight text-sand-ink">Virtual tour</h1>
-          <p className="mt-0.5 text-[14px] text-sand-500">A calm walk-through of the holy places, stop by stop.</p>
+          <h1 className="font-serif text-[clamp(1.5rem,3.4vw,2rem)] font-semibold leading-tight text-sand-ink">{ui(lang).virtualTour}</h1>
+          <p className="mt-0.5 text-[14px] text-sand-500">{chrome.subtitle}</p>
         </div>
-        <Link href="/guide" className="shrink-0 rounded-xl border border-sand-300 bg-white px-4 py-2 text-[13px] font-semibold text-sand-700 hover:bg-sand-50">
-          ← Step-by-step guide
+        <Link href="/guide" className="shrink-0 rounded-xl border border-sand-300 bg-white px-4 py-2 text-[13px] font-semibold text-green-800 hover:bg-sand-50">
+          {chrome.back} →
         </Link>
       </div>
 
-      <PanoramaViewer src={scene.src} fallbackSrc={scene.fallbackSrc} alt={`${scene.title} — ${scene.subtitle}`} />
+      <PanoramaViewer src={scene.src} fallbackSrc={scene.fallbackSrc} alt={`${scene.title} — ${scene.subtitle}`} hint={chrome.hint} />
 
       <div className="mt-3">
         <div className="font-serif text-xl font-semibold text-sand-ink">{scene.title}</div>
@@ -46,11 +51,6 @@ export function VirtualTour() {
           </button>
         ))}
       </div>
-
-      <p className="mt-5 text-center text-[11.5px] leading-relaxed text-sand-500">
-        Lightweight preview — drag to look around. Add real 360° equirectangular photos in
-        <span className="font-mono"> public/img/ritual/tour/ </span> and they appear automatically.
-      </p>
     </div>
   );
 }

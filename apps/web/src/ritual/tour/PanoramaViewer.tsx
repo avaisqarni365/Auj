@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
  * height and panned horizontally by drag / arrow buttons (works with wide panoramas and reads fine
  * with equirectangular photos). Swaps to a fallback image if the scene file is missing.
  */
-export function PanoramaViewer({ src, fallbackSrc, alt }: { src: string; fallbackSrc: string; alt: string }) {
+export function PanoramaViewer({ src, fallbackSrc, alt, hint }: { src: string; fallbackSrc: string; alt: string; hint?: string }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
   const dragRef = useRef<{ pointerX: number; startX: number } | null>(null);
@@ -92,7 +92,7 @@ export function PanoramaViewer({ src, fallbackSrc, alt }: { src: string; fallbac
           </>
         ) : null}
         <span className="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 rounded-full bg-black/40 px-3 py-1 text-[11.5px] font-medium text-white/90 backdrop-blur">
-          ↔ Drag to look around
+          ↔ {hint ?? 'Drag to look around'}
         </span>
       </div>
     </div>

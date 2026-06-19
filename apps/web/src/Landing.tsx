@@ -128,6 +128,16 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
         </div>
       </section>
 
+      {/* second frame — quick launcher for every planning tool */}
+      <div className="mx-auto mt-7 max-w-3xl px-[clamp(16px,4vw,32px)]">
+        <div className="flex flex-wrap justify-center gap-2">
+          <a href="#plan" className="rounded-full border border-sand-200 bg-white px-4 py-2 text-[13px] font-semibold text-green-800 shadow-sm transition-colors duration-fast hover:bg-sand-50">📝 Smart planner</a>
+          <a href="#search" className="rounded-full border border-sand-200 bg-white px-4 py-2 text-[13px] font-semibold text-green-800 shadow-sm transition-colors duration-fast hover:bg-sand-50">🔎 Search packages</a>
+          <a href="#guide-entry" className="rounded-full border border-sand-200 bg-white px-4 py-2 text-[13px] font-semibold text-green-800 shadow-sm transition-colors duration-fast hover:bg-sand-50">🕋 Umrah Guide</a>
+          <Link href="/guide/tour" className="rounded-full border border-sand-200 bg-white px-4 py-2 text-[13px] font-semibold text-green-800 shadow-sm transition-colors duration-fast hover:bg-sand-50">🧭 Virtual tour</Link>
+        </div>
+      </div>
+
       {/* Smart Visit planner — primary widget, overlaps the hero (hero CTA scrolls here) */}
       <div id="plan" className="relative z-20 mx-auto mt-4 max-w-2xl scroll-mt-24 px-[clamp(16px,4vw,32px)]">
         <div className="animate-rise rounded-[22px] border border-sand-200 bg-white px-[clamp(6px,1.4vw,16px)] shadow-[0_24px_60px_-24px_rgba(42,38,32,0.34)]">
@@ -218,7 +228,7 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
       </div>
 
       {/* Umrah Guide — step-by-step ritual companion (distinct from the Smart Visit planner) */}
-      <section className="mx-auto max-w-6xl px-[clamp(16px,4vw,32px)] py-4">
+      <section id="guide-entry" className="mx-auto max-w-6xl scroll-mt-24 px-[clamp(16px,4vw,32px)] py-4">
         <div className="flex flex-col items-start gap-4 overflow-hidden rounded-[20px] border border-green-100 bg-gradient-to-br from-green-50 to-sand-50 p-[clamp(20px,3vw,30px)] sm:flex-row sm:items-center">
           <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-green-800 text-3xl">🕋</div>
           <div className="flex-1">

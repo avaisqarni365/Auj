@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { deleteDua, exportDuas, listDuas, saveDua, togglePin, type PersonalDua } from './personal-duas-store';
 import { ui } from './i18n';
+import { DictateButton } from './DictateButton';
 
 const LANGS: { code: string; label: string; rtl?: boolean }[] = [
   { code: 'en', label: 'English' },
@@ -97,6 +98,10 @@ export function PersonalDuaPanel({ stepKey, uiLang = 'en' }: { stepKey: string; 
       <p className="mt-0.5 text-[12px] text-sand-500">Write your own du‘a or intention for this step, in your language. Saved privately on this device.</p>
 
       <div className="mt-3 rounded-xl border border-sand-200 bg-white p-3">
+        <div className="mb-2 flex items-center justify-between">
+          <span className="text-[11.5px] text-sand-500">Type or speak your du‘a</span>
+          <DictateButton lang={lang} onText={(t) => setText((p) => (p ? `${p} ${t}` : t))} />
+        </div>
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
