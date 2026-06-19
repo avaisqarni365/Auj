@@ -1,12 +1,12 @@
-// Umrah Guide — ritual content as data (pure; unit-tested). Ordered along the master design grid
-// (0_complete.png) with Talbiyah and "Enter Masjid al-Haram" restored as their own screens (they were
-// prominent in the detailed uploads 4_Umrah / 5_Umrah): Niyyah → Ihram → Talbiyah → Enter al-Haram →
-// Tawaf → … → Umrah complete. English copy + Arabic duas (verbatim) with per-language meanings
-// (EN/UR/FR/ID/TR/BN). All ritual text + translations flagged for review (/docs/assumptions.md A6/A7).
+// Umrah Guide — ritual content as data (pure; unit-tested). Ordered to the canonical 15-step flow
+// from .claude/skills/Umrah_Performing_wizard_Pilgrim_guide.md, matching the 15 designed step images
+// (public/img/scenes/{1..15}). Each step's hero is its full designed infographic; the duas, counters,
+// checklists and audio are the live interactive layer on top. English copy + Arabic duas (verbatim)
+// with per-language meanings (EN/UR/FR/ID/TR/BN). All ritual text + translations flagged for review
+// (/docs/assumptions.md A6/A7).
 
 export type ApproxMin = number | 'ongoing' | null;
 
-/** A short piece of text in one language, for the multilingual cards. */
 export interface LangText {
   code: string;
   label: string;
@@ -31,26 +31,20 @@ export interface RitualCounter {
 
 export interface RitualStep {
   key: string;
-  /** Display number (matches the step bar in the design). */
   step: number;
   phase: string;
   title: string;
   subtitle?: string;
   approxMin: ApproxMin;
   intro?: string;
-  instructions?: string[];
-  forMen?: string[];
-  forWomen?: string[];
   checklist?: string[];
   duas?: Dua[];
   counter?: RitualCounter;
-  /** Renders the ziyarat place grid for this city. */
+  forMen?: string[];
+  forWomen?: string[];
   ziyarat?: 'makkah' | 'madinah';
-  /** A hadith / Qur'an citation line. */
   hadith?: string;
   tip?: string;
-  /** Image manifest key (resolved by ritual-images.ts, with a scene fallback). */
-  image: string;
   next: string;
 }
 
@@ -122,17 +116,15 @@ export const RITUAL_STEPS: RitualStep[] = [
   {
     key: 'niyyah',
     step: 1,
-    phase: 'Entering Ihram',
+    phase: 'Before you begin',
     title: 'Niyyah (Intention)',
     subtitle: 'The first and most important step',
     approxMin: 2,
-    intro: 'At or just before the Miqat, make the intention for Umrah in your heart and say the words below.',
+    intro: 'Clear your heart and make the intention to perform Umrah for the sake of Allah. Sincerity is the foundation of every act of worship.',
     duas: [NIYYAH_DUA],
-    checklist: ['I have made my intention (Niyyah) for Umrah'],
-    hadith: '“Actions are but by intentions, and every person shall have but that which they intended.” — Sahih Bukhari 1',
-    tip: 'Sincerity is hidden in the heart. Make your Niyyah only for Allah, seeking His pleasure and reward.',
-    image: 'niyyah',
-    next: 'I have made my Niyyah',
+    hadith: '“Actions are but by intentions…” — Sahih Bukhari 1',
+    checklist: ['I have prepared my intention'],
+    next: 'Prepare for Ihram',
   },
   {
     key: 'ihram',
@@ -141,228 +133,172 @@ export const RITUAL_STEPS: RitualStep[] = [
     title: 'Ihram (State of Purity)',
     subtitle: 'Prepare yourself to enter the state of Ihram',
     approxMin: 20,
-    intro: 'Purify, dress and enter the sacred state. Ihram is not just clothing — it is a state of purity and humility before Allah.',
+    intro: 'Ihram is not just clothing — it is a state of purity, obedience and humility before Allah.',
     forMen: [
       'Ghusl (ritual bath) — purify yourself.',
-      'Wear two clean, white, unstitched sheets (izar + rida).',
+      'Wear two white, unstitched sheets.',
       'Simple & modest — no stitched clothing, no head covering.',
-      'Avoid restrictions — no perfume, no leather items, no cutting hair/nails.',
+      'Avoid restrictions — no perfume, no leather items.',
     ],
     forWomen: [
       'Ghusl (ritual bath) — purify yourself.',
-      'Wear normal modest Islamic dress (any colour).',
-      'Do not cover the face with a veil touching it, and do not wear gloves.',
-      'You are now ready to begin Umrah.',
+      'Wear normal modest Islamic dress.',
+      'Do not cover the face with a veil touching it; no gloves.',
+      'You are now ready for Niyyah.',
     ],
     tip: 'Avoid arguments, sin and anything that breaks the sanctity of Ihram.',
-    image: 'ihram',
-    next: 'I have prepared for Ihram',
+    next: 'Make Niyyah at the Miqat',
+  },
+  {
+    key: 'niyyah-miqat',
+    step: 3,
+    phase: 'Entering Ihram',
+    title: 'Niyyah at the Miqat',
+    subtitle: 'Make the intention for Umrah',
+    approxMin: 1,
+    intro: 'At the Miqat (boundary) or before crossing it, make your intention for Umrah for the sake of Allah and say:',
+    duas: [NIYYAH_DUA],
+    checklist: ['I have made my Niyyah at the Miqat'],
+    next: 'Begin the Talbiyah',
   },
   {
     key: 'talbiyah',
-    step: 3,
+    step: 4,
     phase: 'Entering Ihram',
     title: 'Talbiyah',
     subtitle: 'Declare your response to Allah’s call',
     approxMin: 'ongoing',
-    intro:
-      'After making your intention, begin reciting the Talbiyah and continue often (men raising the voice) until you reach Masjid al-Haram in Makkah.',
+    intro: 'After making your intention, begin reciting the Talbiyah and continue often until you reach Masjid al-Haram.',
     duas: [TALBIYAH_DUA],
-    tip: 'Talbiyah is your declaration that you have answered Allah’s call — recite it with love, humility and eagerness.',
-    image: 'talbiyah',
+    tip: 'Talbiyah shows love, obedience and eagerness to visit His House.',
     next: 'I have started the Talbiyah',
   },
   {
     key: 'enter-haram',
-    step: 4,
+    step: 5,
     phase: 'Arrival in Makkah',
     title: 'Enter Masjid al-Haram',
     subtitle: 'Arrive at the House of Allah',
     approxMin: null,
-    intro:
-      'Enter with respect and humility. Step in with your right foot and recite the entry du‘a. At your first sight of the Kaaba, pause — a moment when du‘a is hoped to be accepted.',
+    intro: 'Enter with your right foot and the entry du‘a. At your first sight of the Kaaba, pause and make du‘a — a moment when du‘a is hoped to be accepted.',
     duas: [ENTRY_DUA],
-    instructions: [
-      'First sight of the Kaaba — look with love and awe.',
-      'Raise your hands and make du‘a for yourself, your family and the Ummah.',
-      'Stay calm and grateful; maintain adab — speak softly and avoid crowding.',
-    ],
     checklist: ['Entered Masjid al-Haram', 'Saw the Kaaba & made du‘a'],
-    tip: 'You have reached the House of Allah. Every step here is an act of worship.',
-    image: 'kaaba-arrival',
     next: 'Begin Tawaf',
   },
   {
-    key: 'tawaf',
-    step: 5,
-    phase: 'Tawaf',
-    title: 'Tawaf (Circumambulation)',
-    subtitle: 'Walk around the Kaaba 7 times',
-    approxMin: 40,
-    intro:
-      'Begin Tawaf at the Black Stone (Hajar al-Aswad) corner, keeping the Kaaba on your left, anti-clockwise. Tap “+1 round” for each circuit. Time varies a lot with the crowd.',
-    instructions: [
-      'Face / gesture to the Black Stone to begin, saying “Bismillah, Allāhu Akbar”.',
-      'Men: uncover the right shoulder (idtiba‘) and walk briskly (raml) in the first three rounds.',
-      'Keep the Kaaba on your left; walk at a normal pace; do not push or harm others.',
-      'There is no fixed du‘a — supplicate freely throughout.',
-    ],
-    counter: { kind: 'tawaf', total: 7 },
-    tip: 'You will pray two Rak‘ahs after completing Tawaf.',
-    image: 'tawaf',
-    next: 'I have completed Tawaf',
-  },
-  {
-    key: 'maqam-ibrahim',
+    key: 'tawaf-start',
     step: 6,
-    phase: 'In Masjid al-Haram',
-    title: 'Prayer behind Maqam Ibrahim',
-    subtitle: 'Pray two Rak‘ahs',
-    approxMin: 5,
-    intro: 'After Tawaf, pray two short Rak‘ahs — behind Maqam Ibrahim if you can reach it without crowding, otherwise anywhere in the mosque.',
-    instructions: ['Recite Surah al-Kafirun in the first Rak‘ah and Surah al-Ikhlas in the second (recommended).'],
-    checklist: ['Completed two Rak‘ahs'],
-    image: 'maqam-ibrahim',
-    next: 'I have prayed two Rak‘ahs',
+    phase: 'Tawaf',
+    title: 'Start Tawaf',
+    subtitle: 'Begin your seven circles',
+    approxMin: 40,
+    intro: 'Begin at the Black Stone (Hajar al-Aswad), keep the Kaaba on your left, and circle anti-clockwise. Tap “+1 round” as you complete each circuit.',
+    counter: { kind: 'tawaf', total: 7 },
+    tip: 'Men: uncover the right shoulder (idtiba‘) and walk briskly (raml) in the first three rounds. Keep the Kaaba on your left and do not push.',
+    next: 'I have completed 7 rounds',
   },
   {
-    key: 'zamzam',
+    key: 'tawaf-complete',
     step: 7,
-    phase: 'In Masjid al-Haram',
-    title: 'Drink Zamzam Water',
-    subtitle: 'Drink and make du‘a',
-    approxMin: 5,
-    intro: 'Drink your fill of Zamzam water and make du‘a — Zamzam is for whatever it is drunk for.',
-    checklist: ['Drank Zamzam water', 'Made du‘a'],
-    image: 'zamzam',
-    next: 'Go to Safa',
+    phase: 'Tawaf',
+    title: 'Complete 7 Rounds of Tawaf',
+    subtitle: 'All seven circuits around the Kaaba',
+    approxMin: null,
+    intro: 'You have circled the Kaaba seven times, ending at the Black Stone. There is no fixed du‘a — supplicate freely with whatever you know.',
+    checklist: ['Completed 7 circuits of Tawaf'],
+    next: 'Pray two Rak‘ahs',
   },
   {
-    key: 'safa',
+    key: 'two-rakahs',
     step: 8,
-    phase: 'Sa‘i',
-    title: 'Go to Safa',
-    subtitle: 'Begin from Mount Safa',
-    approxMin: 2,
-    intro: 'Proceed to Mount Safa to begin Sa‘i. As you approach, recite the verse below; at Safa, face the Kaaba, raise your hands, praise Allah and make du‘a.',
-    duas: [SAFA_DUA],
-    checklist: ['Reached Safa'],
-    image: 'safa',
-    next: 'Begin Sa‘i',
+    phase: 'After Tawaf',
+    title: 'Pray 2 Rak‘ahs',
+    subtitle: 'Behind Maqam Ibrahim, if possible',
+    approxMin: 5,
+    intro: 'Offer two units of voluntary prayer behind Maqam Ibrahim if possible — otherwise anywhere in the mosque. Afterwards, drink Zamzam water and make du‘a.',
+    checklist: ['Prayed two Rak‘ahs', 'Drank Zamzam water & made du‘a'],
+    tip: 'Recite Surah al-Kafirun in the first Rak‘ah and Surah al-Ikhlas in the second (recommended).',
+    next: 'Go to Safa for Sa‘i',
   },
   {
-    key: 'sai',
+    key: 'sai-start',
     step: 9,
     phase: 'Sa‘i',
-    title: 'Sa‘i (between Safa & Marwah)',
-    subtitle: 'Walk seven times between the two hills',
+    title: 'Sa‘i between Safa and Marwah',
+    subtitle: 'Begin your seven circuits from Safa',
     approxMin: 35,
-    intro:
-      'Walk between Safa and Marwah seven times. Safa → Marwah is 1, Marwah → Safa is 2, and so on — you finish at Marwah on the seventh. Tap “+1 passage” at each end.',
-    instructions: [
-      'Men: walk briskly between the two green markers; everyone walks normally otherwise.',
-      'Supplicate freely throughout; there is no fixed du‘a for the walk.',
-    ],
+    intro: 'Proceed to Safa and recite the verse below. Safa → Marwah is 1, Marwah → Safa is 2, and so on — you finish at Marwah on the seventh. Tap “+1 passage” at each end.',
+    duas: [SAFA_DUA],
     counter: { kind: 'sai', total: 7 },
-    image: 'sai',
+    tip: 'Men walk briskly between the two green markers; everyone walks normally otherwise.',
     next: 'I have completed Sa‘i',
   },
   {
-    key: 'complete-sai',
+    key: 'sai-complete',
     step: 10,
     phase: 'Sa‘i',
     title: 'Complete Sa‘i',
-    subtitle: 'Confirm your seven passages',
+    subtitle: 'Seven circuits, ending at Marwah',
     approxMin: null,
-    intro: 'You have completed seven passages, ending at Marwah. Make du‘a and prepare for the final rite of Umrah.',
-    checklist: ['I finished Sa‘i at Marwah (7 passages)'],
-    image: 'sai',
-    next: 'Continue to hair-cutting',
+    intro: 'You have walked between Safa and Marwah seven times. This is the Sa‘i of Umrah — may Allah accept it from you.',
+    checklist: ['Finished Sa‘i at Marwah (7 passages)'],
+    next: 'Trim or shave hair',
   },
   {
     key: 'halq',
     step: 11,
     phase: 'Completing Umrah',
-    title: 'Hair Cutting / Shaving',
-    subtitle: 'Halq or Taqsir',
+    title: 'Trim or Shave Hair',
+    subtitle: 'The final step of Sa‘i',
     approxMin: 10,
-    intro: 'The final rite. After this you leave the state of Ihram.',
-    forMen: ['Shave the whole head (Halq, preferred) — or trim hair evenly from all of the head (Taqsir).'],
+    intro: 'After completing Sa‘i, trim or shave your hair. This marks the completion of the obligatory acts of Umrah.',
+    forMen: ['Shave the whole head (Halq, preferred), or trim hair evenly from all of the head (Taqsir).'],
     forWomen: ['Gather the hair and cut a fingertip’s length (about 2–3 cm) from the ends.'],
-    checklist: ['Hair cut completed'],
-    image: 'halq',
-    next: 'End of Ihram',
+    checklist: ['Hair trimmed / shaved'],
+    next: 'Umrah complete',
   },
   {
-    key: 'end-ihram',
+    key: 'umrah-complete',
     step: 12,
-    phase: 'Completing Umrah',
-    title: 'End of Ihram',
-    subtitle: 'The restrictions are lifted',
+    phase: 'Umrah Complete',
+    title: 'Umrah Complete',
+    subtitle: 'Alhamdulillah, your Umrah is complete',
     approxMin: null,
-    intro: 'You may now exit Ihram. All restrictions of Ihram are lifted — you may change into normal clothes, and what was forbidden in Ihram is permitted again. Alhamdulillah.',
-    checklist: ['Exited the state of Ihram'],
-    image: 'end-ihram',
-    next: 'Visit important places',
+    intro: 'You have completed all the obligatory acts of Umrah — Tawaf, Sa‘i, two Rak‘ahs and trimming/shaving. You have left the state of Ihram. May Allah accept it from you.',
+    next: 'Optional acts',
   },
   {
-    key: 'visit-makkah',
+    key: 'optional-acts',
     step: 13,
     phase: 'After Umrah',
-    title: 'Visit Important Places (Makkah)',
-    subtitle: 'Ziyarah around Makkah',
+    title: 'Optional Acts & Recommended Deeds',
+    subtitle: 'Strengthen your connection with Allah',
     approxMin: null,
-    intro: 'Notable places to visit and pray at in and around Makkah. Always respect local etiquette and guidance.',
+    intro: 'These acts are not obligatory, but they bring great reward: extra Nawafil, reciting Qur’an, dhikr, sincere du‘a, charity, and visiting important places.',
     ziyarat: 'makkah',
-    image: 'visit-makkah',
-    next: 'Make du‘a',
+    tip: 'Quality is better than quantity — Allah looks at the heart.',
+    next: 'Make final du‘a',
   },
   {
-    key: 'make-dua',
+    key: 'final-dua',
     step: 14,
     phase: 'After Umrah',
-    title: 'Make Du‘a',
-    subtitle: 'For yourself, your family and the Ummah',
+    title: 'Make Final Du‘a & Depart',
+    subtitle: 'A heartfelt farewell with gratitude',
     approxMin: null,
-    intro: 'Make plenty of du‘a for yourself, your family, and the whole Muslim Ummah. These are blessed days — do not let them pass without asking Allah.',
-    tip: 'Keep your heart attached to the mosque; pray in congregation and recite Qur’an while you can.',
-    image: 'make-dua',
-    next: 'Visit Madinah (optional)',
+    intro: 'Before leaving Makkah, make heartfelt du‘a, thank Allah for this blessed opportunity, and seek His acceptance. Depart with good manners and a heart full of gratitude.',
+    checklist: ['Made my final du‘a'],
+    next: 'Visit Madinah',
   },
   {
     key: 'visit-madinah',
     step: 15,
-    phase: 'After Umrah',
-    title: 'Optional: Visit Madinah',
-    subtitle: 'The City of the Prophet ﷺ',
-    approxMin: null,
-    intro:
-      'If possible, travel to Madinah to pray in Masjid an-Nabawi and send salutations upon the Prophet ﷺ. Note: the Rawdah visit slot is booked in the Nusuk app — we guide, we don’t issue it.',
-    ziyarat: 'madinah',
-    image: 'visit-madinah',
-    next: 'Continue good deeds',
-  },
-  {
-    key: 'good-deeds',
-    step: 16,
-    phase: 'After Umrah',
-    title: 'Continue Good Deeds',
-    subtitle: 'Keep the spirit of Umrah alive',
-    approxMin: null,
-    intro: 'Continue righteous deeds and keep the spirit of Umrah alive after you return — prayer, charity, kindness, and remembrance of Allah.',
-    tip: 'The sign of an accepted act is another good act after it.',
-    image: 'good-deeds',
-    next: 'Finish',
-  },
-  {
-    key: 'umrah-complete',
-    step: 17,
-    phase: 'Umrah Complete',
-    title: 'Umrah Complete',
+    phase: 'Journey Complete',
+    title: 'Visit Madinah & Journey Complete',
     subtitle: 'May Allah accept your Umrah',
     approxMin: null,
-    intro: 'Alhamdulillah — your Umrah is complete. Add a personal note to remember this day, and may Allah accept it from you and grant you His blessings.',
-    image: 'umrah-complete',
+    intro: 'If possible, visit Madinah to pray in Masjid an-Nabawi and send salutations upon the Prophet ﷺ (the Rawdah slot is booked in the Nusuk app). Alhamdulillah — your journey is complete.',
+    ziyarat: 'madinah',
     next: 'Done',
   },
 ];
@@ -379,8 +315,6 @@ export const ZIYARAT: { makkah: ZiyaratPlace[]; madinah: ZiyaratPlace[] } = {
     { slug: 'maqam-ibrahim', name: 'Maqam Ibrahim', note: 'The station of Prophet Ibrahim, near the Kaaba.' },
     { slug: 'hateem', name: 'Al-Hateem (Hijr Ismail)', note: 'The semi-circular area; praying here is praying inside the Kaaba.' },
     { slug: 'multazam', name: 'Al-Multazam', note: 'Between the Black Stone and the door — a place for du‘a.' },
-    { slug: 'safa', name: 'Mount Safa', note: 'The starting point of Sa‘i.' },
-    { slug: 'marwah', name: 'Mount Marwah', note: 'The end point of Sa‘i.' },
     { slug: 'jabal-al-noor', name: 'Jabal al-Noor (Cave Hira)', note: 'Where the first revelation came to the Prophet ﷺ.' },
     { slug: 'jabal-thawr', name: 'Jabal Thawr', note: 'The cave where the Prophet ﷺ sheltered during the Hijrah.' },
     { slug: 'mina', name: 'Mina', note: 'The valley of the Hajj rites (tents and Jamarat).' },

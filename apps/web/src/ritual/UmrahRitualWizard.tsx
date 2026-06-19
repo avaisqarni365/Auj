@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import type { PublicUser } from '@auj/auth';
 import { RITUAL_STEPS, ZIYARAT, type ApproxMin, type Dua, type RitualStep } from './ritual-content';
-import { ritualAudioSrc, ritualImage, ziyaratImage, type ResolvedImage } from './ritual-images';
+import { ritualAudioSrc, stepDesignImage, ziyaratImage, type ResolvedImage } from './ritual-images';
 
 const STORAGE_KEY = 'auj.ritual.v1';
 
@@ -32,22 +32,38 @@ function approxBadge(a: ApproxMin): string | null {
   return null;
 }
 
-/** Sum of remaining point-estimate minutes from `fromIndex` onward. */
 function remainingMin(fromIndex: number): number {
   return RITUAL_STEPS.slice(fromIndex).reduce((t, s) => t + (typeof s.approxMin === 'number' ? s.approxMin : 0), 0);
 }
 
-/** <img> that swaps to a fallback once if the primary asset is missing. */
-function Img({ img, className }: { img: ResolvedImage; className?: string }) {
+/** The full designed step infographic. Opens full-size on tap; hides itself if the file is missing. */
+function DesignImage({ src, alt }: { src: string | null; alt: string }) {
+  const [ok, setOk] = useState(true);
+  if (!src || !ok) return null;
+  return (
+    <a href={src} target="_blank" rel="noreferrer" className="block focus-visible:outline-none focus-visible:shadow-focus">
+      <img
+        src={src}
+        alt={alt}
+        decoding="async"
+        className="w-full rounded-2xl border border-sand-200 shadow-sm transition-shadow duration-fast hover:shadow-lg"
+        onError={() => setOk(false)}
+      />
+    </a>
+  );
+}
+
+/** Ziyarat photo with a scene fallback. */
+function ZImg({ img, className }: { img: ResolvedImage; className?: string }) {
   const [errored, setErrored] = useState(false);
   return (
     <img
       src={errored ? img.fallbackSrc : img.src}
       alt={img.alt}
-      className={className}
       loading="lazy"
       decoding="async"
       draggable={false}
+      className={className}
       onError={() => setErrored(true)}
     />
   );
@@ -56,48 +72,35 @@ function Img({ img, className }: { img: ResolvedImage; className?: string }) {
 function DuaBlock({ dua }: { dua: Dua }) {
   const [audioOk, setAudioOk] = useState(true);
   return (
-    <div className="mt-4 overflow-hidden rounded-2xl border border-green-100 bg-green-50">
-      <div className="p-5">
-        <p dir="rtl" lang="ar" className="text-right font-arabic text-[26px] leading-[1.95] text-green-900">
-          {dua.arabic}
-        </p>
-        <p className="mt-3 text-[14.5px] font-semibold italic text-sand-700">{dua.translit}</p>
-        <div className="mt-3 flex flex-wrap items-center gap-3">
-          <p className="text-[11.5px] text-sand-500">Source: {dua.source}</p>
-          {dua.audio && audioOk ? (
-            <audio
-              controls
-              preload="none"
-              className="h-8"
-              src={ritualAudioSrc(dua.audio)}
-              onError={() => setAudioOk(false)}
-            >
-              <track kind="captions" />
-            </audio>
-          ) : null}
-        </div>
+    <div className="mt-4 rounded-2xl border border-green-100 bg-green-50 p-5">
+      <p dir="rtl" lang="ar" className="text-right font-arabic text-[24px] leading-[1.95] text-green-900">
+        {dua.arabic}
+      </p>
+      <p className="mt-2.5 text-[14px] font-semibold italic text-sand-700">{dua.translit}</p>
+      <div className="mt-3 flex flex-wrap items-center gap-3">
+        {dua.audio && audioOk ? (
+          <audio controls preload="none" className="h-8" src={ritualAudioSrc(dua.audio)} onError={() => setAudioOk(false)}>
+            <track kind="captions" />
+          </audio>
+        ) : null}
+        <span className="text-[11.5px] text-sand-500">Source: {dua.source}</span>
       </div>
-      <div className="border-t border-green-100 bg-white/70 p-4">
-        <div className="mb-2.5 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-green-800">
-          🌐 Explanation in multiple languages
-        </div>
-        <div className="grid gap-2 sm:grid-cols-2">
+      <details className="mt-3 [&_summary]:cursor-pointer">
+        <summary className="text-[12px] font-semibold text-green-800">🌐 Show meaning in other languages</summary>
+        <div className="mt-2.5 grid gap-2 sm:grid-cols-2">
           {dua.translations.map((t) => {
             const rtl = t.code === 'ur';
             return (
               <div key={t.code} className="rounded-xl border border-sand-200 bg-white p-3">
                 <div className="text-[10.5px] font-bold uppercase tracking-wider text-accent-600">{t.label}</div>
-                <p
-                  dir={rtl ? 'rtl' : 'ltr'}
-                  className={`mt-1 text-[13.5px] leading-relaxed text-sand-700 ${rtl ? 'text-right font-arabic' : ''}`}
-                >
+                <p dir={rtl ? 'rtl' : 'ltr'} className={`mt-1 text-[13px] leading-relaxed text-sand-700 ${rtl ? 'text-right font-arabic' : ''}`}>
                   {t.text}
                 </p>
               </div>
             );
           })}
         </div>
-      </div>
+      </details>
     </div>
   );
 }
@@ -144,20 +147,20 @@ function Checklist({
 }
 
 function Counter({
-  step,
+  kind,
+  total,
   value,
   onBump,
   onReset,
 }: {
-  step: RitualStep;
+  kind: 'tawaf' | 'sai';
+  total: number;
   value: number;
   onBump: () => void;
   onReset: () => void;
 }) {
-  if (!step.counter) return null;
-  const { total } = step.counter;
   const done = value >= total;
-  const label = step.counter.kind === 'tawaf' ? 'round' : 'passage';
+  const label = kind === 'tawaf' ? 'round' : 'passage';
   return (
     <div className="mt-4 rounded-2xl border border-sand-200 bg-white p-5 text-center">
       <div className="mb-3 flex flex-wrap justify-center gap-1.5">
@@ -220,7 +223,7 @@ function ZiyaratGrid({ city }: { city: 'makkah' | 'madinah' }) {
     <div className="mt-4 grid gap-3 sm:grid-cols-2">
       {ZIYARAT[city].map((p) => (
         <div key={p.slug} className="overflow-hidden rounded-2xl border border-sand-200 bg-white">
-          <Img img={ziyaratImage(city, p.slug)} className="h-32 w-full object-cover" />
+          <ZImg img={ziyaratImage(city, p.slug)} className="h-32 w-full object-cover" />
           <div className="p-3.5">
             <div className="text-[14.5px] font-semibold text-sand-ink">{p.name}</div>
             <p className="mt-0.5 text-[12.5px] leading-relaxed text-sand-500">{p.note}</p>
@@ -242,7 +245,6 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
   const [hydrated, setHydrated] = useState(false);
   const [resume, setResume] = useState<Persisted | null>(null);
 
-  // Load any saved run (client-only).
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -258,18 +260,16 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
     setHydrated(true);
   }, []);
 
-  // Persist on change.
   useEffect(() => {
     if (!hydrated || resume) return;
     const p: Persisted = { stepIndex: step, checked, counters, notes, elapsedSec, completedAt };
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(p));
     } catch {
-      /* storage full / disabled — non-fatal */
+      /* non-fatal */
     }
   }, [hydrated, resume, step, checked, counters, notes, elapsedSec, completedAt]);
 
-  // Tick the elapsed timer while running and not yet complete.
   useEffect(() => {
     if (!running || completedAt) return undefined;
     const id = setInterval(() => setElapsedSec((s) => s + 1), 1000);
@@ -281,7 +281,7 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
 
   const doResume = (): void => {
     if (!resume) return;
-    setStep(resume.stepIndex);
+    setStep(Math.min(resume.stepIndex, TOTAL - 1));
     setChecked(resume.checked ?? {});
     setCounters(resume.counters ?? { tawaf: 0, sai: 0 });
     setNotes(resume.notes ?? '');
@@ -297,6 +297,13 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
       /* ignore */
     }
     setResume(null);
+    setStep(0);
+    setChecked({});
+    setCounters({ tawaf: 0, sai: 0 });
+    setNotes('');
+    setElapsedSec(0);
+    setRunning(false);
+    setCompletedAt(null);
   };
 
   const goNext = (): void => {
@@ -357,14 +364,12 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-4 pb-16 pt-6">
+    <div className="mx-auto max-w-3xl px-4 pb-16 pt-6">
       {/* progress + timer header */}
       <div className="mb-4">
         <div className="flex items-center justify-between text-[12.5px] font-semibold text-sand-500">
           <span className="uppercase tracking-wider text-green-800">{cur.phase}</span>
-          <span>
-            Step {step + 1} / {TOTAL}
-          </span>
+          <span>Step {cur.step} / {TOTAL}</span>
         </div>
         <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-sand-100">
           <div className="h-full rounded-full bg-green-700 transition-[width] duration-200 ease-out-soft" style={{ width: `${progressPct}%` }} />
@@ -389,37 +394,23 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
         </div>
       </div>
 
-      {/* hero image */}
-      <div className="relative mb-5 overflow-hidden rounded-[20px]">
-        <Img img={ritualImage(cur.image)} className="h-44 w-full object-cover sm:h-56" />
-        <div className="absolute inset-0 bg-gradient-to-t from-green-950/80 to-transparent" />
-        <div className="absolute bottom-4 start-5 end-5">
-          <div className="mb-1 inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white/90 font-mono text-sm font-bold text-green-900">
-            {cur.step}
-          </div>
-          <h1 className="font-serif text-[clamp(1.5rem,3.4vw,2rem)] font-semibold leading-tight text-white">{cur.title}</h1>
-          {cur.subtitle ? <p className="mt-0.5 text-[13.5px] font-medium text-gold">{cur.subtitle}</p> : null}
-        </div>
+      {/* title */}
+      <div className="mb-3">
+        <h1 className="font-serif text-[clamp(1.4rem,3vw,1.9rem)] font-semibold leading-tight text-sand-ink">
+          <span className="text-green-800">{cur.step}.</span> {cur.title}
+        </h1>
+        {cur.subtitle ? <p className="mt-0.5 text-[14px] font-medium text-accent-600">{cur.subtitle}</p> : null}
       </div>
 
-      {/* body */}
+      {/* the designed step image (tap to view full) */}
       <div key={cur.key} className="animate-rise">
+        <DesignImage src={stepDesignImage(cur.key)} alt={`${cur.title} — ${cur.subtitle ?? ''}`} />
+
         {step === 0 && user?.displayName ? (
-          <p className="mb-2 text-[14px] font-medium text-green-800">Assalamu alaikum, {user.displayName.trim().split(/\s+/)[0]}.</p>
+          <p className="mt-4 text-[14px] font-medium text-green-800">Assalamu alaikum, {user.displayName.trim().split(/\s+/)[0]}.</p>
         ) : null}
 
-        {cur.intro ? <p className="text-[15px] leading-relaxed text-sand-700">{cur.intro}</p> : null}
-
-        {cur.instructions ? (
-          <ul className="mt-3 grid gap-2">
-            {cur.instructions.map((it) => (
-              <li key={it} className="flex gap-2.5 text-[14.5px] leading-relaxed text-sand-700">
-                <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-green-700" />
-                <span>{it}</span>
-              </li>
-            ))}
-          </ul>
-        ) : null}
+        {cur.intro ? <p className="mt-4 text-[15px] leading-relaxed text-sand-700">{cur.intro}</p> : null}
 
         {cur.forMen || cur.forWomen ? (
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -432,7 +423,8 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
 
         {counter ? (
           <Counter
-            step={cur}
+            kind={counter.kind}
+            total={counter.total}
             value={counters[counter.kind]}
             onBump={() => bump(counter.kind, counter.total)}
             onReset={() => resetCounter(counter.kind)}
@@ -460,7 +452,7 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
           </div>
         ) : null}
 
-        {/* Completion screen extras */}
+        {/* Completion extras */}
         {cur.key === 'umrah-complete' ? (
           <div className="mt-4 grid gap-4">
             <div className="rounded-2xl bg-gradient-to-br from-green-800 to-green-950 p-6 text-center text-green-50">
@@ -473,9 +465,7 @@ export function UmrahRitualWizard({ user }: { user?: PublicUser }) {
                 </div>
                 {completedAt ? (
                   <div>
-                    <div className="font-mono text-2xl font-bold text-white">
-                      {new Date(completedAt).toLocaleDateString()}
-                    </div>
+                    <div className="font-mono text-2xl font-bold text-white">{new Date(completedAt).toLocaleDateString()}</div>
                     <div className="text-[11.5px] text-green-100/70">completed</div>
                   </div>
                 ) : null}

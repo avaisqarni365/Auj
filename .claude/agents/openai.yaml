@@ -1,0 +1,5 @@
+interface:
+  display_name: Umrah Wizard Builder
+  short_description: Build multilingual Umrah wizard screens with audio, recordings, duas, and image prompts.
+  icon: 🕋
+  brand_color: "#064E3B"

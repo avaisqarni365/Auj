@@ -62,3 +62,30 @@ export function ziyaratImage(city: 'makkah' | 'madinah', slug: string): Resolved
 export function ritualAudioSrc(key: string): string {
   return `${BASE}/audio/ritual/${key}.mp3`;
 }
+
+// The full designed infographic per step (uploaded under public/img/scenes — filenames are as
+// provided, hence the mixed casing). Each wizard step shows this as its hero. Step keys match
+// RITUAL_STEPS in ritual-content.ts.
+const STEP_DESIGN: Record<string, string> = {
+  niyyah: '1_Umrah.png',
+  ihram: '2_Umrah.png',
+  'niyyah-miqat': '3_Umrah.png',
+  talbiyah: '4_umrah.png',
+  'enter-haram': '5_Umrah.png',
+  'tawaf-start': 'Umrah_6.png',
+  'tawaf-complete': 'Umrah_7.png',
+  'two-rakahs': 'Umrah_8.png',
+  'sai-start': 'Umrah_9.png',
+  'sai-complete': 'Umrah_10.png',
+  halq: '11_Umrah.png',
+  'umrah-complete': '12_Umrah.png',
+  'optional-acts': '13_umrah.png',
+  'final-dua': '14_Umrah.png',
+  'visit-madinah': '15_Umrah.png',
+};
+
+/** Full designed step image URL (or null if none mapped — then the wizard shows no poster). */
+export function stepDesignImage(key: string): string | null {
+  const f = STEP_DESIGN[key];
+  return f ? `${BASE}/img/scenes/${encodeURIComponent(f)}` : null;
+}
