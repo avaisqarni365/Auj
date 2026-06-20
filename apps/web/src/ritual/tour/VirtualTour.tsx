@@ -6,6 +6,7 @@ import { PanoramaViewer } from './PanoramaViewer';
 import { tourChrome, tourScenes } from './scenes';
 import { isRtlLang, ui } from '../i18n';
 import { useRitualLang } from '../useRitualLang';
+import { ListenButton } from '../ListenButton';
 
 const MEDIA_H = 'h-[clamp(220px,42vw,420px)]';
 
@@ -76,6 +77,9 @@ export function VirtualTour() {
         <h2 className="font-serif text-xl font-semibold text-sand-ink">{scene.title}</h2>
         <div className="text-[13.5px] font-medium text-accent-600">{scene.subtitle}</div>
         <p className="mt-2 max-w-[60ch] text-[14.5px] leading-relaxed text-sand-700">{scene.desc}</p>
+        <div className="mt-3">
+          <ListenButton audioSrc={scene.narrationSrc} text={scene.desc} lang={lang} />
+        </div>
       </div>
 
       {/* scene selector */}

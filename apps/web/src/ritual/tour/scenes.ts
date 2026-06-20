@@ -78,6 +78,8 @@ export interface TourScene {
   src: string;
   fallbackSrc: string;
   videoSrc: string;
+  /** Optional narration audio for this scene + language; ListenButton falls back to TTS if absent. */
+  narrationSrc: string;
 }
 
 export function tourScenes(lang: string): TourScene[] {
@@ -89,6 +91,7 @@ export function tourScenes(lang: string): TourScene[] {
     src: `${BASE}/img/ritual/tour/${s.file}`,
     fallbackSrc: FALLBACK,
     videoSrc: `${BASE}/video/ritual/tour/${s.id}.mp4`,
+    narrationSrc: `${BASE}/audio/ritual/tour/${s.id}.${lang}.mp3`,
   }));
 }
 
