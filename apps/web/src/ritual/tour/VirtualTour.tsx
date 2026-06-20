@@ -7,6 +7,7 @@ import { tourChrome, tourScenes } from './scenes';
 import { isRtlLang, ui } from '../i18n';
 import { useRitualLang } from '../useRitualLang';
 import { ListenButton } from '../ListenButton';
+import type { ContentOverrides } from '../content-overrides';
 
 const MEDIA_H = 'h-[clamp(220px,42vw,420px)]';
 
@@ -36,11 +37,15 @@ function Caption({ children }: { children: React.ReactNode }) {
   return <div className="mb-1.5 text-[11px] font-bold uppercase tracking-wider text-sand-500">{children}</div>;
 }
 
-export function VirtualTour() {
+export function VirtualTour({ overrides = {} }: { overrides?: ContentOverrides }) {
   const [lang] = useRitualLang();
   const rtl = isRtlLang(lang);
-  const scenes = tourScenes(lang);
   const chrome = tourChrome(lang);
+  // Apply admin content-editor overrides (keyed tour:<id>; intro → scene description).
+  const scenes = tourScenes(lang).map((s) => {
+    const o = overrides[`tour:${s.id}`]?.[lang] ?? {};
+    return { ...s, title: o.title?.trim() || s.title, subtitle: o.subtitle?.trim() || s.subtitle, desc: o.intro?.trim() || s.desc };
+  });
   const [idx, setIdx] = useState(0);
   const scene = scenes[idx] ?? scenes[0];
   if (!scene) return null;

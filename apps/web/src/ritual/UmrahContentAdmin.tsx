@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useState, useTransition } from 'react';
-import { RITUAL_STEPS } from './ritual-content';
+import { RITUAL_STEPS, type RitualStep } from './ritual-content';
 import { RITUAL_LOCALES, localizedTitle } from './i18n';
 import { effectiveContent, type ContentOverrides } from './content-overrides';
 import { saveOverrideAction } from './content-actions';
+import { tourScenes } from './tour/scenes';
 
 const LANGS = RITUAL_LOCALES.filter((l) => l.code !== 'en');
 const INPUT = 'w-full rounded-lg border-[1.5px] border-sand-300 bg-white px-3 py-2 text-[14px] focus:border-green-700 focus:outline-none';
@@ -41,25 +42,39 @@ export function UmrahContentAdmin({ overrides }: { overrides: ContentOverrides }
   const [savedMsg, setSavedMsg] = useState('');
   const [pending, start] = useTransition();
 
-  const step = RITUAL_STEPS.find((s) => s.key === stepKey) ?? RITUAL_STEPS[0]!;
+  // Default (override-or-code) content for any item — ritual step OR a tour scene (key "tour:<id>").
+  const defaultsFor = (key: string, l: string): { title: string; subtitle: string; intro: string } => {
+    if (key.startsWith('tour:')) {
+      const sc = tourScenes(l).find((s) => `tour:${s.id}` === key);
+      const o = ov[key]?.[l] ?? {};
+      return { title: o.title ?? sc?.title ?? '', subtitle: o.subtitle ?? sc?.subtitle ?? '', intro: o.intro ?? sc?.desc ?? '' };
+    }
+    const step = RITUAL_STEPS.find((s) => s.key === key) ?? RITUAL_STEPS[0]!;
+    const eff = effectiveContent(step, l, ov);
+    return { title: eff.title, subtitle: eff.subtitle ?? '', intro: eff.intro ?? '' };
+  };
+  const labelFor = (key: string): string =>
+    key.startsWith('tour:')
+      ? `Tour · ${tourScenes('en').find((s) => `tour:${s.id}` === key)?.title ?? key}`
+      : RITUAL_STEPS.find((s) => s.key === key)?.title ?? key;
 
   // Prefill the form with the current effective content (override if any, else the code default).
   useEffect(() => {
-    const eff = effectiveContent(step, lang, ov);
-    setTitle(eff.title);
-    setSubtitle(eff.subtitle ?? '');
-    setIntro(eff.intro ?? '');
+    const d = defaultsFor(stepKey, lang);
+    setTitle(d.title);
+    setSubtitle(d.subtitle);
+    setIntro(d.intro);
     setSavedMsg('');
-  }, [stepKey, lang, ov, step]);
+  }, [stepKey, lang, ov]);
 
   const save = (): void =>
     start(async () => {
       const updated = await saveOverrideAction(stepKey, lang, { title, subtitle, intro });
       setOv(updated);
-      setSavedMsg(`Saved · ${step.title} (${lang})`);
+      setSavedMsg(`Saved · ${labelFor(stepKey)} (${lang})`);
     });
 
-  const titleDone = (s: typeof step, code: string): boolean => localizedTitle(s, code) !== s.title || !!ov[s.key]?.[code]?.title;
+  const titleDone = (s: RitualStep, code: string): boolean => localizedTitle(s, code) !== s.title || !!ov[s.key]?.[code]?.title;
 
   return (
     <div className="mx-auto max-w-5xl px-[clamp(16px,4vw,32px)] py-8">
@@ -77,9 +92,14 @@ export function UmrahContentAdmin({ overrides }: { overrides: ContentOverrides }
       <div className="mb-8 rounded-2xl border border-sand-200 bg-white p-5">
         <div className="grid gap-3 sm:grid-cols-2">
           <label className="block">
-            <span className="mb-1 block text-[12px] font-semibold uppercase tracking-wider text-sand-500">Step</span>
+            <span className="mb-1 block text-[12px] font-semibold uppercase tracking-wider text-sand-500">Content item</span>
             <select value={stepKey} onChange={(e) => setStepKey(e.target.value)} className={INPUT}>
-              {RITUAL_STEPS.map((s) => <option key={s.key} value={s.key}>{s.step}. {s.title}</option>)}
+              <optgroup label="Guide steps">
+                {RITUAL_STEPS.map((s) => <option key={s.key} value={s.key}>{s.step}. {s.title}</option>)}
+              </optgroup>
+              <optgroup label="Virtual tour">
+                {tourScenes('en').map((s) => <option key={s.id} value={`tour:${s.id}`}>{s.title}</option>)}
+              </optgroup>
             </select>
           </label>
           <label className="block">
