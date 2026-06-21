@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { ScreenFrame } from '../components/ScreenFrame';
 import type { GuideCategory, GuideCity, GuideSlug } from './guide-data';
 import { GUIDE_I18N, type GuideLocale } from './guide-i18n';
 
@@ -61,14 +62,9 @@ export function GuideWizard({
   };
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8">
+    <ScreenFrame label={`${icon} ${title}`}>
       <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="font-serif text-[clamp(1.6rem,4vw,2.25rem)] font-semibold">
-            {icon} {title}
-          </h1>
-          <p className="mt-2 max-w-[60ch] text-sand-500">{subtitle}</p>
-        </div>
+        <p className="max-w-[60ch] text-sand-500">{subtitle}</p>
         <div className="flex items-center gap-2">
         {/* Language */}
         <div className="inline-flex rounded-xl border border-sand-200 bg-white p-1">
@@ -201,6 +197,6 @@ export function GuideWizard({
           </div>
         </section>
       </div>
-    </div>
+    </ScreenFrame>
   );
 }

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { PanoramaViewer } from './PanoramaViewer';
+import { ScreenFrame } from '../../components/ScreenFrame';
 import { tourChrome, tourScenes } from './scenes';
 import { isRtlLang, ui } from '../i18n';
 import { useRitualLang } from '../useRitualLang';
@@ -51,12 +52,9 @@ export function VirtualTour({ overrides = {} }: { overrides?: ContentOverrides }
   if (!scene) return null;
 
   return (
-    <div dir={rtl ? 'rtl' : 'ltr'} className="mx-auto max-w-4xl px-[clamp(16px,4vw,32px)] pb-16 pt-6">
+    <ScreenFrame label={ui(lang).virtualTour} tag={`${idx + 1} / ${scenes.length}`} dir={rtl ? 'rtl' : 'ltr'}>
       <div className="mb-4 flex items-center justify-between gap-3">
-        <div>
-          <h1 className="font-serif text-[clamp(1.5rem,3.4vw,2rem)] font-semibold leading-tight text-sand-ink">{ui(lang).virtualTour}</h1>
-          <p className="mt-0.5 text-[14px] text-sand-500">{chrome.subtitle}</p>
-        </div>
+        <p className="text-[14px] text-sand-500">{chrome.subtitle}</p>
         <Link
           href="/guide"
           className="shrink-0 rounded-xl border border-sand-300 bg-white px-4 py-2 text-[13px] font-semibold text-green-800 transition-colors duration-fast hover:bg-sand-50 active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus"
@@ -103,6 +101,6 @@ export function VirtualTour({ overrides = {} }: { overrides?: ContentOverrides }
           </button>
         ))}
       </div>
-    </div>
+    </ScreenFrame>
   );
 }

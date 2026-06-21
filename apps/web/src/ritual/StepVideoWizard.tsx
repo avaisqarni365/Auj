@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useTransition } from 'react';
 import Link from 'next/link';
+import { ScreenFrame } from '../components/ScreenFrame';
 import { isRtlLang, RITUAL_LOCALES } from './i18n';
 import { parseEmbed } from './parse-embed';
 import { useRitualLang } from './useRitualLang';
@@ -110,14 +111,9 @@ export function StepVideoWizard({
   const txRtl = isRtlLang(lang);
 
   return (
-    <div dir={rtl ? 'rtl' : 'ltr'} className="mx-auto max-w-4xl px-4 py-8">
+    <ScreenFrame label={`${icon} ${title}`} dir={rtl ? 'rtl' : 'ltr'}>
       <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="font-serif text-[clamp(1.6rem,4vw,2.25rem)] font-semibold">
-            {icon} {title}
-          </h1>
-          <p className="mt-2 max-w-[60ch] text-sand-500">{subtitle}</p>
-        </div>
+        <p className="max-w-[60ch] text-sand-500">{subtitle}</p>
         {/* Language switcher */}
         <div className="flex flex-wrap gap-1.5" dir="ltr">
           {RITUAL_LOCALES.map((l) => <LangChip key={l.code} code={l.code} label={l.label} />)}
@@ -278,7 +274,7 @@ export function StepVideoWizard({
           </div>
         </section>
       </div>
-    </div>
+    </ScreenFrame>
   );
 }
 
