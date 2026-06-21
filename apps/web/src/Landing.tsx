@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { routeFor } from '@auj/visa-router';
+import { Logo } from '@auj/ui';
 import type { PublicUser } from '@auj/auth';
 import { formatMoney, pkrIndicative } from './currency';
 import { HeroBackdrop } from './HeroBackdrop';
@@ -81,9 +82,12 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
       <SiteHeader user={user} />
 
       {/* hero — calm two-column, fills the first screen (no scroll), warm white + high contrast */}
-      <section className="relative flex min-h-[calc(100svh-150px)] items-center overflow-hidden bg-sand-50 px-[clamp(16px,4vw,32px)] py-[clamp(20px,3vw,40px)]">
+      <section
+        className="relative flex min-h-[calc(100svh-150px)] items-center overflow-hidden px-[clamp(16px,4vw,32px)] py-[clamp(20px,3vw,40px)]"
+        style={{ background: 'radial-gradient(150% 120% at 82% -10%, #FFFFFF 0%, #FAF6EF 48%, #F1E6D2 100%)' }}
+      >
         <HeroBackdrop />
-        <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-[clamp(28px,5vw,56px)] md:grid-cols-[1.32fr_0.68fr]">
+        <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-[clamp(28px,4.5vw,52px)] md:grid-cols-2">
           {/* text */}
           <div className="animate-rise">
             <span className="inline-flex items-center gap-2 rounded-full border border-sand-200 bg-sand-50 px-3.5 py-1.5 text-[12.5px] font-medium text-green-800">
@@ -101,9 +105,9 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
                 <span aria-hidden className="animate-sheen pointer-events-none absolute inset-y-0 left-0 w-2/5 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
                 <span className="relative">{t('planPilgrimage')}</span>
               </a>
-              <a href="#how" className="inline-flex items-center gap-1.5 rounded-xl px-4 py-3.5 text-[15.5px] font-semibold text-green-800 transition-colors duration-fast hover:bg-sand-50 focus-visible:outline-none focus-visible:shadow-focus">
-                {t('howItWorks')} <span aria-hidden>→</span>
-              </a>
+              <Link href="/guide/tour" className="inline-flex items-center gap-1.5 rounded-xl border border-sand-300 bg-white px-5 py-3.5 text-[15.5px] font-semibold text-green-800 transition-colors duration-fast hover:bg-sand-50 focus-visible:outline-none focus-visible:shadow-focus">
+                🧭 Take the virtual tour
+              </Link>
             </div>
             <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-3 border-t border-sand-100 pt-6 text-[13px] text-sand-500">
               {HERO_STATS.map((s, i) => (
@@ -116,19 +120,9 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
               ))}
             </div>
           </div>
-          {/* image — smaller, right-aligned portrait */}
-          <div className="relative ms-auto w-full max-w-[300px] animate-fade-in">
-            <div className="relative max-h-[52svh] overflow-hidden rounded-[22px] border border-sand-200 shadow-[0_34px_70px_-36px_rgba(5,28,18,0.4)] [aspect-ratio:4/5]">
-              <Scene name="makkah" priority className="animate-kenburns absolute inset-0 h-full w-full object-cover" />
-              <span className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-green-950/30 to-transparent" />
-            </div>
-            <div className="animate-float absolute -left-3 bottom-5 rounded-2xl bg-white/95 p-3 shadow-[0_18px_40px_rgba(5,28,18,0.2)] backdrop-blur">
-              <div className="text-[10.5px] font-semibold text-sand-500">Umrah Premium · 14 nights</div>
-              <div className="mt-0.5 flex items-baseline gap-2">
-                <span className="font-mono text-[18px] font-bold text-green-800">€2,480</span>
-                <span className="font-mono text-[10.5px] text-sand-500">≈ ₨771k</span>
-              </div>
-            </div>
+          {/* frame 01 — Smart Planner glance card (matches the cinematic prototype hero) */}
+          <div id="plan-glance" className="w-full">
+            <HeroPlannerCard />
           </div>
         </div>
       </section>
@@ -744,6 +738,62 @@ const FRAMES: Frame[] = [
   { n: '17', name: 'HELPLINE & SOS', tag: '24/7', icon: '🆘', href: '/guide/helpline', title: 'Help when you need it', blurb: 'Emergency numbers, official apps and lost-and-found.', cta: 'Open helpline' },
   { n: '18', name: 'CONNECTIVITY', tag: 'SIM · eSIM', icon: '📶', href: '/guide/connectivity', title: 'Stay connected', blurb: 'SIM, eSIM and the apps to set up before you fly.', cta: 'Open connectivity' },
 ];
+
+// Hero "frame 01" — the Smart Planner glance card (matches the cinematic prototype).
+const GLANCE_TILES: Array<[string, string, boolean]> = [
+  ['Journey', 'Umrah', false],
+  ['From', 'Vilnius (VNO)', false],
+  ['Dates', '12–26 Sep · 14 nts', false],
+  ['Pilgrims', '4 travellers', false],
+  ['Visa route', 'e-Visa · EU', false],
+  ['Est. total', '€9,920', true],
+];
+
+function HeroPlannerCard() {
+  return (
+    <div className="animate-rise overflow-hidden rounded-[22px] border border-sand-200 bg-gradient-to-b from-white to-sand-50 shadow-[0_44px_96px_-34px_rgba(5,28,18,0.6)]">
+      <div className="relative flex items-center justify-between gap-3 overflow-hidden bg-gradient-to-br from-green-800 to-green-950 px-4 py-3.5">
+        <span aria-hidden className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+        <div className="flex items-center gap-2.5">
+          <span className="grid place-items-center rounded-lg bg-sand-50 px-2 py-1 shadow-sm">
+            <Logo size={20} />
+          </span>
+          <span className="font-mono text-[11.5px] tracking-[0.08em] text-green-100/80">FRAME 01 · SMART PLANNER</span>
+        </div>
+        <span className="rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[12px] font-semibold text-green-50">Quick info</span>
+      </div>
+      <div className="p-[clamp(18px,2.2vw,24px)]">
+        <div className="mb-4 flex items-baseline justify-between gap-3">
+          <h3 className="font-serif text-[clamp(1.2rem,2.2vw,1.45rem)] font-semibold text-sand-ink">Your trip at a glance</h3>
+          <span className="text-[12.5px] text-sand-500">Editable anytime</span>
+        </div>
+        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
+          {GLANCE_TILES.map(([k, v, mono]) => (
+            <div key={k} className="rounded-xl border border-sand-200 bg-sand-50 p-3">
+              <div className="text-[10.5px] font-semibold uppercase tracking-wide text-sand-500">{k}</div>
+              <div className={`mt-1 text-[15px] font-semibold ${mono ? 'font-mono text-green-800' : 'text-sand-800'}`}>{v}</div>
+            </div>
+          ))}
+        </div>
+        <div className="mt-5 flex items-center justify-between text-[13px]">
+          <span className="font-semibold text-sand-800">Planning progress</span>
+          <span className="font-mono text-[12px] text-sand-500">Step 3 of 7 · Visa</span>
+        </div>
+        <div className="mt-2 h-2 overflow-hidden rounded-full bg-sand-100">
+          <div className="h-full rounded-full bg-gradient-to-r from-green-500 to-green-800" style={{ width: '43%' }} />
+        </div>
+        <div className="mt-5 flex flex-wrap gap-2.5">
+          <a href="#plan" className="inline-flex items-center gap-2 rounded-xl bg-green-800 px-5 py-3 text-[14px] font-semibold text-white shadow-[0_8px_18px_rgba(15,81,50,0.26)] transition-[transform,background-color] duration-fast hover:bg-green-700 active:scale-[0.98]">
+            Continue in Smart Planner <span aria-hidden>→</span>
+          </a>
+          <a href="#search" className="inline-flex items-center gap-2 rounded-xl border border-sand-300 bg-white px-5 py-3 text-[14px] font-semibold text-green-800 transition-colors duration-fast hover:bg-sand-50">
+            Or search packages
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function FrameCard({ frame }: { frame: Frame }) {
   return (
