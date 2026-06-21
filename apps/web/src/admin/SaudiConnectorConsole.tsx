@@ -1,6 +1,7 @@
 import type { SearchCriteria } from '@auj/contracts';
 import { selectSaudiConnector, selectedConnectorKind } from '../connectors';
 import { findProvider, providerStatus } from './providers';
+import { ContractRunner } from './ContractRunner';
 
 // Saudi Connector ops console — the gated certified adapter behind the SaudiConnector seam.
 // Shows the auth gate, domain mapping, resilience posture and the 2025 Nusuk-approved-hotel rule,
@@ -74,8 +75,11 @@ export async function SaudiConnectorConsole() {
           <ul className="grid gap-1.5 text-[13.5px] text-sand-700">
             <li>• Timeouts + retries with backoff on the adapter; mock is deterministic.</li>
             <li>• Idempotent <span className="font-mono">hold → confirm</span> keyed by payment ref.</li>
-            <li>• Shared contract tests run against the mock in CI; against the Saudi sandbox only inside the <span className="font-mono">connector-saudi</span> pipeline (Wave C).</li>
+            <li>• The shared <span className="font-mono">@auj/contracts</span> suite runs live against the active adapter ({kind === 'saudi' ? 'certified' : 'mock'}) below.</li>
           </ul>
+          <div className="mt-3">
+            <ContractRunner target="saudi" label="SaudiConnector" />
+          </div>
         </Card>
       </div>
     </div>

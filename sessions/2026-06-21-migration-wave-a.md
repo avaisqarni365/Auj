@@ -136,7 +136,15 @@ Driving `migration/*.md` in order, one screen per commit, gated + auto-deployed.
 **All 15 migration screens (01–15) delivered, gated & deployed**, plus the object-store foundation.
 Full web suite: **33 files / 124 tests green**; `next build` **48/48 pages**, no client pg/crypto leak.
 Per-screen gate held throughout: typecheck · lint · unit · build → commit → pipeline deploy.
-Standing deferrals (non-blocking): live contract-test runner UI.
+Standing deferrals: none — all cleared.
+
+### Live contract-test runner (done)
+`contract-runner.ts` — runtime mirror of the `@auj/contracts` vitest suite (same Zod schemas as the
+shared source of truth) for `SaudiConnector` (7 checks) + `TravelSupplier` (3 checks), each wrapped
+to a `{name, ok, detail}` result. `runContractTestsAction` (ADMIN) runs them live against the selected
+adapter (mock by default). `ContractRunner` client component (Run button + pass/fail list + N/N badge)
+embedded in the Saudi connector + Travel suppliers consoles. Test asserts the mock passes every check.
+This makes the connector consoles' "contract tests" real, not descriptive.
 
 ### Passport OCR provider (done)
 `passport-mrz.ts` — pure TD3 MRZ parser (passport no., names, nationality, DOB, expiry, sex; lenient,

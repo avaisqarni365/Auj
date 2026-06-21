@@ -7,6 +7,7 @@ import { requireRole } from '../auth/session';
 import { selectSaudiConnector, selectTravelSupplier } from '../connectors';
 import { findProvider, listProviders, providerStatus, type ProviderStatus } from './providers';
 import { getHealthStore } from './health-store';
+import { runSaudiContract, runSupplierContract, type CheckResult } from './contract-runner';
 
 const SAMPLE: SearchCriteria = { city: 'MAKKAH', checkIn: '2026-09-01', checkOut: '2026-09-05', pax: 2 };
 
@@ -45,6 +46,12 @@ export async function listProvidersAction(): Promise<ProviderRow[]> {
       lastOk: h?.ok ?? null,
     };
   });
+}
+
+/** Run the shared contract suite live against the selected adapter (mock by default). */
+export async function runContractTestsAction(target: 'saudi' | 'supplier'): Promise<CheckResult[]> {
+  await requireRole(['ADMIN'], '/admin/connector');
+  return target === 'supplier' ? runSupplierContract(selectTravelSupplier()) : runSaudiContract(selectSaudiConnector());
 }
 
 /** Ping an adapter through its interface and record the result. Never touches secrets. */

@@ -1,5 +1,6 @@
 import { formatMoney } from '../currency';
 import { selectTravelSupplier, selectedSupplierKind } from '../connectors';
+import { ContractRunner } from './ContractRunner';
 
 // Travel Suppliers ops — bedbank/GDS net offers THROUGH the TravelSupplier interface (mock by
 // default). search → book → cancel all run on the interface, so a live supplier is a drop-in.
@@ -49,9 +50,15 @@ export async function SuppliersConsole() {
         </ul>
       </section>
 
-      <p className="mt-4 text-[12px] text-sand-500">
-        Booking returns a net <span className="font-mono">BookingResult</span>; <span className="font-mono">cancel(bookingRef)</span> reverses it — both exercised by the contract tests.
-      </p>
+      <section className="mt-4 rounded-2xl border border-sand-200 bg-white p-5 shadow-sm">
+        <h2 className="font-serif text-lg font-semibold text-sand-800">Contract tests</h2>
+        <p className="mt-1 text-[13px] text-sand-500">
+          Runs the shared <span className="font-mono">@auj/contracts</span> TravelSupplier suite live against the active supplier ({kind}).
+        </p>
+        <div className="mt-3">
+          <ContractRunner target="supplier" label="TravelSupplier" />
+        </div>
+      </section>
     </div>
   );
 }
