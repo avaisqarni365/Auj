@@ -136,9 +136,18 @@ Driving `migration/*.md` in order, one screen per commit, gated + auto-deployed.
 **All 15 migration screens (01–15) delivered, gated & deployed**, plus the object-store foundation.
 Full web suite: **33 files / 124 tests green**; `next build` **48/48 pages**, no client pg/crypto leak.
 Per-screen gate held throughout: typecheck · lint · unit · build → commit → pipeline deploy.
-Standing deferrals (non-blocking, tracked below): real MRZ OCR provider; certificate PDF + voice
-recordings → object store (seam now exists — retrofit pending); markups-table persistence; guide
+Standing deferrals (non-blocking): real MRZ OCR provider; markups-table persistence; guide
 LT/TR localisation; live contract-test runner; Jeddah gifts data.
+
+### Object-store retrofits (done)
+- **Certificate PDFs** — dependency-free `src/admin/pdf.ts` `textPdf()` (valid PDF 1.4 + xref; 2 tests).
+  `compliance-store.onPackageBooking` now renders the certificate to a PDF, stores it in the object
+  store (`compliance/<certId>.pdf`, new `pdf_key` column), and the console **Download** opens it via the
+  owner/ADMIN-scoped `/api/doc` route (text fallback if absent).
+- **Voice recordings** — opt-in cloud copy alongside the private on-device IndexedDB store.
+  `recordings-cloud-store.ts` (`pilgrim_recordings`) + `recordings-actions.ts`: "☁️ Save to account"
+  on each recording uploads the audio blob to the object store (`${uid}/recording/<id>.ext`) and lists
+  cloud recordings (cross-device) with `/api/doc` playback + delete. 20 MB cap, sign-in gated.
 - Pending (non-blocking): voice recordings on-device vs object store; passport OCR (needs object store);
   hotels-via-connector in guides; Jeddah gifts data + guide localisation (LT/UR/AR via `locale`).
 

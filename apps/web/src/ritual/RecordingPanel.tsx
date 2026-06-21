@@ -10,6 +10,7 @@ import {
   type RecordingRecord,
   type Visibility,
 } from './recordings-store';
+import { deleteRecordingCloudAction, listMyRecordingsAction, uploadRecordingAction, type CloudRecordingView } from './recordings-actions';
 import { ui } from './i18n';
 
 function mmss(sec: number): string {
@@ -32,17 +33,28 @@ function RecordingItem({
   rec,
   onDelete,
   onVisibility,
+  onSaveCloud,
 }: {
   rec: RecordingRecord;
   onDelete: (id: string) => void;
   onVisibility: (id: string, v: Visibility) => void;
+  onSaveCloud: (rec: RecordingRecord) => Promise<{ ok: boolean; error?: string }>;
 }) {
   const [url, setUrl] = useState<string>('');
+  const [cloud, setCloud] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const [cloudMsg, setCloudMsg] = useState('');
   useEffect(() => {
     const u = URL.createObjectURL(rec.blob);
     setUrl(u);
     return () => URL.revokeObjectURL(u);
   }, [rec.blob]);
+  const saveCloud = (): void => {
+    setCloud('saving');
+    void onSaveCloud(rec).then((r) => {
+      setCloud(r.ok ? 'saved' : 'error');
+      setCloudMsg(r.error ?? '');
+    });
+  };
   return (
     <div className="rounded-xl border border-sand-200 bg-white p-3">
       <div className="flex items-start justify-between gap-2">
@@ -78,6 +90,15 @@ function RecordingItem({
             Download
           </a>
         ) : null}
+        <button
+          type="button"
+          onClick={saveCloud}
+          disabled={cloud === 'saving' || cloud === 'saved'}
+          className="font-semibold text-green-800 hover:underline disabled:text-sand-400 disabled:no-underline"
+        >
+          {cloud === 'saved' ? '☁️ Saved to account' : cloud === 'saving' ? 'Saving…' : '☁️ Save to account'}
+        </button>
+        {cloud === 'error' ? <span className="text-danger-fg">{cloudMsg || 'Could not save'}</span> : null}
       </div>
     </div>
   );
@@ -87,6 +108,7 @@ export function RecordingPanel({ stepKey, stepTitle, lang = 'en' }: { stepKey: s
   const t = ui(lang);
   const [supported, setSupported] = useState(false);
   const [list, setList] = useState<RecordingRecord[]>([]);
+  const [cloudList, setCloudList] = useState<CloudRecordingView[]>([]);
   const [recording, setRecording] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [pending, setPending] = useState<{ blob: Blob; url: string; durationSec: number; mime: string } | null>(null);
@@ -102,16 +124,35 @@ export function RecordingPanel({ stepKey, stepTitle, lang = 'en' }: { stepKey: s
   const reload = (): void => {
     listByStep(stepKey).then(setList).catch(() => setList([]));
   };
+  const reloadCloud = (): void => {
+    listMyRecordingsAction(stepKey).then(setCloudList).catch(() => setCloudList([]));
+  };
 
   useEffect(() => {
     const ok = recordingsSupported();
     setSupported(ok);
     if (ok) reload();
+    reloadCloud();
     // Reset transient UI when switching steps.
     setPending(null);
     setError('');
     setName('');
   }, [stepKey]);
+
+  const saveCloud = async (rec: RecordingRecord): Promise<{ ok: boolean; error?: string }> => {
+    const form = new FormData();
+    form.set('file', new File([rec.blob], `${rec.name || 'recording'}.webm`, { type: rec.mime || 'audio/webm' }));
+    form.set('stepKey', stepKey);
+    form.set('name', rec.name);
+    form.set('lang', rec.lang);
+    form.set('durationSec', String(rec.durationSec));
+    const r = await uploadRecordingAction(form);
+    if (r.ok) reloadCloud();
+    return { ok: r.ok, error: r.error };
+  };
+  const deleteCloud = (id: string): void => {
+    void deleteRecordingCloudAction(id).then(reloadCloud);
+  };
 
   const stopTimer = (): void => {
     if (timerRef.current) clearInterval(timerRef.current);
@@ -271,8 +312,30 @@ export function RecordingPanel({ stepKey, stepTitle, lang = 'en' }: { stepKey: s
           {list.length > 0 ? (
             <div className="mt-4 grid gap-2">
               {list.map((rec) => (
-                <RecordingItem key={rec.id} rec={rec} onDelete={onDelete} onVisibility={onVisibility} />
+                <RecordingItem key={rec.id} rec={rec} onDelete={onDelete} onVisibility={onVisibility} onSaveCloud={saveCloud} />
               ))}
+            </div>
+          ) : null}
+
+          {cloudList.length > 0 ? (
+            <div className="mt-4">
+              <div className="text-[12px] font-semibold text-sand-600">☁️ Saved to your account (any device)</div>
+              <div className="mt-2 grid gap-2">
+                {cloudList.map((rec) => (
+                  <div key={rec.id} className="rounded-xl border border-sand-200 bg-white p-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0">
+                        <div className="truncate text-[13.5px] font-semibold text-sand-ink">{rec.name}</div>
+                        <div className="text-[11px] text-sand-500">{new Date(rec.createdAt).toLocaleString()} · {mmss(rec.durationSec)}</div>
+                      </div>
+                      <button type="button" onClick={() => deleteCloud(rec.id)} className="rounded-md px-2 py-1 text-[12px] font-semibold text-danger-fg hover:bg-danger-bg">
+                        Delete
+                      </button>
+                    </div>
+                    <audio controls preload="none" src={rec.url} className="mt-2 h-9 w-full" />
+                  </div>
+                ))}
+              </div>
             </div>
           ) : null}
         </>

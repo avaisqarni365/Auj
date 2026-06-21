@@ -70,7 +70,13 @@ export function ComplianceConsole({ initial }: { initial: ComplianceSnapshot }) 
     if (kind === 'export' && r.export) download(`gdpr-export-${id}.json`, JSON.stringify(r.export, null, 2), 'application/json');
     refresh();
   });
-  const downloadCert = (c: CertificateRecord): void => download(`${c.id}.txt`, c.content);
+  const downloadCert = (c: CertificateRecord): void => {
+    if (c.pdfKey) {
+      window.open(`/api/doc/${c.pdfKey}`, '_blank', 'noopener');
+      return;
+    }
+    download(`${c.id}.txt`, c.content); // fallback if the PDF wasn't stored
+  };
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">

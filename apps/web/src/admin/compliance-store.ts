@@ -4,6 +4,8 @@
 // windows, GDPR requests. Certificate PDF→DocumentStore is deferred; the rendered text is stored.
 import { createPool, type DbPool } from '@auj/core-booking/postgres';
 import { GUARANTEE_TIERS, refundDueBy, renderCertificate, uuidv7, type GuaranteeTier } from '@auj/compliance';
+import { getObjectStore } from '../storage/document-store';
+import { textPdf } from './pdf';
 
 export interface CertificateRecord {
   id: string;
@@ -17,6 +19,7 @@ export interface CertificateRecord {
   issuedAt: string;
   deliveredAt: string | null;
   deliveryProof: string | null;
+  pdfKey: string | null; // object-store key of the rendered PDF
 }
 export interface ConsentRecord {
   id: string;
@@ -77,7 +80,16 @@ function buildCertificate(input: { bookingRef: string; customerId: string; custo
     issuedAt: input.now,
     deliveredAt: input.now,
     deliveryProof: `Emailed to customer ${input.customerId} at ${input.now}`,
+    pdfKey: null,
   };
+}
+
+// Render the certificate to a PDF and store it in the object store; returns its key.
+async function storePdf(cert: CertificateRecord): Promise<string> {
+  const key = `compliance/${cert.id}.pdf`;
+  const lines = cert.content.split('\n');
+  await (await getObjectStore()).put(key, textPdf(lines), 'application/pdf');
+  return key;
 }
 
 class InMemoryCompliance implements ComplianceStore {
@@ -91,6 +103,7 @@ class InMemoryCompliance implements ComplianceStore {
     const consent: ConsentRecord = { id: uuidv7(), bookingRef: input.bookingRef, infoVersion: '2026-01', shown: input.shown, consentedAt: now, ip: input.ip };
     this.consents.unshift(consent);
     const certificate = buildCertificate({ ...input, now });
+    certificate.pdfKey = await storePdf(certificate);
     this.certs.unshift(certificate);
     const refund: RefundWindow = { bookingRef: input.bookingRef, openedAt: now, dueAt: refundDueBy(now) };
     this.refunds.set(input.bookingRef, refund);
@@ -138,10 +151,11 @@ class PostgresCompliance implements ComplianceStore {
       [consent.id, consent.bookingRef, consent.infoVersion, JSON.stringify(consent.shown), now, consent.ip],
     );
     const certificate = buildCertificate({ ...input, now });
+    certificate.pdfKey = await storePdf(certificate);
     await this.pool.query(
-      `INSERT INTO security_certificates (id, booking_ref, customer_id, customer_name, tier, coverage_minor, insurer, content, issued_at, delivered_at, delivery_proof)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,
-      [certificate.id, certificate.bookingRef, certificate.customerId, certificate.customerName, certificate.tier, certificate.coverageMinor, certificate.insurer, certificate.content, now, now, certificate.deliveryProof],
+      `INSERT INTO security_certificates (id, booking_ref, customer_id, customer_name, tier, coverage_minor, insurer, content, issued_at, delivered_at, delivery_proof, pdf_key)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)`,
+      [certificate.id, certificate.bookingRef, certificate.customerId, certificate.customerName, certificate.tier, certificate.coverageMinor, certificate.insurer, certificate.content, now, now, certificate.deliveryProof, certificate.pdfKey],
     );
     const refund: RefundWindow = { bookingRef: input.bookingRef, openedAt: now, dueAt: refundDueBy(now) };
     await this.pool.query(
@@ -152,7 +166,7 @@ class PostgresCompliance implements ComplianceStore {
   }
   async listCertificates() {
     const r = await this.pool.query<CertificateRecord & { booking_ref: string; customer_id: string; customer_name: string; coverage_minor: number; issued_at: string; delivered_at: string | null; delivery_proof: string | null }>(
-      "SELECT id, booking_ref AS \"bookingRef\", customer_id AS \"customerId\", customer_name AS \"customerName\", tier, coverage_minor AS \"coverageMinor\", insurer, content, to_char(issued_at,'YYYY-MM-DD\"T\"HH24:MI:SSZ') AS \"issuedAt\", to_char(delivered_at,'YYYY-MM-DD\"T\"HH24:MI:SSZ') AS \"deliveredAt\", delivery_proof AS \"deliveryProof\" FROM security_certificates ORDER BY issued_at DESC",
+      "SELECT id, booking_ref AS \"bookingRef\", customer_id AS \"customerId\", customer_name AS \"customerName\", tier, coverage_minor AS \"coverageMinor\", insurer, content, to_char(issued_at,'YYYY-MM-DD\"T\"HH24:MI:SSZ') AS \"issuedAt\", to_char(delivered_at,'YYYY-MM-DD\"T\"HH24:MI:SSZ') AS \"deliveredAt\", delivery_proof AS \"deliveryProof\", pdf_key AS \"pdfKey\" FROM security_certificates ORDER BY issued_at DESC",
     );
     return r.rows as unknown as CertificateRecord[];
   }
@@ -207,7 +221,8 @@ async function init(): Promise<ComplianceStore> {
   await pool.query(`CREATE TABLE IF NOT EXISTS security_certificates (
      id text PRIMARY KEY, booking_ref text NOT NULL, customer_id text NOT NULL, customer_name text NOT NULL,
      tier text NOT NULL, coverage_minor bigint NOT NULL, insurer text NOT NULL, content text NOT NULL,
-     issued_at timestamptz NOT NULL DEFAULT now(), delivered_at timestamptz, delivery_proof text)`);
+     issued_at timestamptz NOT NULL DEFAULT now(), delivered_at timestamptz, delivery_proof text, pdf_key text)`);
+  await pool.query('ALTER TABLE security_certificates ADD COLUMN IF NOT EXISTS pdf_key text');
   await pool.query(`CREATE TABLE IF NOT EXISTS precontract_consents (
      id text PRIMARY KEY, booking_ref text NOT NULL, info_version text NOT NULL,
      shown jsonb NOT NULL DEFAULT '[]'::jsonb, consented_at timestamptz NOT NULL DEFAULT now(), ip text NOT NULL DEFAULT '')`);
