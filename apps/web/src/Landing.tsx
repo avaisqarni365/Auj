@@ -263,10 +263,7 @@ export default function Landing({ user, deals, content = {} }: { user?: PublicUs
         </div>
       </section>
 
-      {/* trust marquee */}
-      <TrustMarquee />
-
-      {/* cinematic frames — every migrated tool as a framed feature card, frame by frame */}
+      {/* cinematic frames — every migrated tool as a framed feature card, frame by frame (frames 02–18) */}
       <Section id="tools" title="Everything for your journey, frame by frame" sub="Free planning tools and on-the-ground guides — most need no login.">
         <div className="flex flex-col gap-[clamp(20px,3vw,32px)]">
           {LANDING_FRAMES.map((f) => (
@@ -274,6 +271,9 @@ export default function Landing({ user, deals, content = {} }: { user?: PublicUs
           ))}
         </div>
       </Section>
+
+      {/* trust marquee (after the frame sequence, per the prototype order) */}
+      <TrustMarquee />
 
       {/* why book with AUJ */}
       <Section id="why" title={tl('sections.why.title')} sub={tl('sections.why.sub')}>
