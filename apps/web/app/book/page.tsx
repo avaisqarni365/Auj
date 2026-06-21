@@ -1,6 +1,7 @@
 import type { SearchCriteria } from '@auj/contracts';
 import { requireRole } from '../../src/auth/session';
 import { BookingFunnel } from '../../src/book/BookingFunnel';
+import { getBookingDraftStore } from '../../src/book/booking-draft-store';
 import { SitePage } from '../../src/components/SitePage';
 
 const CITIES = ['MAKKAH', 'MADINAH', 'JEDDAH'] as const;
@@ -15,6 +16,7 @@ const isDate = (v: string | undefined): v is string => !!v && /^\d{4}-\d{2}-\d{2
 export default async function BookPage({ searchParams }: { searchParams: { city?: string; pax?: string; checkIn?: string; checkOut?: string } }) {
   const user = await requireRole(['PILGRIM', 'AGENT', 'SUB_AGENT', 'ADMIN'], '/book');
   const pax = Math.min(49, Math.max(1, Number.parseInt(searchParams.pax ?? '1', 10) || 1));
+  const initialDraft = (await (await getBookingDraftStore()).get(user.id)) ?? null;
   return (
     <SitePage user={user}>
       <BookingFunnel
@@ -22,6 +24,7 @@ export default async function BookPage({ searchParams }: { searchParams: { city?
         initialPax={pax}
         initialCheckIn={isDate(searchParams.checkIn) ? searchParams.checkIn : ''}
         initialCheckOut={isDate(searchParams.checkOut) ? searchParams.checkOut : ''}
+        initialDraft={initialDraft}
       />
     </SitePage>
   );

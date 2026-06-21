@@ -1,6 +1,6 @@
 'use client';
 
-import { useReducer, useState, useTransition } from 'react';
+import { useEffect, useReducer, useState, useTransition } from 'react';
 import { useLocale } from 'next-intl';
 import type { CateringOffer, GroundOffer, HotelOffer, SearchCriteria } from '@auj/contracts';
 import type { Booking, PackageItem, VisaCase } from '@auj/core-booking';
@@ -12,6 +12,8 @@ import { formatMoney } from './fx';
 import { LOCALES as BOOK_LOCALES, type Locale as BookLocale } from './i18n';
 import { previewVisaRoute } from './usecases';
 import { finalizeBookingAction, pollVisaAction, searchAddonsAction, searchHotelsAction, startCheckoutAction } from './actions';
+import { clearBookingDraftAction, saveBookingDraftAction } from './booking-draft-actions';
+import type { BookingDraft } from './booking-draft-types';
 
 const SELL_PRICE = { amount: 120000, currency: 'EUR' as const }; // demo sell price, charged in EUR
 
@@ -29,11 +31,13 @@ export function BookingFunnel({
   initialPax,
   initialCheckIn = '',
   initialCheckOut = '',
+  initialDraft = null,
 }: {
   initialCity: SearchCriteria['city'];
   initialPax: number;
   initialCheckIn?: string;
   initialCheckOut?: string;
+  initialDraft?: BookingDraft | null;
 }) {
   const [state, dispatch] = useReducer(
     funnelReducer,
@@ -52,6 +56,23 @@ export function BookingFunnel({
   const [pending, start] = useTransition();
   const loc = useLocale();
   const bookLocale: BookLocale = (BOOK_LOCALES as readonly string[]).includes(loc) ? (loc as BookLocale) : 'en';
+
+  // Resume a saved draft once (DB-backed; a CONFIRMED draft is ignored — it already completed).
+  useEffect(() => {
+    if (initialDraft && initialDraft.state.step !== 'CONFIRMED') {
+      dispatch({ type: 'RESTORE', state: initialDraft.state });
+      if (initialDraft.pilgrims.length) setPilgrims(initialDraft.pilgrims);
+    }
+  }, [initialDraft]);
+
+  // Debounced autosave of the booking choices to DB (signed-in; the action no-ops otherwise).
+  useEffect(() => {
+    if (state.step === 'CONFIRMED') return undefined;
+    const id = setTimeout(() => {
+      void saveBookingDraftAction({ state, pilgrims });
+    }, 1200);
+    return () => clearTimeout(id);
+  }, [state, pilgrims]);
 
   const search = (): void =>
     start(async () => {
@@ -78,6 +99,7 @@ export function BookingFunnel({
     setBooking(placed.booking);
     setVisaCase(placed.visaCase);
     dispatch({ type: 'SET_BOOKING', bookingId: placed.booking.id });
+    void clearBookingDraftAction(); // booking placed — drop the resumable draft
   };
 
   const pay = (): void =>

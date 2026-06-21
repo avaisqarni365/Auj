@@ -52,7 +52,8 @@ export type FunnelAction =
   | { type: 'REMOVE_ITEM'; offerId: string }
   | { type: 'SET_PILGRIMS'; pilgrims: PilgrimDraft[] }
   | { type: 'SET_CURRENCY'; currency: 'EUR' | 'PKR' }
-  | { type: 'SET_BOOKING'; bookingId: string };
+  | { type: 'SET_BOOKING'; bookingId: string }
+  | { type: 'RESTORE'; state: FunnelState };
 
 export function initialFunnel(): FunnelState {
   return {
@@ -104,6 +105,9 @@ export function funnelReducer(state: FunnelState, action: FunnelAction): FunnelS
       return { ...state, currency: action.currency };
     case 'SET_BOOKING':
       return { ...state, bookingId: action.bookingId, step: 'CONFIRMED' };
+    case 'RESTORE':
+      // Restore a saved draft; RESULTS needs re-fetched offers, so land on SEARCH there.
+      return { ...action.state, step: action.state.step === 'RESULTS' ? 'SEARCH' : action.state.step };
     default:
       return state;
   }
