@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@auj/auth": "workspace:*",
+    "@auj/compliance": "workspace:*",
     "@auj/connector-mock": "workspace:*",
     "@auj/connector-saudi": "workspace:*",
     "@auj/connector-travel": "workspace:*",
@@ -24,8 +25,8 @@
     "@auj/notifications": "workspace:*",
     "@auj/payments": "workspace:*",
     "@auj/support": "workspace:*",
-    "@auj/visa-router": "workspace:*",
     "@auj/ui": "workspace:*",
+    "@auj/visa-router": "workspace:*",
     "next": "^14.2.15",
     "next-intl": "^3.26.3",
     "pg": "^8.13.1",

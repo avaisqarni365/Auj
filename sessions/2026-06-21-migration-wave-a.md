@@ -88,8 +88,21 @@ Driving `migration/*.md` in order, one screen per commit, gated + auto-deployed.
   (net hotels/flights via `TravelSupplier` mock). Linked from AdminConsole. Deferred: live contract-test
   runner UI, real vault rotate-creds, supplier book→cancel interactivity, "+ Add provider" (registry is code).
 
+- **14 EU Compliance** (`PENDING`) — `/admin/compliance`. `@auj/compliance` logic already existed
+  (tiers, `renderCertificate`, `refundDueBy`, GDPR/consent); added it as a web dep + closed the DB gap.
+  **DB** `compliance-store.ts` (Postgres + in-memory): `security_certificates` (+ delivery proof),
+  `precontract_consents`, `refund_windows`, `gdpr_requests`. `onPackageBooking` records consent (before
+  charge) → issues + delivers the certificate (tier drives cover) → opens the **6-month** refund window
+  (`refundDueBy`, 183d), in one step. `compliance-actions.ts` (ADMIN): list, simulate-booking, GDPR
+  request/complete (export returns the customer's records; delete erases PII). `ComplianceConsole`:
+  tier config, certificates (download .txt), refund windows (overdue/days-left), consents, GDPR
+  export/delete. Repo test (2: on-booking issue+consent+window=183d; GDPR export/erase). Linked from
+  AdminConsole. Deferred: certificate **PDF→DocumentStore** (object-store pending; text artifact stored),
+  wiring `onPackageBooking` into the live checkout confirm step (flow + simulate available now),
+  per-issue/refund `activity_logs`.
+
 ## Next
-- Wave C: 14 EU Compliance · 15 Landing (last). 05 Dashboard still gated on object-store decision.
+- Wave C: **15 Landing** (last — links everything). 05 Dashboard still gated on object-store decision.
 - Pending (non-blocking): voice recordings on-device vs object store; passport OCR (needs object store);
   hotels-via-connector in guides; Jeddah gifts data + guide localisation (LT/UR/AR via `locale`).
 

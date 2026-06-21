@@ -501,6 +501,7 @@ function ServiceProviders() {
           { href: '/admin/connector', label: '🛂 Saudi connector' },
           { href: '/admin/nusuk', label: '🕋 Nusuk services' },
           { href: '/admin/suppliers', label: '🧭 Travel suppliers' },
+          { href: '/admin/compliance', label: '🛡️ EU compliance' },
         ].map((l) => (
           <Link
             key={l.href}

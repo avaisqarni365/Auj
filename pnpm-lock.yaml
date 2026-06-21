@@ -90,6 +90,9 @@ importers:
       '@auj/auth':
         specifier: workspace:*
         version: link:../../packages/auth
+      '@auj/compliance':
+        specifier: workspace:*
+        version: link:../../packages/compliance
       '@auj/connector-mock':
         specifier: workspace:*
         version: link:../../packages/connector-mock
