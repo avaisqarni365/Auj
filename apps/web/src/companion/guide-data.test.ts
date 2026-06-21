@@ -12,7 +12,7 @@ describe('companion guide seed', () => {
       expect(def.title.length).toBeGreaterThan(0);
       expect(def.icon.length).toBeGreaterThan(0);
       for (const city of CITIES) {
-        const cats = def.cities[city];
+        const cats = def.cities[city] ?? [];
         expect(cats.length).toBeGreaterThan(0);
         for (const cat of cats) {
           expect(cat.key.length).toBeGreaterThan(0);
@@ -29,7 +29,7 @@ describe('companion guide seed', () => {
   it('category keys are unique within each guide/city', () => {
     for (const slug of GUIDE_SLUGS) {
       for (const city of CITIES) {
-        const keys = GUIDES[slug].cities[city].map((c) => c.key);
+        const keys = (GUIDES[slug].cities[city] ?? []).map((c) => c.key);
         expect(new Set(keys).size).toBe(keys.length);
       }
     }

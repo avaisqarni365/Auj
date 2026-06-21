@@ -1,6 +1,6 @@
 // Companion-guide seed content (migration 10), transcribed from the prototypes.
 export type GuideSlug = 'food' | 'transport' | 'connectivity' | 'gifts' | 'laundry' | 'hospitals' | 'helpline';
-export type GuideCity = 'makkah' | 'madinah';
+export type GuideCity = 'makkah' | 'madinah' | 'jeddah';
 
 export interface GuideItem {
   name: string;
@@ -20,7 +20,8 @@ export interface GuideDef {
   title: string;     // e.g. 'Food guide'
   subtitle: string;  // one short line
   icon: string;      // single emoji
-  cities: Record<GuideCity, GuideCategory[]>;
+  // Not every guide covers every city (most are Makkah + Madinah; gifts also covers Jeddah).
+  cities: Partial<Record<GuideCity, GuideCategory[]>>;
 }
 
 export const GUIDES: Record<GuideSlug, GuideDef> = {
@@ -332,6 +333,32 @@ export const GUIDES: Record<GuideSlug, GuideDef> = {
           { name: 'Al Rashid Mega Mall', note: 'Family mall', tag: 'Mall', mark: 'RM' },
           { name: 'Central area souqs', note: 'Around the Haram', tag: 'Souq', mark: 'CL' },
           { name: 'Quba Road shops', note: 'Dates & gifts', tag: 'Shops', mark: 'QB' },
+        ] },
+        { key: 'Online', name: 'Order online', desc: 'Buy gifts, dates and Zamzam online for delivery to your hotel or shipped home.', noun: 'options', items: [
+          { name: 'HungerStation / ToYou', note: 'Groceries & gift delivery', tag: 'App', mark: 'HS' },
+          { name: 'Bateel.com', note: 'Premium dates · ships abroad', tag: 'Web', mark: 'BT' },
+          { name: 'Amazon.sa / Noon', note: 'Gifts & essentials', tag: 'Web', mark: 'AZ' },
+          { name: 'Local date sellers (WhatsApp)', note: 'Many ship overseas', tag: 'Chat', mark: 'WA' },
+        ] },
+      ],
+      jeddah: [
+        { key: 'Dates & Zamzam', name: 'Dates & last-minute gifts', desc: 'Stock up on the way to or from King Abdulaziz Airport (JED).', noun: 'options', items: [
+          { name: 'Date markets (Al-Balad)', note: 'Wide variety', tag: 'per kg', mark: 'BL' },
+          { name: 'Bateel (premium dates)', note: 'Gourmet date boutique', tag: 'Premium', mark: 'BT' },
+          { name: 'Danube / Tamimi gift packs', note: 'Supermarket gift sets', tag: 'Packs', mark: 'SP' },
+          { name: 'JED airport date shops', note: 'Last-minute gifts', tag: 'Airport', mark: 'JD' },
+        ] },
+        { key: 'Gifts', name: 'Souqs & souvenirs', desc: 'Historic Al-Balad markets for attar, fabrics, gold and crafts.', noun: 'places', items: [
+          { name: 'Souq Al Alawi (Al-Balad)', note: 'Historic market · attar, fabrics', tag: 'Souq', mark: 'AL' },
+          { name: 'Gold Souq, Balad', note: 'Gold & jewellery', tag: 'Gold', mark: 'GS' },
+          { name: 'Attar & oud houses', note: 'Arabian Oud, Abdul Samad', tag: 'Attar', mark: 'AT' },
+          { name: 'Handicrafts & frames', note: 'Souvenirs', tag: 'Gift', mark: 'HC' },
+        ] },
+        { key: 'Malls & Corniche', name: 'Malls & Corniche', desc: 'Some of the largest malls in the Kingdom, plus the seafront.', noun: 'places', items: [
+          { name: 'Red Sea Mall', note: 'One of KSA’s largest', tag: 'Mall', mark: 'RS' },
+          { name: 'Mall of Arabia', note: 'Big brands', tag: 'Mall', mark: 'MA' },
+          { name: 'Historic Al-Balad', note: 'UNESCO old-town souqs', tag: 'Souq', mark: 'HB' },
+          { name: 'Jeddah Corniche shops', note: 'Waterfront', tag: 'Corniche', mark: 'CR' },
         ] },
         { key: 'Online', name: 'Order online', desc: 'Buy gifts, dates and Zamzam online for delivery to your hotel or shipped home.', noun: 'options', items: [
           { name: 'HungerStation / ToYou', note: 'Groceries & gift delivery', tag: 'App', mark: 'HS' },

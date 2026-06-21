@@ -23,15 +23,16 @@ export function GuideWizard({
   subtitle: string;
   icon: string;
   slug: GuideSlug;
-  cities: Record<GuideCity, GuideCategory[]>;
+  cities: Partial<Record<GuideCity, GuideCategory[]>>;
 }) {
-  const [city, setCity] = useState<GuideCity>('makkah');
+  const availableCities = (Object.keys(cities) as GuideCity[]).filter((c) => (cities[c]?.length ?? 0) > 0);
+  const [city, setCity] = useState<GuideCity>(availableCities[0] ?? 'makkah');
   const [lang, setLang] = useState<'en' | GuideLocale>('en');
   const [i, setI] = useState(0);
 
   // Apply the LT/TR translation overlay (category name/desc/noun + item note); EN = base; any
   // missing translation falls back to English.
-  const localized = useMemo<Record<GuideCity, GuideCategory[]>>(() => {
+  const localized = useMemo<Partial<Record<GuideCity, GuideCategory[]>>>(() => {
     if (lang === 'en') return cities;
     const tx = GUIDE_I18N[slug]?.[lang];
     if (!tx) return cities;
@@ -43,10 +44,12 @@ export function GuideWizard({
         noun: tx.cat[c.key]?.noun ?? c.noun,
         items: c.items.map((it) => ({ ...it, note: tx.item[it.name]?.note ?? it.note })),
       }));
-    return { makkah: map(cities.makkah), madinah: map(cities.madinah) };
+    const out: Partial<Record<GuideCity, GuideCategory[]>> = {};
+    for (const c of Object.keys(cities) as GuideCity[]) out[c] = map(cities[c] ?? []);
+    return out;
   }, [cities, lang, slug]);
 
-  const cats = localized[city];
+  const cats = localized[city] ?? [];
   const total = cats.length;
   const idx = Math.max(0, Math.min(i, total - 1));
   const cat = cats[idx];
@@ -88,7 +91,7 @@ export function GuideWizard({
         </div>
         {/* City toggle */}
         <div className="inline-flex rounded-xl border border-sand-200 bg-white p-1">
-          {(['makkah', 'madinah'] as const).map((c) => {
+          {availableCities.map((c) => {
             const active = c === city;
             return (
               <button

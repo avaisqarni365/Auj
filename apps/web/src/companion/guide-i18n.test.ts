@@ -11,7 +11,7 @@ describe('LT/TR localisation overlays', () => {
         const tx = GUIDE_I18N[slug]?.[loc];
         expect(tx, `${slug}.${loc}`).toBeTruthy();
         // every category key present across either city has a translated name
-        const keys = new Set([...GUIDES[slug].cities.makkah, ...GUIDES[slug].cities.madinah].map((c) => c.key));
+        const keys = new Set([...(GUIDES[slug].cities.makkah ?? []), ...(GUIDES[slug].cities.madinah ?? [])].map((c) => c.key));
         for (const k of keys) expect(tx.cat[k]?.name, `${slug}.${loc}.${k}`).toBeTruthy();
       }
     }

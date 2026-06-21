@@ -136,7 +136,16 @@ Driving `migration/*.md` in order, one screen per commit, gated + auto-deployed.
 **All 15 migration screens (01–15) delivered, gated & deployed**, plus the object-store foundation.
 Full web suite: **33 files / 124 tests green**; `next build` **48/48 pages**, no client pg/crypto leak.
 Per-screen gate held throughout: typecheck · lint · unit · build → commit → pipeline deploy.
-Standing deferrals (non-blocking): real MRZ OCR provider; live contract-test runner; Jeddah gifts data.
+Standing deferrals (non-blocking): real MRZ OCR provider; live contract-test runner.
+
+### Jeddah gifts data (done)
+Widened `GuideCity` to include `'jeddah'` and made `GuideDef.cities` partial. Restored the Gifts
+prototype's Jeddah block (4 categories / 16 items: Dates & last-minute gifts, Souqs & souvenirs,
+Malls & Corniche, Order online). `GuideWizard` city toggle is now data-driven (renders the cities a
+guide actually has — 3 for gifts, 2 for the rest); `guide-store` seeds + regroups per the guide's
+own cities. Seeding is now **idempotent per (guide, city)** so the new Jeddah rows seed on deploy
+without disturbing existing makkah/madinah rows. Jeddah descriptive text falls back to EN (LT/TR
+overlay covers the shared keys; new Jeddah-only keys pending, per A10).
 
 ### Guide + wizard LT/TR localisation (done)
 Non-destructive translation overlays (EN stays the reviewed base; missing strings fall back to EN).

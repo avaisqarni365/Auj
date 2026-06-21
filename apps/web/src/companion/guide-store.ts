@@ -4,29 +4,31 @@
 import { createPool, type DbPool } from '@auj/core-booking/postgres';
 import { GUIDES, type GuideCategory, type GuideCity, type GuideSlug } from './guide-data';
 
-const CITIES: GuideCity[] = ['makkah', 'madinah'];
+export type GuideCities = Partial<Record<GuideCity, GuideCategory[]>>;
+
+const citiesOf = (slug: GuideSlug): GuideCity[] => Object.keys(GUIDES[slug].cities) as GuideCity[];
 
 export interface GuideStore {
-  getGuide(slug: GuideSlug): Promise<Record<GuideCity, GuideCategory[]>>;
+  getGuide(slug: GuideSlug): Promise<GuideCities>;
 }
 
 class InMemoryGuides implements GuideStore {
-  async getGuide(slug: GuideSlug): Promise<Record<GuideCity, GuideCategory[]>> {
+  async getGuide(slug: GuideSlug): Promise<GuideCities> {
     return GUIDES[slug].cities;
   }
 }
 
 class PostgresGuides implements GuideStore {
   constructor(private readonly pool: DbPool) {}
-  async getGuide(slug: GuideSlug): Promise<Record<GuideCity, GuideCategory[]>> {
+  async getGuide(slug: GuideSlug): Promise<GuideCities> {
     const r = await this.pool.query<{ city: GuideCity; category: string; name: string; note: string; tag: string; mark: string }>(
       'SELECT city, category, name, note, tag, mark FROM guide_entries WHERE guide = $1 ORDER BY sort',
       [slug],
     );
     if (!r.rows.length) return GUIDES[slug].cities; // not seeded — fall back to the bundled seed
-    const out = { makkah: [], madinah: [] } as Record<GuideCity, GuideCategory[]>;
-    for (const city of CITIES) {
-      out[city] = GUIDES[slug].cities[city]
+    const out: GuideCities = {};
+    for (const city of citiesOf(slug)) {
+      out[city] = (GUIDES[slug].cities[city] ?? [])
         .map((cat) => ({
           ...cat,
           items: r.rows.filter((row) => row.city === city && row.category === cat.key).map((row) => ({
@@ -42,12 +44,14 @@ class PostgresGuides implements GuideStore {
   }
 }
 
+// Idempotent per (guide, city): seeds a city's rows only when it has none yet, so newly added
+// cities (e.g. Jeddah gifts) get seeded on deploy without disturbing existing rows.
 async function seed(pool: DbPool): Promise<void> {
-  const existing = await pool.query<{ n: string }>('SELECT count(*)::text AS n FROM guide_entries');
-  if (Number(existing.rows[0]?.n ?? '0') > 0) return;
   for (const slug of Object.keys(GUIDES) as GuideSlug[]) {
-    for (const city of CITIES) {
-      GUIDES[slug].cities[city].forEach((cat, ci) => {
+    for (const city of citiesOf(slug)) {
+      const existing = await pool.query<{ n: string }>('SELECT count(*)::text AS n FROM guide_entries WHERE guide = $1 AND city = $2', [slug, city]);
+      if (Number(existing.rows[0]?.n ?? '0') > 0) continue;
+      (GUIDES[slug].cities[city] ?? []).forEach((cat, ci) => {
         cat.items.forEach((item, ii) => {
           void pool
             .query(
