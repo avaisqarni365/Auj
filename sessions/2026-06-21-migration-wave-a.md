@@ -20,7 +20,7 @@ Driving `migration/*.md` in order, one screen per commit, gated + auto-deployed.
   flights+hotels by season (×1/1.28/1.55), reuses `buildAssessment` for sell/profit; 4 tests. Pax
   40/80/120 + clamp 1–500, live breakdown bar. **Save as deal → DB** (reuses #02). Links to /admin/finance.
 
-- **07 Packing Organizer** (`eb63975`) — `/companion/packing`. Pure `companion/packing.ts`
+- **07 Packing Organizer** (`bf3ae5d`) — `/companion/packing`. Pure `companion/packing.ts`
   `build(profile, days)` — quantities scale with stay (11/21/30), profile gates items, **Diabetic**
   adds glucose meter/insulin/strips/tabs (3 tests). **DB** `packing_lists (pilgrim_id, profile, days,
   checked jsonb)` via `packing-store.ts`/`packing-actions.ts` — browse open, **sign-in to save**,
