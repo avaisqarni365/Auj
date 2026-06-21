@@ -165,6 +165,32 @@ export function Companion({ makkah, madinah }: { makkah: PrayerDay | null; madin
         </div>
       </Section>
 
+      <Section icon="🎬" title="Step-by-step wizards" sub="Bilingual walk-throughs with a video on each step — airport, luggage & customs, and the Ziyarat sites.">
+        <div className="grid gap-2.5 sm:grid-cols-2">
+          {[
+            { href: '/guide/airport', icon: '✈️', label: 'Airport wizard' },
+            { href: '/guide/luggage', icon: '🧳', label: 'Luggage & customs' },
+            { href: '/guide/makkah-ziyarat', icon: '🕋', label: 'Makkah Ziyarat sites' },
+            { href: '/guide/madina-ziyarat', icon: '🕌', label: 'Madinah Ziyarat sites' },
+            { href: '/guide/tour', icon: '🌅', label: 'Virtual tour' },
+            { href: '/guide', icon: '📿', label: 'Umrah ritual guide' },
+          ].map((w) => (
+            <Link
+              key={w.href}
+              href={w.href}
+              className="flex items-center justify-between rounded-xl border border-sand-200 bg-white p-3.5 text-[13.5px] font-semibold text-sand-700 transition-[transform,border-color,color] duration-fast hover:border-green-700 hover:text-green-800 active:scale-[0.99]"
+            >
+              <span>
+                {w.icon} {w.label}
+              </span>
+              <span className="text-sand-300" aria-hidden>
+                →
+              </span>
+            </Link>
+          ))}
+        </div>
+      </Section>
+
       <Section icon="💡" title={t('tips.title')}>
         <List items={tips} />
       </Section>

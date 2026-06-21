@@ -49,10 +49,22 @@ Driving `migration/*.md` in order, one screen per commit, gated + auto-deployed.
   Deferred: hotels-via-`SaudiConnector.searchHotels` (hotels already searchable in the booking funnel)
   and the prototype's Jeddah gifts block (type is makkah/madinah only) — note for a later pass.
 
+- **11 Step-video wizards** (`PENDING`) — `/guide/{airport,luggage,makkah-ziyarat,madina-ziyarat}`.
+  (Virtual Tour already live at `/guide/tour`.) ONE shared `<StepVideoWizard>` (step rail + media
+  panel + localized RTL title/body + string-or-customs-rule items + tip + per-step video link +
+  language switcher + prev/next). `parse-embed.ts` YouTube/Vimeo/MP4 → embeddable (4 tests). Content
+  transcribed into `ritual/wizard-steps.ts` (45 steps: airport 7, luggage 8, Makkah 16, Madinah 14;
+  EN/UR/AR/DE airport+luggage, EN/AR ziyarat; luggage items = ok/permit/prohibited customs rules).
+  **DB** `ritual_steps (wizard, idx, short, label, text jsonb, items jsonb, tip, video_url, sort)` via
+  `wizard-store.ts` (seeds from seed, editable via CMS) + `pilgrim_step_videos (pilgrim_id, wizard,
+  step_idx, url)` via `step-video-store.ts`/`-actions.ts` — **sign-in to save** per-step clips, URL
+  validated by parseEmbed. `WizardScreen` loader; all linked from `/companion`. Seed test (2).
+  Assumption A9 logged (content + translations + customs rules pending review). Deferred: object-store
+  video upload (URL-only for now) + LT/TR locale text.
+
 ## Next
-- Wave B: 05 Dashboard (passport OCR + Me/Family/Group switcher — needs object store) ·
-  11 tour/wizards (Airport/Luggage/Ziyarat). Then Wave C
-  (12 B2B · 13 admin connectors · 14 compliance · 15 landing last).
+- Wave B: 05 Dashboard (passport OCR + Me/Family/Group switcher — needs object store).
+  Then Wave C (12 B2B · 13 admin connectors · 14 compliance · 15 landing last).
 - Pending (non-blocking): voice recordings on-device vs object store; passport OCR (needs object store);
   hotels-via-connector in guides; Jeddah gifts data + guide localisation (LT/UR/AR via `locale`).
 
