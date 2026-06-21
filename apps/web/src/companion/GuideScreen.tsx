@@ -11,7 +11,7 @@ export async function GuideScreen({ slug }: { slug: GuideSlug }) {
   const def = GUIDES[slug];
   return (
     <SitePage user={user}>
-      <GuideWizard title={def.title} subtitle={def.subtitle} icon={def.icon} cities={cities} />
+      <GuideWizard title={def.title} subtitle={def.subtitle} icon={def.icon} slug={slug} cities={cities} />
     </SitePage>
   );
 }

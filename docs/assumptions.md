@@ -13,3 +13,4 @@ Append a row whenever you proceed on something unverified. Resolve before the re
 | A7 | Umrah Guide content is EN-only for v1; LT/UR/AR translation pending (Arabic dua text shown verbatim) | umrah-ritual-wizard | med | translator + scholar | open |
 | A8 | Day-planner jamaat times + hourly temperatures are a static hot-season approximation (Makkah; Madinah ~2°C cooler), not live data | day-planner | med | prayer-times service + local verification | open |
 | A9 | Airport/Luggage/Ziyarat wizard step content + EN/UR/AR/DE translations (and Saudi customs allowed/declare/prohibited rules) are accurate | step-video-wizards | med | qualified scholar + translator + current customs source | open |
+| A10 | Companion-guide + step-wizard LT/TR translations are machine-drafted (EN is the reviewed base; UI falls back to EN) | guides, step-video-wizards | med | native LT/TR reviewer | open |

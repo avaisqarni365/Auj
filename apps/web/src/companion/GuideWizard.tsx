@@ -1,7 +1,14 @@
 'use client';
 
-import { useState } from 'react';
-import type { GuideCategory, GuideCity } from './guide-data';
+import { useMemo, useState } from 'react';
+import type { GuideCategory, GuideCity, GuideSlug } from './guide-data';
+import { GUIDE_I18N, type GuideLocale } from './guide-i18n';
+
+const LANGS: Array<{ code: 'en' | GuideLocale; label: string }> = [
+  { code: 'en', label: 'EN' },
+  { code: 'lt', label: 'LT' },
+  { code: 'tr', label: 'TR' },
+];
 
 const pad2 = (n: number): string => `0${n}`.slice(-2);
 
@@ -9,17 +16,37 @@ export function GuideWizard({
   title,
   subtitle,
   icon,
+  slug,
   cities,
 }: {
   title: string;
   subtitle: string;
   icon: string;
+  slug: GuideSlug;
   cities: Record<GuideCity, GuideCategory[]>;
 }) {
   const [city, setCity] = useState<GuideCity>('makkah');
+  const [lang, setLang] = useState<'en' | GuideLocale>('en');
   const [i, setI] = useState(0);
 
-  const cats = cities[city];
+  // Apply the LT/TR translation overlay (category name/desc/noun + item note); EN = base; any
+  // missing translation falls back to English.
+  const localized = useMemo<Record<GuideCity, GuideCategory[]>>(() => {
+    if (lang === 'en') return cities;
+    const tx = GUIDE_I18N[slug]?.[lang];
+    if (!tx) return cities;
+    const map = (cats: GuideCategory[]): GuideCategory[] =>
+      cats.map((c) => ({
+        ...c,
+        name: tx.cat[c.key]?.name ?? c.name,
+        desc: tx.cat[c.key]?.desc ?? c.desc,
+        noun: tx.cat[c.key]?.noun ?? c.noun,
+        items: c.items.map((it) => ({ ...it, note: tx.item[it.name]?.note ?? it.note })),
+      }));
+    return { makkah: map(cities.makkah), madinah: map(cities.madinah) };
+  }, [cities, lang, slug]);
+
+  const cats = localized[city];
   const total = cats.length;
   const idx = Math.max(0, Math.min(i, total - 1));
   const cat = cats[idx];
@@ -39,6 +66,26 @@ export function GuideWizard({
           </h1>
           <p className="mt-2 max-w-[60ch] text-sand-500">{subtitle}</p>
         </div>
+        <div className="flex items-center gap-2">
+        {/* Language */}
+        <div className="inline-flex rounded-xl border border-sand-200 bg-white p-1">
+          {LANGS.map((l) => {
+            const active = l.code === lang;
+            return (
+              <button
+                key={l.code}
+                type="button"
+                onClick={() => setLang(l.code)}
+                className={`rounded-lg px-2.5 py-1.5 text-[12px] font-semibold transition-colors duration-fast ${
+                  active ? 'bg-green-700 text-white' : 'text-sand-600 hover:text-green-800'
+                }`}
+                aria-pressed={active}
+              >
+                {l.label}
+              </button>
+            );
+          })}
+        </div>
         {/* City toggle */}
         <div className="inline-flex rounded-xl border border-sand-200 bg-white p-1">
           {(['makkah', 'madinah'] as const).map((c) => {
@@ -57,6 +104,7 @@ export function GuideWizard({
               </button>
             );
           })}
+        </div>
         </div>
       </div>
 

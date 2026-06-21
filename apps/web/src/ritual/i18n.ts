@@ -15,6 +15,7 @@ export const RITUAL_LOCALES: Locale[] = [
   { code: 'ur', label: 'اردو', rtl: true },
   { code: 'tr', label: 'Türkçe', rtl: false },
   { code: 'de', label: 'Deutsch', rtl: false },
+  { code: 'lt', label: 'Lietuvių', rtl: false },
 ];
 
 export function isRtlLang(code: string): boolean {

@@ -136,8 +136,18 @@ Driving `migration/*.md` in order, one screen per commit, gated + auto-deployed.
 **All 15 migration screens (01–15) delivered, gated & deployed**, plus the object-store foundation.
 Full web suite: **33 files / 124 tests green**; `next build` **48/48 pages**, no client pg/crypto leak.
 Per-screen gate held throughout: typecheck · lint · unit · build → commit → pipeline deploy.
-Standing deferrals (non-blocking): real MRZ OCR provider; guide LT/TR localisation; live
-contract-test runner; Jeddah gifts data.
+Standing deferrals (non-blocking): real MRZ OCR provider; live contract-test runner; Jeddah gifts data.
+
+### Guide + wizard LT/TR localisation (done)
+Non-destructive translation overlays (EN stays the reviewed base; missing strings fall back to EN).
+- Companion guides: `companion/guide-i18n.ts` (`GUIDE_I18N`, lt+tr — 35 categories / 179 items per
+  locale; proper-noun names/tags/marks kept as join keys). `GuideWizard` gains an EN/LT/TR switcher that
+  applies the overlay (category name/desc/noun + item note); `slug` threaded from `GuideScreen`.
+- Step wizards: `ritual/wizard-steps-i18n.ts` (`WIZARD_I18N`, lt+tr for all 45 steps, index-aligned).
+  `WizardScreen` merges the overlay into each step's localized `text`; `RITUAL_LOCALES` += Lithuanian
+  (the EN/AR/UR/TR/DE/LT switcher already drives `StepVideoWizard`).
+Coverage test (2: every guide category key + every wizard step has lt+tr). Assumption A10 logged
+(machine-drafted, pending native review). Full web suite 130 tests; build 48/48.
 
 ### B2B markups persistence (done)
 `agent-db.ts` gains a `markups` table + `listMarkups/saveMarkup/deleteMarkup` (per agency, upsert).
