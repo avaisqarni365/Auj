@@ -82,6 +82,22 @@ export function Companion({ makkah, madinah }: { makkah: PrayerDay | null; madin
 
       <Section icon="🌅" title={t('day.title')} sub={t('day.sub')}>
         <List items={day} />
+        <div className="mt-3 grid gap-2.5 sm:grid-cols-2">
+          <Link
+            href="/plan/day"
+            className="flex items-center justify-between rounded-xl border border-green-700/30 bg-green-50 p-3.5 text-[13.5px] font-semibold text-green-800 transition-transform duration-fast hover:border-green-700 active:scale-[0.99]"
+          >
+            <span>🕌 Open the day planner — jamaat schedule + ±15 min</span>
+            <span aria-hidden>→</span>
+          </Link>
+          <Link
+            href="/companion/diary"
+            className="flex items-center justify-between rounded-xl border border-green-700/30 bg-green-50 p-3.5 text-[13.5px] font-semibold text-green-800 transition-transform duration-fast hover:border-green-700 active:scale-[0.99]"
+          >
+            <span>📿 Personal diary — Quran, nafl, duas, reflection</span>
+            <span aria-hidden>→</span>
+          </Link>
+        </div>
       </Section>
 
       <Section icon="🧳" title={t('before.title')} sub={t('before.sub')}>

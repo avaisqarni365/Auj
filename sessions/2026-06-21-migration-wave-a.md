@@ -27,9 +27,21 @@ Driving `migration/*.md` in order, one screen per commit, gated + auto-deployed.
   debounced upsert per (pilgrim, profile). UI: profile tabs, 11/21/30 toggle, grouped checkboxes,
   progress bar; linked from `/companion`.
 
+- **08 Day Planner** (`5d6d9d6`) — `/plan/day`. (Smart Planner #08-pt1 already shipped at `/plan`
+  via `leads/SmartVisitWizard`.) Pure `ritual/planner.ts` `dayPlan(city, shiftMin)`: jamaat-anchored
+  14-slot schedule per city, hourly temperature (Makkah; Madinah −2°C), ±15-min whole-day shift,
+  `clampShift` (5 tests). **DB** `day_plans (pilgrim_id PK, city, shift_min)` via store/actions —
+  browse open, **sign-in to save** city+shift. UI: city toggle, ∓ time-adjust, temp band, timeline.
+  Assumption A8 logged (times are a static approximation).
+- **09 Personal Diary** (`5d6d9d6`) — `/companion/diary`. Pure `ritual/diary.ts` (NAFL/DUAS consts +
+  `naflTotal`/`duaDone`/`quranPct`, 2 tests). **DB** `diary_entries (pilgrim_id, date, quran_target,
+  quran_done, nafl jsonb, duas jsonb, note)` keyed per pilgrim+day (KSA date) — **DB not localStorage**,
+  sign-in to save, server clamps bounds. UI: Quran target/done + nafl counters + dua chips +
+  reflection textarea, debounced save. Both linked from `/companion`.
+
 ## Next
 - Wave B: 05 Dashboard (passport OCR + Me/Family/Group switcher — needs object store) ·
-  08–09 planners/diary · 10 companion guides · 11 tour/wizards. Then Wave C
+  10 companion guides · 11 tour/wizards. Then Wave C
   (12 B2B · 13 admin connectors · 14 compliance · 15 landing last).
 - Pending (non-blocking): voice recordings on-device vs object store; passport OCR (needs object store).
 
