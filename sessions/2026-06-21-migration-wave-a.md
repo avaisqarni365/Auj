@@ -62,9 +62,22 @@ Driving `migration/*.md` in order, one screen per commit, gated + auto-deployed.
   Assumption A9 logged (content + translations + customs rules pending review). Deferred: object-store
   video upload (URL-only for now) + LT/TR locale text.
 
+- **12 B2B Agent Portal** (`PENDING`) — `/agent`. Portal engine/screens/tests already existed but ran
+  on a shared in-process backend (not durable, not per-user). Added durable, **agency-scoped Postgres
+  persistence** (`agent-db.ts`, in-memory fallback): `agencies, wallets, wallet_ledger (double-entry),
+  quotes` — every query scoped by agency (= user id); one agent never sees another's wallet/quotes.
+  Rewrote `actions.ts` DB-backed: setup load-or-creates the agency + seeds a €60k float; bookGroup
+  blocks over `balance+creditLimit`, books via core-booking, appends a balanced ledger leg; new
+  `saveQuote/listQuotes/convertQuote/statementCsv` actions. Wallet/ledger now persist across restarts;
+  balance + history reload on visit. New `QuotesPanel` (build → save → shareable `/agent/quote/<ref>`
+  public page → convert), CSV statement download (reconciles the ledger via existing `buildStatement`).
+  Repo test (3: double-entry balance, statement reconcile, agency isolation); existing 26 agent tests
+  still green. Deferred: `markups` table persistence (markup engine already tested), sub-agent
+  hierarchy/approval workflow UI, live wallet holds (held=0), PKR-indicative on quotes.
+
 ## Next
 - Wave B: 05 Dashboard (passport OCR + Me/Family/Group switcher — needs object store).
-  Then Wave C (12 B2B · 13 admin connectors · 14 compliance · 15 landing last).
+  Then Wave C (13 admin connectors · 14 compliance · 15 landing last).
 - Pending (non-blocking): voice recordings on-device vs object store; passport OCR (needs object store);
   hotels-via-connector in guides; Jeddah gifts data + guide localisation (LT/UR/AR via `locale`).
 

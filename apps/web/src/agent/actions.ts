@@ -1,14 +1,17 @@
 'use server';
 
-// Server Actions for the agent portal. The backend runs server-side (node:crypto +
-// in-memory ledger/agents). The portal's agent record is personalised from the
-// logged-in user; wallet + booking state persist in a dev singleton.
+// Server Actions for the agent portal. Durable, agency-scoped state lives in Postgres
+// (agent-db.ts; in-memory fallback in dev) — the agency, wallet, double-entry ledger and
+// quotes all persist and are scoped to the logged-in agent. The booking transaction itself
+// runs through core-booking via the in-process backend.
 import type { SearchCriteria } from '@auj/contracts';
 import type { Booking } from '@auj/core-booking';
 import type { JournalEntry } from '@auj/payments';
 import { createInProcessBackend } from './backend/in-process';
-import { bookGroupFromWallet } from './multipax';
-import type { Agent, PaxRow } from './domain';
+import { validatePax } from './multipax';
+import { buildStatement, statementToCSV } from './statements';
+import { getAgentDb, toJournalEntries, type QuoteRecord } from './agent-db';
+import type { Agent, PaxRow, QuoteLine } from './domain';
 import type { Backend } from './ports';
 import { getCurrentUser } from '../auth/session';
 
@@ -21,40 +24,95 @@ function getBackend(): Backend {
 const CRITERIA: SearchCriteria = { city: 'MAKKAH', checkIn: '2026-09-01', checkOut: '2026-09-05', pax: 1 };
 const PER_PAX_EUR = 100_000; // €1,000 client price per pilgrim
 
-/** Onboard the logged-in agent: register + approve and fund the wallet (idempotent per session). */
-export async function setupAgentAction(): Promise<{ agent: Agent; balance: number }> {
-  const b = getBackend();
+async function requireAgency(): Promise<{ id: string; name: string; email: string; tier: Agent['tier'] }> {
   const user = await getCurrentUser();
-  const reg = await b.agents.register({
-    agencyName: user?.displayName ?? 'Agency',
-    email: user?.email ?? 'agent@auj.example',
-    tier: 'GOLD',
-  });
-  const agent = await b.agents.approve(reg.id);
-  b.wallet.open(agent.id, 'EUR', 0);
-  b.wallet.topUp(agent.id, { amount: 6_000_000, currency: 'EUR' }, 'demo-topup');
-  return { agent, balance: b.wallet.balance(agent.id) };
+  if (!user) throw new Error('Not signed in');
+  const db = await getAgentDb();
+  const agency = await db.loadOrCreateAgency(user.id, user.displayName || 'Agency', user.email || 'agent@auj.example', 'GOLD');
+  return { id: agency.id, name: agency.name, email: agency.email, tier: agency.tier };
 }
 
-/** Book a group of `paxCount` pilgrims in one transaction, paid from the wallet. */
+function agencyToAgent(a: { id: string; name: string; email: string; tier: Agent['tier'] }): Agent {
+  return { id: a.id, agencyName: a.name, email: a.email, tier: a.tier, status: 'APPROVED', createdAt: new Date().toISOString() };
+}
+
+/** Onboard the logged-in agent: load-or-create their durable agency + wallet, return current state. */
+export async function setupAgentAction(): Promise<{ agent: Agent; balance: number; creditLimit: number; entries: JournalEntry[] }> {
+  const agency = await requireAgency();
+  const db = await getAgentDb();
+  const w = await db.wallet(agency.id);
+  const legs = await db.ledger(agency.id);
+  return { agent: agencyToAgent(agency), balance: w.balanceMinor, creditLimit: w.creditLimitMinor, entries: toJournalEntries(agency.id, legs, w.currency) };
+}
+
+/** Book a group of `paxCount` pilgrims in one transaction, paid from the durable wallet. */
 export async function bookGroupAction(input: {
-  agentId: string;
   paxCount: number;
 }): Promise<{ booking: Booking; balance: number; entries: JournalEntry[] }> {
-  const b = getBackend();
-  const agent = await b.agents.get(input.agentId);
-  if (!agent) throw new Error('Unknown agent');
+  const agency = await requireAgency();
+  const db = await getAgentDb();
+  const w = await db.wallet(agency.id);
 
-  const hotels = await b.booking.searchHotels(CRITERIA);
-  const top = hotels[0];
-  if (!top) throw new Error('No hotels available');
-
-  const items = [{ kind: 'HOTEL' as const, offerId: top.id, title: top.name, net: top.nightlyNet }];
   const rows: PaxRow[] = Array.from({ length: input.paxCount }, (_, i) => ({
     firstName: `Pax${i + 1}`, lastName: 'Group', passportNumber: `PK${i + 1}`, nationality: 'PK', dob: '1990-01-01', gender: 'M',
   }));
-  const sell = { amount: input.paxCount * PER_PAX_EUR, currency: 'EUR' as const };
+  const validation = validatePax(rows);
+  if (!validation.ok) throw new Error(validation.errors.join('; '));
 
-  const booking = await bookGroupFromWallet(b, { agent, rows, items, sell });
-  return { booking, balance: b.wallet.balance(agent.id), entries: b.wallet.entries() };
+  const sellMinor = input.paxCount * PER_PAX_EUR;
+  const available = w.balanceMinor + w.creditLimitMinor;
+  if (sellMinor > available) throw new Error('Over credit limit — top up the wallet before booking this group.');
+
+  const b = getBackend();
+  const hotels = await b.booking.searchHotels(CRITERIA);
+  const top = hotels[0];
+  if (!top) throw new Error('No hotels available');
+  const items = [{ kind: 'HOTEL' as const, offerId: top.id, title: top.name, net: top.nightlyNet }];
+
+  const customer = await b.booking.createCustomer({ fullName: agency.name, email: agency.email });
+  const pilgrims = await Promise.all(rows.map((r) => b.booking.addPilgrim({ ...r, customerId: customer.id })));
+  const draft = await b.booking.createBooking({ customerId: customer.id, channel: 'PILGRIMAGE', pilgrimIds: pilgrims.map((p) => p.id), items });
+  await b.booking.hold(draft.id);
+  const booking = await b.booking.confirm(draft.id, `wallet:${agency.id}`);
+
+  const snapshot = await db.append(agency.id, {
+    ref: booking.bookingRef ?? booking.id,
+    kind: 'BOOKING',
+    memo: `${input.paxCount} pax · ${top.name}`,
+    debitMinor: sellMinor,
+    creditMinor: 0,
+  });
+  const legs = await db.ledger(agency.id);
+  return { booking, balance: snapshot.balanceMinor, entries: toJournalEntries(agency.id, legs, w.currency) };
+}
+
+/** Build + persist a shareable quote, scoped to the agency. markupPct is whole-number percent. */
+export async function saveQuoteAction(input: { lines: QuoteLine[]; markupPct: number }): Promise<QuoteRecord> {
+  const agency = await requireAgency();
+  const db = await getAgentDb();
+  const lines = input.lines.filter((l) => l.label.trim() && l.net.amount > 0);
+  const netMinor = lines.reduce((s, l) => s + l.net.amount, 0);
+  const pct = Math.max(0, Math.min(100, Math.trunc(input.markupPct) || 0));
+  const markupMinor = Math.round((netMinor * pct) / 100);
+  return db.saveQuote(agency.id, { lines, netMinor, markupMinor, sellMinor: netMinor + markupMinor, currency: 'EUR' });
+}
+
+export async function listQuotesAction(): Promise<QuoteRecord[]> {
+  const agency = await requireAgency();
+  return (await getAgentDb()).listQuotes(agency.id);
+}
+
+export async function convertQuoteAction(id: string): Promise<void> {
+  const agency = await requireAgency();
+  await (await getAgentDb()).convertQuote(agency.id, id);
+}
+
+/** Per-agency statement as CSV, reconstructed from (and reconciling) the double-entry ledger. */
+export async function statementCsvAction(): Promise<string> {
+  const agency = await requireAgency();
+  const db = await getAgentDb();
+  const w = await db.wallet(agency.id);
+  const legs = await db.ledger(agency.id);
+  const entries = toJournalEntries(agency.id, legs, w.currency);
+  return statementToCSV(buildStatement(entries, `wallet:${agency.id}`, w.currency));
 }
