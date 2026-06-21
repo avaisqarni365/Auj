@@ -121,7 +121,7 @@ Driving `migration/*.md` in order, one screen per commit, gated + auto-deployed.
   owner-scoped blob route `GET /api/doc/[...key]` (only the owner or ADMIN may fetch). Test (2:
   round-trip + miss). Next: #05 Dashboard (passport upload+OCR, Me/Family/Group switcher) on this seam.
 
-- **05 Pilgrim Dashboard** (`PENDING`) — `/journey/dashboard` (linked from the journey tab bar + landing).
+- **05 Pilgrim Dashboard** (`4d3042c`) — `/journey/dashboard` (linked from the journey tab bar + landing).
   Built on the object-store seam. **Me/Family/Group switcher** (`dashboard_members`, 'me' implicit,
   add/remove, owner-scoped). **Passport scan**: upload image → object store (`${uid}/passport/${member}/…`)
   → owner-scoped `/api/doc` preview → editable MRZ fields → persist to `passport_scans`
