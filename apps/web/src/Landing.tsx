@@ -2,11 +2,12 @@
 
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { routeFor } from '@auj/visa-router';
 import { Logo } from '@auj/ui';
 import type { PublicUser } from '@auj/auth';
 import { formatMoney, pkrIndicative } from './currency';
+import { landingCopy, type LandingOverrides } from './landing-content';
 import { HeroBackdrop } from './HeroBackdrop';
 import { Scene } from './components/Scene';
 import { SiteHeader } from './components/SiteHeader';
@@ -37,7 +38,7 @@ import {
   type SearchTab,
 } from './content';
 
-export default function Landing({ user, deals }: { user?: PublicUser; deals?: Deal[] }) {
+export default function Landing({ user, deals, content = {} }: { user?: PublicUser; deals?: Deal[]; content?: LandingOverrides }) {
   const dealCards = deals && deals.length > 0 ? deals : DEALS;
   const [tab, setTab] = useState<SearchTab>('Umrah');
   const [from, setFrom] = useState<string>(DEPARTURE_CITIES[0]);
@@ -52,6 +53,9 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
   const [demoLocale, setDemoLocale] = useState(LOCALES[0]!); // the "in your language" preview widget
   const t = useTranslations('common');
   const tl = useTranslations('landing');
+  const locale = useLocale();
+  // Admin CMS copy overrides the i18n default per locale (landingCopy falls back to EN, then catalog).
+  const copy = (key: string, fallback: string): string => landingCopy(key, locale, fallback, content);
   const trust = tl.raw('trust') as string[];
   const statLabels = tl.raw('statLabels') as string[];
   const journeyDesc = tl.raw('journeyDesc') as string[];
@@ -96,13 +100,13 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
           <div className="animate-rise">
             <span className="inline-flex items-center gap-2 rounded-full border border-sand-200 bg-sand-50 px-3.5 py-1.5 text-[12.5px] font-medium text-green-800">
               <span className="h-1.5 w-1.5 rounded-full bg-green-600" />
-              {t('heroBadge')}
+              {copy('hero.badge', t('heroBadge'))}
             </span>
             <h1 className="mt-6 font-serif text-[clamp(2.4rem,5.2vw,4rem)] font-semibold leading-[1.02] tracking-[-0.025em] text-sand-ink">
-              {t('heroTitle')}
+              {copy('hero.title', t('heroTitle'))}
             </h1>
             <p className="mt-5 max-w-[52ch] text-[clamp(1.02rem,1.5vw,1.2rem)] leading-relaxed text-sand-600">
-              {t('heroSubtitle')}
+              {copy('hero.subtitle', t('heroSubtitle'))}
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a href="#plan" className="relative inline-flex items-center gap-2 overflow-hidden rounded-xl bg-green-800 px-6 py-3.5 text-[15.5px] font-semibold text-white shadow-[0_10px_28px_rgba(15,81,50,0.26)] transition-[transform,background-color] duration-fast hover:bg-green-700 active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">

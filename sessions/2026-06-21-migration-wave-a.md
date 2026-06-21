@@ -220,3 +220,18 @@ Already prototype-faithful (left as-is): Pilgrim Profile (green cover card), B2B
 agency/wallet header), Landing (its own cinematic hero/frames). Plus landing cinematic polish earlier
 (parallax skyline/dome hero, count-up stats, trust marquee, CTA sheen). SW bumped to auj-v3 to evict
 stale clients. Full monorepo green: 26 typecheck · 14 lint · 26 test · 14 build; web next build 48/48.
+
+### Landing DB layer (migration 15 finalize) — CMS + leads
+- **landing_content CMS** — `landing-content.ts` (client-safe `LandingOverrides` + `landingCopy()`
+  locale→EN→catalog fallback + `LANDING_CONTENT_KEYS`), `landing-content-store.ts` (Postgres
+  `landing_content (key, locale, value)` + in-memory), `landing-content-actions.ts` (ADMIN list/save,
+  key-allowlisted). `app/page.tsx` fetches overrides → `Landing` applies them to hero badge/title/
+  subtitle over the i18n defaults. Repo test (override layering + fallback).
+- **leads table** — extended `src/leads/store.ts` with a normalized `leads (id, name, contact, intent,
+  locale, consent, created_at)` projection written alongside the rich `inquiries` row on every Smart
+  Visit submission (GDPR `consent` carried through); `listLeads()` + `toLead()`. Repo test (projection
+  + email→phone fallback + consent true/false).
+- Frames already link to real migrated routes; fluid clamp() + overflow-hidden (no h-scroll); RTL via
+  app locale dir; gold = logo/highlights only. Note: target route is `app/page.tsx` (no `(marketing)`
+  group exists; creating one would collide with the root page). Gates: typecheck · lint · 138 unit ·
+  build 48/48 — all green.
