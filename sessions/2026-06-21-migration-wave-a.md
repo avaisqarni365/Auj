@@ -101,7 +101,7 @@ Driving `migration/*.md` in order, one screen per commit, gated + auto-deployed.
   wiring `onPackageBooking` into the live checkout confirm step (flow + simulate available now),
   per-issue/refund `activity_logs`.
 
-- **15 Landing** (`PENDING`) — `/` (`src/Landing.tsx`, already a rich cinematic page). Closed the
+- **15 Landing** (`ea38a5b`) — `/` (`src/Landing.tsx`, already a rich cinematic page). Closed the
   "hub links to everything" gap: added an **"Everything for your journey"** frame (`#tools`) — a
   responsive grid linking every migrated route (/plan, /book, /companion, /plan/day,
   /companion/packing, /companion/diary, /guide + /guide/tour, the 4 step wizards, food/transport/
