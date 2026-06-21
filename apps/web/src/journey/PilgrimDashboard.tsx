@@ -4,6 +4,8 @@ import { useRef, useState, useTransition } from 'react';
 import Link from 'next/link';
 import { routeFor } from '@auj/visa-router';
 import { displayFromEur, type DisplayCurrency } from '../currency';
+import { StripePaymentForm } from '../book/screens/StripePaymentForm';
+import { finalizeDepositAction, startDepositAction } from './deposit-actions';
 import {
   addMemberAction,
   getDashboardAction,
@@ -48,6 +50,9 @@ export function PilgrimDashboard({ initial }: { initial: DashboardData }) {
   const [pending, start] = useTransition();
   const [err, setErr] = useState<string>();
   const fileRef = useRef<HTMLInputElement>(null);
+  const [pay, setPay] = useState<'idle' | 'card' | 'paid'>(initial.depositPaid ? 'paid' : 'idle');
+  const [payErr, setPayErr] = useState<string>();
+  const [card, setCard] = useState<{ ref: string; clientSecret: string; publishableKey: string; amountLabel: string }>();
 
   const refresh = (next?: string): void =>
     void getDashboardAction().then((d) => {
@@ -101,11 +106,41 @@ export function PilgrimDashboard({ initial }: { initial: DashboardData }) {
   const step = data.bookingStep;
   const passportConfirmed = data.passports.me?.status === 'confirmed';
   const confirmed = step === 'CONFIRMED';
-  const done = [true, passportConfirmed, confirmed, confirmed, confirmed];
+  const depositDone = data.depositPaid || pay === 'paid' || confirmed;
+  const done = [true, passportConfirmed, depositDone, confirmed, confirmed];
   const pct = Math.round((done.filter(Boolean).length / STAGES.length) * 100);
 
   const visa = fields.nationality.trim() ? routeFor({ nationality: fields.nationality.trim() } as Parameters<typeof routeFor>[0]) : null;
   const depositMinor = Math.round((parseFloat(depositEur) || 0) * 100);
+
+  const payDeposit = (): void => {
+    setPayErr(undefined);
+    start(async () => {
+      const r = await startDepositAction(depositMinor);
+      if (r.status === 'error') {
+        setPayErr(r.error);
+        return;
+      }
+      if (r.status === 'requires_card') {
+        setCard({ ref: r.ref, clientSecret: r.clientSecret, publishableKey: r.publishableKey, amountLabel: r.amountLabel });
+        setPay('card');
+        return;
+      }
+      setPay('paid');
+    });
+  };
+  const confirmDeposit = (): void => {
+    if (!card) return;
+    start(async () => {
+      const r = await finalizeDepositAction(card.ref);
+      if (r.ok) {
+        setPay('paid');
+        setCard(undefined);
+      } else {
+        setPayErr('Could not capture the payment.');
+      }
+    });
+  };
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
@@ -265,8 +300,36 @@ export function PilgrimDashboard({ initial }: { initial: DashboardData }) {
               {currency === 'EUR' ? 'Charged in EUR.' : `Indicative — charged in EUR (${displayFromEur(depositMinor, 'EUR')}).`}
             </div>
           </div>
-          <Link href="/book" className="mt-3 block rounded-lg bg-green-800 px-4 py-2.5 text-center text-[13.5px] font-semibold text-white transition-transform duration-fast active:scale-[0.98]">
-            Continue to booking →
+
+          {pay === 'paid' ? (
+            <div className="mt-3 rounded-lg bg-green-100 px-4 py-2.5 text-center text-[13.5px] font-semibold text-green-800">✓ Deposit paid</div>
+          ) : pay === 'card' && card ? (
+            <div className="mt-3">
+              <StripePaymentForm
+                locale="en"
+                clientSecret={card.clientSecret}
+                publishableKey={card.publishableKey}
+                amountLabel={card.amountLabel}
+                onConfirmed={confirmDeposit}
+                onBack={() => {
+                  setPay('idle');
+                  setCard(undefined);
+                }}
+              />
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={payDeposit}
+              disabled={pending || depositMinor < 5000}
+              className="mt-3 w-full rounded-lg bg-green-800 px-4 py-2.5 text-center text-[13.5px] font-semibold text-white transition-transform duration-fast active:scale-[0.98] disabled:opacity-50"
+            >
+              {pending ? 'Starting…' : 'Pay deposit'}
+            </button>
+          )}
+          {payErr ? <p className="mt-1.5 text-[12px] text-danger-fg">{payErr}</p> : null}
+          <Link href="/book" className="mt-2 block text-center text-[12.5px] font-semibold text-accent-600 hover:underline">
+            or build a full package →
           </Link>
         </section>
       </div>

@@ -139,6 +139,15 @@ Per-screen gate held throughout: typecheck · lint · unit · build → commit �
 Standing deferrals (non-blocking): real MRZ OCR provider; markups-table persistence; guide
 LT/TR localisation; live contract-test runner; Jeddah gifts data.
 
+### Dashboard deposit → live payments intent (done)
+`deposit-store.ts` (`deposits` table) + `deposit-actions.ts`: `startDepositAction` authorizes an
+EUR payment intent via the booking backend's `payments.authorize` (synthetic `deposit:<uid>:<ts>`
+ref), persists a pending row holding the intent id; live Stripe → returns clientSecret/publishable
+key, sandbox → captures immediately. `finalizeDepositAction` captures after the browser confirms
+(owner-checked). Dashboard deposit card now pays inline via the shared `StripePaymentForm` (EUR
+charged, EUR/USD/SAR/PKR display), shows "✓ Deposit paid", and the **Deposit progress stage now
+reflects a real paid deposit** (`depositPaid`). €50–50,000 bounds. Repo test (1).
+
 ### Object-store retrofits (done)
 - **Certificate PDFs** — dependency-free `src/admin/pdf.ts` `textPdf()` (valid PDF 1.4 + xref; 2 tests).
   `compliance-store.onPackageBooking` now renders the certificate to a PDF, stores it in the object

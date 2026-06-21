@@ -4,6 +4,7 @@ import { getCurrentUser } from '../auth/session';
 import { getBookingDraftStore } from '../book/booking-draft-store';
 import { getObjectStore } from '../storage/document-store';
 import { getDashboardStore } from './dashboard-store';
+import { getDepositStore } from './deposit-store';
 import { EMPTY_PASSPORT, type Member, type PassportFields, type PassportScan } from './dashboard-types';
 
 const MAX_BYTES = 8 * 1024 * 1024;
@@ -13,6 +14,7 @@ export interface DashboardData {
   members: Member[];
   passports: Record<string, PassportScan>;
   bookingStep: string | null;
+  depositPaid: boolean;
 }
 
 // MRZ OCR is a provider swap (OCR_* in the registry). Until configured, fields are entered manually.
@@ -32,7 +34,8 @@ export async function getDashboardAction(): Promise<DashboardData | null> {
     if (scan) passports[m.memberId] = scan;
   }
   const draft = await (await getBookingDraftStore()).get(user.id);
-  return { members, passports, bookingStep: draft?.state.step ?? null };
+  const deposits = await (await getDepositStore()).listByPilgrim(user.id);
+  return { members, passports, bookingStep: draft?.state.step ?? null, depositPaid: deposits.some((d) => d.status === 'paid') };
 }
 
 export async function addMemberAction(name: string, relation: string): Promise<void> {
