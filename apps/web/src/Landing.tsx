@@ -95,8 +95,9 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
               {t('heroSubtitle')}
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a href="#plan" className="inline-flex items-center gap-2 rounded-xl bg-green-800 px-6 py-3.5 text-[15.5px] font-semibold text-white shadow-[0_10px_28px_rgba(15,81,50,0.26)] transition-[transform,background-color] duration-fast hover:bg-green-700 active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">
-                {t('planPilgrimage')}
+              <a href="#plan" className="relative inline-flex items-center gap-2 overflow-hidden rounded-xl bg-green-800 px-6 py-3.5 text-[15.5px] font-semibold text-white shadow-[0_10px_28px_rgba(15,81,50,0.26)] transition-[transform,background-color] duration-fast hover:bg-green-700 active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">
+                <span aria-hidden className="animate-sheen pointer-events-none absolute inset-y-0 left-0 w-2/5 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+                <span className="relative">{t('planPilgrimage')}</span>
               </a>
               <a href="#how" className="inline-flex items-center gap-1.5 rounded-xl px-4 py-3.5 text-[15.5px] font-semibold text-green-800 transition-colors duration-fast hover:bg-sand-50 focus-visible:outline-none focus-visible:shadow-focus">
                 {t('howItWorks')} <span aria-hidden>→</span>
@@ -105,7 +106,9 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
             <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-3 border-t border-sand-100 pt-6 text-[13px] text-sand-500">
               {HERO_STATS.map((s, i) => (
                 <span key={s.label} className="inline-flex items-baseline gap-1.5">
-                  <span className="font-mono text-[15px] font-semibold text-green-800">{s.value}</span>
+                  <span className="font-mono text-[15px] font-semibold text-green-800">
+                    <CountUp value={s.value} />
+                  </span>
                   {statLabels[i] ?? s.label}
                 </span>
               ))}
@@ -255,6 +258,9 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
           </div>
         </div>
       </section>
+
+      {/* trust marquee */}
+      <TrustMarquee />
 
       {/* cinematic frames — every migrated tool as a framed feature card, frame by frame */}
       <Section id="tools" title="Everything for your journey, frame by frame" sub="Free planning tools and on-the-ground guides — most need no login.">
@@ -771,6 +777,64 @@ function FrameCard({ frame }: { frame: Frame }) {
         </div>
       </article>
     </Reveal>
+  );
+}
+
+// Animate the leading number of a stat string (e.g. "1,240+" → counts to 1,240 keeping "+").
+function CountUp({ value }: { value: string }) {
+  const m = value.match(/^([\d.,]+)(.*)$/);
+  const target = m ? Number(m[1]!.replace(/,/g, '')) : NaN;
+  const suffix = m ? m[2]! : value;
+  const decimals = m && m[1]!.includes('.') ? (m[1]!.split('.')[1]?.length ?? 0) : 0;
+  const grouped = !!m && m[1]!.includes(',');
+  const [shown, setShown] = useState(Number.isFinite(target) ? 0 : target);
+
+  useEffect(() => {
+    if (!Number.isFinite(target)) return undefined;
+    if (typeof requestAnimationFrame === 'undefined') {
+      setShown(target);
+      return undefined;
+    }
+    let raf = 0;
+    let start: number | null = null;
+    const ease = (p: number): number => 1 - (1 - p) ** 3;
+    const tick = (now: number): void => {
+      if (start === null) start = now;
+      const p = Math.min(1, (now - start) / 1300);
+      setShown(target * ease(p));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [target]);
+
+  if (!Number.isFinite(target)) return <>{value}</>;
+  const num = decimals ? shown.toFixed(decimals) : Math.round(shown).toLocaleString('en-US', { useGrouping: grouped });
+  return (
+    <>
+      {num}
+      {suffix}
+    </>
+  );
+}
+
+const TRUST_BADGES = ['IATA accredited', 'GDPR compliant', 'SEPA secure payments', 'Licensed pilgrimage operator', 'ATOL-style bonded'];
+
+// Seamless trust marquee: the list is doubled and the track animates to -50%.
+function TrustMarquee() {
+  return (
+    <section className="mt-[clamp(40px,5vw,52px)] overflow-hidden border-y border-sand-200 bg-sand-50" aria-label="Trust & accreditation">
+      <div className="flex w-max animate-marquee">
+        {[...TRUST_BADGES, ...TRUST_BADGES].map((b, i) => (
+          <span key={`${b}-${i}`} className="inline-flex items-center gap-2 whitespace-nowrap px-[30px] py-4 text-[14px] font-semibold text-sand-700">
+            <span className="text-green-700" aria-hidden>
+              ✓
+            </span>
+            {b}
+          </span>
+        ))}
+      </div>
+    </section>
   );
 }
 
