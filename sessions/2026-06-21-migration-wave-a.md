@@ -62,7 +62,7 @@ Driving `migration/*.md` in order, one screen per commit, gated + auto-deployed.
   Assumption A9 logged (content + translations + customs rules pending review). Deferred: object-store
   video upload (URL-only for now) + LT/TR locale text.
 
-- **12 B2B Agent Portal** (`PENDING`) — `/agent`. Portal engine/screens/tests already existed but ran
+- **12 B2B Agent Portal** (`0770e90`) — `/agent`. Portal engine/screens/tests already existed but ran
   on a shared in-process backend (not durable, not per-user). Added durable, **agency-scoped Postgres
   persistence** (`agent-db.ts`, in-memory fallback): `agencies, wallets, wallet_ledger (double-entry),
   quotes` — every query scoped by agency (= user id); one agent never sees another's wallet/quotes.
