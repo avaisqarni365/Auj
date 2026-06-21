@@ -4,6 +4,7 @@ import { useRef, useState, useTransition } from 'react';
 import Link from 'next/link';
 import { routeFor } from '@auj/visa-router';
 import { displayFromEur, type DisplayCurrency } from '../currency';
+import { ScreenFrame } from '../components/ScreenFrame';
 import { StripePaymentForm } from '../book/screens/StripePaymentForm';
 import { finalizeDepositAction, startDepositAction } from './deposit-actions';
 import {
@@ -143,9 +144,8 @@ export function PilgrimDashboard({ initial }: { initial: DashboardData }) {
   };
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8">
-      <h1 className="font-serif text-[clamp(1.6rem,4vw,2.25rem)] font-semibold">📋 Pilgrim dashboard</h1>
-      <p className="mt-2 max-w-[60ch] text-sand-500">Manage passports, deposits and your journey progress — for yourself, family or your group.</p>
+    <ScreenFrame label="📋 Pilgrim dashboard">
+      <p className="max-w-[60ch] text-sand-500">Manage passports, deposits and your journey progress — for yourself, family or your group.</p>
 
       {/* member switcher */}
       <div className="mt-6 flex flex-wrap items-center gap-2">
@@ -354,6 +354,6 @@ export function PilgrimDashboard({ initial }: { initial: DashboardData }) {
           ))}
         </div>
       </section>
-    </div>
+    </ScreenFrame>
   );
 }

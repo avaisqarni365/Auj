@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { ScreenFrame } from '../components/ScreenFrame';
 import { GUIDES, GUIDE_SLUGS } from './guide-data';
 import type { PrayerDay } from './prayer-times';
 
@@ -65,9 +66,8 @@ export function Companion({ makkah, madinah }: { makkah: PrayerDay | null; madin
   const stages = t.raw('journey.stages') as string[];
   const mapsUrl = (q: string): string => `https://www.google.com/maps/search/${encodeURIComponent(q)}`;
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8">
-      <h1 className="font-serif text-[clamp(1.6rem,4vw,2.25rem)] font-semibold">{t('title')}</h1>
-      <p className="mt-2 max-w-[60ch] text-sand-500">{t('subtitle')}</p>
+    <ScreenFrame label={`🧭 ${t('title')}`} maxWidth="max-w-3xl">
+      <p className="max-w-[60ch] text-sand-500">{t('subtitle')}</p>
 
       <Section icon="🧭" title={t('journey.title')} sub={t('journey.sub')}>
         <List items={stages} />
@@ -194,6 +194,6 @@ export function Companion({ makkah, madinah }: { makkah: PrayerDay | null; madin
       <Section icon="💡" title={t('tips.title')}>
         <List items={tips} />
       </Section>
-    </div>
+    </ScreenFrame>
   );
 }

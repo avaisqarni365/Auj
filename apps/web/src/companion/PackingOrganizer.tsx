@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import Link from 'next/link';
+import { ScreenFrame } from '../components/ScreenFrame';
 import { build, PACKING_DAYS, PACKING_PROFILES, totalItems, type PackingProfile } from './packing';
 import { getPackingAction, savePackingAction } from './packing-actions';
 import type { PackingState } from './packing-types';
@@ -82,9 +83,8 @@ export function PackingOrganizer({
   };
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8">
-      <h1 className="font-serif text-[clamp(1.6rem,4vw,2.25rem)] font-semibold">🧳 Packing organizer</h1>
-      <p className="mt-2 max-w-[60ch] text-sand-500">
+    <ScreenFrame label="🧳 Packing organizer" maxWidth="max-w-3xl">
+      <p className="max-w-[60ch] text-sand-500">
         A smart checklist tuned to who is travelling and how long you stay. Tick items as you pack —
         {signedIn ? ' your progress is saved to your account.' : ' sign in to save your progress.'}
       </p>
@@ -205,6 +205,6 @@ export function PackingOrganizer({
           </section>
         ))}
       </div>
-    </div>
+    </ScreenFrame>
   );
 }

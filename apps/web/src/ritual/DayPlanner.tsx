@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
+import { ScreenFrame } from '../components/ScreenFrame';
 import { dayPlan, SHIFT_MAX, SHIFT_STEP, type PlannerCity, type SlotKind } from './planner';
 import { saveDayPlanAction } from './day-plan-actions';
 import type { DayPlanPref } from './day-plan-types';
@@ -47,15 +48,12 @@ export function DayPlanner({ signedIn, initialPref = null }: { signedIn: boolean
   };
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8">
+    <ScreenFrame label="🕌 Day planner" maxWidth="max-w-3xl">
       <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="font-serif text-[clamp(1.6rem,4vw,2.25rem)] font-semibold">🕌 Day planner</h1>
-          <p className="mt-2 max-w-[60ch] text-sand-500">
-            A jamaat-anchored daily rhythm for {view.cityLabel}. Nudge the whole day to match your hotel and pace —
-            {signedIn ? ' your preference is saved.' : ' sign in to save your preference.'}
-          </p>
-        </div>
+        <p className="max-w-[60ch] text-sand-500">
+          A jamaat-anchored daily rhythm for {view.cityLabel}. Nudge the whole day to match your hotel and pace —
+          {signedIn ? ' your preference is saved.' : ' sign in to save your preference.'}
+        </p>
         {/* City toggle */}
         <div className="inline-flex rounded-xl border border-sand-200 bg-white p-1">
           {(['makkah', 'madinah'] as const).map((c) => {
@@ -162,6 +160,6 @@ export function DayPlanner({ signedIn, initialPref = null }: { signedIn: boolean
           Companion ↗
         </Link>
       </div>
-    </div>
+    </ScreenFrame>
   );
 }

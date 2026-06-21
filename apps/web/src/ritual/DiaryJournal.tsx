@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { ScreenFrame } from '../components/ScreenFrame';
 import { DUAS, NAFL, duaDone, emptyEntry, naflTotal, quranPct, type DiaryEntry } from './diary';
 import { saveDiaryAction } from './diary-actions';
 
@@ -53,17 +54,11 @@ export function DiaryJournal({ signedIn, date, initialEntry = null }: { signedIn
   const resetDay = (): void => update({ quranDone: 0, nafl: {}, duas: {}, note: '' });
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="font-serif text-[clamp(1.6rem,4vw,2.25rem)] font-semibold">📿 Personal diary</h1>
-          <p className="mt-2 max-w-[60ch] text-sand-500">
-            Your spiritual journal — Quran, nafl, duas and a daily reflection.
-            {signedIn ? ' Saved to your account.' : ' Sign in to save it.'}
-          </p>
-        </div>
-        <span className="font-mono text-[12px] text-sand-500">{date}</span>
-      </div>
+    <ScreenFrame label="📿 Personal diary" tag={date} maxWidth="max-w-3xl">
+      <p className="max-w-[60ch] text-sand-500">
+        Your spiritual journal — Quran, nafl, duas and a daily reflection.
+        {signedIn ? ' Saved to your account.' : ' Sign in to save it.'}
+      </p>
 
       {/* Today summary */}
       <div className="mt-5 grid gap-3 rounded-2xl border border-sand-200 bg-white p-4 shadow-sm sm:grid-cols-[1fr_auto_auto] sm:items-center">
@@ -201,6 +196,6 @@ export function DiaryJournal({ signedIn, date, initialEntry = null }: { signedIn
           Day planner →
         </Link>
       </div>
-    </div>
+    </ScreenFrame>
   );
 }

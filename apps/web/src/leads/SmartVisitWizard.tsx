@@ -3,7 +3,7 @@
 import { useMemo, useState, useTransition, type ReactNode } from 'react';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
-import { Logo } from '@auj/ui';
+import { ScreenFrame } from '../components/ScreenFrame';
 import { submitInquiryAction } from './actions';
 import { COUNTRIES, HOTEL_BANDS, MADINAH_ZIYARAH, MAKKAH_ZIYARAH, airportsFor } from './wizard-data';
 import type { ContactChannel, DiningPref, InquiryInput, PartyKind, ReturnFrom, TimeBand, TransferMode } from './inquiry';
@@ -56,14 +56,7 @@ export function SmartVisitWizard() {
 
   const key = STEPS[step]!;
   return (
-    <div className="mx-auto max-w-lg px-4 py-8">
-      <div className="mb-5 flex items-center gap-2.5">
-        <Logo size={32} />
-        <div>
-          <div className="font-serif text-lg font-semibold leading-none">{t('title')}</div>
-          <div className="text-[12px] text-sand-500">{t('step', { n: step + 1, total: STEPS.length })}</div>
-        </div>
-      </div>
+    <ScreenFrame label={t('title')} tag={t('step', { n: step + 1, total: STEPS.length })} maxWidth="max-w-lg">
       {/* progress */}
       <div className="mb-6 h-1.5 overflow-hidden rounded-full bg-sand-100">
         <div className="h-full rounded-full bg-green-700 transition-[width] duration-200 ease-out-soft" style={{ width: `${((step + 1) / STEPS.length) * 100}%` }} />
@@ -186,7 +179,7 @@ export function SmartVisitWizard() {
           <button type="button" onClick={submit} disabled={!canSubmit || pending} className="rounded-xl bg-green-800 px-6 py-2.5 text-sm font-semibold text-white transition-[transform,background-color] duration-fast hover:bg-green-700 active:scale-[0.98] disabled:opacity-50">{pending ? t('submitting') : t('submit')}</button>
         )}
       </div>
-    </div>
+    </ScreenFrame>
   );
 }
 
