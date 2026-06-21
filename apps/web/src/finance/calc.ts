@@ -116,6 +116,55 @@ export function fmt(cents: number, currency: string): string {
   }
 }
 
+// --- Deal-by-deal self-assessment (migration 02) -------------------------------------------------
+export type Channel = 'B2C' | 'B2B';
+
+export interface AssessmentInput {
+  costsCents: number[];
+  bufferPct: number;
+  markupPct: number;
+  feePct: number;
+  commissionPct: number;
+  channel: Channel;
+  pax: number;
+}
+
+export interface Assessment {
+  baseCents: number;
+  bufferCents: number;
+  markupCents: number;
+  feeCents: number;
+  commissionCents: number;
+  sellingCents: number;
+  profitCents: number;
+  marginPct: number;
+  perPilgrimCents: number;
+}
+
+/** Money-in / money-out / profit for one deal. Decimals (integer cents); commission only on B2B. */
+export function buildAssessment(i: AssessmentInput): Assessment {
+  const base = i.costsCents.reduce((s, c) => s + c, 0);
+  const buffer = r((base * i.bufferPct) / 100);
+  const markup = r(((base + buffer) * i.markupPct) / 100);
+  const fee = r(((base + buffer + markup) * i.feePct) / 100);
+  const commission = i.channel === 'B2B' ? r(((base + buffer + markup + fee) * i.commissionPct) / 100) : 0;
+  const selling = base + buffer + markup + fee + commission;
+  const profit = selling - base - buffer - fee - commission; // == markup
+  const marginPct = selling > 0 ? (profit / selling) * 100 : 0;
+  const pax = Math.max(1, Math.trunc(i.pax));
+  return {
+    baseCents: base,
+    bufferCents: buffer,
+    markupCents: markup,
+    feeCents: fee,
+    commissionCents: commission,
+    sellingCents: selling,
+    profitCents: profit,
+    marginPct,
+    perPilgrimCents: r(selling / pax),
+  };
+}
+
 export const CURRENCIES = ['EUR', 'GBP', 'USD', 'PKR', 'SAR'] as const;
 export const PACKAGE_TYPES = ['Economy', 'Standard', 'Premium', 'Ramadan', 'Family', 'Group', 'Custom'] as const;
 

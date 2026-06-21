@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { computeFinance, toCents, defaultInputs, type CostItem, type FinanceInputs } from './calc';
+import { buildAssessment, computeFinance, toCents, defaultInputs, type CostItem, type FinanceInputs } from './calc';
 
 const item = (label: string, dec: number, basis: 'per_person' | 'total'): CostItem => ({
   id: label,
@@ -84,6 +84,19 @@ describe('umrah finance calculator', () => {
       b.priceBeforeFeesCents + b.agentCommissionCents + b.paymentFeeCents + b.taxCents - b.discountCents,
     );
     expect(b.marginPct).toBeGreaterThan(0);
+  });
+
+  it('buildAssessment: profit == markup, selling is the sum, B2B-only commission, per-pilgrim split', () => {
+    const b2c = buildAssessment({ costsCents: [toCents(1000), toCents(500)], bufferPct: 5, markupPct: 12, feePct: 2, commissionPct: 8, channel: 'B2C', pax: 3 });
+    expect(b2c.baseCents).toBe(toCents(1500));
+    expect(b2c.commissionCents).toBe(0); // B2C hides commission
+    expect(b2c.profitCents).toBe(b2c.markupCents);
+    expect(b2c.sellingCents).toBe(b2c.baseCents + b2c.bufferCents + b2c.markupCents + b2c.feeCents + b2c.commissionCents);
+    expect(b2c.perPilgrimCents).toBe(Math.round(b2c.sellingCents / 3));
+
+    const b2b = buildAssessment({ costsCents: [toCents(1500)], bufferPct: 5, markupPct: 12, feePct: 2, commissionPct: 8, channel: 'B2B', pax: 1 });
+    expect(b2b.commissionCents).toBeGreaterThan(0); // B2B adds commission
+    expect(b2b.profitCents).toBe(b2b.markupCents);
   });
 
   it('toCents is money-safe (no float drift)', () => {
