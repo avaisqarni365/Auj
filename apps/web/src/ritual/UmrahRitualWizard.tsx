@@ -11,8 +11,8 @@ import { RITUAL_LOCALES, isRtlLang, ui } from './i18n';
 import { useRitualLang } from './useRitualLang';
 import { ListenButton } from './ListenButton';
 import { effectiveContent, type ContentOverrides } from './content-overrides';
-
-const STORAGE_KEY = 'auj.ritual.v1';
+import { saveProgressAction } from './ritual-progress-actions';
+import type { RitualProgress } from './ritual-progress-types';
 
 interface Persisted {
   stepIndex: number;
@@ -236,7 +236,8 @@ function ZiyaratGrid({ city }: { city: 'makkah' | 'madinah' }) {
   );
 }
 
-export function UmrahRitualWizard({ user, overrides = {} }: { user?: PublicUser; overrides?: ContentOverrides }) {
+export function UmrahRitualWizard({ user, overrides = {}, initialProgress = null }: { user?: PublicUser; overrides?: ContentOverrides; initialProgress?: RitualProgress | null }) {
+  const signedIn = !!user;
   const [step, setStep] = useState(0);
   const [checked, setChecked] = useState<Record<string, boolean>>({});
   const [counters, setCounters] = useState<{ tawaf: number; sai: number }>({ tawaf: 0, sai: 0 });
@@ -250,30 +251,25 @@ export function UmrahRitualWizard({ user, overrides = {} }: { user?: PublicUser;
   const t = ui(lang);
   const rtl = isRtlLang(lang);
 
+  // Resume from the signed-in user's saved DB progress (no localStorage).
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const p = JSON.parse(raw) as Persisted;
-        const hasProgress =
-          p.stepIndex > 0 || p.elapsedSec > 0 || (p.counters?.tawaf ?? 0) > 0 || (p.counters?.sai ?? 0) > 0 || !!p.completedAt;
-        if (hasProgress) setResume(p);
-      }
-    } catch {
-      /* ignore corrupt storage */
+    const p = initialProgress;
+    if (p) {
+      const hasProgress =
+        p.stepIndex > 0 || p.elapsedSec > 0 || (p.counters?.tawaf ?? 0) > 0 || (p.counters?.sai ?? 0) > 0 || !!p.completedAt;
+      if (hasProgress) setResume(p);
     }
     setHydrated(true);
-  }, []);
+  }, [initialProgress]);
 
+  // Debounced save to DB (signed-in only; saving requires an account).
   useEffect(() => {
-    if (!hydrated || resume) return;
-    const p: Persisted = { stepIndex: step, checked, counters, notes, elapsedSec, completedAt };
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(p));
-    } catch {
-      /* non-fatal */
-    }
-  }, [hydrated, resume, step, checked, counters, notes, elapsedSec, completedAt]);
+    if (!hydrated || resume || !signedIn) return undefined;
+    const id = setTimeout(() => {
+      void saveProgressAction({ stepIndex: step, checked, counters, notes, elapsedSec, completedAt });
+    }, 1200);
+    return () => clearTimeout(id);
+  }, [signedIn, hydrated, resume, step, checked, counters, notes, elapsedSec, completedAt]);
 
   useEffect(() => {
     if (!running || completedAt) return undefined;
@@ -296,11 +292,6 @@ export function UmrahRitualWizard({ user, overrides = {} }: { user?: PublicUser;
     setResume(null);
   };
   const startOver = (): void => {
-    try {
-      localStorage.removeItem(STORAGE_KEY);
-    } catch {
-      /* ignore */
-    }
     setResume(null);
     setStep(0);
     setChecked({});
