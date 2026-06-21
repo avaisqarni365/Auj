@@ -1,7 +1,7 @@
 /* AUJ service worker — offline support WITHOUT ever showing stale content online.
  * Strategy: network-first for everything. When online you always get the freshest build; the cache
  * is only a fallback when the network fails (offline). Bumping CACHE evicts everything on next load. */
-const CACHE = 'auj-v3';
+const CACHE = 'auj-v4';
 const OFFLINE_URL = '/offline.html';
 
 self.addEventListener('install', (event) => {
@@ -23,8 +23,13 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return; // never touch third-party / API origins
 
-  // Network-first: always try the live network; cache the result; fall back to cache (then the
-  // offline page for navigations) only when the network is unavailable.
+  // Page navigations (HTML): network-ONLY — never serve a cached document, so the app shell can
+  // never go stale online. Offline → the offline page. Static assets: network-first with cache
+  // fallback (content-hashed, so safe to cache).
+  if (request.mode === 'navigate') {
+    event.respondWith(fetch(request).catch(() => caches.match(OFFLINE_URL)));
+    return;
+  }
   event.respondWith(
     fetch(request)
       .then((res) => {
@@ -32,8 +37,6 @@ self.addEventListener('fetch', (event) => {
         caches.open(CACHE).then((c) => c.put(request, copy));
         return res;
       })
-      .catch(() =>
-        caches.match(request).then((cached) => cached || (request.mode === 'navigate' ? caches.match(OFFLINE_URL) : undefined)),
-      ),
+      .catch(() => caches.match(request)),
   );
 });
