@@ -13,6 +13,7 @@ import {
 } from './calc';
 import { listActivityAction, saveCalculationAction } from './actions';
 import { FINANCE_STATUSES, type ActivityEntry, type FinanceStatus, type SavedCalc } from './types';
+import { ScreenFrame } from '../components/ScreenFrame';
 
 const INPUT =
   'w-full rounded-lg border-[1.5px] border-sand-300 bg-white px-3 py-2 text-[14px] focus:border-green-700 focus:outline-none';
@@ -115,11 +116,8 @@ export function FinanceCalculator({ saved, activity }: { saved: SavedCalc[]; act
     });
 
   return (
-    <div className="mx-auto max-w-6xl px-[clamp(16px,4vw,32px)] py-8">
-      <div className="mb-6">
-        <h1 className="font-serif text-[clamp(1.6rem,3vw,2.1rem)] font-semibold text-sand-ink">Umrah Finance Calculator</h1>
-        <p className="mt-1 text-[14px] text-sand-500">Manual costing → selling price, profit and balance. Amounts in {cur}. Internal — admin/finance only.</p>
-      </div>
+    <ScreenFrame label="🧮 Umrah Finance Calculator" maxWidth="max-w-6xl">
+      <p className="mb-6 text-[14px] text-sand-500">Manual costing → selling price, profit and balance. Amounts in {cur}. Internal — admin/finance only.</p>
 
       <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
         {/* ---- inputs ---- */}
@@ -301,6 +299,6 @@ export function FinanceCalculator({ saved, activity }: { saved: SavedCalc[]; act
           </div>
         </div>
       ) : null}
-    </div>
+    </ScreenFrame>
   );
 }

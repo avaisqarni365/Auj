@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { DEFAULT_VISA_CONFIG, routeFor } from '@auj/visa-router';
 import type { Pilgrim } from '@auj/contracts';
 import { StatusPill } from '@auj/ui';
+import { ScreenFrame } from '../components/ScreenFrame';
 
 // Nationalities for the demo dropdown — a mix of e-visa-eligible and agent-channel passports.
 const NATIONS: ReadonlyArray<[string, string]> = [
@@ -57,11 +58,8 @@ export function VisaRouterDemo() {
   const SELECT = 'w-full rounded-lg border-[1.5px] border-sand-300 bg-white px-3 py-2 text-[14px] focus:border-green-700 focus:outline-none';
 
   return (
-    <div className="mx-auto max-w-3xl px-[clamp(16px,4vw,32px)] py-8">
-      <div className="mb-6">
-        <h1 className="font-serif text-[clamp(1.6rem,3vw,2.1rem)] font-semibold text-sand-ink">Visa Router</h1>
-        <p className="mt-1 text-[14px] text-sand-500">Eligibility QA — passport + residence decide e‑Visa vs agent channel. Pure domain (no connector).</p>
-      </div>
+    <ScreenFrame label="🛂 Visa Router" maxWidth="max-w-3xl">
+      <p className="mb-6 text-[14px] text-sand-500">Eligibility QA — passport + residence decide e‑Visa vs agent channel. Pure domain (no connector).</p>
 
       <div className="grid gap-6 md:grid-cols-2">
         {/* inputs */}
@@ -113,6 +111,6 @@ export function VisaRouterDemo() {
           → {evisa ? 'EVISA_DIRECT' : 'AGENT_CHANNEL'}
         </div>
       </div>
-    </div>
+    </ScreenFrame>
   );
 }

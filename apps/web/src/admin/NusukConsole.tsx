@@ -1,6 +1,7 @@
 import type { SearchCriteria } from '@auj/contracts';
 import { formatMoney } from '../currency';
 import { selectSaudiConnector, selectedConnectorKind } from '../connectors';
+import { ScreenFrame } from '../components/ScreenFrame';
 
 // Nusuk Services ops — proves approved-agent parity THROUGH the SaudiConnector interface
 // (the mock by default). Package modes, Rawdah slots, ziyarah + catering add-ons, e-services.
@@ -26,14 +27,8 @@ export async function NusukConsole() {
   const kind = selectedConnectorKind();
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8">
-      <div className="flex items-center gap-3">
-        <h1 className="font-serif text-[clamp(1.6rem,4vw,2.25rem)] font-semibold">🕋 Nusuk services</h1>
-        <span className={`rounded-md px-2 py-1 text-[11px] font-semibold ${kind === 'saudi' ? 'bg-success-bg text-success-fg' : 'bg-accent-100 text-accent-700'}`}>
-          via SaudiConnector · {kind === 'saudi' ? 'certified' : 'mock'}
-        </span>
-      </div>
-      <p className="mt-2 max-w-[60ch] text-sand-500">Approved-agent parity — every call goes through the regulated interface, so the certified adapter is a drop-in swap.</p>
+    <ScreenFrame label="🕋 Nusuk services" tag={`via SaudiConnector · ${kind === 'saudi' ? 'certified' : 'mock'}`}>
+      <p className="max-w-[60ch] text-sand-500">Approved-agent parity — every call goes through the regulated interface, so the certified adapter is a drop-in swap.</p>
 
       <div className="mt-6 grid gap-4">
         <Card title="Package modes">
@@ -83,6 +78,6 @@ export async function NusukConsole() {
           </ul>
         </Card>
       </div>
-    </div>
+    </ScreenFrame>
   );
 }

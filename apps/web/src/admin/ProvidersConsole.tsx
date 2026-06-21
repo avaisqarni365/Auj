@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react';
 import { listProvidersAction, testConnectionAction, type ProviderRow } from './connector-actions';
 import type { ProviderStatus } from './providers';
+import { ScreenFrame } from '../components/ScreenFrame';
 
 const STATUS: Record<ProviderStatus, { label: string; cls: string }> = {
   connected: { label: 'Connected', cls: 'bg-success-bg text-success-fg' },
@@ -39,9 +40,8 @@ export function ProvidersConsole({ initial }: { initial: ProviderRow[] }) {
   const selected = rows.find((r) => r.slug === sel);
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8">
-      <h1 className="font-serif text-[clamp(1.6rem,4vw,2.25rem)] font-semibold">🔌 Service providers</h1>
-      <p className="mt-2 max-w-[60ch] text-sand-500">
+    <ScreenFrame label="🔌 Service providers" maxWidth="max-w-5xl">
+      <p className="max-w-[60ch] text-sand-500">
         Every integration behind the connector seam. Status is derived from environment bindings —
         secrets live in the vault, never here. Adding a provider to the registry needs no product code.
       </p>
@@ -148,6 +148,6 @@ export function ProvidersConsole({ initial }: { initial: ProviderRow[] }) {
           </div>
         </div>
       ) : null}
-    </div>
+    </ScreenFrame>
   );
 }

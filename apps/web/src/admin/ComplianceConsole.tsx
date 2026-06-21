@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react';
 import type { GuaranteeTier } from '@auj/compliance';
 import { formatMoney } from '../currency';
+import { ScreenFrame } from '../components/ScreenFrame';
 import {
   completeGdprAction,
   listComplianceAction,
@@ -79,9 +80,8 @@ export function ComplianceConsole({ initial }: { initial: ComplianceSnapshot }) 
   };
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8">
-      <h1 className="font-serif text-[clamp(1.6rem,4vw,2.25rem)] font-semibold">🛡️ EU compliance</h1>
-      <p className="mt-2 max-w-[60ch] text-sand-500">
+    <ScreenFrame label="🛡️ EU compliance">
+      <p className="max-w-[60ch] text-sand-500">
         Lithuanian operator duties under the EU Package Travel Directive + GDPR: insolvency-protection
         certificates, pre-contract consent before charge, the 6-month refund window, and data rights.
       </p>
@@ -222,6 +222,6 @@ export function ComplianceConsole({ initial }: { initial: ComplianceSnapshot }) 
           )}
         </Card>
       </div>
-    </div>
+    </ScreenFrame>
   );
 }

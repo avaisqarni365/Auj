@@ -6,6 +6,7 @@ import { clampPax, forecast, SCEN_LABEL, type Scenario } from './predict';
 import { toCents } from './calc';
 import { saveDealAction } from './deals-actions';
 import { formatMoney, pkrIndicative } from '../currency';
+import { ScreenFrame } from '../components/ScreenFrame';
 
 const INPUT = 'rounded-lg border-[1.5px] border-sand-300 bg-white px-3 py-2 text-[14px] focus:border-green-700 focus:outline-none';
 const eur = (c: number): string => formatMoney({ amount: c, currency: 'EUR' });
@@ -57,14 +58,8 @@ export function PredictiveAnalysis() {
     });
 
   return (
-    <div className="mx-auto max-w-5xl px-[clamp(16px,4vw,32px)] py-8">
-      <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="font-serif text-[clamp(1.6rem,3vw,2.1rem)] font-semibold text-sand-ink">Predictive cost analysis</h1>
-          <p className="mt-1 text-[14px] text-sand-500">Group forecast by pax + season. Charged in EUR · PKR indicative.</p>
-        </div>
-        <Link href="/admin/finance" className="rounded-xl border border-sand-300 bg-white px-4 py-2 text-[13px] font-semibold text-green-800 hover:bg-sand-50">Open deal planner →</Link>
-      </div>
+    <ScreenFrame label="📈 Predictive cost analysis" tag={<Link href="/admin/finance" className="text-green-50 hover:underline">Deal planner →</Link>} maxWidth="max-w-5xl">
+      <p className="mb-6 text-[14px] text-sand-500">Group forecast by pax + season. Charged in EUR · PKR indicative.</p>
 
       {/* pax + scenario */}
       <div className="mb-6 flex flex-wrap items-center gap-4 rounded-2xl border border-sand-200 bg-white p-4">
@@ -136,6 +131,6 @@ export function PredictiveAnalysis() {
           </div>
         </div>
       </div>
-    </div>
+    </ScreenFrame>
   );
 }

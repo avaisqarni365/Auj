@@ -2,6 +2,7 @@ import type { SearchCriteria } from '@auj/contracts';
 import { selectSaudiConnector, selectedConnectorKind } from '../connectors';
 import { findProvider, providerStatus } from './providers';
 import { ContractRunner } from './ContractRunner';
+import { ScreenFrame } from '../components/ScreenFrame';
 
 // Saudi Connector ops console — the gated certified adapter behind the SaudiConnector seam.
 // Shows the auth gate, domain mapping, resilience posture and the 2025 Nusuk-approved-hotel rule,
@@ -34,14 +35,8 @@ export async function SaudiConnectorConsole() {
   const approved = hotels.filter((h) => h.nusukApproved).length;
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8">
-      <div className="flex items-center gap-3">
-        <h1 className="font-serif text-[clamp(1.6rem,4vw,2.25rem)] font-semibold">🛂 Saudi connector</h1>
-        <span className={`rounded-md px-2 py-1 text-[11px] font-semibold ${kind === 'saudi' ? 'bg-success-bg text-success-fg' : 'bg-warning-bg text-warning-fg'}`}>
-          {kind === 'saudi' ? 'certified' : 'mock'} · {status}
-        </span>
-      </div>
-      <p className="mt-2 max-w-[60ch] text-sand-500">
+    <ScreenFrame label="🛂 Saudi connector" tag={`${kind === 'saudi' ? 'certified' : 'mock'} · ${status}`}>
+      <p className="max-w-[60ch] text-sand-500">
         The regulated pipe (Maqam/Nusuk). Product code depends only on the <span className="font-mono">SaudiConnector</span> interface — flip <span className="font-mono">CONNECTOR=saudi</span> to go live once partner access is granted.
       </p>
 
@@ -82,6 +77,6 @@ export async function SaudiConnectorConsole() {
           </div>
         </Card>
       </div>
-    </div>
+    </ScreenFrame>
   );
 }
