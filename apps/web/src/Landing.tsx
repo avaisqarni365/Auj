@@ -256,35 +256,11 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
         </div>
       </section>
 
-      {/* companion tools & guides — links to every migrated tool */}
-      <Section id="tools" title="Everything for your journey" sub="Free planning tools and on-the-ground guides — most need no login.">
-        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
-          {[
-            { href: '/plan', icon: '📝', label: 'Smart planner' },
-            { href: '/book', icon: '🔎', label: 'Search packages' },
-            { href: '/companion', icon: '🧭', label: 'Pilgrim companion' },
-            { href: '/plan/day', icon: '🕌', label: 'Day planner' },
-            { href: '/companion/packing', icon: '🧳', label: 'Packing organizer' },
-            { href: '/companion/diary', icon: '📿', label: 'Personal diary' },
-            { href: '/guide', icon: '🕋', label: 'Umrah ritual guide' },
-            { href: '/guide/tour', icon: '🌅', label: 'Virtual tour' },
-            { href: '/guide/airport', icon: '✈️', label: 'Airport wizard' },
-            { href: '/guide/luggage', icon: '🧳', label: 'Luggage & customs' },
-            { href: '/guide/makkah-ziyarat', icon: '🕋', label: 'Makkah Ziyarat' },
-            { href: '/guide/madina-ziyarat', icon: '🕌', label: 'Madinah Ziyarat' },
-            { href: '/guide/food', icon: '🍽️', label: 'Food guide' },
-            { href: '/guide/transport', icon: '🚌', label: 'Transport guide' },
-            { href: '/guide/helpline', icon: '🆘', label: 'Helpline & SOS' },
-            { href: '/agent', icon: '🤝', label: 'Travel-agent portal' },
-          ].map((tool) => (
-            <Link
-              key={tool.href}
-              href={tool.href}
-              className="flex items-center gap-2.5 rounded-xl border border-sand-200 bg-white p-3.5 text-[13.5px] font-semibold text-sand-700 transition-[transform,border-color,color] duration-fast hover:border-green-700 hover:text-green-800 active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus"
-            >
-              <span className="text-lg" aria-hidden>{tool.icon}</span>
-              <span>{tool.label}</span>
-            </Link>
+      {/* cinematic frames — every migrated tool as a framed feature card, frame by frame */}
+      <Section id="tools" title="Everything for your journey, frame by frame" sub="Free planning tools and on-the-ground guides — most need no login.">
+        <div className="flex flex-col gap-[clamp(20px,3vw,32px)]">
+          {FRAMES.map((f) => (
+            <FrameCard key={f.n} frame={f} />
           ))}
         </div>
       </Section>
@@ -727,6 +703,74 @@ function Section({ id, title, sub, children }: { id?: string; title: string; sub
         <div className="mt-7">{children}</div>
       </Reveal>
     </section>
+  );
+}
+
+interface Frame {
+  n: string;
+  name: string;
+  tag: string;
+  icon: string;
+  href: string;
+  title: string;
+  blurb: string;
+  cta: string;
+}
+
+const FRAMES: Frame[] = [
+  { n: '02', name: 'VIRTUAL TOUR', tag: '15 guided steps', icon: '🌅', href: '/guide/tour', title: 'Walk through every rite', blurb: 'A guided panorama of each Umrah step, narrated in your language.', cta: 'Open virtual tour' },
+  { n: '03', name: 'SEARCH', tag: 'EUR · PKR', icon: '🔎', href: '/book', title: 'Search verified packages', blurb: 'Hotels by distance to the Haram — charged in EUR with an indicative PKR total.', cta: 'Search packages' },
+  { n: '04', name: 'LUGGAGE WIZARD', tag: 'customs rules', icon: '🧳', href: '/guide/luggage', title: 'Pack right, clear customs', blurb: 'What’s allowed, what to declare, what’s prohibited — Saudi customs at a glance.', cta: 'Open luggage guide' },
+  { n: '05', name: 'AIRPORT WIZARD', tag: '7 steps', icon: '✈️', href: '/guide/airport', title: 'Check-in to your hotel', blurb: 'Every airport step from bag-drop to your transfer, bilingual.', cta: 'Open airport guide' },
+  { n: '06', name: 'MAKKAH ZIYARAT', tag: '16 sites', icon: '🕋', href: '/guide/makkah-ziyarat', title: 'Sacred sites of Makkah', blurb: 'Sixteen ziyarat sites with context and a clip on each.', cta: 'Open Makkah ziyarat' },
+  { n: '07', name: 'MADINAH ZIYARAT', tag: '14 sites', icon: '🕌', href: '/guide/madina-ziyarat', title: 'Sacred sites of Madinah', blurb: 'Fourteen ziyarat sites around the Prophet’s city ﷺ.', cta: 'Open Madinah ziyarat' },
+  { n: '08', name: 'MAKKAH HOTELS', tag: 'near the Haram', icon: '🏨', href: '/book?city=MAKKAH', title: 'Stay near the Haram', blurb: 'Nusuk-approved hotels sorted by distance to Masjid al-Haram.', cta: 'Find Makkah hotels' },
+  { n: '09', name: 'MADINAH HOTELS', tag: 'near an-Nabawi', icon: '🏨', href: '/book?city=MADINAH', title: 'Stay by an-Nabawi', blurb: 'Hotels steps from Masjid an-Nabawi, net rates in EUR.', cta: 'Find Madinah hotels' },
+  { n: '10', name: 'FOOD & DINING', tag: 'by city', icon: '🍽️', href: '/guide/food', title: 'Where to eat', blurb: 'Trusted bites near the Haram, desi favourites and online orders.', cta: 'Open food guide' },
+  { n: '11', name: 'HOSPITALS & CARE', tag: 'free for pilgrims', icon: '🏥', href: '/guide/hospitals', title: 'Health & emergencies', blurb: 'Hospitals, clinics and what to do if you fall ill.', cta: 'Open hospitals guide' },
+  { n: '12', name: 'TRANSPORT', tag: 'fares', icon: '🚌', href: '/guide/transport', title: 'Getting around', blurb: 'Haramain rail, taxis and transfers with indicative fares.', cta: 'Open transport guide' },
+  { n: '13', name: 'LAUNDRY', tag: 'by city', icon: '🧺', href: '/guide/laundry', title: 'Laundry & essentials', blurb: 'Where to wash and refresh between rites.', cta: 'Open laundry guide' },
+  { n: '14', name: 'GIFTS & SHOPPING', tag: '3 cities', icon: '🎁', href: '/guide/gifts', title: 'Gifts, dates & Zamzam', blurb: 'Souqs and gift ideas across Makkah, Madinah and Jeddah.', cta: 'Open gifts guide' },
+  { n: '15', name: 'DAY PLANNER', tag: 'jamaat-anchored', icon: '🕌', href: '/plan/day', title: 'Plan each day', blurb: 'A calm daily rhythm anchored to the Haram jamaat, ±15 min.', cta: 'Open day planner' },
+  { n: '16', name: 'PERSONAL DIARY', tag: 'private', icon: '📿', href: '/companion/diary', title: 'Your spiritual journal', blurb: 'Quran, nafl and dua counters with a daily reflection.', cta: 'Open diary' },
+  { n: '17', name: 'HELPLINE & SOS', tag: '24/7', icon: '🆘', href: '/guide/helpline', title: 'Help when you need it', blurb: 'Emergency numbers, official apps and lost-and-found.', cta: 'Open helpline' },
+  { n: '18', name: 'CONNECTIVITY', tag: 'SIM · eSIM', icon: '📶', href: '/guide/connectivity', title: 'Stay connected', blurb: 'SIM, eSIM and the apps to set up before you fly.', cta: 'Open connectivity' },
+];
+
+function FrameCard({ frame }: { frame: Frame }) {
+  return (
+    <Reveal>
+      <article className="overflow-hidden rounded-[22px] border border-sand-200 bg-gradient-to-b from-white to-sand-50 shadow-[0_30px_70px_-28px_rgba(42,38,32,0.42)]">
+        {/* header bar */}
+        <div className="relative flex items-center justify-between gap-3 overflow-hidden bg-gradient-to-br from-green-800 to-green-950 px-4 py-3">
+          <span aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-gold/60" />
+          <div className="relative flex items-center gap-2.5">
+            <span className="grid h-6 w-7 place-items-center rounded-md bg-sand-50 text-[11px] font-bold text-green-900">✦</span>
+            <span className="font-mono text-[11.5px] tracking-[0.08em] text-green-100/80">FRAME {frame.n} · {frame.name}</span>
+          </div>
+          <span className="rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[11.5px] font-semibold text-green-50">{frame.tag}</span>
+        </div>
+        {/* body */}
+        <div className="flex flex-col sm:flex-row">
+          <div className="grid min-h-[120px] place-items-center bg-gradient-to-br from-green-700 to-green-900 p-6 sm:w-44 sm:flex-none">
+            <span className="text-5xl" aria-hidden>{frame.icon}</span>
+          </div>
+          <div className="flex flex-1 flex-col gap-2 p-[clamp(18px,2.4vw,26px)]">
+            <h3 className="font-serif text-[19px] font-semibold text-sand-ink">{frame.title}</h3>
+            <p className="max-w-[56ch] text-[14px] leading-relaxed text-sand-600">{frame.blurb}</p>
+            <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-2">
+              <span className="font-mono text-[11.5px] text-sand-400">EN · العربية · اردو · DE</span>
+              <Link
+                href={frame.href}
+                className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-green-800 transition-colors duration-fast hover:text-green-700 focus-visible:outline-none focus-visible:shadow-focus"
+              >
+                {frame.cta} <span aria-hidden>→</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </article>
+    </Reveal>
   );
 }
 
