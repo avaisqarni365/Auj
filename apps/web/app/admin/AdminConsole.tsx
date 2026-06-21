@@ -113,6 +113,7 @@ export function AdminConsole() {
           <span className="hidden whitespace-nowrap rounded-full bg-accent-100 px-3 py-1.5 text-[12.5px] font-semibold text-accent-700 sm:inline">FX · 1 € = ₨310.8</span>
           <Link href="/admin/umrah-finance" className="whitespace-nowrap rounded-[10px] border-[1.5px] border-sand-200 bg-white px-3.5 py-2.5 text-sm font-semibold text-green-800 hover:bg-sand-50">💷 Finance</Link>
           <Link href="/admin/umrah-content" className="hidden whitespace-nowrap rounded-[10px] border-[1.5px] border-sand-200 bg-white px-3.5 py-2.5 text-sm font-semibold text-green-800 hover:bg-sand-50 sm:inline">📖 Content</Link>
+          <Link href="/admin/visa" className="hidden whitespace-nowrap rounded-[10px] border-[1.5px] border-sand-200 bg-white px-3.5 py-2.5 text-sm font-semibold text-green-800 hover:bg-sand-50 lg:inline">🛂 Visa</Link>
           <button type="button" className="relative h-10 w-10 rounded-[10px] border-[1.5px] border-sand-200 bg-white">🔔<span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-danger" /></button>
           <button type="button" className="whitespace-nowrap rounded-[10px] bg-green-800 px-4 py-2.5 text-sm font-semibold text-white">{t('newBooking')}</button>
         </header>

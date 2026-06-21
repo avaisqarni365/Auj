@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;} body{margin:0;} ::selection{background:#C8A24A;color:#07301E;}
+  input[type=range]{accent-color:#0F5132;}
+  @media (max-width:860px){ .fa-grid{grid-template-columns:1fr!important;} }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:radial-gradient(120% 90% at 50% 0%, #FFFDF8 0%, #F3EEE4 100%);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:clamp(20px,4vw,44px) clamp(14px,4vw,32px);display:flex;flex-direction:column;align-items:center;">
+  <div style="width:100%;max-width:1060px;">
+
+    <!-- HEADER -->
+    <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:18px 22px;border-radius:20px;background:radial-gradient(130% 230% at 88% -60%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;box-shadow:0 24px 60px -34px rgba(5,28,18,0.6);color:#EFF6F1;">
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+      <div style="position:relative;display:flex;align-items:center;gap:14px;">
+        <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:11px;padding:6px 12px;box-shadow:0 10px 26px -8px rgba(0,0,0,0.45);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:clamp(46px,6.5vw,62px);width:auto;display:block;" /></span>
+        <div>
+          <div style="font-family:'IBM Plex Serif',serif;font-size:20px;font-weight:600;color:#fff;">Finance · Self-assessment</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#BFE0CD;margin-top:3px;">MONEY IN · MONEY OUT · PROFIT</div>
+        </div>
+      </div>
+      <div style="position:relative;display:flex;align-items:center;gap:9px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);border-radius:13px;padding:7px 10px;">
+        <span style="font-size:11.5px;color:#9CC6AE;">Channel</span>
+        <div style="display:flex;gap:4px;background:rgba(0,0,0,0.2);border-radius:9px;padding:3px;">
+          <sc-for list="{{ chanBtns }}" as="c" hint-placeholder-count="2"><button onClick="{{ c.onClick }}" style="cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;padding:6px 12px;border-radius:7px;background:{{ c.bg }};color:{{ c.fg }};border:none;transition:all .15s;" style-active="transform:scale(0.97)">{{ c.label }}</button></sc-for>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEAL BAR -->
+    <div style="background:#fff;border:1px solid #E6DDCE;border-radius:18px;padding:14px 16px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);margin-top:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:9px;flex:1;min-width:230px;">
+        <span style="width:38px;height:38px;border-radius:11px;background:#DCEDE4;color:#0F5132;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;flex-shrink:0;">{{ dealType }}</span>
+        <div style="flex:1;min-width:0;">
+          <input value="{{ dealName }}" onInput="{{ onName }}" placeholder="Deal name (e.g. Khan family · Ramadan)" style="width:100%;background:#FBFAF8;border:1.5px solid #E6DDCE;border-radius:9px;padding:8px 11px;font-size:13.5px;font-weight:600;color:#2A2620;outline:none;" style-focus="border-color:#2A9468;" />
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#9A9183;margin-top:3px;">{{ dealRef }} · {{ pax }} pax · {{ chanLabel }}</div>
+        </div>
+      </div>
+      <select value="{{ dealId }}" onChange="{{ onPick }}" style="background:#FBFAF8;border:1.5px solid #E6DDCE;border-radius:10px;padding:9px 11px;font-family:inherit;font-size:13px;color:#2A2620;outline:none;max-width:200px;">
+        <sc-for list="{{ dealOpts }}" as="o" hint-placeholder-count="3"><option value="{{ o.v }}">{{ o.label }}</option></sc-for>
+      </select>
+      <button onClick="{{ saveDeal }}" style="cursor:pointer;background:#0F5132;color:#fff;border:none;border-radius:10px;font-family:inherit;font-size:13px;font-weight:600;padding:10px 15px;" style-active="transform:scale(0.98)">{{ saveLabel }}</button>
+      <button onClick="{{ newDeal }}" style="cursor:pointer;background:#fff;color:#156440;border:1.5px solid #C9BCA6;border-radius:10px;font-family:inherit;font-size:13px;font-weight:600;padding:10px 14px;">+ New</button>
+    </div>
+
+    <!-- TOP SUMMARY -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:18px;">
+      <div style="background:#fff;border:1px solid #E6DDCE;border-radius:18px;padding:17px 18px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);border-top:3px solid #2F6F8F;">
+        <div style="font-size:12.5px;color:#7A7263;">Money in · revenue</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:27px;font-weight:600;color:#235B73;margin-top:5px;">{{ inTotal }}</div>
+        <div style="font-size:11.5px;color:#9A9183;margin-top:3px;">{{ pax }} pax · {{ sellEach }} each</div>
+      </div>
+      <div style="background:#fff;border:1px solid #E6DDCE;border-radius:18px;padding:17px 18px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);border-top:3px solid #B23A2E;">
+        <div style="font-size:12.5px;color:#7A7263;">Money out · cost</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:27px;font-weight:600;color:#B23A2E;margin-top:5px;">{{ outTotal }}</div>
+        <div style="font-size:11.5px;color:#9A9183;margin-top:3px;">supplier + fees + commission</div>
+      </div>
+      <div style="background:linear-gradient(165deg,#0F5132,#06251A);border:1px solid #0A3D26;border-radius:18px;padding:17px 18px;box-shadow:0 18px 44px -30px rgba(5,28,18,0.6);color:#EFF6F1;border-top:3px solid #E8C36A;">
+        <div style="font-size:12.5px;color:#9CC6AE;">Profit · what remains</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:27px;font-weight:600;color:#fff;margin-top:5px;">{{ profitTotal }}</div>
+        <div style="font-size:11.5px;color:#BFE0CD;margin-top:3px;">{{ margin }} margin · {{ profitEach }}/pax</div>
+      </div>
+    </div>
+
+    <!-- WATERFALL BAR -->
+    <div style="background:#fff;border:1px solid #E6DDCE;border-radius:18px;padding:18px 20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);margin-top:14px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;"><span style="font-size:13.5px;font-weight:600;color:#2A2620;">Where the money goes (per pilgrim)</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#7A7263;">{{ sellEach }}</span></div>
+      <div style="display:flex;height:30px;border-radius:9px;overflow:hidden;border:1px solid #F1EADD;">
+        <sc-for list="{{ bars }}" as="b" hint-placeholder-count="4"><div title="{{ b.label }}" style="width:{{ b.pct }}%;background:{{ b.color }};min-width:2px;"></div></sc-for>
+      </div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:11px;">
+        <sc-for list="{{ bars }}" as="b" hint-placeholder-count="4"><span style="display:inline-flex;align-items:center;gap:7px;font-size:12px;color:#4A4337;"><span style="width:11px;height:11px;border-radius:3px;background:{{ b.color }};"></span>{{ b.label }} · {{ b.amount }}</span></sc-for>
+      </div>
+    </div>
+
+    <div class="fa-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px;align-items:start;">
+      <!-- COST INPUTS -->
+      <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);">
+        <div style="font-size:16px;font-weight:600;color:#2A2620;margin-bottom:4px;">Cost per pilgrim (money out)</div>
+        <div style="font-size:12.5px;color:#7A7263;margin-bottom:15px;">Editable line items — base cost before buffer &amp; markup.</div>
+        <div style="display:flex;flex-direction:column;gap:11px;">
+          <sc-for list="{{ costRows }}" as="r" hint-placeholder-count="7">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="flex:1;font-size:13.5px;color:#2A2620;">{{ r.label }}</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#7A7263;width:54px;text-align:right;">{{ r.amount }}</span>
+              <input type="range" min="{{ r.min }}" max="{{ r.max }}" step="{{ r.step }}" value="{{ r.value }}" onInput="{{ r.onInput }}" style="width:120px;" />
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:13px;border-top:1px solid #F1EADD;"><span style="font-size:14px;font-weight:600;color:#2A2620;">Base cost</span><span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:700;color:#B23A2E;">{{ baseEach }}</span></div>
+      </div>
+
+      <!-- PRICING -->
+      <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);">
+        <div style="font-size:16px;font-weight:600;color:#2A2620;margin-bottom:15px;">Pricing &amp; scale</div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <sc-for list="{{ dials }}" as="d" hint-placeholder-count="4">
+            <div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;"><span style="font-size:13px;color:#2A2620;">{{ d.label }}</span><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:#0F5132;">{{ d.display }}</span></div>
+              <input type="range" min="{{ d.min }}" max="{{ d.max }}" step="{{ d.step }}" value="{{ d.value }}" onInput="{{ d.onInput }}" style="width:100%;" />
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;font-size:13px;"><span style="color:#7A7263;">+ Buffer</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#2A2620;">{{ bufferEach }}</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;font-size:13px;"><span style="color:#7A7263;">+ Payment fee</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#2A2620;">{{ feeEach }}</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;font-size:13px;"><span style="color:#7A7263;">+ Markup</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#2A2620;">{{ markupEach }}</span></div>
+          <sc-if value="{{ isB2b }}" hint-placeholder-val="{{ false }}"><div style="display:flex;align-items:center;justify-content:space-between;font-size:13px;"><span style="color:#7A7263;">− Agent commission</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#B23A2E;">{{ commissionEach }}</span></div></sc-if>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px;padding-top:11px;border-top:1px solid #F1EADD;"><span style="font-size:14px;font-weight:600;color:#2A2620;">Selling price / pax</span><span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:700;color:#235B73;">{{ sellEach }}</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;display:flex;align-items:flex-start;gap:11px;background:#FBF4E6;border:1px solid #F0E2C4;border-radius:14px;padding:13px 16px;">
+      <span style="width:24px;height:24px;border-radius:7px;background:#B5791E;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;">i</span>
+      <span style="font-size:12.5px;color:#4A4337;line-height:1.55;">Self-assessment estimate. <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;">profit = selling − base − buffer − fee − commission</span>. Charged in EUR · figures indicative — confirm supplier rates &amp; gateway fees at booking.</span>
+    </div>
+
+    <div style="margin-top:20px;text-align:center;"><a href="AUJ Landing Cinematic.dc.html" style="text-decoration:none;font-size:13.5px;color:#7A7263;">← Back to AUJ home</a></div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1100,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  state = {
+    chan: 'b2c', pax: 30,
+    costs: { flight: 480, visa: 150, hotel: 1100, transport: 180, ziyarat: 60, food: 180, insurance: 40 },
+    bufferPct: 5, feePct: 2.5, markupPct: 18, commissionPct: 8,
+    dealId: 'd1', dealName: '', deals: {}
+  };
+
+  componentDidMount() {
+    try { const s = JSON.parse(localStorage.getItem('auj-finance-deals') || 'null'); if (s && s.deals) this.setState(s); } catch (e) {}
+  }
+  persist() { try { localStorage.setItem('auj-finance-deals', JSON.stringify({ deals: this.state.deals, dealId: this.state.dealId })); } catch (e) {} }
+
+  snapshot() {
+    const s = this.state;
+    return { name: s.dealName, chan: s.chan, pax: s.pax, costs: { ...s.costs }, bufferPct: s.bufferPct, feePct: s.feePct, markupPct: s.markupPct, commissionPct: s.commissionPct };
+  }
+  saveDeal() {
+    const id = this.state.dealId;
+    const deals = { ...this.state.deals, [id]: this.snapshot() };
+    this.setState({ deals }, () => this.persist());
+  }
+  newDeal() {
+    const id = 'd' + Date.now().toString(36);
+    this.setState({ dealId: id, dealName: '', pax: this.state.chan === 'b2c' ? 1 : 30 });
+  }
+  pickDeal(id) {
+    const d = this.state.deals[id];
+    if (!d) { this.setState({ dealId: id }); return; }
+    this.setState({ dealId: id, dealName: d.name || '', chan: d.chan, pax: d.pax, costs: { ...d.costs }, bufferPct: d.bufferPct, feePct: d.feePct, markupPct: d.markupPct, commissionPct: d.commissionPct });
+  }
+
+  eur(n) { return '\u20AC' + Math.round(n).toLocaleString('de-DE'); }
+
+  renderVals() {
+    const st = this.state;
+    const isB2b = st.chan === 'b2b';
+
+    const COSTS = [
+      ['flight', 'Flights (return)', 0, 1200, 10],
+      ['visa', 'Visa & services', 0, 400, 5],
+      ['hotel', 'Hotel (whole stay)', 0, 4000, 50],
+      ['transport', 'Transfers & ziyarat transport', 0, 600, 10],
+      ['ziyarat', 'Guide & ziyarat', 0, 400, 5],
+      ['food', 'Food / catering', 0, 600, 10],
+      ['insurance', 'Insurance', 0, 200, 5]
+    ];
+    const costRows = COSTS.map(([k, label, min, max, step]) => ({
+      label, min, max, step, value: st.costs[k], amount: this.eur(st.costs[k]),
+      onInput: (e) => this.setState({ costs: { ...st.costs, [k]: +e.target.value } })
+    }));
+    const base = Object.values(st.costs).reduce((a, b) => a + b, 0);
+    const buffer = base * st.bufferPct / 100;
+
+    // selling price solves so markup is on net cost; fee approximated on selling≈net*(1+markup)
+    const netNoFee = base + buffer;
+    const markup = netNoFee * st.markupPct / 100;
+    const preFee = netNoFee + markup;
+    const fee = preFee * st.feePct / 100;
+    const commission = isB2b ? (preFee + fee) * st.commissionPct / 100 : 0;
+    const sell = netNoFee + markup + fee + commission;
+    const profit = sell - base - buffer - fee - commission;
+
+    const dials = [
+      { key: 'pax', label: 'Group size (pax)', min: 1, max: 200, step: 1, value: st.pax, display: st.pax + ' pax', onInput: (e) => this.setState({ pax: +e.target.value }) },
+      { key: 'markupPct', label: 'Markup %', min: 0, max: 40, step: 0.5, value: st.markupPct, display: st.markupPct + '%', onInput: (e) => this.setState({ markupPct: +e.target.value }) },
+      { key: 'bufferPct', label: 'Buffer %', min: 0, max: 15, step: 0.5, value: st.bufferPct, display: st.bufferPct + '%', onInput: (e) => this.setState({ bufferPct: +e.target.value }) },
+      { key: 'feePct', label: 'Payment fee %', min: 0, max: 6, step: 0.1, value: st.feePct, display: st.feePct + '%', onInput: (e) => this.setState({ feePct: +e.target.value }) }
+    ];
+    if (isB2b) dials.push({ key: 'commissionPct', label: 'Agent commission %', min: 0, max: 20, step: 0.5, value: st.commissionPct, display: st.commissionPct + '%', onInput: (e) => this.setState({ commissionPct: +e.target.value }) });
+
+    const pax = st.pax;
+    const bars = [
+      { label: 'Base cost', amount: this.eur(base), value: base, color: '#B23A2E' },
+      { label: 'Buffer', amount: this.eur(buffer), value: buffer, color: '#C9A04A' },
+      { label: 'Fee', amount: this.eur(fee), value: fee, color: '#9A8F7C' }
+    ];
+    if (isB2b) bars.push({ label: 'Commission', amount: this.eur(commission), value: commission, color: '#2F6F8F' });
+    bars.push({ label: 'Profit', amount: this.eur(profit), value: profit, color: '#1C7A4F' });
+    bars.forEach((b) => { b.pct = sell > 0 ? (b.value / sell * 100) : 0; });
+
+    const chanBtns = [['b2c', 'B2C'], ['b2b', 'B2B']].map(([k, label]) => ({
+      label, onClick: () => this.setState({ chan: k }),
+      bg: st.chan === k ? '#C8A24A' : 'transparent', fg: st.chan === k ? '#07301E' : '#BFE0CD'
+    }));
+
+    const savedIds = Object.keys(st.deals);
+    const dealOpts = [{ v: st.dealId, label: (st.dealName || 'Current deal') + (st.deals[st.dealId] ? '' : ' (unsaved)') }]
+      .concat(savedIds.filter((id) => id !== st.dealId).map((id) => ({ v: id, label: st.deals[id].name || id })));
+    const isGroup = pax > 1;
+    const seq = (savedIds.indexOf(st.dealId) >= 0 ? savedIds.indexOf(st.dealId) : savedIds.length) + 1;
+
+    return {
+      chanBtns, costRows, dials, isB2b, pax,
+      dealName: st.dealName, onName: (e) => this.setState({ dealName: e.target.value }),
+      dealId: st.dealId, dealOpts,
+      onPick: (e) => this.pickDeal(e.target.value),
+      saveDeal: () => this.saveDeal(), newDeal: () => this.newDeal(),
+      saveLabel: st.deals[st.dealId] ? 'Update' : 'Save deal',
+      dealType: isGroup ? 'GRP' : 'IND',
+      dealRef: 'DEAL-26-' + ('00' + seq).slice(-3),
+      chanLabel: isB2b ? 'B2B' : 'B2C',
+      baseEach: this.eur(base), bufferEach: '+ ' + this.eur(buffer), feeEach: '+ ' + this.eur(fee),
+      markupEach: '+ ' + this.eur(markup), commissionEach: '\u2212 ' + this.eur(commission),
+      sellEach: this.eur(sell), profitEach: this.eur(profit),
+      inTotal: this.eur(sell * pax), outTotal: this.eur((base + buffer + fee + commission) * pax),
+      profitTotal: this.eur(profit * pax),
+      margin: sell > 0 ? Math.round(profit / sell * 100) + '%' : '0%',
+      bars
+    };
+  }
+}
+</script>
+</body>
+</html>

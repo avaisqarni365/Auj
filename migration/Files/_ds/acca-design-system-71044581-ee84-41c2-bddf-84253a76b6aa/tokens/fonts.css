@@ -1,0 +1,66 @@
+/* ============================================================
+   ACCA — Fonts
+   ------------------------------------------------------------
+   The production app ships Klim Type Foundry's proprietary
+   "Styrene A" (sans) and "Söhne Mono" (mono) — the same families
+   Claude.ai uses. Those binaries are NOT redistributable.
+
+   The --font-sans / --font-mono tokens (tokens/typography.css)
+   point at the REAL family names ("Styrene A", "Söhne Mono").
+   The @font-face rules below register those exact family names
+   but currently load the closest freely-licensed substitutes as
+   their `src`:
+
+     Styrene A  →  Hanken Grotesk  (Fontsource CDN)
+     Söhne Mono →  JetBrains Mono  (Fontsource CDN)
+
+   ⚠  SUBSTITUTION FLAGGED. When you have the licensed Styrene A /
+   Söhne Mono .woff2 files, drop them in assets/fonts/ and replace
+   ONLY the `src:` URLs below — the family names and every token
+   already reference the real names, so the swap is render-exact
+   with no other changes.
+   ============================================================ */
+
+/* ── Styrene A  (substitute src: Hanken Grotesk) ── */
+@font-face {
+  font-family: 'Styrene A';
+  font-style: normal; font-weight: 400; font-display: swap;
+  src: url('https://cdn.jsdelivr.net/npm/@fontsource/hanken-grotesk/files/hanken-grotesk-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Styrene A';
+  font-style: normal; font-weight: 500; font-display: swap;
+  src: url('https://cdn.jsdelivr.net/npm/@fontsource/hanken-grotesk/files/hanken-grotesk-latin-500-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Styrene A';
+  font-style: normal; font-weight: 600; font-display: swap;
+  src: url('https://cdn.jsdelivr.net/npm/@fontsource/hanken-grotesk/files/hanken-grotesk-latin-600-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Styrene A';
+  font-style: normal; font-weight: 700; font-display: swap;
+  src: url('https://cdn.jsdelivr.net/npm/@fontsource/hanken-grotesk/files/hanken-grotesk-latin-700-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Styrene A';
+  font-style: normal; font-weight: 800; font-display: swap;
+  src: url('https://cdn.jsdelivr.net/npm/@fontsource/hanken-grotesk/files/hanken-grotesk-latin-800-normal.woff2') format('woff2');
+}
+
+/* ── Söhne Mono  (substitute src: JetBrains Mono) ── */
+@font-face {
+  font-family: 'Söhne Mono';
+  font-style: normal; font-weight: 400; font-display: swap;
+  src: url('https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Söhne Mono';
+  font-style: normal; font-weight: 500; font-display: swap;
+  src: url('https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono/files/jetbrains-mono-latin-500-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Söhne Mono';
+  font-style: normal; font-weight: 600; font-display: swap;
+  src: url('https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono/files/jetbrains-mono-latin-600-normal.woff2') format('woff2');
+}

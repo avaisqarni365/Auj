@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;} body{margin:0;} ::selection{background:#C8A24A;color:#07301E;}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:radial-gradient(120% 90% at 50% 0%, #FFFDF8 0%, #F3EEE4 100%);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:clamp(20px,4vw,44px) clamp(14px,4vw,32px);display:flex;flex-direction:column;align-items:center;">
+  <div style="width:100%;max-width:1060px;">
+
+    <!-- HEADER -->
+    <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:18px 22px;border-radius:20px;background:radial-gradient(130% 230% at 88% -60%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;box-shadow:0 24px 60px -34px rgba(5,28,18,0.6);color:#EFF6F1;">
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+      <div style="position:relative;display:flex;align-items:center;gap:14px;">
+        <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:11px;padding:6px 12px;box-shadow:0 10px 26px -8px rgba(0,0,0,0.45);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:clamp(46px,6.5vw,62px);width:auto;display:block;" /></span>
+        <div>
+          <div style="font-family:'IBM Plex Serif',serif;font-size:20px;font-weight:600;color:#fff;">Saudi Connector</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#BFE0CD;margin-top:3px;">OPS CONSOLE · MAQAM GDS / NUSUK MASAR</div>
+        </div>
+      </div>
+      <div style="position:relative;display:flex;align-items:center;gap:9px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);border-radius:13px;padding:8px 12px;">
+        <span style="font-size:12px;color:#9CC6AE;">Active connector</span>
+        <div style="display:flex;gap:4px;background:rgba(0,0,0,0.2);border-radius:9px;padding:3px;">
+          <sc-for list="{{ envBtns }}" as="e" hint-placeholder-count="2"><button onClick="{{ e.onClick }}" style="cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;padding:6px 12px;border-radius:7px;background:{{ e.bg }};color:{{ e.fg }};border:none;transition:all .15s;">{{ e.label }}</button></sc-for>
+        </div>
+      </div>
+    </div>
+
+    <!-- BANNER -->
+    <div style="margin-top:16px;display:flex;align-items:flex-start;gap:13px;background:{{ banBg }};border:1px solid {{ banBorder }};border-radius:16px;padding:15px 18px;">
+      <span style="width:34px;height:34px;border-radius:10px;background:{{ banIconBg }};color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px;font-weight:700;">{{ banIcon }}</span>
+      <div style="flex:1;min-width:0;"><div style="font-size:14.5px;font-weight:600;color:{{ banTitleColor }};">{{ banTitle }}</div><div style="font-size:13px;color:#4A4337;line-height:1.55;margin-top:2px;">{{ banBody }}</div></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin-top:18px;">
+      <!-- AUTHORIZATION GATE -->
+      <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);">
+        <div style="font-size:16px;font-weight:600;color:#2A2620;margin-bottom:4px;">Authorization gate</div>
+        <div style="font-size:12.5px;color:#7A7263;margin-bottom:14px;">Live access is granted by the Ministry of Hajj &amp; Umrah — not a coding step.</div>
+        <div style="display:flex;flex-direction:column;gap:9px;">
+          <sc-for list="{{ gates }}" as="g" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:11px;border:1px solid #F1EADD;border-radius:11px;padding:11px 13px;">
+              <span style="width:22px;height:22px;border-radius:50%;background:{{ g.dot }};color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">{{ g.mark }}</span>
+              <div style="flex:1;min-width:0;"><div style="font-size:13.5px;font-weight:600;color:#2A2620;">{{ g.label }}</div><div style="font-size:12px;color:#7A7263;">{{ g.note }}</div></div>
+              <span style="font-size:11px;font-weight:600;color:{{ g.tagFg }};background:{{ g.tagBg }};border-radius:7px;padding:4px 9px;white-space:nowrap;">{{ g.tag }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <!-- CONTRACT TESTS -->
+      <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px;"><div style="font-size:16px;font-weight:600;color:#2A2620;">Shared contract tests</div><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:#0F5132;">{{ testsPass }}/{{ testsTotal }}</span></div>
+        <div style="font-size:12.5px;color:#7A7263;margin-bottom:14px;">The same suite the mock passes — must be green against the partner sandbox.</div>
+        <div style="display:flex;flex-direction:column;gap:7px;">
+          <sc-for list="{{ tests }}" as="t" hint-placeholder-count="6">
+            <div style="display:flex;align-items:center;gap:10px;padding:8px 11px;border-radius:9px;background:{{ t.bg }};">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;color:{{ t.fg }};">{{ t.mark }}</span>
+              <span style="flex:1;font-size:13px;color:#2A2620;">{{ t.label }}</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#7A7263;">{{ t.ms }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOMAIN MAPPING + RESILIENCE -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin-top:18px;">
+      <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);">
+        <div style="font-size:16px;font-weight:600;color:#2A2620;margin-bottom:14px;">Domain mapping</div>
+        <div style="display:flex;flex-direction:column;gap:9px;">
+          <sc-for list="{{ maps }}" as="m" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;">
+              <span style="flex:1;color:#7A7263;background:#FAF6EF;border:1px solid #F1EADD;border-radius:8px;padding:8px 10px;">{{ m.partner }}</span>
+              <span style="color:#156440;">→</span>
+              <span style="flex:1;color:#2A2620;font-weight:600;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:8px;padding:8px 10px;">{{ m.ours }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);">
+        <div style="font-size:16px;font-weight:600;color:#2A2620;margin-bottom:14px;">Resilience</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <sc-for list="{{ resil }}" as="r" hint-placeholder-count="4">
+            <div style="border:1px solid #F1EADD;border-radius:12px;padding:12px 13px;"><div style="font-size:12px;color:#7A7263;">{{ r.label }}</div><div style="font-size:14px;font-weight:600;color:#2A2620;margin-top:3px;">{{ r.value }}</div></div>
+          </sc-for>
+        </div>
+        <div style="margin-top:13px;display:flex;align-items:center;justify-content:space-between;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:11px;padding:11px 13px;"><span style="font-size:13px;font-weight:600;color:#0F5132;">Circuit breaker</span><span style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#0F5132;"><span style="width:9px;height:9px;border-radius:50%;background:#1C7A4F;"></span>Closed · healthy</span></div>
+      </div>
+    </div>
+
+    <!-- VISA RULE -->
+    <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);margin-top:18px;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:260px;">
+          <div style="font-size:16px;font-weight:600;color:#2A2620;margin-bottom:4px;">2025 rule · Nusuk-approved hotel required for visa</div>
+          <div style="font-size:13px;color:#4A4337;line-height:1.6;">Visa issuance requires a Nusuk-approved hotel booking. The connector surfaces a validation error when a non-approved hotel is confirmed for a visa flow. Eligibility itself stays in <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;">visa-router</span>.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:9px;min-width:240px;">
+          <div style="display:flex;align-items:center;gap:11px;border:1px solid #DCEDE4;background:#F0F6F2;border-radius:11px;padding:11px 13px;"><span style="width:20px;height:20px;border-radius:50%;background:#0F5132;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">✓</span><div style="flex:1;"><div style="font-size:13px;font-weight:600;color:#2A2620;">Swissôtel Makkah</div><div style="font-size:11.5px;color:#7A7263;">Nusuk-approved · visa OK</div></div></div>
+          <div style="display:flex;align-items:center;gap:11px;border:1px solid #F0D9D3;background:#FBF1EF;border-radius:11px;padding:11px 13px;"><span style="width:20px;height:20px;border-radius:50%;background:#B23A2E;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">!</span><div style="flex:1;"><div style="font-size:13px;font-weight:600;color:#2A2620;">Budget apt · Aziziyah</div><div style="font-size:11.5px;color:#B23A2E;">Not approved · visa blocked</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;text-align:center;"><a href="AUJ Landing Cinematic.dc.html" style="text-decoration:none;font-size:13.5px;color:#7A7263;">← Back to AUJ home</a></div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1100,&quot;height&quot;:860}}">
+class Component extends DCLogic {
+  state = { env: 'mock' };
+
+  renderVals() {
+    const live = this.state.env === 'certified';
+    const envBtns = [['mock', 'MOCK'], ['certified', 'CERTIFIED']].map(([k, label]) => ({
+      label, onClick: () => this.setState({ env: k }),
+      bg: this.state.env === k ? '#C8A24A' : 'transparent', fg: this.state.env === k ? '#07301E' : '#BFE0CD'
+    }));
+
+    const okTag = { tag: 'DONE', tagFg: '#0F5132', tagBg: '#DCEDE4', dot: '#0F5132', mark: '\u2713' };
+    const waitTag = { tag: 'PENDING', tagFg: '#9A6512', tagBg: '#FBF4E6', dot: '#C9A04A', mark: '\u00B7' };
+    const gates = [
+      { label: 'Interface + mock shipped', note: 'Everything builds on the mock first', ...okTag },
+      { label: 'Operator / agent authorization', note: 'Ministry of Hajj & Umrah', ...(live ? okTag : waitTag) },
+      { label: 'Partner / ERP credentials', note: 'Maqam GDS or Nusuk Masar via partner', ...(live ? okTag : waitTag) },
+      { label: 'Per-agent codes + authenticator', note: 'Token flow for confirm calls', ...(live ? okTag : waitTag) }
+    ];
+
+    const tests = [
+      ['search availability', 38], ['hold + TTL expiry', 52], ['confirm (idempotent)', 41],
+      ['BRN passthrough', 19], ['Nusuk hotel validation', 27], ['error mapping', 23]
+    ].map(([label, ms]) => ({ label, ms: ms + 'ms', mark: '\u2713', fg: '#0F5132', bg: '#F0F6F2' }));
+
+    const maps = [
+      { partner: 'maqam.pnr', ours: 'BookingRef' },
+      { partner: 'masar.pilgrimId', ours: 'PilgrimId' },
+      { partner: 'offer.segments[]', ours: 'PackageLeg[]' },
+      { partner: 'hold.expiresAt', ours: 'Hold.ttl' }
+    ];
+    const resil = [
+      { label: 'Retries', value: '3 · backoff' },
+      { label: 'Idempotency', value: 'on confirm' },
+      { label: 'Timeout', value: '8s / call' },
+      { label: 'Errors', value: 'structured map' }
+    ];
+
+    return {
+      envBtns, gates,
+      tests, testsPass: tests.length, testsTotal: tests.length,
+      maps, resil,
+      banBg: live ? '#F0F6F2' : '#FBF4E6', banBorder: live ? '#DCEDE4' : '#F0E2C4',
+      banIconBg: live ? '#0F5132' : '#B5791E', banIcon: live ? '\u2713' : '!',
+      banTitleColor: live ? '#0F5132' : '#9A6512',
+      banTitle: live ? 'Certified connector active' : 'Mock connector active — safe default',
+      banBody: live
+        ? 'Live Maqam / Nusuk Masar adapter selected. Swapped in by env flag only — no product or UI module changed. Contract tests green against the partner sandbox.'
+        : 'All product modules run on the mock so they ship first. The certified adapter is a drop-in replacement, gated on operator authorization, and selected by a single env flag in production.'
+    };
+  }
+}
+</script>
+</body>
+</html>

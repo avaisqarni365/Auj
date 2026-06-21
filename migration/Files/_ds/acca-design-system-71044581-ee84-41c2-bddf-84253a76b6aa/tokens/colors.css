@@ -1,0 +1,96 @@
+/* ============================================================
+   ACCA — Color tokens
+   Claude.ai-inspired warm palette: terracotta accent on sand
+   neutrals, with conventional semantic ramps.
+   ============================================================ */
+
+:root {
+  /* ── Accent — warm terracotta (the ACCA signature) ── */
+  --accent-50:  #fdf8f3;
+  --accent-100: #f9efe4;
+  --accent-200: #f2ddc6;
+  --accent-300: #e8c49e;
+  --accent-400: #dba673;
+  --accent-500: #d18d4e;
+  --accent-600: #c47a3a;  /* primary brand color */
+  --accent-700: #a36230;
+  --accent-800: #834f2c;
+  --accent-900: #6b4127;
+
+  /* ── Sand — warm neutral grays ── */
+  --sand-50:  #faf9f7;
+  --sand-100: #f5f3ef;
+  --sand-200: #eeebe5;
+  --sand-300: #e3dfd6;
+  --sand-400: #d4cec3;
+  --sand-500: #b8b0a2;
+  --sand-600: #9a9184;
+  --sand-700: #7d7568;
+  --sand-800: #5c564c;
+  --sand-900: #3d3930;
+
+  /* ── Success — green ── */
+  --success-50:  #f0faf4;
+  --success-100: #dbf2e3;
+  --success-200: #b9e5c9;
+  --success-500: #2d9d5c;
+  --success-600: #1f7f48;
+  --success-700: #1a653b;
+
+  /* ── Warning — amber ── */
+  --warning-50:  #fef8ee;
+  --warning-100: #fcefd6;
+  --warning-200: #f8dbac;
+  --warning-500: #e8862a;
+  --warning-600: #d96c1e;
+  --warning-700: #b4521b;
+
+  /* ── Error — red ── */
+  --error-50:  #fef2f2;
+  --error-100: #fee2e2;
+  --error-200: #fecaca;
+  --error-500: #ef4444;
+  --error-600: #dc2626;
+  --error-700: #b91c1c;
+
+  /* ── Info — blue ── */
+  --info-50:  #eff8ff;
+  --info-100: #dbeffe;
+  --info-200: #bfe3fe;
+  --info-500: #3b9af5;
+  --info-600: #257cea;
+  --info-700: #1d65d8;
+
+  /* ── Semantic aliases — use these in product UI ── */
+  /* Text */
+  --text-primary:   #2d2b28;
+  --text-secondary: #6b6560;
+  --text-tertiary:  #9a9184;
+  --text-muted:     #b8b0a2;
+  --text-inverse:   #ffffff;
+  --text-accent:    var(--accent-700);
+
+  /* Surfaces */
+  --surface-page:      #faf9f7;
+  --surface-card:      #ffffff;
+  --surface-sunken:    #f5f3ef;
+  --surface-raised:    #eeebe5;
+  --surface-sidebar:   #f5f3ef;
+  --surface-hover:     #faf9f7;
+  --surface-active:    #f5f3ef;
+
+  /* Borders */
+  --border-primary:   #e3dfd6;
+  --border-secondary: #eeebe5;
+  --border-strong:    #d4cec3;
+  --border-focus:     #c47a3a;
+
+  /* Brand single-tokens (mirror app's globals.css) */
+  --color-accent:        var(--accent-600);
+  --color-accent-hover:  var(--accent-700);
+  --color-accent-light:  var(--accent-50);
+  --color-accent-muted:  var(--accent-200);
+
+  /* Focus ring */
+  --focus-ring: 0 0 0 3px rgba(196, 122, 58, 0.12);
+}

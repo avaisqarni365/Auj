@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;}
+  ::selection{background:#C8A24A;color:#07301E;}
+  .hw-list::-webkit-scrollbar{width:8px;}
+  .hw-list::-webkit-scrollbar-thumb{background:#E0D6C4;border-radius:8px;}
+  @media (max-width:840px){ .hw-body{flex-direction:column!important;} .hw-stage{min-height:200px!important;} .hw-list{max-height:none!important;} }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:radial-gradient(120% 90% at 50% 0%, #FFFDF8 0%, #F3EEE4 100%);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:clamp(20px,4vw,48px) clamp(14px,4vw,32px);display:flex;flex-direction:column;align-items:center;">
+
+  <div style="width:100%;max-width:1040px;background:#fff;border:1px solid #E6DDCE;border-radius:24px;overflow:hidden;box-shadow:0 40px 90px -40px rgba(42,38,32,0.5), 0 2px 6px rgba(42,38,32,0.04);">
+
+    <!-- HEADER -->
+    <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:15px 20px;background:radial-gradient(130% 230% at 88% -70%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;">
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+      <div style="position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,162,74,0.6),transparent);"></div>
+      <div style="position:relative;display:flex;align-items:center;gap:12px;">
+        <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:9px;padding:5px 10px;box-shadow:0 10px 26px -8px rgba(0,0,0,0.45);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:clamp(42px,6vw,58px);width:auto;display:block;" /></span>
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.1em;color:#E8C36A;">GIFTS &amp; SHOPPING</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#BFE0CD;margin-top:2px;">DATES · ZAMZAM · GIFTS · SOUQS</div>
+        </div>
+      </div>
+      <div style="position:relative;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <div style="display:flex;gap:5px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);padding:4px;border-radius:11px;">
+          <button onClick="{{ setMk }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit;font-size:12.5px;font-weight:600;padding:6px 13px;border-radius:8px;background:{{ mkBg }};color:{{ mkFg }};border:1px solid {{ mkBorder }};transition:all .15s;"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6.5" width="12" height="9" rx="0.5"/><path d="M4 9.5h12M10 6.5v9"/></svg>Makkah</button>
+          <button onClick="{{ setMd }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit;font-size:12.5px;font-weight:600;padding:6px 13px;border-radius:8px;background:{{ mdBg }};color:{{ mdFg }};border:1px solid {{ mdBorder }};transition:all .15s;"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4c1.6 1.1 2.5 2.4 2.5 4h-5C7.5 6.4 8.4 5.1 10 4z"/><path d="M6 16v-6M14 16v-6M6 11h8v5H6z"/></svg>Madinah</button>
+          <button onClick="{{ setJd }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit;font-size:12.5px;font-weight:600;padding:6px 13px;border-radius:8px;background:{{ jdBg }};color:{{ jdFg }};border:1px solid {{ jdBorder }};transition:all .15s;"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16c1.5-1.5 3-1.5 4.5 0s3 1.5 4.5 0 3-1.5 4.5 0"/><path d="M6 13V7l4-2.5V13M14 13V9l-4-2.5"/></svg>Jeddah</button>
+        </div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#fff;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);padding:6px 11px;border-radius:999px;">{{ counter }}</span>
+      </div>
+    </div>
+
+    <!-- CATEGORY RAIL -->
+    <div style="position:relative;padding:18px 22px;border-bottom:1px solid #F1EADD;overflow-x:auto;background:#FCFAF5;">
+      <div style="position:relative;display:flex;gap:4px;min-width:660px;">
+        <div style="position:absolute;left:14px;right:14px;top:14px;height:2px;background:#EADFCE;"></div>
+        <sc-for list="{{ rail }}" as="s" hint-placeholder-count="6">
+          <button onClick="{{ s.onClick }}" style="position:relative;flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;background:none;border:none;font-family:inherit;padding:0;">
+            <div style="width:30px;height:30px;border-radius:50%;background:{{ s.dotBg }};border:2px solid {{ s.dotBorder }};color:{{ s.dotFg }};display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;transition:all .2s;">{{ s.num }}</div>
+            <span style="font-size:10px;font-weight:600;color:{{ s.labelColor }};text-align:center;line-height:1.2;max-width:80px;">{{ s.short }}</span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="hw-body" style="display:flex;flex-wrap:wrap;">
+
+      <!-- CATEGORY PANEL -->
+      <div class="hw-stage" style="position:relative;flex:1 1 300px;min-height:300px;background:radial-gradient(120% 130% at 75% 12%, #156440 0%, #0A3D26 52%, #06251A 100%);overflow:hidden;color:#EFF6F1;padding:clamp(22px,2.6vw,30px);display:flex;flex-direction:column;justify-content:space-between;">
+        <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 12px);pointer-events:none;"></div>
+        <div style="position:absolute;top:-50px;right:-44px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle, rgba(200,162,74,0.22), transparent 70%);pointer-events:none;"></div>
+        <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:#9CC6AE;">{{ cityLabel }} · SHOPPING</div>
+        <div style="position:relative;">
+          <div style="width:54px;height:54px;border-radius:15px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:16px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#E8C36A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="9" width="16" height="11" rx="1.5"/><path d="M4 13h16M12 9v11M12 9c-1.2-3-5.5-2.8-5 .3M12 9c1.2-3 5.5-2.8 5 .3"/></svg></div>
+          <div style="font-family:'IBM Plex Serif',serif;font-size:clamp(26px,3.4vw,38px);font-weight:600;line-height:1.1;">{{ catName }}</div>
+          <div style="font-size:14px;color:#C6DDCF;margin-top:12px;line-height:1.55;">{{ desc }}</div>
+        </div>
+        <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#BFE0CD;">{{ count }} {{ countNoun }}</div>
+      </div>
+
+      <!-- LIST -->
+      <div style="flex:1 1 360px;padding:clamp(20px,2.4vw,26px);display:flex;flex-direction:column;min-width:0;">
+        <div style="margin-bottom:14px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.08em;color:#2F6F8F;">{{ cityLabel }} · {{ catUpper }}</span></div>
+        <div class="hw-list" style="display:flex;flex-direction:column;gap:9px;max-height:330px;overflow-y:auto;padding-right:4px;">
+          <sc-for list="{{ items }}" as="h" hint-placeholder-count="5">
+            <div style="display:flex;align-items:center;gap:12px;padding:11px 13px;border:1px solid #F1EADD;border-radius:12px;background:#FFFDFA;">
+              <div style="width:44px;height:44px;border-radius:11px;background:{{ h.badgeBg }};color:{{ h.badgeFg }};display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;flex-shrink:0;">{{ h.mark }}</div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:14px;font-weight:600;color:#2A2620;line-height:1.25;">{{ h.name }}</div>
+                <div style="font-size:12px;color:#7A7263;margin-top:1px;">{{ h.note }}</div>
+              </div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#156440;white-space:nowrap;flex-shrink:0;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:7px;padding:4px 8px;">{{ h.tag }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+          <button onClick="{{ prev }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:7px;background:{{ prevBg }};color:{{ prevColor }};border:1.5px solid {{ prevBorder }};border-radius:11px;font-family:inherit;font-size:14px;font-weight:600;padding:11px 16px;transition:all .15s;"><span>←</span> Back</button>
+          <div style="display:flex;align-items:center;gap:7px;">
+            <sc-for list="{{ dots }}" as="d" hint-placeholder-count="6">
+              <button onClick="{{ d.onClick }}" style="cursor:pointer;border:none;height:9px;width:{{ d.w }};border-radius:999px;background:{{ d.bg }};transition:all .2s;padding:0;"></button>
+            </sc-for>
+          </div>
+          <button onClick="{{ next }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:7px;background:#0F5132;color:#fff;border:none;border-radius:11px;font-family:inherit;font-size:14px;font-weight:600;padding:11px 18px;box-shadow:0 8px 18px rgba(15,81,50,0.26);transition:background .15s;" style-hover="background:#156440;">{{ nextLabel }} <span>→</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:18px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center;">
+    <a href="AUJ Landing Cinematic.dc.html" style="text-decoration:none;font-size:13.5px;color:#7A7263;display:inline-flex;align-items:center;gap:6px;">← Back to AUJ home</a>
+    <a href="AUJ Food Guide.dc.html" style="text-decoration:none;font-size:13.5px;font-weight:600;color:#156440;display:inline-flex;align-items:center;gap:6px;">Food &amp; dining <span>→</span></a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1080,&quot;height&quot;:760}}">
+class Component extends DCLogic {
+  state = { i: 0, city: 'makkah' };
+
+  data() {
+    const mk = (mark) => ({ badgeBg: '#E2EEF3', badgeFg: '#235B73', mark });
+    const onlineCat = { short: 'Online', name: 'Order online', desc: 'Buy gifts, dates and Zamzam online for delivery to your hotel or shipped home.', noun: 'options', items: [
+      { name: 'HungerStation / ToYou', note: 'Groceries & gift delivery', tag: 'App', ...mk('HS') },
+      { name: 'Bateel.com', note: 'Premium dates · ships abroad', tag: 'Web', ...mk('BT') },
+      { name: 'Amazon.sa / Noon', note: 'Gifts & essentials', tag: 'Web', ...mk('AZ') },
+      { name: 'Local date sellers (WhatsApp)', note: 'Many ship overseas', tag: 'Chat', ...mk('WA') }
+    ] };
+    return {
+      makkah: [
+        { short: 'Dates & Zamzam', name: 'Dates, Zamzam & Ajwa', desc: 'The classic gifts to carry home — sealed Zamzam and the best Makkah dates.', noun: 'options', items: [
+          { name: 'Zamzam (sealed 5L / 10L)', note: 'Official outlets near the Haram', tag: 'Sealed', ...mk('ZM') },
+          { name: 'Makkah date shops', note: 'Ajwa, Sukkari, Safawi', tag: 'per kg', ...mk('DT') },
+          { name: 'Bin Dawood / Panda', note: 'Supermarket gift packs', tag: 'Packs', ...mk('BD') },
+          { name: 'Chocolate-stuffed date boxes', note: 'Ready gift boxes', tag: 'Gift', ...mk('GB') }
+        ] },
+        { short: 'Gifts', name: 'Gifts & souvenirs', desc: 'Prayer mats, tasbeeh, attar, caps and frames around the Haram.', noun: 'options', items: [
+          { name: 'Prayer mats & tasbeeh', note: 'Around the Haram', tag: 'SAR 10+', ...mk('PM') },
+          { name: 'Attar & oud perfume', note: 'Alcohol-free fragrance', tag: 'Attar', ...mk('AT') },
+          { name: 'Caps, abayas & scarves', note: 'Clothing & ihram bags', tag: 'Wear', ...mk('AB') },
+          { name: 'Kaaba frames & decor', note: 'Souvenir art', tag: 'Decor', ...mk('FR') }
+        ] },
+        { short: 'Malls & souqs', name: 'Malls & souqs', desc: 'Browse it all under one roof or in the old markets.', noun: 'places', items: [
+          { name: 'Abraj Al Bait Mall', note: 'Inside the Clock Tower', tag: 'Mall', ...mk('AB') },
+          { name: 'Makkah Mall', note: 'Aziziyah · big brands', tag: 'Mall', ...mk('MM') },
+          { name: 'Souq Al Hijaz / Al Diyafa', note: 'Gifts & souvenirs', tag: 'Souq', ...mk('SH') },
+          { name: 'Street stalls near the Haram', note: 'Bargain souvenirs', tag: 'Bargain', ...mk('ST') }
+        ] },
+        onlineCat
+      ],
+      madinah: [
+        { short: 'Dates & Zamzam', name: 'Ajwa, dates & Zamzam', desc: 'Madinah is the home of Ajwa — the date praised by the Prophet \uFDFA.', noun: 'options', items: [
+          { name: 'Ajwa date market (near Quba)', note: 'The famous Madinah Ajwa', tag: 'per kg', ...mk('AJ') },
+          { name: 'Tamr (date) Souq', note: 'Dozens of date sellers', tag: 'Souq', ...mk('DS') },
+          { name: 'Zamzam (sealed)', note: 'Official outlets', tag: 'Sealed', ...mk('ZM') },
+          { name: 'Sidr honey & gift boxes', note: 'Local Sidr honey, dates', tag: 'Gift', ...mk('HN') }
+        ] },
+        { short: 'Gifts', name: 'Gifts & souvenirs', desc: 'Prayer mats, tasbeeh, attar and clothing in the central area.', noun: 'options', items: [
+          { name: 'Prayer mats & tasbeeh', note: 'Central area', tag: 'SAR 10+', ...mk('PM') },
+          { name: 'Attar & oud perfume', note: 'Alcohol-free fragrance', tag: 'Attar', ...mk('AT') },
+          { name: 'Caps, abayas & scarves', note: 'Clothing', tag: 'Wear', ...mk('AB') },
+          { name: 'Frames & decor', note: 'Souvenir art', tag: 'Decor', ...mk('FR') }
+        ] },
+        { short: 'Malls & souqs', name: 'Malls & souqs', desc: 'Modern malls and markets around the Haram.', noun: 'places', items: [
+          { name: 'Al Noor Mall', note: 'Big brands', tag: 'Mall', ...mk('NM') },
+          { name: 'Al Rashid Mega Mall', note: 'Family mall', tag: 'Mall', ...mk('RM') },
+          { name: 'Central area souqs', note: 'Around the Haram', tag: 'Souq', ...mk('CL') },
+          { name: 'Quba Road shops', note: 'Dates & gifts', tag: 'Shops', ...mk('QB') }
+        ] },
+        onlineCat
+      ],
+      jeddah: [
+        { short: 'Dates & Zamzam', name: 'Dates & last-minute gifts', desc: 'Stock up on the way to or from King Abdulaziz Airport (JED).', noun: 'options', items: [
+          { name: 'Date markets (Al-Balad)', note: 'Wide variety', tag: 'per kg', ...mk('BL') },
+          { name: 'Bateel (premium dates)', note: 'Gourmet date boutique', tag: 'Premium', ...mk('BT') },
+          { name: 'Danube / Tamimi gift packs', note: 'Supermarket gift sets', tag: 'Packs', ...mk('SP') },
+          { name: 'JED airport date shops', note: 'Last-minute gifts', tag: 'Airport', ...mk('JD') }
+        ] },
+        { short: 'Gifts', name: 'Souqs & souvenirs', desc: 'Historic Al-Balad markets for attar, fabrics, gold and crafts.', noun: 'places', items: [
+          { name: 'Souq Al Alawi (Al-Balad)', note: 'Historic market · attar, fabrics', tag: 'Souq', ...mk('AL') },
+          { name: 'Gold Souq, Balad', note: 'Gold & jewellery', tag: 'Gold', ...mk('GS') },
+          { name: 'Attar & oud houses', note: 'Arabian Oud, Abdul Samad', tag: 'Attar', ...mk('AT') },
+          { name: 'Handicrafts & frames', note: 'Souvenirs', tag: 'Gift', ...mk('HC') }
+        ] },
+        { short: 'Malls & Corniche', name: 'Malls & Corniche', desc: 'Some of the largest malls in the Kingdom, plus the seafront.', noun: 'places', items: [
+          { name: 'Red Sea Mall', note: 'One of KSA\u2019s largest', tag: 'Mall', ...mk('RS') },
+          { name: 'Mall of Arabia', note: 'Big brands', tag: 'Mall', ...mk('MA') },
+          { name: 'Historic Al-Balad', note: 'UNESCO old-town souqs', tag: 'Souq', ...mk('HB') },
+          { name: 'Jeddah Corniche shops', note: 'Waterfront', tag: 'Corniche', ...mk('CR') }
+        ] },
+        onlineCat
+      ]
+    };
+  }
+
+  renderVals() {
+    const all = this.data();
+    const city = this.state.city;
+    const S = all[city];
+    const total = S.length;
+    const i = Math.max(0, Math.min(this.state.i, total - 1));
+    const cat = S[i];
+    const pad2 = (n) => ('0' + n).slice(-2);
+
+    const cityButtons = [['makkah', 'Makkah'], ['madinah', 'Madinah']].map(([key, label]) => ({
+      label, onClick: () => this.setState({ city: key }),
+      bg: city === key ? 'rgba(255,255,255,0.18)' : 'transparent',
+      fg: city === key ? '#fff' : '#BFE0CD',
+      border: city === key ? 'rgba(255,255,255,0.32)' : 'transparent'
+    }));
+
+    const rail = S.map((s, k) => ({
+      num: pad2(k + 1), short: s.short,
+      onClick: () => this.setState({ i: k }),
+      dotBg: k === i ? '#0F5132' : (k < i ? '#DCEDE4' : '#fff'),
+      dotBorder: k === i ? '#0F5132' : (k < i ? '#9CC6AE' : '#E6DDCE'),
+      dotFg: k === i ? '#fff' : (k < i ? '#0F5132' : '#9A9183'),
+      labelColor: k === i ? '#0F5132' : '#9A9183'
+    }));
+    const dots = S.map((_, k) => ({
+      onClick: () => this.setState({ i: k }),
+      bg: k === i ? '#0F5132' : (k < i ? '#9CC6AE' : '#E6DDCE'),
+      w: k === i ? '26px' : '9px'
+    }));
+
+    return {
+      counter: pad2(i + 1) + ' / ' + pad2(total),
+      cityLabel: city === 'makkah' ? 'MAKKAH' : (city === 'madinah' ? 'MADINAH' : 'JEDDAH'),
+      catName: cat.name, catUpper: cat.short.toUpperCase(), desc: cat.desc,
+      count: cat.items.length, countNoun: cat.noun.toUpperCase(), items: cat.items,
+      rail, dots,
+      setMk: () => this.setState({ city: 'makkah' }),
+      setMd: () => this.setState({ city: 'madinah' }),
+      mkBg: city === 'makkah' ? 'rgba(255,255,255,0.18)' : 'transparent',
+      mkFg: city === 'makkah' ? '#fff' : '#BFE0CD',
+      mkBorder: city === 'makkah' ? 'rgba(255,255,255,0.32)' : 'transparent',
+      mdBg: city === 'madinah' ? 'rgba(255,255,255,0.18)' : 'transparent',
+      mdFg: city === 'madinah' ? '#fff' : '#BFE0CD',
+      mdBorder: city === 'madinah' ? 'rgba(255,255,255,0.32)' : 'transparent',
+      setJd: () => this.setState({ city: 'jeddah' }),
+      jdBg: city === 'jeddah' ? 'rgba(255,255,255,0.18)' : 'transparent',
+      jdFg: city === 'jeddah' ? '#fff' : '#BFE0CD',
+      jdBorder: city === 'jeddah' ? 'rgba(255,255,255,0.32)' : 'transparent',
+      prev: () => this.setState({ i: Math.max(0, i - 1) }),
+      next: () => this.setState({ i: Math.min(total - 1, i + 1) }),
+      prevBg: i === 0 ? '#F4EEE3' : '#fff',
+      prevColor: i === 0 ? '#B8AE9C' : '#156440',
+      prevBorder: i === 0 ? '#EADFCE' : '#C9BCA6',
+      nextLabel: i === total - 1 ? 'Done' : 'Next'
+    };
+  }
+}
+</script>
+</body>
+</html>
