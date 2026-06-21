@@ -11,7 +11,9 @@ import { createInProcessBackend } from './backend/in-process';
 import { validatePax } from './multipax';
 import { buildStatement, statementToCSV } from './statements';
 import { getAgentDb, toJournalEntries, type QuoteRecord } from './agent-db';
-import type { Agent, PaxRow, QuoteLine } from './domain';
+import { MarkupEngine } from './markup';
+import { uuidv7 } from './ids';
+import type { Agent, AgentTier, MarkupRule, PaxRow, QuoteLine } from './domain';
 import type { Backend } from './ports';
 import { getCurrentUser } from '../auth/session';
 
@@ -105,6 +107,66 @@ export async function listQuotesAction(): Promise<QuoteRecord[]> {
 export async function convertQuoteAction(id: string): Promise<void> {
   const agency = await requireAgency();
   await (await getAgentDb()).convertQuote(agency.id, id);
+}
+
+// ---- Markups (per-agency, persisted) ----------------------------------------------------
+export interface MarkupInput {
+  id?: string;
+  tier?: AgentTier;
+  productKind?: MarkupRule['productKind'];
+  kind: MarkupRule['kind'];
+  value: number;
+  enabled: boolean;
+}
+
+export async function listMarkupsAction(): Promise<MarkupRule[]> {
+  const agency = await requireAgency();
+  return (await getAgentDb()).listMarkups(agency.id);
+}
+
+export async function saveMarkupAction(input: MarkupInput): Promise<MarkupRule> {
+  const agency = await requireAgency();
+  const rule: MarkupRule = {
+    id: input.id || uuidv7(),
+    ...(input.tier ? { tier: input.tier } : {}),
+    ...(input.productKind ? { productKind: input.productKind } : {}),
+    kind: input.kind === 'FIXED' ? 'FIXED' : 'PERCENT',
+    value: Math.max(0, Math.round(input.value) || 0),
+    enabled: input.enabled,
+  };
+  await (await getAgentDb()).saveMarkup(agency.id, rule);
+  return rule;
+}
+
+export async function toggleMarkupAction(id: string, enabled: boolean): Promise<void> {
+  const agency = await requireAgency();
+  const db = await getAgentDb();
+  const rule = (await db.listMarkups(agency.id)).find((r) => r.id === id);
+  if (rule) await db.saveMarkup(agency.id, { ...rule, enabled });
+}
+
+export async function deleteMarkupAction(id: string): Promise<void> {
+  const agency = await requireAgency();
+  await (await getAgentDb()).deleteMarkup(agency.id, id);
+}
+
+export interface TierPreview {
+  tier: AgentTier;
+  netMinor: number;
+  markupMinor: number;
+  sellMinor: number;
+}
+
+/** Net→sell preview per tier for a representative hotel net, via the tested MarkupEngine. */
+export async function markupPreviewAction(netMinor: number): Promise<TierPreview[]> {
+  const agency = await requireAgency();
+  const rules = await (await getAgentDb()).listMarkups(agency.id);
+  const engine = new MarkupEngine(rules);
+  const net = { amount: Math.max(0, Math.round(netMinor) || 0), currency: 'EUR' as const };
+  return (['BRONZE', 'SILVER', 'GOLD'] as AgentTier[]).map((tier) => {
+    const r = engine.price(net, { tier, kind: 'HOTEL' });
+    return { tier, netMinor: net.amount, markupMinor: r.markup.amount, sellMinor: r.sell.amount };
+  });
 }
 
 /** Per-agency statement as CSV, reconstructed from (and reconciling) the double-entry ledger. */

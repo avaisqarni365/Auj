@@ -42,4 +42,20 @@ describe('agent DB (in-memory)', () => {
     // shareable lookup works across agencies by ref
     expect((await db.findByRef(q.ref))?.id).toBe(q.id);
   });
+
+  it('persists, updates and removes markup rules, scoped by agency', async () => {
+    const db = await getAgentDb();
+    await db.saveMarkup('ag-1', { id: 'm1', tier: 'GOLD', kind: 'PERCENT', value: 12, enabled: true });
+    await db.saveMarkup('ag-1', { id: 'm2', kind: 'FIXED', value: 5000, enabled: true });
+    expect(await db.listMarkups('ag-1')).toHaveLength(2);
+    expect(await db.listMarkups('ag-2')).toHaveLength(0); // isolation
+
+    await db.saveMarkup('ag-1', { id: 'm1', tier: 'GOLD', kind: 'PERCENT', value: 12, enabled: false }); // upsert, not duplicate
+    const after = await db.listMarkups('ag-1');
+    expect(after).toHaveLength(2);
+    expect(after.find((r) => r.id === 'm1')?.enabled).toBe(false);
+
+    await db.deleteMarkup('ag-1', 'm2');
+    expect(await db.listMarkups('ag-1')).toHaveLength(1);
+  });
 });

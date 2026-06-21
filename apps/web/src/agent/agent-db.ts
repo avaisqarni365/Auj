@@ -6,7 +6,7 @@ import { createPool, type DbPool } from '@auj/core-booking/postgres';
 import type { Money } from '@auj/contracts';
 import type { JournalEntry } from '@auj/payments';
 import { uuidv7 } from './ids';
-import type { AgentTier, QuoteLine, QuoteStatus } from './domain';
+import type { AgentTier, MarkupRule, QuoteLine, QuoteStatus } from './domain';
 
 export const SEED_TOPUP_MINOR = 6_000_000; // €60,000 demo float on first onboarding
 export const DEFAULT_CREDIT_LIMIT_MINOR = 600_000; // €6,000
@@ -57,6 +57,9 @@ export interface AgentDb {
   convertQuote(agencyId: string, id: string): Promise<void>;
   /** Public lookup for a shared quote link (by human ref, across agencies). */
   findByRef(ref: string): Promise<QuoteRecord | undefined>;
+  listMarkups(agencyId: string): Promise<MarkupRule[]>;
+  saveMarkup(agencyId: string, rule: MarkupRule): Promise<void>;
+  deleteMarkup(agencyId: string, id: string): Promise<void>;
 }
 
 // Reconstruct balanced double-entry journal entries from the wallet legs (for the existing
@@ -145,6 +148,20 @@ class InMemoryAgentDb implements AgentDb {
       if (q) return q;
     }
     return undefined;
+  }
+  private markups = new Map<string, MarkupRule[]>();
+  async listMarkups(agencyId: string): Promise<MarkupRule[]> {
+    return this.markups.get(agencyId) ?? [];
+  }
+  async saveMarkup(agencyId: string, rule: MarkupRule): Promise<void> {
+    const arr = this.markups.get(agencyId) ?? [];
+    const i = arr.findIndex((r) => r.id === rule.id);
+    if (i >= 0) arr[i] = rule;
+    else arr.push(rule);
+    this.markups.set(agencyId, arr);
+  }
+  async deleteMarkup(agencyId: string, id: string): Promise<void> {
+    this.markups.set(agencyId, (this.markups.get(agencyId) ?? []).filter((r) => r.id !== id));
   }
 }
 
@@ -240,6 +257,31 @@ class PostgresAgentDb implements AgentDb {
       ? { id: x.id, ref: x.ref, lines: x.lines ?? [], netMinor: x.net_minor, markupMinor: x.markup_minor, sellMinor: x.sell_minor, currency: x.currency, status: x.status, createdAt: x.created_at }
       : undefined;
   }
+  async listMarkups(agencyId: string): Promise<MarkupRule[]> {
+    const r = await this.pool.query<{ id: string; tier: AgentTier | null; product_kind: MarkupRule['productKind'] | null; kind: MarkupRule['kind']; value: number; enabled: boolean }>(
+      'SELECT id, tier, product_kind, kind, value, enabled FROM markups WHERE agency_id = $1 ORDER BY created_at',
+      [agencyId],
+    );
+    return r.rows.map((x) => ({
+      id: x.id,
+      ...(x.tier ? { tier: x.tier } : {}),
+      ...(x.product_kind ? { productKind: x.product_kind } : {}),
+      kind: x.kind,
+      value: x.value,
+      enabled: x.enabled,
+    }));
+  }
+  async saveMarkup(agencyId: string, rule: MarkupRule): Promise<void> {
+    await this.pool.query(
+      `INSERT INTO markups (id, agency_id, tier, product_kind, kind, value, enabled)
+       VALUES ($1,$2,$3,$4,$5,$6,$7)
+       ON CONFLICT (id) DO UPDATE SET tier = $3, product_kind = $4, kind = $5, value = $6, enabled = $7`,
+      [rule.id, agencyId, rule.tier ?? null, rule.productKind ?? null, rule.kind, rule.value, rule.enabled],
+    );
+  }
+  async deleteMarkup(agencyId: string, id: string): Promise<void> {
+    await this.pool.query('DELETE FROM markups WHERE agency_id = $1 AND id = $2', [agencyId, id]);
+  }
 }
 
 const KEY = Symbol.for('auj.agent.db');
@@ -262,6 +304,9 @@ async function init(): Promise<AgentDb> {
      id text PRIMARY KEY, agency_id text NOT NULL, ref text NOT NULL, lines jsonb NOT NULL DEFAULT '[]'::jsonb,
      net_minor bigint NOT NULL DEFAULT 0, markup_minor bigint NOT NULL DEFAULT 0, sell_minor bigint NOT NULL DEFAULT 0,
      currency text NOT NULL DEFAULT 'EUR', status text NOT NULL DEFAULT 'SENT', created_at timestamptz NOT NULL DEFAULT now())`);
+  await pool.query(`CREATE TABLE IF NOT EXISTS markups (
+     id text PRIMARY KEY, agency_id text NOT NULL, tier text, product_kind text, kind text NOT NULL,
+     value bigint NOT NULL DEFAULT 0, enabled boolean NOT NULL DEFAULT true, created_at timestamptz NOT NULL DEFAULT now())`);
   return new PostgresAgentDb(pool);
 }
 

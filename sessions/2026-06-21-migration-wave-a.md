@@ -136,8 +136,16 @@ Driving `migration/*.md` in order, one screen per commit, gated + auto-deployed.
 **All 15 migration screens (01–15) delivered, gated & deployed**, plus the object-store foundation.
 Full web suite: **33 files / 124 tests green**; `next build` **48/48 pages**, no client pg/crypto leak.
 Per-screen gate held throughout: typecheck · lint · unit · build → commit → pipeline deploy.
-Standing deferrals (non-blocking): real MRZ OCR provider; markups-table persistence; guide
-LT/TR localisation; live contract-test runner; Jeddah gifts data.
+Standing deferrals (non-blocking): real MRZ OCR provider; guide LT/TR localisation; live
+contract-test runner; Jeddah gifts data.
+
+### B2B markups persistence (done)
+`agent-db.ts` gains a `markups` table + `listMarkups/saveMarkup/deleteMarkup` (per agency, upsert).
+`actions.ts`: `listMarkupsAction/saveMarkupAction/toggleMarkupAction/deleteMarkupAction` +
+`markupPreviewAction` (net→sell per tier via the tested `MarkupEngine`, server-side). New crypto-free
+`MarkupsPanel` (rules list + add/toggle/delete + per-tier preview) on the agent portal — imports the
+markup *types* only, never `markup.ts`/`ids` (which pull node:crypto). Repo test (markups upsert +
+isolation). Completes #12's data model.
 
 ### Dashboard deposit → live payments intent (done)
 `deposit-store.ts` (`deposits` table) + `deposit-actions.ts`: `startDepositAction` authorizes an

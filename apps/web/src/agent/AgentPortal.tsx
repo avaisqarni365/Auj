@@ -11,6 +11,7 @@ import { AgentDashboard } from './screens/AgentDashboard';
 import { MultiPaxBooking } from './screens/MultiPaxBooking';
 import { WalletView } from './screens/WalletView';
 import { QuotesPanel } from './screens/QuotesPanel';
+import { MarkupsPanel } from './screens/MarkupsPanel';
 import { Shell } from './screens/Shell';
 import { MAX_PAX } from './multipax';
 import { formatMoney } from './money';
@@ -109,6 +110,11 @@ export function AgentPortal() {
             </button>
           </div>
           <WalletView balance={eur(balance)} creditLimit={creditLimit} account={`wallet:${agent.id}`} entries={entries} />
+        </section>
+
+        <section>
+          <h3 className="mb-3 font-serif text-lg font-semibold text-sand-ink">Markups</h3>
+          <MarkupsPanel />
         </section>
 
         <section>
