@@ -1,7 +1,7 @@
 /* AUJ service worker — offline support WITHOUT ever showing stale content online.
  * Strategy: network-first for everything. When online you always get the freshest build; the cache
  * is only a fallback when the network fails (offline). Bumping CACHE evicts everything on next load. */
-const CACHE = 'auj-v2';
+const CACHE = 'auj-v3';
 const OFFLINE_URL = '/offline.html';
 
 self.addEventListener('install', (event) => {
