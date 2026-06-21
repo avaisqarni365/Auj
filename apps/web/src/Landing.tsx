@@ -256,6 +256,39 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
         </div>
       </section>
 
+      {/* companion tools & guides — links to every migrated tool */}
+      <Section id="tools" title="Everything for your journey" sub="Free planning tools and on-the-ground guides — most need no login.">
+        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
+          {[
+            { href: '/plan', icon: '📝', label: 'Smart planner' },
+            { href: '/book', icon: '🔎', label: 'Search packages' },
+            { href: '/companion', icon: '🧭', label: 'Pilgrim companion' },
+            { href: '/plan/day', icon: '🕌', label: 'Day planner' },
+            { href: '/companion/packing', icon: '🧳', label: 'Packing organizer' },
+            { href: '/companion/diary', icon: '📿', label: 'Personal diary' },
+            { href: '/guide', icon: '🕋', label: 'Umrah ritual guide' },
+            { href: '/guide/tour', icon: '🌅', label: 'Virtual tour' },
+            { href: '/guide/airport', icon: '✈️', label: 'Airport wizard' },
+            { href: '/guide/luggage', icon: '🧳', label: 'Luggage & customs' },
+            { href: '/guide/makkah-ziyarat', icon: '🕋', label: 'Makkah Ziyarat' },
+            { href: '/guide/madina-ziyarat', icon: '🕌', label: 'Madinah Ziyarat' },
+            { href: '/guide/food', icon: '🍽️', label: 'Food guide' },
+            { href: '/guide/transport', icon: '🚌', label: 'Transport guide' },
+            { href: '/guide/helpline', icon: '🆘', label: 'Helpline & SOS' },
+            { href: '/agent', icon: '🤝', label: 'Travel-agent portal' },
+          ].map((tool) => (
+            <Link
+              key={tool.href}
+              href={tool.href}
+              className="flex items-center gap-2.5 rounded-xl border border-sand-200 bg-white p-3.5 text-[13.5px] font-semibold text-sand-700 transition-[transform,border-color,color] duration-fast hover:border-green-700 hover:text-green-800 active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus"
+            >
+              <span className="text-lg" aria-hidden>{tool.icon}</span>
+              <span>{tool.label}</span>
+            </Link>
+          ))}
+        </div>
+      </Section>
+
       {/* why book with AUJ */}
       <Section id="why" title={tl('sections.why.title')} sub={tl('sections.why.sub')}>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -581,7 +614,7 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
           </div>
           <div className="relative flex flex-wrap gap-3">
             <a href="#plan" className="rounded-xl bg-sand-50 px-6 py-3 text-sm font-semibold text-green-900 transition-[transform,background-color] duration-fast hover:bg-white active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">Plan my pilgrimage</a>
-            <a href="#" className="rounded-xl border border-white/25 bg-white/10 px-6 py-3 text-sm font-semibold transition-[transform,background-color] duration-fast hover:bg-white/15 active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">For travel agents</a>
+            <Link href="/agent" className="rounded-xl border border-white/25 bg-white/10 px-6 py-3 text-sm font-semibold transition-[transform,background-color] duration-fast hover:bg-white/15 active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">For travel agents</Link>
           </div>
         </div>
       </div>

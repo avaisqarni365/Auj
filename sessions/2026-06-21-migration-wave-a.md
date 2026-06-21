@@ -101,8 +101,21 @@ Driving `migration/*.md` in order, one screen per commit, gated + auto-deployed.
   wiring `onPackageBooking` into the live checkout confirm step (flow + simulate available now),
   per-issue/refund `activity_logs`.
 
-## Next
-- Wave C: **15 Landing** (last — links everything). 05 Dashboard still gated on object-store decision.
+- **15 Landing** (`PENDING`) — `/` (`src/Landing.tsx`, already a rich cinematic page). Closed the
+  "hub links to everything" gap: added an **"Everything for your journey"** frame (`#tools`) — a
+  responsive grid linking every migrated route (/plan, /book, /companion, /plan/day,
+  /companion/packing, /companion/diary, /guide + /guide/tour, the 4 step wizards, food/transport/
+  helpline guides, /agent); fixed the dead "For travel agents" CTA → `/agent`. Lead capture already
+  persists with a **GDPR consent** checkbox that gates submit (`SmartVisitWizard` → `leads`/inquiry,
+  `consent: boolean`). Fluid `clamp()` + RTL + tokens pre-existing. Landing's 17 tests still green.
+  **Also fixed a latent #14 break**: `compliance-actions.ts` exported a non-function const from a
+  `'use server'` file (Next forbids) → made `PRECONTRACT_INFO` module-local; build now collects all
+  47 pages.
+
+## Migration status
+Screens 01–15 delivered & deployed **except 05 Dashboard** (passport OCR + Me/Family/Group switcher),
+which is gated on the object-store decision. Full web suite: 31 files / 119 tests green; `next build`
+47/47 pages. Standing deferrals tracked below.
 - Pending (non-blocking): voice recordings on-device vs object store; passport OCR (needs object store);
   hotels-via-connector in guides; Jeddah gifts data + guide localisation (LT/UR/AR via `locale`).
 

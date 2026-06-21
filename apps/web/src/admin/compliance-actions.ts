@@ -12,7 +12,7 @@ import {
 } from './compliance-store';
 
 // Mandated pre-contractual information shown (and consented to) before any charge.
-export const PRECONTRACT_INFO = [
+const PRECONTRACT_INFO = [
   'Total price incl. taxes & fees',
   'Insolvency protection & guarantor',
   'Main characteristics of the travel services',
