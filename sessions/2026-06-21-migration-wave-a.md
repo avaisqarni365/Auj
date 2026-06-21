@@ -88,7 +88,7 @@ Driving `migration/*.md` in order, one screen per commit, gated + auto-deployed.
   (net hotels/flights via `TravelSupplier` mock). Linked from AdminConsole. Deferred: live contract-test
   runner UI, real vault rotate-creds, supplier book→cancel interactivity, "+ Add provider" (registry is code).
 
-- **14 EU Compliance** (`PENDING`) — `/admin/compliance`. `@auj/compliance` logic already existed
+- **14 EU Compliance** (`8ab44b4`) — `/admin/compliance`. `@auj/compliance` logic already existed
   (tiers, `renderCertificate`, `refundDueBy`, GDPR/consent); added it as a web dep + closed the DB gap.
   **DB** `compliance-store.ts` (Postgres + in-memory): `security_certificates` (+ delivery proof),
   `precontract_consents`, `refund_windows`, `gdpr_requests`. `onPackageBooking` records consent (before
