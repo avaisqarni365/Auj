@@ -39,7 +39,7 @@ Driving `migration/*.md` in order, one screen per commit, gated + auto-deployed.
   sign-in to save, server clamps bounds. UI: Quran target/done + nafl counters + dua chips +
   reflection textarea, debounced save. Both linked from `/companion`.
 
-- **10 Companion guides** (`PENDING`) — `/guide/<slug>` for food, transport, connectivity, gifts,
+- **10 Companion guides** (`dc6507c`) — `/guide/<slug>` for food, transport, connectivity, gifts,
   laundry, hospitals, helpline. ONE shared `<GuideWizard>` (city tabs + category rail + item list +
   prev/next dots). Content transcribed from the 7 prototypes into `companion/guide-data.ts`
   (`GUIDES`, ~290 items, both cities, marks/tags/notes preserved). **DB** `guide_entries (guide, city,
