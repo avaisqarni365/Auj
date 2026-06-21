@@ -39,10 +39,21 @@ Driving `migration/*.md` in order, one screen per commit, gated + auto-deployed.
   sign-in to save, server clamps bounds. UI: Quran target/done + nafl counters + dua chips +
   reflection textarea, debounced save. Both linked from `/companion`.
 
+- **10 Companion guides** (`PENDING`) — `/guide/<slug>` for food, transport, connectivity, gifts,
+  laundry, hospitals, helpline. ONE shared `<GuideWizard>` (city tabs + category rail + item list +
+  prev/next dots). Content transcribed from the 7 prototypes into `companion/guide-data.ts`
+  (`GUIDES`, ~290 items, both cities, marks/tags/notes preserved). **DB** `guide_entries (guide, city,
+  category, name, note, tag, mark, sort, locale)` via `guide-store.ts` — seeds from the seed on first
+  init, `getGuide(slug)` regroups DB rows under the seed's category meta; editable later via Admin CMS.
+  `GuideScreen` server loader; all 7 linked from `/companion`. Seed-integrity test (2). Public.
+  Deferred: hotels-via-`SaudiConnector.searchHotels` (hotels already searchable in the booking funnel)
+  and the prototype's Jeddah gifts block (type is makkah/madinah only) — note for a later pass.
+
 ## Next
 - Wave B: 05 Dashboard (passport OCR + Me/Family/Group switcher — needs object store) ·
-  10 companion guides · 11 tour/wizards. Then Wave C
+  11 tour/wizards (Airport/Luggage/Ziyarat). Then Wave C
   (12 B2B · 13 admin connectors · 14 compliance · 15 landing last).
-- Pending (non-blocking): voice recordings on-device vs object store; passport OCR (needs object store).
+- Pending (non-blocking): voice recordings on-device vs object store; passport OCR (needs object store);
+  hotels-via-connector in guides; Jeddah gifts data + guide localisation (LT/UR/AR via `locale`).
 
 Gate per screen: typecheck · lint · unit · build green → commit → pipeline deploys.

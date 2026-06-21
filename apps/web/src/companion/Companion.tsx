@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { GUIDES, GUIDE_SLUGS } from './guide-data';
 import type { PrayerDay } from './prayer-times';
 
 const PRAYERS = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'] as const;
@@ -139,6 +140,28 @@ export function Companion({ makkah, madinah }: { makkah: PrayerDay | null; madin
               <span className="text-sand-300">↗</span>
             </a>
           ))}
+        </div>
+      </Section>
+
+      <Section icon="🧭" title="On-the-ground guides" sub="Food, transport, connectivity, gifts, laundry, hospitals and a helpline — by city.">
+        <div className="grid gap-2.5 sm:grid-cols-2">
+          {GUIDE_SLUGS.map((slug) => {
+            const def = GUIDES[slug];
+            return (
+              <Link
+                key={slug}
+                href={`/guide/${slug}`}
+                className="flex items-center justify-between rounded-xl border border-sand-200 bg-white p-3.5 text-[13.5px] font-semibold text-sand-700 transition-[transform,border-color,color] duration-fast hover:border-green-700 hover:text-green-800 active:scale-[0.99]"
+              >
+                <span>
+                  {def.icon} {def.title}
+                </span>
+                <span className="text-sand-300" aria-hidden>
+                  →
+                </span>
+              </Link>
+            );
+          })}
         </div>
       </Section>
 
