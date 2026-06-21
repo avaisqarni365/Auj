@@ -75,9 +75,21 @@ Driving `migration/*.md` in order, one screen per commit, gated + auto-deployed.
   still green. Deferred: `markups` table persistence (markup engine already tested), sub-agent
   hierarchy/approval workflow UI, live wallet holds (held=0), PKR-indicative on quotes.
 
+- **13 Admin connectors** (`PENDING`) — `/admin/{providers,connector,nusuk,suppliers}`.
+  **Provider registry** `src/admin/providers.ts` (pure): 7 integrations with env KEY NAMES (never
+  secrets); `providerStatus` derives connected/sandbox/gated/not-configured from env presence — Saudi
+  & supplier seams sandbox on mock, gated when switched live without creds (4 tests, asserts secret
+  values never serialised). **DB** `service_providers` (status snapshot) + `health_checks` (append) via
+  `health-store.ts`; `connector-actions.ts` (ADMIN): `listProviders` + `testConnection` pings the
+  adapter THROUGH the interface (mock by default) and logs latency. `ProvidersConsole` table + detail
+  drawer (capabilities, bound/missing key names, Test connection, vault-rotate note). Ops consoles:
+  Saudi connector (auth gate, domain map, 2025 Nusuk-approved-hotel rule verified live, resilience),
+  Nusuk (package modes + Rawdah slots + ziyarah/catering via `SaudiConnector` mock), Travel suppliers
+  (net hotels/flights via `TravelSupplier` mock). Linked from AdminConsole. Deferred: live contract-test
+  runner UI, real vault rotate-creds, supplier book→cancel interactivity, "+ Add provider" (registry is code).
+
 ## Next
-- Wave B: 05 Dashboard (passport OCR + Me/Family/Group switcher — needs object store).
-  Then Wave C (13 admin connectors · 14 compliance · 15 landing last).
+- Wave C: 14 EU Compliance · 15 Landing (last). 05 Dashboard still gated on object-store decision.
 - Pending (non-blocking): voice recordings on-device vs object store; passport OCR (needs object store);
   hotels-via-connector in guides; Jeddah gifts data + guide localisation (LT/UR/AR via `locale`).
 

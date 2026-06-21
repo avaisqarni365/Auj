@@ -495,6 +495,22 @@ function ServiceProviders() {
         Every external integration behind the connector seam — Saudi pilgrimage (Nusuk Masar / Maqam),
         general-travel supply, payment gateways and storage. Only licensed/approved partners are listed.
       </p>
+      <div className="mb-4 flex flex-wrap gap-2">
+        {[
+          { href: '/admin/providers', label: '🔌 Provider registry + health' },
+          { href: '/admin/connector', label: '🛂 Saudi connector' },
+          { href: '/admin/nusuk', label: '🕋 Nusuk services' },
+          { href: '/admin/suppliers', label: '🧭 Travel suppliers' },
+        ].map((l) => (
+          <Link
+            key={l.href}
+            href={l.href}
+            className="rounded-lg border border-sand-200 bg-white px-3 py-2 text-[12.5px] font-semibold text-green-800 transition-transform duration-fast hover:border-green-700 active:scale-[0.98]"
+          >
+            {l.label}
+          </Link>
+        ))}
+      </div>
       <div className="grid gap-3.5 lg:grid-cols-2">
         {PROVIDERS.map((p) => (
           <Card key={p.name} className="p-5">
