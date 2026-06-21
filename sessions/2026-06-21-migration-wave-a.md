@@ -206,3 +206,17 @@ reflects a real paid deposit** (`depositPaid`). €50–50,000 bounds. Repo test
   hotels-via-connector in guides; Jeddah gifts data + guide localisation (LT/UR/AR via `locale`).
 
 Gate per screen: typecheck · lint · unit · build green → commit → pipeline deploys.
+
+### Cinematic design rollout (ScreenFrame) — all migration screens
+Built a reusable `components/ScreenFrame` (prototype chrome: white rounded card on the warm canvas +
+dark-green gradient header with AUJ logo chip + mono section label + tag pill + gold underline +
+texture) and applied it across every screen, in 4 gated waves:
+- W1 (12): VirtualTour (/guide/tour) + GuideWizard (7 guides) + StepVideoWizard (4 wizards).
+- W2 (6): Pilgrim Dashboard, Day Planner, Personal Diary, Packing, Companion hub, Smart Visit planner.
+- W3 (9): Visa Router, Finance Self-Assessment, Predictive Analysis, Umrah Finance Calculator,
+  Service Providers, Saudi Connector, Nusuk, Travel Suppliers, EU Compliance.
+- W4 (1): Booking funnel (step name as tag, width adapts).
+Already prototype-faithful (left as-is): Pilgrim Profile (green cover card), B2B Portal (Shell rail +
+agency/wallet header), Landing (its own cinematic hero/frames). Plus landing cinematic polish earlier
+(parallax skyline/dome hero, count-up stats, trust marquee, CTA sheen). SW bumped to auj-v3 to evict
+stale clients. Full monorepo green: 26 typecheck · 14 lint · 26 test · 14 build; web next build 48/48.
