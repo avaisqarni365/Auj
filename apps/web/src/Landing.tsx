@@ -764,36 +764,59 @@ function HeroPlannerCard() {
   );
 }
 
+// Preview-panel accent → token gradient (gold/red are highlight panels, not body text).
+const FRAME_PANEL: Record<LandingFrame['accent'], string> = {
+  green: 'bg-gradient-to-br from-green-600 to-green-950',
+  blue: 'bg-gradient-to-br from-accent-500 to-green-950',
+  gold: 'bg-gradient-to-br from-gold to-warning-fg',
+  red: 'bg-gradient-to-br from-danger to-danger-fg',
+};
+
 function FrameCard({ frame }: { frame: LandingFrame }) {
+  const panel = FRAME_PANEL[frame.accent];
   return (
     <Reveal>
       <article className="overflow-hidden rounded-[22px] border border-sand-200 bg-gradient-to-b from-white to-sand-50 shadow-[0_30px_70px_-28px_rgba(42,38,32,0.42)]">
         {/* header bar */}
-        <div className="relative flex items-center justify-between gap-3 overflow-hidden bg-gradient-to-br from-green-800 to-green-950 px-4 py-3">
-          <span aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-gold/60" />
+        <div className="relative flex flex-wrap items-center justify-between gap-3 overflow-hidden bg-gradient-to-br from-green-800 to-green-950 px-4 py-3.5">
+          <span aria-hidden className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
           <div className="relative flex items-center gap-2.5">
-            <span className="grid h-6 w-7 place-items-center rounded-md bg-sand-50 text-[11px] font-bold text-green-900">✦</span>
-            <span className="font-mono text-[11.5px] tracking-[0.08em] text-green-100/80">FRAME {frame.n} · {frame.name}</span>
+            <span className="grid place-items-center rounded-lg bg-sand-50 px-2 py-1 shadow-sm">
+              <Logo size={18} />
+            </span>
+            <span className="font-mono text-[11.5px] tracking-[0.08em] text-green-100/80">
+              FRAME {frame.n} · {frame.name}
+            </span>
           </div>
-          <span className="rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[11.5px] font-semibold text-green-50">{frame.tag}</span>
+          <span className="rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[12px] font-semibold text-green-50">{frame.tag}</span>
         </div>
-        {/* body */}
+        {/* body — preview panel (left) + content panel (right) */}
         <div className="flex flex-col sm:flex-row">
-          <div className="grid min-h-[120px] place-items-center bg-gradient-to-br from-green-700 to-green-900 p-6 sm:w-44 sm:flex-none">
-            <span className="text-5xl" aria-hidden>{frame.icon}</span>
-          </div>
-          <div className="flex flex-1 flex-col gap-2 p-[clamp(18px,2.4vw,26px)]">
-            <h3 className="font-serif text-[19px] font-semibold text-sand-ink">{frame.title}</h3>
-            <p className="max-w-[56ch] text-[14px] leading-relaxed text-sand-600">{frame.blurb}</p>
-            <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-2">
-              <span className="font-mono text-[11.5px] text-sand-400">EN · العربية · اردو · DE</span>
-              <Link
-                href={frame.href}
-                className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-green-800 transition-colors duration-fast hover:text-green-700 focus-visible:outline-none focus-visible:shadow-focus"
-              >
-                {frame.cta} <span aria-hidden>→</span>
-              </Link>
+          <div className={`relative flex min-h-[200px] flex-1 flex-col justify-between overflow-hidden p-[clamp(18px,2.2vw,24px)] text-white sm:basis-1/2 ${panel}`}>
+            <span aria-hidden className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-gold/15 blur-xl" />
+            <div className="relative font-mono text-[10.5px] uppercase tracking-[0.1em] text-white/75">{frame.kicker}</div>
+            <div className="relative flex items-center gap-3.5">
+              <span className="grid h-14 w-14 flex-none place-items-center rounded-2xl border border-white/25 bg-white/10 text-3xl" aria-hidden>{frame.icon}</span>
+              <span className="font-serif text-[clamp(1.25rem,2.2vw,1.5rem)] font-semibold leading-tight">{frame.punch}</span>
             </div>
+            <div className="relative font-mono text-[10.5px] uppercase tracking-[0.08em] text-white/75">{frame.caption}</div>
+          </div>
+          <div className="flex flex-1 flex-col gap-3.5 p-[clamp(20px,2.4vw,28px)] sm:basis-1/2">
+            <h3 className="font-serif text-[clamp(1.25rem,2.4vw,1.55rem)] font-semibold tracking-[-0.01em] text-sand-ink">{frame.heading}</h3>
+            <p className="max-w-[56ch] text-[14.5px] leading-relaxed text-sand-700">{frame.blurb}</p>
+            {frame.chips.length > 0 ? (
+              <div className="flex flex-wrap gap-2">
+                {frame.chips.map((c) => (
+                  <span key={c} className="rounded-full border border-sand-200 bg-sand-50 px-3 py-1.5 text-[12.5px] font-medium text-sand-700">{c}</span>
+                ))}
+              </div>
+            ) : null}
+            <Link
+              href={frame.href}
+              className="mt-auto inline-flex w-fit items-center gap-2 rounded-xl bg-green-800 px-5 py-3 text-[14px] font-semibold text-white shadow-[0_8px_18px_rgba(15,81,50,0.26)] transition-[transform,background-color] duration-fast hover:bg-green-700 active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus"
+            >
+              {frame.cta} <span aria-hidden>→</span>
+            </Link>
           </div>
         </div>
       </article>
