@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import type { PrayerDay } from './prayer-times';
 
@@ -85,6 +86,13 @@ export function Companion({ makkah, madinah }: { makkah: PrayerDay | null; madin
 
       <Section icon="🧳" title={t('before.title')} sub={t('before.sub')}>
         <List items={before} />
+        <Link
+          href="/companion/packing"
+          className="mt-3 flex items-center justify-between rounded-xl border border-green-700/30 bg-green-50 p-3.5 text-[13.5px] font-semibold text-green-800 transition-transform duration-fast hover:border-green-700 active:scale-[0.99]"
+        >
+          <span>📋 Open the smart packing organizer — by traveller & stay length</span>
+          <span aria-hidden>→</span>
+        </Link>
       </Section>
 
       <Section icon="🚑" title={t('safety.title')} sub={t('safety.sub')}>

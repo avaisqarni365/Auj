@@ -20,9 +20,17 @@ Driving `migration/*.md` in order, one screen per commit, gated + auto-deployed.
   flights+hotels by season (×1/1.28/1.55), reuses `buildAssessment` for sell/profit; 4 tests. Pax
   40/80/120 + clamp 1–500, live breakdown bar. **Save as deal → DB** (reuses #02). Links to /admin/finance.
 
+- **07 Packing Organizer** (`eb63975`) — `/companion/packing`. Pure `companion/packing.ts`
+  `build(profile, days)` — quantities scale with stay (11/21/30), profile gates items, **Diabetic**
+  adds glucose meter/insulin/strips/tabs (3 tests). **DB** `packing_lists (pilgrim_id, profile, days,
+  checked jsonb)` via `packing-store.ts`/`packing-actions.ts` — browse open, **sign-in to save**,
+  debounced upsert per (pilgrim, profile). UI: profile tabs, 11/21/30 toggle, grouped checkboxes,
+  progress bar; linked from `/companion`.
+
 ## Next
-- Wave B: 04 Pilgrim Profile · 05 Dashboard (+ retrofit guide storage to DB/user) · 06 Booking +
-  hotels · 07 Packing · 08–09 planners/diary · 10 companion guides · 11 tour/wizards. Then Wave C
+- Wave B: 05 Dashboard (passport OCR + Me/Family/Group switcher — needs object store) ·
+  08–09 planners/diary · 10 companion guides · 11 tour/wizards. Then Wave C
   (12 B2B · 13 admin connectors · 14 compliance · 15 landing last).
+- Pending (non-blocking): voice recordings on-device vs object store; passport OCR (needs object store).
 
 Gate per screen: typecheck · lint · unit · build green → commit → pipeline deploys.
