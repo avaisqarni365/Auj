@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, type ReactNode } from 'react';
+import Link from 'next/link';
 import { routeFor } from '@auj/visa-router';
 import type { PublicUser } from '@auj/auth';
 import { formatMoney, pkrIndicative } from '../currency';
@@ -42,6 +43,12 @@ export function JourneyView({ user }: { user: PublicUser }) {
               {t}
             </button>
           ))}
+          <Link
+            href="/journey/dashboard"
+            className="ms-auto rounded-[9px] px-3.5 py-2 text-[13.5px] font-semibold text-green-800 transition-colors duration-fast hover:bg-green-50 focus-visible:outline-none focus-visible:shadow-focus"
+          >
+            📋 Dashboard
+          </Link>
         </div>
       </div>
 

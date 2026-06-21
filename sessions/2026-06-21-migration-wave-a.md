@@ -121,10 +121,24 @@ Driving `migration/*.md` in order, one screen per commit, gated + auto-deployed.
   owner-scoped blob route `GET /api/doc/[...key]` (only the owner or ADMIN may fetch). Test (2:
   round-trip + miss). Next: #05 Dashboard (passport upload+OCR, Me/Family/Group switcher) on this seam.
 
-## Migration status
-Screens 01–15 delivered & deployed **except 05 Dashboard** (passport OCR + Me/Family/Group switcher),
-which is gated on the object-store decision. Full web suite: 31 files / 119 tests green; `next build`
-47/47 pages. Standing deferrals tracked below.
+- **05 Pilgrim Dashboard** (`PENDING`) — `/journey/dashboard` (linked from the journey tab bar + landing).
+  Built on the object-store seam. **Me/Family/Group switcher** (`dashboard_members`, 'me' implicit,
+  add/remove, owner-scoped). **Passport scan**: upload image → object store (`${uid}/passport/${member}/…`)
+  → owner-scoped `/api/doc` preview → editable MRZ fields → persist to `passport_scans`
+  (OCR auto-fill is a provider swap; manual entry until OCR_* set). **Deposit card** EUR/USD/SAR/PKR
+  (`displayFromEur`, EUR charged of record, others indicative). **Progress bar**
+  Registered→Passport→Deposit→Visa→Info derived from real signals (passport confirmed + booking-draft
+  step). **Tool grid** → real routes. Per-member **visa-route pill** via `routeFor(nationality)`.
+  Repo test (3: member isolation, 'me' kept, passport persist). Deferred: real MRZ OCR (provider),
+  deposit→payments intent (currently links to /book).
+
+## Migration status — COMPLETE
+**All 15 migration screens (01–15) delivered, gated & deployed**, plus the object-store foundation.
+Full web suite: **33 files / 124 tests green**; `next build` **48/48 pages**, no client pg/crypto leak.
+Per-screen gate held throughout: typecheck · lint · unit · build → commit → pipeline deploy.
+Standing deferrals (non-blocking, tracked below): real MRZ OCR provider; certificate PDF + voice
+recordings → object store (seam now exists — retrofit pending); markups-table persistence; guide
+LT/TR localisation; live contract-test runner; Jeddah gifts data.
 - Pending (non-blocking): voice recordings on-device vs object store; passport OCR (needs object store);
   hotels-via-connector in guides; Jeddah gifts data + guide localisation (LT/UR/AR via `locale`).
 

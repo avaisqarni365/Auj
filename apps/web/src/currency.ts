@@ -17,3 +17,14 @@ export function pkrIndicative(eur: Money): string {
   if (pkr >= 1000) return `≈ ₨${Math.round(pkr / 1000)}k`;
   return `≈ ₨${pkr}`;
 }
+
+// EUR is the charged currency of record. These are mock indicative rates for display only.
+export type DisplayCurrency = 'EUR' | 'USD' | 'SAR' | 'PKR';
+export const FX_FROM_EUR: Record<Exclude<DisplayCurrency, 'EUR'>, number> = { USD: 1.08, SAR: 4.05, PKR: FX_EUR_TO_PKR };
+const DISPLAY_SYMBOL: Record<DisplayCurrency, string> = { EUR: '€', USD: '$', SAR: 'SAR ', PKR: '₨' };
+
+/** Format an EUR (minor-units) amount in a chosen display currency. Non-EUR is indicative. */
+export function displayFromEur(eurMinor: number, currency: DisplayCurrency): string {
+  const major = currency === 'EUR' ? eurMinor / 100 : (eurMinor / 100) * FX_FROM_EUR[currency];
+  return `${DISPLAY_SYMBOL[currency]}${Math.round(major).toLocaleString('en-US')}`;
+}
