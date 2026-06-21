@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { RITUAL_STEPS } from './ritual-content';
-import { deleteDua, exportDuas, listDuas, type PersonalDua } from './personal-duas-store';
+import { deleteMyDuaAction, listMyDuasAction } from './personal-duas-actions';
+import type { PersonalDua } from './personal-duas-types';
 import { deleteRecording, listAllRecordings, type RecordingRecord } from './recordings-store';
 
 const TOTAL = RITUAL_STEPS.length;
@@ -66,7 +67,7 @@ export function JourneyProfile() {
       /* ignore */
     }
     reloadRecs();
-    setDuas(listDuas());
+    listMyDuasAction().then(setDuas).catch(() => setDuas([]));
     setReady(true);
   }, []);
 
@@ -74,12 +75,11 @@ export function JourneyProfile() {
     deleteRecording(id).then(reloadRecs).catch(() => undefined);
   };
   const removeDua = (id: string): void => {
-    deleteDua(id);
-    setDuas(listDuas());
+    deleteMyDuaAction(id).then(() => listMyDuasAction()).then(setDuas).catch(() => undefined);
   };
   const exportAll = (): void => {
     if (typeof window === 'undefined') return;
-    const blob = new Blob([exportDuas()], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(duas, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;

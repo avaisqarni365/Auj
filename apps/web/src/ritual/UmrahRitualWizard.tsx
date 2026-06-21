@@ -500,7 +500,7 @@ export function UmrahRitualWizard({ user, overrides = {} }: { user?: PublicUser;
           </div>
         ) : null}
 
-        <PersonalDuaPanel stepKey={cur.key} uiLang={lang} />
+        <PersonalDuaPanel stepKey={cur.key} uiLang={lang} signedIn={!!user} />
 
         <RecordingPanel stepKey={cur.key} stepTitle={cur.title} lang={lang} />
 

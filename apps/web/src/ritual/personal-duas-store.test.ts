@@ -1,45 +1,34 @@
-// @vitest-environment jsdom
-import { describe, it, expect, beforeEach } from 'vitest';
-import { deleteDua, exportDuas, listDuas, saveDua, togglePin } from './personal-duas-store';
+import { describe, it, expect } from 'vitest';
+import { InMemoryDuas } from './personal-duas-store';
 
-describe('Personal duas store', () => {
-  beforeEach(() => localStorage.clear());
+const U = 'user-1';
 
-  it('creates, lists by step, and ignores empty text', () => {
-    expect(saveDua({ stepKey: 'niyyah', text: '   ', lang: 'en' })).toBeNull();
-    const a = saveDua({ stepKey: 'niyyah', text: 'O Allah accept my Umrah', lang: 'en' });
+describe('personal duas store (in-memory, per-user)', () => {
+  it('creates, lists by step, ignores empty, scopes to the user', async () => {
+    const s = new InMemoryDuas();
+    expect(await s.save(U, { stepKey: 'niyyah', text: '   ', lang: 'en' })).toBeNull();
+    const a = await s.save(U, { stepKey: 'niyyah', text: 'O Allah accept my Umrah', lang: 'en' });
     expect(a?.id).toBeTruthy();
-    saveDua({ stepKey: 'tawaf-start', text: 'For my parents', lang: 'ur' });
-    expect(listDuas('niyyah')).toHaveLength(1);
-    expect(listDuas()).toHaveLength(2);
+    await s.save(U, { stepKey: 'tawaf-start', text: 'For my parents', lang: 'ur' });
+    expect(await s.list(U, 'niyyah')).toHaveLength(1);
+    expect(await s.list(U)).toHaveLength(2);
+    expect(await s.list('other-user')).toHaveLength(0); // per-user isolation
   });
 
-  it('updates by id, pins to the top, and deletes', () => {
-    const a = saveDua({ stepKey: 'niyyah', text: 'first', lang: 'en' })!;
-    const b = saveDua({ stepKey: 'niyyah', text: 'second', lang: 'en' })!;
-    const updated = saveDua({ id: a.id, stepKey: 'niyyah', text: 'first edited', lang: 'fr' });
-    expect(updated?.text).toBe('first edited');
-    expect(updated?.lang).toBe('fr');
+  it('updates by id (translit/meaning/note), pins to top, deletes', async () => {
+    const s = new InMemoryDuas();
+    const a = (await s.save(U, { stepKey: 'niyyah', text: 'first', lang: 'en' }))!;
+    const b = (await s.save(U, { stepKey: 'niyyah', text: 'second', lang: 'en' }))!;
+    const up = await s.save(U, { id: a.id, stepKey: 'niyyah', text: 'first edited', lang: 'fr', translit: 'x', meaning: 'y', note: 'z' });
+    expect(up?.text).toBe('first edited');
+    expect(up?.translit).toBe('x');
+    expect(up?.meaning).toBe('y');
+    expect(up?.note).toBe('z');
 
-    togglePin(a.id);
-    expect(listDuas('niyyah')[0]?.id).toBe(a.id); // pinned floats to top
+    await s.togglePin(U, a.id);
+    expect((await s.list(U, 'niyyah'))[0]?.id).toBe(a.id); // pinned floats to top
 
-    deleteDua(b.id);
-    expect(listDuas('niyyah').map((d) => d.id)).toEqual([a.id]);
-  });
-
-  it('persists transliteration, meaning and note', () => {
-    saveDua({ stepKey: 'niyyah', text: 'لبيك', lang: 'ar', translit: 'labbayk', meaning: 'here I am', note: 'for my mother' });
-    const got = listDuas('niyyah')[0]!;
-    expect(got.translit).toBe('labbayk');
-    expect(got.meaning).toBe('here I am');
-    expect(got.note).toBe('for my mother');
-  });
-
-  it('exports valid JSON of all duas', () => {
-    saveDua({ stepKey: 'niyyah', text: 'x', lang: 'en' });
-    const parsed = JSON.parse(exportDuas());
-    expect(Array.isArray(parsed)).toBe(true);
-    expect(parsed).toHaveLength(1);
+    await s.remove(U, b.id);
+    expect((await s.list(U, 'niyyah')).map((d) => d.id)).toEqual([a.id]);
   });
 });
