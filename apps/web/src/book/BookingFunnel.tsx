@@ -14,6 +14,17 @@ import { previewVisaRoute } from './usecases';
 import { finalizeBookingAction, pollVisaAction, searchAddonsAction, searchHotelsAction, startCheckoutAction } from './actions';
 import { clearBookingDraftAction, saveBookingDraftAction } from './booking-draft-actions';
 import type { BookingDraft } from './booking-draft-types';
+import { ScreenFrame } from '../components/ScreenFrame';
+
+const STEP_LABEL: Record<FunnelState['step'], string> = {
+  SEARCH: 'Search',
+  RESULTS: 'Choose a hotel',
+  BUILDER: 'Build package',
+  PILGRIMS: 'Pilgrims',
+  CHECKOUT: 'Checkout',
+  CARD: 'Payment',
+  CONFIRMED: 'Confirmed',
+};
 
 const SELL_PRICE = { amount: 120000, currency: 'EUR' as const }; // demo sell price, charged in EUR
 
@@ -170,7 +181,7 @@ export function BookingFunnel({
   // Results is a multi-column grid on desktop; the other steps read best as a centered column.
   const wide = state.step === 'RESULTS';
   return (
-    <div className={`mx-auto w-full ${wide ? 'max-w-6xl' : 'max-w-3xl'} bg-sand-50 shadow-sm`}>
+    <ScreenFrame label="🧳 Booking process" tag={STEP_LABEL[state.step]} maxWidth={wide ? 'max-w-6xl' : 'max-w-3xl'} bodyClassName="bg-sand-50">
       <div key={state.step} className="animate-rise">
       {state.step === 'SEARCH' && (
         <HomeSearch
@@ -261,6 +272,6 @@ export function BookingFunnel({
         </div>
       )}
       </div>
-    </div>
+    </ScreenFrame>
   );
 }
