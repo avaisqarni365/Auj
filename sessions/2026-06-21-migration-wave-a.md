@@ -112,6 +112,15 @@ Driving `migration/*.md` in order, one screen per commit, gated + auto-deployed.
   `'use server'` file (Next forbids) → made `PRECONTRACT_INFO` module-local; build now collects all
   47 pages.
 
+- **Object store foundation** (`PENDING`) — unblocks #05 + closes the standing object-store deferrals.
+  User chose "wire MinIO/S3 now". `src/storage/document-store.ts` implements core-booking's
+  `DocumentStore` contract with env-selected backends: **S3/MinIO** when `OBJECT_STORE_*` set
+  (`@aws-sdk/client-s3`, path-style for MinIO), **durable Postgres `documents_blob` (bytea)** when only
+  `DATABASE_URL` (works on the live server today, no MinIO needed), in-memory otherwise.
+  `uploadDocumentAction` (sign-in, 8 MB cap, images/PDF only, key = `${userId}/${kind}/${uuid}.ext`) +
+  owner-scoped blob route `GET /api/doc/[...key]` (only the owner or ADMIN may fetch). Test (2:
+  round-trip + miss). Next: #05 Dashboard (passport upload+OCR, Me/Family/Group switcher) on this seam.
+
 ## Migration status
 Screens 01–15 delivered & deployed **except 05 Dashboard** (passport OCR + Me/Family/Group switcher),
 which is gated on the object-store decision. Full web suite: 31 files / 119 tests green; `next build`
