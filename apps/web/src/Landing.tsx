@@ -20,8 +20,11 @@ import {
   DESTINATIONS,
   FAQS,
   FEATURE_ICONS,
+  GLANCE_TILES,
   HERO_STATS,
   JOURNEY_TYPES,
+  LANDING_FRAMES,
+  type LandingFrame,
   LOCALES,
   PACKAGES,
   PAYMENT_METHODS,
@@ -29,6 +32,7 @@ import {
   SEARCH_TABS,
   SUPPORT_CHANNELS,
   TESTIMONIALS,
+  TRUST_MARQUEE,
   VALUE_ICONS,
   type SearchTab,
 } from './content';
@@ -261,7 +265,7 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
       {/* cinematic frames — every migrated tool as a framed feature card, frame by frame */}
       <Section id="tools" title="Everything for your journey, frame by frame" sub="Free planning tools and on-the-ground guides — most need no login.">
         <div className="flex flex-col gap-[clamp(20px,3vw,32px)]">
-          {FRAMES.map((f) => (
+          {LANDING_FRAMES.map((f) => (
             <FrameCard key={f.n} frame={f} />
           ))}
         </div>
@@ -708,47 +712,8 @@ function Section({ id, title, sub, children }: { id?: string; title: string; sub
   );
 }
 
-interface Frame {
-  n: string;
-  name: string;
-  tag: string;
-  icon: string;
-  href: string;
-  title: string;
-  blurb: string;
-  cta: string;
-}
-
-const FRAMES: Frame[] = [
-  { n: '02', name: 'VIRTUAL TOUR', tag: '15 guided steps', icon: '🌅', href: '/guide/tour', title: 'Walk through every rite', blurb: 'A guided panorama of each Umrah step, narrated in your language.', cta: 'Open virtual tour' },
-  { n: '03', name: 'SEARCH', tag: 'EUR · PKR', icon: '🔎', href: '/book', title: 'Search verified packages', blurb: 'Hotels by distance to the Haram — charged in EUR with an indicative PKR total.', cta: 'Search packages' },
-  { n: '04', name: 'LUGGAGE WIZARD', tag: 'customs rules', icon: '🧳', href: '/guide/luggage', title: 'Pack right, clear customs', blurb: 'What’s allowed, what to declare, what’s prohibited — Saudi customs at a glance.', cta: 'Open luggage guide' },
-  { n: '05', name: 'AIRPORT WIZARD', tag: '7 steps', icon: '✈️', href: '/guide/airport', title: 'Check-in to your hotel', blurb: 'Every airport step from bag-drop to your transfer, bilingual.', cta: 'Open airport guide' },
-  { n: '06', name: 'MAKKAH ZIYARAT', tag: '16 sites', icon: '🕋', href: '/guide/makkah-ziyarat', title: 'Sacred sites of Makkah', blurb: 'Sixteen ziyarat sites with context and a clip on each.', cta: 'Open Makkah ziyarat' },
-  { n: '07', name: 'MADINAH ZIYARAT', tag: '14 sites', icon: '🕌', href: '/guide/madina-ziyarat', title: 'Sacred sites of Madinah', blurb: 'Fourteen ziyarat sites around the Prophet’s city ﷺ.', cta: 'Open Madinah ziyarat' },
-  { n: '08', name: 'MAKKAH HOTELS', tag: 'near the Haram', icon: '🏨', href: '/book?city=MAKKAH', title: 'Stay near the Haram', blurb: 'Nusuk-approved hotels sorted by distance to Masjid al-Haram.', cta: 'Find Makkah hotels' },
-  { n: '09', name: 'MADINAH HOTELS', tag: 'near an-Nabawi', icon: '🏨', href: '/book?city=MADINAH', title: 'Stay by an-Nabawi', blurb: 'Hotels steps from Masjid an-Nabawi, net rates in EUR.', cta: 'Find Madinah hotels' },
-  { n: '10', name: 'FOOD & DINING', tag: 'by city', icon: '🍽️', href: '/guide/food', title: 'Where to eat', blurb: 'Trusted bites near the Haram, desi favourites and online orders.', cta: 'Open food guide' },
-  { n: '11', name: 'HOSPITALS & CARE', tag: 'free for pilgrims', icon: '🏥', href: '/guide/hospitals', title: 'Health & emergencies', blurb: 'Hospitals, clinics and what to do if you fall ill.', cta: 'Open hospitals guide' },
-  { n: '12', name: 'TRANSPORT', tag: 'fares', icon: '🚌', href: '/guide/transport', title: 'Getting around', blurb: 'Haramain rail, taxis and transfers with indicative fares.', cta: 'Open transport guide' },
-  { n: '13', name: 'LAUNDRY', tag: 'by city', icon: '🧺', href: '/guide/laundry', title: 'Laundry & essentials', blurb: 'Where to wash and refresh between rites.', cta: 'Open laundry guide' },
-  { n: '14', name: 'GIFTS & SHOPPING', tag: '3 cities', icon: '🎁', href: '/guide/gifts', title: 'Gifts, dates & Zamzam', blurb: 'Souqs and gift ideas across Makkah, Madinah and Jeddah.', cta: 'Open gifts guide' },
-  { n: '15', name: 'DAY PLANNER', tag: 'jamaat-anchored', icon: '🕌', href: '/plan/day', title: 'Plan each day', blurb: 'A calm daily rhythm anchored to the Haram jamaat, ±15 min.', cta: 'Open day planner' },
-  { n: '16', name: 'PERSONAL DIARY', tag: 'private', icon: '📿', href: '/companion/diary', title: 'Your spiritual journal', blurb: 'Quran, nafl and dua counters with a daily reflection.', cta: 'Open diary' },
-  { n: '17', name: 'HELPLINE & SOS', tag: '24/7', icon: '🆘', href: '/guide/helpline', title: 'Help when you need it', blurb: 'Emergency numbers, official apps and lost-and-found.', cta: 'Open helpline' },
-  { n: '18', name: 'CONNECTIVITY', tag: 'SIM · eSIM', icon: '📶', href: '/guide/connectivity', title: 'Stay connected', blurb: 'SIM, eSIM and the apps to set up before you fly.', cta: 'Open connectivity' },
-];
-
 // Hero "frame 01" — the Smart Planner glance card (matches the cinematic prototype).
-const GLANCE_TILES: Array<[string, string, boolean]> = [
-  ['Journey', 'Umrah', false],
-  ['From', 'Vilnius (VNO)', false],
-  ['Dates', '12–26 Sep · 14 nts', false],
-  ['Pilgrims', '4 travellers', false],
-  ['Visa route', 'e-Visa · EU', false],
-  ['Est. total', '€9,920', true],
-];
-
+// Data: GLANCE_TILES / LANDING_FRAMES / TRUST_MARQUEE live in content.ts (client-safe landing data).
 function HeroPlannerCard() {
   return (
     <div className="animate-rise overflow-hidden rounded-[22px] border border-sand-200 bg-gradient-to-b from-white to-sand-50 shadow-[0_44px_96px_-34px_rgba(5,28,18,0.6)]">
@@ -795,7 +760,7 @@ function HeroPlannerCard() {
   );
 }
 
-function FrameCard({ frame }: { frame: Frame }) {
+function FrameCard({ frame }: { frame: LandingFrame }) {
   return (
     <Reveal>
       <article className="overflow-hidden rounded-[22px] border border-sand-200 bg-gradient-to-b from-white to-sand-50 shadow-[0_30px_70px_-28px_rgba(42,38,32,0.42)]">
@@ -870,14 +835,12 @@ function CountUp({ value }: { value: string }) {
   );
 }
 
-const TRUST_BADGES = ['IATA accredited', 'GDPR compliant', 'SEPA secure payments', 'Licensed pilgrimage operator', 'ATOL-style bonded'];
-
 // Seamless trust marquee: the list is doubled and the track animates to -50%.
 function TrustMarquee() {
   return (
     <section className="mt-[clamp(40px,5vw,52px)] overflow-hidden border-y border-sand-200 bg-sand-50" aria-label="Trust & accreditation">
       <div className="flex w-max animate-marquee">
-        {[...TRUST_BADGES, ...TRUST_BADGES].map((b, i) => (
+        {[...TRUST_MARQUEE, ...TRUST_MARQUEE].map((b, i) => (
           <span key={`${b}-${i}`} className="inline-flex items-center gap-2 whitespace-nowrap px-[30px] py-4 text-[14px] font-semibold text-sand-700">
             <span className="text-green-700" aria-hidden>
               ✓
