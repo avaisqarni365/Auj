@@ -75,7 +75,7 @@ Driving `migration/*.md` in order, one screen per commit, gated + auto-deployed.
   still green. Deferred: `markups` table persistence (markup engine already tested), sub-agent
   hierarchy/approval workflow UI, live wallet holds (held=0), PKR-indicative on quotes.
 
-- **13 Admin connectors** (`PENDING`) — `/admin/{providers,connector,nusuk,suppliers}`.
+- **13 Admin connectors** (`236b4a7`) — `/admin/{providers,connector,nusuk,suppliers}`.
   **Provider registry** `src/admin/providers.ts` (pure): 7 integrations with env KEY NAMES (never
   secrets); `providerStatus` derives connected/sandbox/gated/not-configured from env presence — Saudi
   & supplier seams sandbox on mock, gated when switched live without creds (4 tests, asserts secret
