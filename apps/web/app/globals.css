@@ -67,3 +67,19 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee, .animate-sheen { animation: none !important; }
 }
+
+/* Hero ambience — twinkling minaret lights/stars + crescent glow. Opacity/transform only. */
+@keyframes auj-twinkle {
+  0%, 100% { opacity: 0.15; transform: scale(0.7); }
+  50% { opacity: 1; transform: scale(1); }
+}
+@keyframes auj-glow {
+  0%, 100% { opacity: 0.45; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.12); }
+}
+.animate-twinkle { animation: auj-twinkle 3.6s ease-in-out infinite; }
+.animate-glow { animation: auj-glow 6s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-twinkle, .animate-glow { animation: none !important; }
+}

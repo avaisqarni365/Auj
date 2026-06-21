@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { routeFor } from '@auj/visa-router';
 import type { PublicUser } from '@auj/auth';
 import { formatMoney, pkrIndicative } from './currency';
+import { HeroBackdrop } from './HeroBackdrop';
 import { Scene } from './components/Scene';
 import { SiteHeader } from './components/SiteHeader';
 import { SiteFooter } from './components/SiteFooter';
@@ -80,8 +81,9 @@ export default function Landing({ user, deals }: { user?: PublicUser; deals?: De
       <SiteHeader user={user} />
 
       {/* hero — calm two-column, fills the first screen (no scroll), warm white + high contrast */}
-      <section className="flex min-h-[calc(100svh-150px)] items-center bg-sand-50 px-[clamp(16px,4vw,32px)] py-[clamp(20px,3vw,40px)]">
-        <div className="mx-auto grid w-full max-w-6xl items-center gap-[clamp(28px,5vw,56px)] md:grid-cols-[1.32fr_0.68fr]">
+      <section className="relative flex min-h-[calc(100svh-150px)] items-center overflow-hidden bg-sand-50 px-[clamp(16px,4vw,32px)] py-[clamp(20px,3vw,40px)]">
+        <HeroBackdrop />
+        <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-[clamp(28px,5vw,56px)] md:grid-cols-[1.32fr_0.68fr]">
           {/* text */}
           <div className="animate-rise">
             <span className="inline-flex items-center gap-2 rounded-full border border-sand-200 bg-sand-50 px-3.5 py-1.5 text-[12.5px] font-medium text-green-800">
