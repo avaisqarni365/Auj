@@ -49,7 +49,7 @@ Driving `migration/*.md` in order, one screen per commit, gated + auto-deployed.
   Deferred: hotels-via-`SaudiConnector.searchHotels` (hotels already searchable in the booking funnel)
   and the prototype's Jeddah gifts block (type is makkah/madinah only) — note for a later pass.
 
-- **11 Step-video wizards** (`PENDING`) — `/guide/{airport,luggage,makkah-ziyarat,madina-ziyarat}`.
+- **11 Step-video wizards** (`e0b10b5`) — `/guide/{airport,luggage,makkah-ziyarat,madina-ziyarat}`.
   (Virtual Tour already live at `/guide/tour`.) ONE shared `<StepVideoWizard>` (step rail + media
   panel + localized RTL title/body + string-or-customs-rule items + tip + per-step video link +
   language switcher + prev/next). `parse-embed.ts` YouTube/Vimeo/MP4 → embeddable (4 tests). Content
