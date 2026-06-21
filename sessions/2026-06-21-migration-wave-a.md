@@ -136,7 +136,17 @@ Driving `migration/*.md` in order, one screen per commit, gated + auto-deployed.
 **All 15 migration screens (01–15) delivered, gated & deployed**, plus the object-store foundation.
 Full web suite: **33 files / 124 tests green**; `next build` **48/48 pages**, no client pg/crypto leak.
 Per-screen gate held throughout: typecheck · lint · unit · build → commit → pipeline deploy.
-Standing deferrals (non-blocking): real MRZ OCR provider; live contract-test runner.
+Standing deferrals (non-blocking): live contract-test runner UI.
+
+### Passport OCR provider (done)
+`passport-mrz.ts` — pure TD3 MRZ parser (passport no., names, nationality, DOB, expiry, sex; lenient,
+century guard; 3 tests incl. the ICAO specimen). `passport-ocr.ts` — provider seam behind `OCR_*`:
+when `OCR_ENDPOINT`+`OCR_API_KEY` are set the image is POSTed (generic `{mrz|text}` contract) and
+parsed; otherwise OCR is off and the dashboard keeps manual entry. `dashboard-actions.uploadPassportAction`
+now auto-fills extracted fields from the scan when OCR is configured (editable, then confirm); the UI
+note adapts ("Auto-filled from the scan — please check" vs manual). Provider registry updated
+(`OCR_ENDPOINT`+`OCR_API_KEY`, MRZ read + TD3 parse). Swap vendors by pointing `OCR_ENDPOINT` at them
+and adapting the response shape in `passport-ocr.ts`.
 
 ### Jeddah gifts data (done)
 Widened `GuideCity` to include `'jeddah'` and made `GuideDef.cities` partial. Restored the Gifts

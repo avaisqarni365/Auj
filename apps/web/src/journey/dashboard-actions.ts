@@ -5,6 +5,8 @@ import { getBookingDraftStore } from '../book/booking-draft-store';
 import { getObjectStore } from '../storage/document-store';
 import { getDashboardStore } from './dashboard-store';
 import { getDepositStore } from './deposit-store';
+import { parseMrz } from './passport-mrz';
+import { readPassportText } from './passport-ocr';
 import { EMPTY_PASSPORT, type Member, type PassportFields, type PassportScan } from './dashboard-types';
 
 const MAX_BYTES = 8 * 1024 * 1024;
@@ -17,10 +19,12 @@ export interface DashboardData {
   depositPaid: boolean;
 }
 
-// MRZ OCR is a provider swap (OCR_* in the registry). Until configured, fields are entered manually.
-async function runOcr(_bytes: Uint8Array): Promise<Partial<PassportFields> | undefined> {
-  if (!process.env.OCR_API_KEY) return undefined;
-  return undefined; // a real PassportOcr.read() call would populate fields here
+// MRZ OCR via the configured provider (OCR_* in the registry); parses the recognised MRZ into
+// fields. When OCR is off or unreadable, returns undefined and the dashboard falls back to manual.
+async function runOcr(bytes: Uint8Array, contentType: string): Promise<Partial<PassportFields> | undefined> {
+  const text = await readPassportText(bytes, contentType);
+  if (!text) return undefined;
+  return parseMrz(text) ?? undefined;
 }
 
 export async function getDashboardAction(): Promise<DashboardData | null> {
@@ -71,7 +75,7 @@ export async function uploadPassportAction(form: FormData): Promise<UploadPasspo
   const key = `${user.id}/passport/${memberId}/${id}.${EXT[ct]}`;
   await (await getObjectStore()).put(key, bytes, ct);
 
-  const ocr = await runOcr(bytes);
+  const ocr = await runOcr(bytes, ct);
   const scan: PassportScan = { memberId, imageKey: key, extracted: { ...EMPTY_PASSPORT, ...(ocr ?? {}) }, status: 'uploaded' };
   await (await getDashboardStore()).savePassport(user.id, memberId, { imageKey: scan.imageKey, extracted: scan.extracted, status: scan.status });
   return { ok: true, scan };

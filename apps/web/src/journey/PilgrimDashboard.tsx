@@ -241,7 +241,11 @@ export function PilgrimDashboard({ initial }: { initial: DashboardData }) {
           </button>
           {scan && scan.status !== 'none' ? (
             <p className="mt-1 text-[12px] text-sand-500">
-              {scan.status === 'confirmed' ? '✓ Details confirmed.' : 'Uploaded — fields are entered manually (OCR not configured).'}
+              {scan.status === 'confirmed'
+                ? '✓ Details confirmed.'
+                : fields.passportNumber.trim()
+                  ? 'Auto-filled from the scan — please check and confirm.'
+                  : 'Uploaded — enter the details below, then confirm.'}
             </p>
           ) : null}
           {err ? <p className="mt-1 text-[12px] text-danger-fg">{err}</p> : null}

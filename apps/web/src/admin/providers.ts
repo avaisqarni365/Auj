@@ -80,11 +80,11 @@ export const PROVIDERS: ProviderDef[] = [
     slug: 'passport-ocr',
     name: 'Passport OCR',
     kind: 'Documents',
-    adapter: 'core-booking · PassportOcr',
+    adapter: 'journey · PassportOcr',
     binding: 'OCR_*',
     mode: 'service',
-    envKeys: ['OCR_API_KEY'],
-    capabilities: ['MRZ read'],
+    envKeys: ['OCR_ENDPOINT', 'OCR_API_KEY'],
+    capabilities: ['MRZ read', 'TD3 parse'],
   },
 ];
 
