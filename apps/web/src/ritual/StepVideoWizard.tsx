@@ -47,6 +47,7 @@ export function StepVideoWizard({
   steps,
   signedIn,
   initialVideos = {},
+  draftLangs = [],
 }: {
   title: string;
   subtitle: string;
@@ -55,9 +56,11 @@ export function StepVideoWizard({
   steps: WizStep[];
   signedIn: boolean;
   initialVideos?: Record<number, string>;
+  draftLangs?: string[];
 }) {
   const [lang] = useRitualLang();
   const rtl = isRtlLang(lang);
+  const isDraftLang = draftLangs.includes(lang);
   const [i, setI] = useState(0);
   const [videos, setVideos] = useState<Record<number, string>>(initialVideos);
   const [draft, setDraft] = useState('');
@@ -112,6 +115,11 @@ export function StepVideoWizard({
 
   return (
     <ScreenFrame label={`${icon} ${title}`} dir={rtl ? 'rtl' : 'ltr'}>
+      {isDraftLang ? (
+        <div dir="ltr" className="mb-3 flex items-center gap-2 rounded-xl border border-warning/30 bg-warning-bg px-3 py-2 text-[12.5px] text-warning-fg">
+          <span aria-hidden>⚠</span> This translation is a machine-generated draft under review — wording may change.
+        </div>
+      ) : null}
       <div className="flex flex-wrap items-end justify-between gap-3">
         <p className="max-w-[60ch] text-sand-500">{subtitle}</p>
         {/* Language switcher */}
