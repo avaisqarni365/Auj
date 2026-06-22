@@ -28,7 +28,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   );
 }
 
-export function ProfileEditor({ user, profile }: { user: PublicUser; profile: PilgrimProfile | null }) {
+export function ProfileEditor({ user, profile, reached = ['Registered'] }: { user: PublicUser; profile: PilgrimProfile | null; reached?: string[] }) {
   const [city, setCity] = useState(profile?.city ?? '');
   const [country, setCountry] = useState(profile?.country ?? '');
   const [email, setEmail] = useState(profile?.email ?? user.email);
@@ -81,11 +81,16 @@ export function ProfileEditor({ user, profile }: { user: PublicUser; profile: Pi
       <div className="mb-6 rounded-2xl border border-sand-200 bg-white p-5">
         <div className="mb-3 text-[12px] font-semibold uppercase tracking-wider text-sand-500">Your journey progress</div>
         <div className="flex flex-wrap gap-2">
-          {STAGES.map((s, i) => (
-            <span key={s} className={`rounded-full px-3 py-1.5 text-[12.5px] font-semibold ${i === 0 ? 'bg-green-800 text-white' : 'border border-sand-200 bg-sand-50 text-sand-500'}`}>{s}</span>
-          ))}
+          {STAGES.map((s) => {
+            const done = reached.includes(s);
+            return (
+              <span key={s} className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[12.5px] font-semibold ${done ? 'bg-green-800 text-white' : 'border border-sand-200 bg-sand-50 text-sand-500'}`}>
+                {done ? <span aria-hidden className="text-[11px]">✓</span> : null}{s}
+              </span>
+            );
+          })}
         </div>
-        <p className="mt-2 text-[11.5px] text-sand-400">Stages reflect your booking status once a booking exists.</p>
+        <p className="mt-2 text-[11.5px] text-sand-400">Stages reflect your real booking status — passport, deposit and visa progress light up as you go.</p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">

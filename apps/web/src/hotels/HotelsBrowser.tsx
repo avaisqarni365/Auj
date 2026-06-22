@@ -23,8 +23,25 @@ export function HotelsBrowser({ city }: { city: CityHotels }) {
       maxWidth="max-w-[1040px]"
       bodyClassName="p-0"
     >
+      {/* top horizontal band rail (matches the prototype) */}
+      <div className="flex flex-wrap gap-2 border-b border-sand-200 bg-sand-50/60 px-[clamp(16px,3vw,24px)] py-3">
+        {bands.map((b, k) => {
+          const active = k === i;
+          return (
+            <button
+              key={b.short}
+              type="button"
+              onClick={() => setI(k)}
+              className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[12.5px] font-semibold transition-colors duration-fast focus-visible:outline-none focus-visible:shadow-focus ${active ? 'border-green-800 bg-green-800 text-white' : 'border-sand-300 bg-white text-sand-700 hover:border-green-500'}`}
+            >
+              <span className={`font-mono ${active ? 'text-gold' : 'text-sand-400'}`}>{pad2(k + 1)}</span> {b.short}
+            </button>
+          );
+        })}
+      </div>
+
       <div className="flex flex-wrap">
-        {/* band stage + rail */}
+        {/* band stage (distance display) */}
         <div className="relative flex flex-1 basis-[300px] flex-col gap-5 overflow-hidden bg-gradient-to-br from-green-700 via-green-900 to-green-950 p-[clamp(22px,2.6vw,30px)] text-green-50">
           <span aria-hidden className="pointer-events-none absolute -right-11 -top-12 h-52 w-52 rounded-full bg-[radial-gradient(circle,rgba(200,162,74,0.22),transparent_70%)]" />
           <div className="relative">
@@ -33,23 +50,6 @@ export function HotelsBrowser({ city }: { city: CityHotels }) {
             <div className="mt-1.5 text-[13px] text-green-100/80">{band.walk}</div>
             <div className="mt-3 font-serif text-lg font-semibold text-gold">{band.name}</div>
             <p className="mt-1 max-w-[40ch] text-[12.5px] leading-relaxed text-green-100/70">{band.area}</p>
-          </div>
-          {/* rail */}
-          <div className="relative mt-1 flex flex-col gap-1.5">
-            {bands.map((b, k) => {
-              const active = k === i;
-              return (
-                <button
-                  key={b.short}
-                  type="button"
-                  onClick={() => setI(k)}
-                  className={`flex items-center gap-3 rounded-lg px-2.5 py-2 text-left transition-colors duration-fast focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 ${active ? 'bg-white/15' : 'hover:bg-white/[0.07]'}`}
-                >
-                  <span className={`grid h-7 w-7 shrink-0 place-items-center rounded-full font-mono text-[11px] font-semibold ${active ? 'bg-gold text-green-950' : 'bg-white/10 text-green-100/70'}`}>{pad2(k + 1)}</span>
-                  <span className={`text-[13px] font-semibold ${active ? 'text-white' : 'text-green-100/60'}`}>{b.short}</span>
-                </button>
-              );
-            })}
           </div>
         </div>
 
