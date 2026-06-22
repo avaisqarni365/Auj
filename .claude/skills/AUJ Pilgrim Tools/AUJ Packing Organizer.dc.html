@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;} body{margin:0;} ::selection{background:#C8A24A;color:#07301E;}
+  .po-list::-webkit-scrollbar{width:8px;} .po-list::-webkit-scrollbar-thumb{background:#E0D6C4;border-radius:8px;}
+  @media (max-width:840px){ .po-body{flex-direction:column!important;} .po-stage{min-height:0!important;} .po-list{max-height:none!important;} }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:radial-gradient(120% 90% at 50% 0%, #FFFDF8 0%, #F3EEE4 100%);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:clamp(20px,4vw,48px) clamp(14px,4vw,32px);display:flex;flex-direction:column;align-items:center;">
+  <div style="width:100%;max-width:1040px;background:#fff;border:1px solid #E6DDCE;border-radius:24px;overflow:hidden;box-shadow:0 40px 90px -40px rgba(42,38,32,0.5), 0 2px 6px rgba(42,38,32,0.04);">
+
+    <!-- HEADER -->
+    <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:15px 20px;background:radial-gradient(130% 230% at 88% -70%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;">
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+      <div style="position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,162,74,0.6),transparent);"></div>
+      <div style="position:relative;display:flex;align-items:center;gap:12px;">
+        <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:9px;padding:5px 10px;box-shadow:0 10px 26px -8px rgba(0,0,0,0.45);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:clamp(42px,6vw,58px);width:auto;display:block;" /></span>
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.1em;color:#E8C36A;">PACKING ORGANIZER</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#BFE0CD;margin-top:2px;">CHECKLIST · TICK AS YOU PACK</div>
+        </div>
+      </div>
+      <div style="position:relative;display:flex;gap:5px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);padding:4px;border-radius:11px;flex-wrap:wrap;">
+        <sc-for list="{{ profiles }}" as="p" hint-placeholder-count="5">
+          <button onClick="{{ p.onClick }}" style="cursor:pointer;font-family:inherit;font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:8px;background:{{ p.bg }};color:{{ p.fg }};border:1px solid {{ p.border }};transition:all .15s;">{{ p.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="po-body" style="display:flex;flex-wrap:wrap;">
+      <!-- LEFT -->
+      <div class="po-stage" style="position:relative;flex:1 1 300px;background:radial-gradient(120% 130% at 75% 12%, #156440 0%, #0A3D26 52%, #06251A 100%);overflow:hidden;color:#EFF6F1;padding:clamp(22px,2.6vw,30px);display:flex;flex-direction:column;justify-content:space-between;gap:22px;">
+        <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 12px);pointer-events:none;"></div>
+        <div style="position:absolute;top:-50px;right:-44px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle, rgba(200,162,74,0.22), transparent 70%);pointer-events:none;"></div>
+        <div style="position:relative;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:#9CC6AE;">PACKING FOR · {{ profileLabel }}</div>
+          <div style="font-family:'IBM Plex Serif',serif;font-size:clamp(26px,3.2vw,36px);font-weight:600;line-height:1.08;margin-top:8px;">Everything, ready to pack</div>
+          <div style="font-size:14px;color:#C6DDCF;margin-top:10px;line-height:1.5;">Quantities are sized for your stay. Tick each item as it goes in the bag — it saves automatically.</div>
+        </div>
+        <div style="position:relative;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:#9CC6AE;margin-bottom:9px;">LENGTH OF STAY</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <sc-for list="{{ dayBtns }}" as="d" hint-placeholder-count="3">
+              <button onClick="{{ d.onClick }}" style="cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;padding:9px 15px;border-radius:11px;background:{{ d.bg }};color:{{ d.fg }};border:1px solid {{ d.border }};transition:all .15s;">{{ d.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="position:relative;">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:7px;"><span style="font-size:13px;font-weight:600;">Packed</span><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#E8C36A;">{{ packed }} / {{ totalItems }}</span></div>
+          <div style="height:9px;border-radius:999px;background:rgba(255,255,255,0.16);overflow:hidden;"><div style="height:100%;border-radius:999px;background:linear-gradient(90deg,#2A9468,#E8C36A);width:{{ packedPct }}%;"></div></div>
+          <div style="font-size:12px;color:#9CC6AE;margin-top:10px;">Saved on this device · <button onClick="{{ resetProfile }}" style="cursor:pointer;background:none;border:none;color:#E8C36A;font-family:inherit;font-size:12px;font-weight:600;text-decoration:underline;padding:0;">clear ticks</button></div>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="po-list" style="flex:1 1 360px;padding:clamp(20px,2.4vw,26px);display:flex;flex-direction:column;gap:18px;max-height:580px;overflow-y:auto;">
+        <sc-for list="{{ groups }}" as="g" hint-placeholder-count="6">
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.08em;color:#2F6F8F;margin-bottom:10px;">{{ g.title }}</div>
+            <div style="display:flex;flex-direction:column;gap:7px;">
+              <sc-for list="{{ g.items }}" as="it" hint-placeholder-count="5">
+                <button onClick="{{ it.toggle }}" style="display:flex;align-items:center;gap:11px;width:100%;text-align:left;cursor:pointer;background:{{ it.bg }};border:1px solid {{ it.border }};border-radius:11px;padding:10px 12px;font-family:inherit;transition:all .12s;">
+                  <span style="width:20px;height:20px;border-radius:6px;border:2px solid {{ it.boxBorder }};background:{{ it.boxBg }};color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">{{ it.mark }}</span>
+                  <span style="flex:1;font-size:13.5px;font-weight:500;color:{{ it.textColor }};text-decoration:{{ it.deco }};">{{ it.label }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:18px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center;">
+    <a href="AUJ Landing Cinematic.dc.html" style="text-decoration:none;font-size:13.5px;color:#7A7263;display:inline-flex;align-items:center;gap:6px;">← Back to AUJ home</a>
+    <a href="AUJ Luggage Wizard.dc.html" style="text-decoration:none;font-size:13.5px;font-weight:600;color:#156440;display:inline-flex;align-items:center;gap:6px;">Luggage &amp; customs rules <span>→</span></a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1080,&quot;height&quot;:760}}">
+class Component extends DCLogic {
+  state = { profile: 'men', days: 11, checked: {} };
+
+  componentDidMount() { try { const s = JSON.parse(localStorage.getItem('auj-packing') || 'null'); if (s && typeof s === 'object') this.setState(s); } catch (e) {} }
+  persist() { try { localStorage.setItem('auj-packing', JSON.stringify(this.state)); } catch (e) {} }
+
+  build(profile, days) {
+    const q = (f, b) => Math.ceil(days * f) + b;
+    const clothing = {
+      men: { title: 'IHRAM & CLOTHING', items: [
+        ['m_ihram', 'Ihram sets × 2 (unstitched)'], ['m_belt', 'Ihram belt & money belt'],
+        ['m_day', 'Daily clothes × ' + q(0.33, 1)], ['m_under', 'Underwear × ' + q(0.5, 2)],
+        ['m_socks', 'Socks × ' + q(0.5, 2)], ['m_sleep', 'Sleepwear × 2'],
+        ['m_sandal', 'Sandals + spare slippers'], ['m_cap', 'Prayer cap']
+      ] },
+      women: { title: 'CLOTHING & MODEST WEAR', items: [
+        ['w_abaya', 'Abayas × ' + q(0.15, 2)], ['w_hijab', 'Hijabs / scarves × ' + q(0.33, 2)],
+        ['w_prayer', 'Prayer dress × 2'], ['w_day', 'Loose day clothes × ' + q(0.33, 1)],
+        ['w_under', 'Underwear × ' + q(0.5, 2)], ['w_socks', 'Socks × ' + q(0.5, 2)],
+        ['w_sleep', 'Sleepwear × 2'], ['w_shoes', 'Comfortable closed shoes'], ['w_pins', 'Hijab pins & undercaps']
+      ] },
+      kids: { title: 'KIDS\u2019 CLOTHING', items: [
+        ['k_outfit', 'Daily outfits × ' + q(0.5, 2)], ['k_under', 'Underwear × ' + q(0.7, 2)],
+        ['k_socks', 'Socks × ' + q(0.5, 2)], ['k_jacket', 'Light jacket / cardigan'],
+        ['k_shoes', 'Comfortable shoes + sandals'], ['k_sleep', 'Pyjamas × 2'],
+        ['k_sun', 'Sun hat'], ['k_comfort', 'Comfort item / small toy']
+      ] },
+      family: { title: 'FAMILY CLOTHING (PER PERSON)', items: [
+        ['f_note', 'Pack each person from Men / Women / Kids'], ['f_ihram', 'Ihram sets for adults × 2 each'],
+        ['f_day', 'Daily clothes / person × ' + q(0.33, 1)], ['f_under', 'Underwear / person × ' + q(0.5, 2)],
+        ['f_shoes', 'Comfortable shoes (each)'], ['f_share', 'Shared: detergent, pegs, washing line'], ['f_label', 'Name labels for kids\u2019 bags']
+      ] },
+      diabetic: { title: 'CLOTHING & FOOT CARE', items: [
+        ['d_ihram', 'Ihram / modest clothing × 2'], ['d_day', 'Daily clothes × ' + q(0.33, 1)],
+        ['d_under', 'Underwear × ' + q(0.5, 2)], ['d_socks', 'Cotton socks × ' + q(0.6, 3) + ' (foot care)'],
+        ['d_shoes', 'Well-fitted shoes (avoid blisters)'], ['d_sleep', 'Sleepwear × 2']
+      ] }
+    };
+
+    const groups = [];
+    groups.push(clothing[profile] || clothing.men);
+    groups.push({ title: 'DOCUMENTS', items: [
+      ['doc_pass', 'Passport & visa'], ['doc_vac', 'Vaccination (ACWY) certificate'], ['doc_ins', 'Travel insurance'],
+      ['doc_cash', 'Cash (SAR) + card'], ['doc_copy', 'Passport copies × 3'], ['doc_nusuk', 'Nusuk / booking on phone'], ['doc_ice', 'Emergency contacts card']
+    ] });
+    groups.push({ title: 'TOILETRIES', items: [
+      ['t_soap', 'Unscented soap (for ihram)'], ['t_brush', 'Toothbrush & paste'], ['t_sham', 'Shampoo & body wash'],
+      ['t_towel', 'Quick-dry towels × 2'], ['t_comb', 'Comb / brush'], ['t_clip', 'Nail clipper & scissors'],
+      ['t_wipe', 'Tissues & wet wipes'], ['t_sun', 'Sunscreen (unscented in ihram)'], ['t_det', 'Detergent sachets']
+    ] });
+    const health = [
+      ['h_med', 'Personal medicines + doctor note'], ['h_pain', 'Pain relief (paracetamol)'],
+      ['h_ors', 'ORS / rehydration sachets'], ['h_plast', 'Plasters & antiseptic'],
+      ['h_vit', 'Vitamins'], ['h_san', 'Hand sanitiser'], ['h_mask', 'Face masks']
+    ];
+    if (profile === 'diabetic') {
+      health.push(['h_ins', 'Insulin + cool pack'], ['h_glu', 'Glucometer + test strips'], ['h_tab', 'Glucose tablets / juice'],
+        ['h_need', 'Spare needles + sharps box'], ['h_id', 'Diabetic ID / bracelet'], ['h_let', 'Doctor letter (needles & meds)'],
+        ['h_snack', 'Healthy snacks'], ['h_foot', 'Foot-care kit']);
+    }
+    if (profile === 'kids') health.push(['h_kmed', 'Child medicines & syringe'], ['h_therm', 'Thermometer']);
+    groups.push({ title: 'HEALTH & MEDICINES', items: health });
+    groups.push({ title: 'ELECTRONICS', items: [
+      ['e_phone', 'Phone + charger'], ['e_pb', 'Power bank'], ['e_adapt', 'EU/UK travel adapter (Type G)'], ['e_ear', 'Earphones'], ['e_cable', 'Spare cable']
+    ] });
+    groups.push({ title: 'EXTRAS & COMFORT', items: [
+      ['x_mat', 'Light prayer mat'], ['x_tas', 'Tasbeeh'], ['x_quran', 'Quran / app'], ['x_umb', 'Umbrella for shade'],
+      ['x_bottle', 'Refillable water bottle'], ['x_shoe', 'Shoe bag for the mosque'], ['x_snack', 'Snacks for the journey'],
+      ['x_zip', 'Ziploc bags'], ['x_laund', 'Foldable laundry bag'], ['x_pillow', 'Neck pillow'], ['x_bag', 'Small daypack']
+    ] });
+    return groups;
+  }
+
+  renderVals() {
+    const profile = this.state.profile, days = this.state.days, checked = this.state.checked || {};
+    const raw = this.build(profile, days);
+
+    let total = 0, packed = 0;
+    const groups = raw.map((g) => ({
+      title: g.title,
+      items: g.items.map(([id, label]) => {
+        const key = profile + ':' + id;
+        const on = !!checked[key];
+        total++; if (on) packed++;
+        return {
+          label,
+          mark: on ? '\u2713' : '',
+          toggle: () => { const c = { ...checked, [key]: !on }; this.setState({ checked: c }, () => this.persist()); },
+          bg: on ? '#F0F6F2' : '#FFFDFA', border: on ? '#CBE6D6' : '#F1EADD',
+          boxBg: on ? '#0F5132' : '#fff', boxBorder: on ? '#0F5132' : '#C9BCA6',
+          textColor: on ? '#6E8F7E' : '#2A2620', deco: on ? 'line-through' : 'none'
+        };
+      })
+    }));
+
+    const PROF = [['men', 'Men'], ['women', 'Women'], ['kids', 'Kids'], ['family', 'Family'], ['diabetic', 'Diabetic']];
+    const profiles = PROF.map(([k, label]) => ({
+      label, onClick: () => this.setState({ profile: k }, () => this.persist()),
+      bg: profile === k ? 'rgba(255,255,255,0.18)' : 'transparent', fg: profile === k ? '#fff' : '#BFE0CD',
+      border: profile === k ? 'rgba(255,255,255,0.32)' : 'transparent'
+    }));
+    const dayBtns = [11, 21, 30].map((d) => ({
+      label: d + ' days', onClick: () => this.setState({ days: d }, () => this.persist()),
+      bg: days === d ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.06)', fg: days === d ? '#fff' : '#BFE0CD',
+      border: days === d ? 'rgba(255,255,255,0.32)' : 'rgba(255,255,255,0.16)'
+    }));
+
+    return {
+      groups, profiles, dayBtns,
+      profileLabel: (PROF.find((p) => p[0] === profile) || ['', 'Men'])[1].toUpperCase(),
+      packed, totalItems: total, packedPct: total ? Math.round((packed / total) * 100) : 0,
+      resetProfile: () => {
+        const c = { ...checked };
+        Object.keys(c).forEach((k) => { if (k.indexOf(profile + ':') === 0) delete c[k]; });
+        this.setState({ checked: c }, () => this.persist());
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

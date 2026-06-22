@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; }
+  ::selection { background: #C8A24A; color: #07301E; }
+  a { color: inherit; }
+  @keyframes auj-twinkle { 0%,100%{opacity:.15;transform:scale(.7)} 50%{opacity:1;transform:scale(1)} }
+  @keyframes auj-glow { 0%,100%{opacity:.45;transform:scale(1)} 50%{opacity:.9;transform:scale(1.12)} }
+  @keyframes auj-floatA { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-15px)} }
+  @keyframes auj-floatB { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-24px)} }
+  @keyframes auj-rise { 0%{transform:translateY(30px);opacity:0} 14%{opacity:.8} 82%{opacity:.8} 100%{transform:translateY(-150px);opacity:0} }
+  @keyframes auj-ping { 0%{box-shadow:0 0 0 0 rgba(181,121,30,.5)} 70%{box-shadow:0 0 0 8px rgba(181,121,30,0)} 100%{box-shadow:0 0 0 0 rgba(181,121,30,0)} }
+  @keyframes auj-pingG { 0%{box-shadow:0 0 0 0 rgba(42,148,104,.55)} 70%{box-shadow:0 0 0 9px rgba(42,148,104,0)} 100%{box-shadow:0 0 0 0 rgba(42,148,104,0)} }
+  @keyframes auj-spin { to { transform: rotate(360deg) } }
+  @keyframes auj-sheen { 0%{transform:translateX(-130%) skewX(-18deg)} 55%,100%{transform:translateX(320%) skewX(-18deg)} }
+  @keyframes auj-marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+  @keyframes auj-hue { 0%,100%{filter:hue-rotate(0deg)} 50%{filter:hue-rotate(-8deg)} }
+  @keyframes auj-bob { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-6px) rotate(2deg)} }
+  [data-reveal]{transition:opacity .8s ease, transform .8s cubic-bezier(.2,.75,.2,1);}
+  [data-reveal].rv-pre{opacity:0;transform:translateY(28px);}
+  @media (max-width:880px){ .auj-navlinks{display:none!important} }
+  .auj-pkgmenu{opacity:0;visibility:hidden;transform:translateY(6px);transition:opacity .16s ease,transform .16s ease,visibility .16s;}
+  .auj-pkg:hover .auj-pkgmenu,.auj-pkg:focus-within .auj-pkgmenu{opacity:1;visibility:visible;transform:translateY(0);}
+  @media (prefers-reduced-motion: reduce){ *{animation:none!important;transition:none!important} [data-reveal]{opacity:1!important;transform:none!important} }
+</style>
+<script>
+(function(){
+  var ease = function(p){ return 1 - Math.pow(1-p,3); };
+  function initCounters(){
+    document.querySelectorAll('[data-count]').forEach(function(el){
+      if (el.__auj) return; el.__auj = 1;
+      var target = parseFloat(el.getAttribute('data-target'))||0;
+      var suffix = el.getAttribute('data-suffix')||'';
+      var dec = parseInt(el.getAttribute('data-dec')||'0',10);
+      var start = null;
+      function tick(now){
+        if(start===null) start=now;
+        var p = Math.min(1,(now-start)/1500), v = target*ease(p);
+        el.textContent = (dec? v.toFixed(dec): Math.round(v)) + suffix;
+        if(p<1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+  function revealPass(){
+    var vh = window.innerHeight || 800;
+    document.querySelectorAll('[data-reveal].rv-pre').forEach(function(el){
+      var r = el.getBoundingClientRect();
+      if(r.top < vh*0.88 && r.bottom > 0){
+        var sibs = [].slice.call(el.parentElement.querySelectorAll(':scope > [data-reveal].rv-pre'));
+        el.style.transitionDelay = (Math.max(0, sibs.indexOf(el))*70)+'ms';
+        el.classList.remove('rv-pre');
+      }
+    });
+  }
+  function initReveal(){
+    var vh = window.innerHeight || 800;
+    // hide only what is below the fold, so above-the-fold content never flashes
+    document.querySelectorAll('[data-reveal]').forEach(function(el){
+      var r = el.getBoundingClientRect();
+      if(r.top > vh*0.86) el.classList.add('rv-pre');
+    });
+    var scrolled = false;
+    window.addEventListener('scroll', function(){ scrolled = true; requestAnimationFrame(revealPass); }, {passive:true});
+    window.addEventListener('resize', function(){ requestAnimationFrame(revealPass); });
+    revealPass();
+    setInterval(revealPass, 200);
+    // safety net: if the page is never scrolled (static render / export / print), reveal all
+    setTimeout(function(){ if(!scrolled) document.querySelectorAll('[data-reveal].rv-pre').forEach(function(e){ e.classList.remove('rv-pre'); }); }, 3500);
+  }
+  function initParallax(){
+    var layers = [].slice.call(document.querySelectorAll('[data-px]'));
+    var mx=0, my=0;
+    function apply(){
+      var sy = window.scrollY||0;
+      layers.forEach(function(l){
+        var f = parseFloat(l.getAttribute('data-px'))||0;
+        l.style.transform = 'translate('+(mx*f*40)+'px,'+(sy*f*0.4 + my*f*26)+'px)';
+      });
+    }
+    window.addEventListener('scroll', function(){ requestAnimationFrame(apply); }, {passive:true});
+    window.addEventListener('mousemove', function(ev){ mx=ev.clientX/window.innerWidth-0.5; my=ev.clientY/window.innerHeight-0.5; requestAnimationFrame(apply); }, {passive:true});
+    apply();
+  }
+  window.__aujReady = 0;
+  var tries=0;
+  (function boot(){
+    if(document.querySelector('[data-reveal]')){ window.__aujReady = 1; initReveal(); initCounters(); initParallax(); return; }
+    if(tries++ < 900) requestAnimationFrame(boot);
+  })();
+})();
+</script>
+</helmet>
+
+<div style="background:#FAF6EF;color:#2A2620;font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;">
+
+  <!-- ANNOUNCEMENT -->
+  <div style="background:#06251A;color:#BFE0CD;font-size:13px;position:relative;z-index:70;">
+    <div style="max-width:1200px;margin:0 auto;padding:9px clamp(16px,4vw,32px);display:flex;align-items:center;justify-content:space-between;gap:10px 16px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:9px;">
+        <span style="width:6px;height:6px;border-radius:50%;background:#C8A24A;animation:auj-twinkle 2.4s ease-in-out infinite;"></span>
+        <span>Now departing from <strong style="color:#EFF6F1;font-weight:600;">6 EU cities</strong> · e-Visa guidance on every booking</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:18px;">
+        <a href="#" style="text-decoration:none;color:#9CC6AE;font-weight:500;" style-hover="color:#fff;">For travel agents →</a>
+        <span style="color:#9CC6AE;">EN · LT · UR · AR</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <header style="position:sticky;top:0;z-index:60;background:rgba(250,246,239,0.82);backdrop-filter:blur(16px);border-bottom:1px solid #E6DDCE;">
+    <div style="max-width:1200px;margin:0 auto;padding:13px clamp(16px,4vw,32px);display:flex;align-items:center;justify-content:space-between;gap:12px;">
+      <a href="#top" style="position:relative;text-decoration:none;display:inline-flex;align-items:center;height:54px;">
+        <img src="assets/auj-logo-trim.png" alt="AUJ — Pilgrimage &amp; travel" style="height:clamp(84px,11vw,120px);width:auto;display:block;object-fit:contain;margin:-34px 0;filter:drop-shadow(0 6px 14px rgba(42,38,32,0.18));" />
+      </a>
+      <nav class="auj-navlinks" style="display:flex;align-items:center;gap:2px;">
+        <div class="auj-pkg" style="position:relative;">
+          <a href="#search" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-size:14.5px;font-weight:500;color:#4A4337;padding:9px 14px;border-radius:9px;white-space:nowrap;transition:background .15s,color .15s;" style-hover="background:#F1EADD;color:#0F5132;"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M10 2.6l6.5 3v6.8l-6.5 3-6.5-3V5.6z"/><path d="M3.7 5.8l6.3 3 6.3-3M10 8.8V18"/></svg>Packages <span style="font-size:11px;color:#7A7263;">▾</span></a>
+          <div class="auj-pkgmenu" style="position:absolute;top:100%;left:0;padding-top:10px;z-index:80;">
+            <div style="background:#fff;border:1px solid #E6DDCE;border-radius:14px;box-shadow:0 24px 50px -24px rgba(42,38,32,0.4);padding:8px;min-width:212px;">
+              <a href="#how" style="text-decoration:none;display:block;font-size:14px;font-weight:500;color:#4A4337;padding:10px 12px;border-radius:9px;transition:background .14s,color .14s;" style-hover="background:#F1EADD;color:#0F5132;">How it works</a>
+              <a href="#" style="text-decoration:none;display:block;font-size:14px;font-weight:500;color:#4A4337;padding:10px 12px;border-radius:9px;transition:background .14s,color .14s;" style-hover="background:#F1EADD;color:#0F5132;">Visa help</a>
+              <a href="#" style="text-decoration:none;display:block;font-size:14px;font-weight:500;color:#4A4337;padding:10px 12px;border-radius:9px;transition:background .14s,color .14s;" style-hover="background:#F1EADD;color:#0F5132;">For agents</a>
+              <a href="#" style="text-decoration:none;display:block;font-size:14px;font-weight:500;color:#4A4337;padding:10px 12px;border-radius:9px;transition:background .14s,color .14s;" style-hover="background:#F1EADD;color:#0F5132;">Support</a>
+            </div>
+          </div>
+        </div>
+        <a href="#search" style="text-decoration:none;display:inline-flex;align-items:center;gap:7px;font-size:14.5px;font-weight:500;color:#4A4337;padding:9px 14px;border-radius:9px;white-space:nowrap;transition:background .15s,color .15s;" style-hover="background:#F1EADD;color:#0F5132;"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><rect x="5" y="6.5" width="10" height="9" rx="0.5"/><path d="M3.5 6.5h13M5 9.5h10"/></svg>Umrah</a>
+        <a href="#search" style="text-decoration:none;display:inline-flex;align-items:center;gap:7px;font-size:14.5px;font-weight:500;color:#4A4337;padding:9px 14px;border-radius:9px;white-space:nowrap;transition:background .15s,color .15s;" style-hover="background:#F1EADD;color:#0F5132;"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M10 2.6a5 5 0 0 1 5 5c0 3.5-5 9.4-5 9.4S5 11.1 5 7.6a5 5 0 0 1 5-5z"/><circle cx="10" cy="7.3" r="1.7"/></svg>Ziyarat</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button style="display:inline-flex;align-items:center;gap:7px;cursor:pointer;background:#fff;border:1px solid #E6DDCE;font-family:inherit;font-size:13.5px;font-weight:600;color:#4A4337;padding:9px 13px;border-radius:10px;white-space:nowrap;">{{ lang }} <span style="color:#7A7263;">▾</span></button>
+        <a href="#search" style="text-decoration:none;font-size:14px;font-weight:600;color:#fff;padding:11px 19px;border-radius:11px;background:#0F5132;box-shadow:0 6px 16px rgba(15,81,50,0.26);white-space:nowrap;transition:background .15s,transform .15s;" style-hover="background:#156440;transform:translateY(-1px);">Plan my pilgrimage</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section id="top" style="position:relative;overflow:hidden;background:radial-gradient(150% 120% at 82% -10%, #FFFFFF 0%, #FBF7F0 48%, #F1E6D2 100%);color:#2A2620;min-height:clamp(600px,86vh,900px);display:flex;align-items:center;">
+    <!-- texture -->
+    <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(42,38,32,0.02) 0 2px, transparent 2px 12px);pointer-events:none;"></div>
+    <!-- stars -->
+    <div data-px="0.18" style="position:absolute;inset:0;pointer-events:none;will-change:transform;display:none;">
+      <sc-for list="{{ stars }}" as="s" hint-placeholder-count="34">
+        <span style="position:absolute;left:{{ s.x }}%;top:{{ s.y }}%;width:{{ s.s }}px;height:{{ s.s }}px;border-radius:50%;background:{{ s.c }};box-shadow:0 0 {{ s.g }}px {{ s.c }};animation:auj-twinkle {{ s.dur }}s ease-in-out infinite;animation-delay:{{ s.delay }}s;"></span>
+      </sc-for>
+    </div>
+    <!-- crescent moon -->
+    <div data-px="0.1" style="position:absolute;top:clamp(40px,9vh,96px);right:clamp(60px,16vw,260px);pointer-events:none;will-change:transform;display:none;">
+      <div style="position:absolute;inset:-34px;border-radius:50%;background:radial-gradient(circle, rgba(200,162,74,0.42), transparent 68%);animation:auj-glow 6s ease-in-out infinite;"></div>
+      <div style="position:relative;width:74px;height:74px;border-radius:50%;background:#F4ECD6;box-shadow:0 0 40px rgba(244,236,214,0.45);"></div>
+      <div style="position:absolute;top:-9px;left:13px;width:74px;height:74px;border-radius:50%;background:radial-gradient(140% 120% at 84% -6%, #1C7A4F 0%, #0A3D26 44%, #06251A 100%);"></div>
+    </div>
+    <!-- rising particles -->
+    <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden;display:none;">
+      <sc-for list="{{ particles }}" as="p" hint-placeholder-count="12">
+        <span style="position:absolute;left:{{ p.x }}%;bottom:-12px;width:{{ p.s }}px;height:{{ p.s }}px;border-radius:50%;background:rgba(200,162,74,0.7);box-shadow:0 0 6px rgba(200,162,74,0.6);animation:auj-rise {{ p.dur }}s linear infinite;animation-delay:{{ p.delay }}s;"></span>
+      </sc-for>
+    </div>
+
+    <!-- SKYLINE -->
+    <div data-px="0.05" style="position:absolute;left:0;right:0;bottom:0;height:clamp(190px,30vh,330px);pointer-events:none;will-change:transform;opacity:0.13;">
+      <div style="position:absolute;left:0;right:0;bottom:0;height:62%;background:linear-gradient(to top, rgba(200,162,74,0.14), transparent);"></div>
+      <div style="position:absolute;left:50%;bottom:0;transform:translateX(-50%);display:flex;align-items:flex-end;justify-content:center;gap:0;filter:drop-shadow(0 0 1px rgba(200,162,74,0.35));">
+        <!-- far left flat -->
+        <div style="width:46px;height:clamp(70px,11vh,118px);background:#04190F;border-radius:6px 6px 0 0;margin-right:-6px;"></div>
+        <!-- left minaret -->
+        <div style="display:flex;flex-direction:column;align-items:center;z-index:2;">
+          <div style="width:3px;height:14px;background:#C8A24A;opacity:.85;"></div>
+          <div style="width:16px;height:20px;border-radius:8px 8px 0 0;background:#05200F;"></div>
+          <div style="width:10px;height:6px;background:#05200F;"></div>
+          <div style="width:19px;height:clamp(150px,24vh,250px);background:#05200F;border-radius:4px 4px 0 0;position:relative;">
+            <span style="position:absolute;left:50%;top:30%;transform:translateX(-50%);width:3px;height:3px;border-radius:50%;background:#E8C36A;box-shadow:0 0 5px #C8A24A;animation:auj-twinkle 3.2s ease-in-out infinite;"></span>
+            <span style="position:absolute;left:50%;top:52%;transform:translateX(-50%);width:3px;height:3px;border-radius:50%;background:#E8C36A;box-shadow:0 0 5px #C8A24A;animation:auj-twinkle 4s ease-in-out infinite;animation-delay:.6s;"></span>
+          </div>
+        </div>
+        <!-- left small dome -->
+        <div style="display:flex;flex-direction:column;align-items:center;margin:0 -4px;">
+          <div style="width:2px;height:11px;background:#C8A24A;opacity:.8;"></div>
+          <div style="width:52px;height:38px;border-radius:26px 26px 6px 6px / 34px 34px 6px 6px;background:#05200F;"></div>
+          <div style="width:70px;height:clamp(78px,12vh,128px);background:#05200F;border-radius:8px 8px 0 0;margin-top:-2px;position:relative;">
+            <span style="position:absolute;left:30%;top:34%;width:4px;height:6px;border-radius:1px;background:#D9B45E;box-shadow:0 0 5px #C8A24A;opacity:.85;"></span>
+            <span style="position:absolute;left:60%;top:34%;width:4px;height:6px;border-radius:1px;background:#D9B45E;box-shadow:0 0 5px #C8A24A;opacity:.7;"></span>
+          </div>
+        </div>
+        <!-- CENTRAL green dome -->
+        <div style="display:flex;flex-direction:column;align-items:center;position:relative;z-index:3;margin:0 -8px;">
+          <div style="position:relative;width:14px;height:14px;margin-bottom:1px;">
+            <div style="position:absolute;inset:0;border-radius:50%;background:#C8A24A;box-shadow:0 0 8px rgba(200,162,74,.8);"></div>
+            <div style="position:absolute;top:-2px;left:4px;width:12px;height:12px;border-radius:50%;background:#0A3D26;"></div>
+          </div>
+          <div style="width:3px;height:16px;background:#C8A24A;"></div>
+          <div style="width:96px;height:78px;border-radius:52px 52px 8px 8px / 72px 72px 8px 8px;background:linear-gradient(#0D3A24,#06280F);box-shadow:inset 0 4px 0 rgba(42,148,104,.3), 0 0 22px rgba(42,148,104,.18);"></div>
+          <div style="width:128px;height:clamp(96px,15vh,150px);background:#05230F;border-radius:10px 10px 0 0;margin-top:-3px;position:relative;">
+            <span style="position:absolute;left:24%;top:26%;width:6px;height:9px;border-radius:2px;background:#E8C36A;box-shadow:0 0 6px #C8A24A;animation:auj-twinkle 3.6s ease-in-out infinite;"></span>
+            <span style="position:absolute;left:47%;top:26%;width:6px;height:9px;border-radius:2px;background:#E8C36A;box-shadow:0 0 6px #C8A24A;animation:auj-twinkle 4.4s ease-in-out infinite;animation-delay:.5s;"></span>
+            <span style="position:absolute;left:70%;top:26%;width:6px;height:9px;border-radius:2px;background:#E8C36A;box-shadow:0 0 6px #C8A24A;animation:auj-twinkle 3.9s ease-in-out infinite;animation-delay:1s;"></span>
+          </div>
+        </div>
+        <!-- right small dome -->
+        <div style="display:flex;flex-direction:column;align-items:center;margin:0 -4px;">
+          <div style="width:2px;height:11px;background:#C8A24A;opacity:.8;"></div>
+          <div style="width:52px;height:38px;border-radius:26px 26px 6px 6px / 34px 34px 6px 6px;background:#05200F;"></div>
+          <div style="width:70px;height:clamp(78px,12vh,128px);background:#05200F;border-radius:8px 8px 0 0;margin-top:-2px;position:relative;">
+            <span style="position:absolute;left:32%;top:34%;width:4px;height:6px;border-radius:1px;background:#D9B45E;box-shadow:0 0 5px #C8A24A;opacity:.8;"></span>
+            <span style="position:absolute;left:62%;top:34%;width:4px;height:6px;border-radius:1px;background:#D9B45E;box-shadow:0 0 5px #C8A24A;opacity:.6;"></span>
+          </div>
+        </div>
+        <!-- right minaret -->
+        <div style="display:flex;flex-direction:column;align-items:center;z-index:2;">
+          <div style="width:3px;height:14px;background:#C8A24A;opacity:.85;"></div>
+          <div style="width:16px;height:20px;border-radius:8px 8px 0 0;background:#05200F;"></div>
+          <div style="width:10px;height:6px;background:#05200F;"></div>
+          <div style="width:19px;height:clamp(150px,24vh,250px);background:#05200F;border-radius:4px 4px 0 0;position:relative;">
+            <span style="position:absolute;left:50%;top:36%;transform:translateX(-50%);width:3px;height:3px;border-radius:50%;background:#E8C36A;box-shadow:0 0 5px #C8A24A;animation:auj-twinkle 3.5s ease-in-out infinite;animation-delay:.3s;"></span>
+            <span style="position:absolute;left:50%;top:58%;transform:translateX(-50%);width:3px;height:3px;border-radius:50%;background:#E8C36A;box-shadow:0 0 5px #C8A24A;animation:auj-twinkle 4.2s ease-in-out infinite;animation-delay:.9s;"></span>
+          </div>
+        </div>
+        <!-- far right flat -->
+        <div style="width:46px;height:clamp(70px,11vh,118px);background:#04190F;border-radius:6px 6px 0 0;margin-left:-6px;"></div>
+      </div>
+    </div>
+
+    <!-- HERO CONTENT — text + smart planner (frame 01) -->
+    <div style="position:relative;z-index:5;width:100%;max-width:1200px;margin:0 auto;padding:clamp(30px,4.5vw,56px) clamp(16px,4vw,32px) clamp(120px,16vh,200px);display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:clamp(32px,4.5vw,56px);align-items:center;">
+      <div>
+        <div data-reveal style="display:inline-flex;align-items:center;gap:9px;background:#F1EADD;border:1px solid #E6DDCE;color:#4A4337;font-size:13px;font-weight:500;padding:7px 14px;border-radius:999px;margin-bottom:24px;">
+          <span style="width:7px;height:7px;border-radius:50%;background:#2A9468;animation:auj-pingG 2.6s ease-out infinite;"></span>
+          Umrah · Hajj · Ziyarat — for the EU &amp; Pakistani diaspora
+        </div>
+        <h1 data-reveal style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(36px,5.2vw,62px);line-height:1.04;letter-spacing:-0.024em;margin:0 0 20px;">Begin a sacred journey, <span style="color:#156440;">with calm.</span></h1>
+        <p data-reveal style="font-size:clamp(16px,1.6vw,19px);line-height:1.62;color:#6A6356;max-width:540px;margin:0 0 32px;">Hotel, transport, ground services and flights in one cart — with e-Visa guidance, live booking status, and prices in EUR or PKR. From across the EU to Makkah, Madinah and beyond.</p>
+        <div data-reveal style="display:flex;align-items:center;gap:12px;margin-bottom:38px;flex-wrap:wrap;">
+          <a href="AUJ Smart Planner.dc.html" style="text-decoration:none;display:inline-flex;align-items:center;gap:9px;background:#0F5132;color:#fff;font-size:15.5px;font-weight:600;padding:15px 26px;border-radius:13px;box-shadow:0 14px 30px rgba(15,81,50,0.3);transition:transform .18s, box-shadow .18s;" style-hover="transform:translateY(-2px);box-shadow:0 20px 44px rgba(7,48,30,0.55);">Plan my pilgrimage <span>→</span></a>
+          <a href="#tour" style="text-decoration:none;display:inline-flex;align-items:center;gap:9px;background:#fff;border:1px solid #C9BCA6;color:#156440;font-size:15.5px;font-weight:600;padding:15px 24px;border-radius:13px;transition:background .18s,border-color .18s;" style-hover="background:#F1EADD;border-color:#156440;">Take the virtual tour</a>
+        </div>
+        <div data-reveal style="display:flex;flex-wrap:wrap;gap:22px 38px;padding-top:28px;border-top:1px solid #E6DDCE;">
+          <div><div data-count data-target="6" data-suffix="" style="font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:600;color:#2A2620;">6</div><div style="font-size:12.5px;color:#7A7263;margin-top:3px;">EU departure cities</div></div>
+          <div><div data-count data-target="58" data-suffix="" style="font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:600;color:#2A2620;">58</div><div style="font-size:12.5px;color:#7A7263;margin-top:3px;">Verified packages</div></div>
+          <div><div data-count data-target="4.9" data-suffix="" data-dec="1" style="font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:600;color:#2A2620;">4.9</div><div style="font-size:12.5px;color:#7A7263;margin-top:3px;">Avg. pilgrim rating</div></div>
+          <div><div data-count data-target="11" data-suffix="k+" style="font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:600;color:#2A2620;">11k+</div><div style="font-size:12.5px;color:#7A7263;margin-top:3px;">Pilgrims served</div></div>
+        </div>
+      </div>
+
+      <!-- SMART PLANNER (frame 01) -->
+      <div data-reveal id="plan" style="background:linear-gradient(180deg,#FFFFFF,#FBF7F0);border:1px solid #E6DDCE;border-radius:22px;overflow:hidden;box-shadow:0 44px 96px -34px rgba(5,28,18,0.6);">
+        <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:radial-gradient(130% 230% at 88% -70%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;">
+          <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+          <div style="position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,162,74,0.6),transparent);"></div>
+          <div style="position:relative;display:flex;align-items:center;gap:11px;">
+            <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:8px;padding:4px 9px;box-shadow:0 2px 8px rgba(0,0,0,0.22);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:20px;width:auto;display:block;" /></span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.08em;color:#BFE0CD;">FRAME 01 · SMART PLANNER</span>
+          </div>
+          <span style="position:relative;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);color:#EFF6F1;font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;">Quick info</span>
+        </div>
+        <div style="padding:clamp(20px,2.4vw,26px);">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px;">
+            <h3 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(19px,2.2vw,23px);letter-spacing:-0.01em;margin:0;">Your trip at a glance</h3>
+            <span style="font-size:12.5px;color:#7A7263;">Editable anytime</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;">
+            <div style="background:#FAF6EF;border:1px solid #F1EADD;border-radius:13px;padding:13px 14px;">
+              <div style="font-size:10.5px;font-weight:600;letter-spacing:0.07em;color:#7A7263;margin-bottom:6px;">JOURNEY</div>
+              <div style="font-size:15.5px;font-weight:600;color:#2A2620;">Umrah</div>
+            </div>
+            <div style="background:#FAF6EF;border:1px solid #F1EADD;border-radius:13px;padding:13px 14px;">
+              <div style="font-size:10.5px;font-weight:600;letter-spacing:0.07em;color:#7A7263;margin-bottom:6px;">FROM</div>
+              <div style="font-size:15.5px;font-weight:600;color:#2A2620;">Vilnius (VNO)</div>
+            </div>
+            <div style="background:#FAF6EF;border:1px solid #F1EADD;border-radius:13px;padding:13px 14px;">
+              <div style="font-size:10.5px;font-weight:600;letter-spacing:0.07em;color:#7A7263;margin-bottom:6px;">DATES</div>
+              <div style="font-size:15.5px;font-weight:600;color:#2A2620;">12–26 Sep · 14 nts</div>
+            </div>
+            <div style="background:#FAF6EF;border:1px solid #F1EADD;border-radius:13px;padding:13px 14px;">
+              <div style="font-size:10.5px;font-weight:600;letter-spacing:0.07em;color:#7A7263;margin-bottom:6px;">PILGRIMS</div>
+              <div style="font-size:15.5px;font-weight:600;color:#2A2620;">4 travellers</div>
+            </div>
+            <div style="background:#FAF6EF;border:1px solid #F1EADD;border-radius:13px;padding:13px 14px;">
+              <div style="font-size:10.5px;font-weight:600;letter-spacing:0.07em;color:#7A7263;margin-bottom:6px;">VISA ROUTE</div>
+              <div style="font-size:15.5px;font-weight:600;color:#2A2620;">e-Visa · EU</div>
+            </div>
+            <div style="background:#FAF6EF;border:1px solid #F1EADD;border-radius:13px;padding:13px 14px;">
+              <div style="font-size:10.5px;font-weight:600;letter-spacing:0.07em;color:#7A7263;margin-bottom:6px;">EST. TOTAL</div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:15.5px;font-weight:600;color:#0F5132;">€9,920</div>
+            </div>
+          </div>
+          <div style="margin-top:20px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:9px;">
+            <span style="font-size:13px;font-weight:600;color:#2A2620;">Planning progress</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#7A7263;">Step 3 of 7 · Visa</span>
+          </div>
+          <div style="height:8px;border-radius:999px;background:#F1EADD;overflow:hidden;">
+            <div style="width:43%;height:100%;background:linear-gradient(90deg,#2A9468,#0F5132);border-radius:999px;"></div>
+          </div>
+          <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;">
+            <a href="AUJ Smart Planner.dc.html" style="text-decoration:none;display:inline-flex;align-items:center;gap:8px;background:#0F5132;color:#fff;font-size:14px;font-weight:600;padding:13px 22px;border-radius:12px;box-shadow:0 8px 18px rgba(15,81,50,0.26);transition:background .15s;" style-hover="background:#156440;">Continue in Smart Planner <span>→</span></a>
+            <a href="#search" style="text-decoration:none;display:inline-flex;align-items:center;gap:8px;background:#fff;color:#156440;border:1.5px solid #C9BCA6;font-size:14px;font-weight:600;padding:13px 20px;border-radius:12px;transition:background .15s;" style-hover="background:#F1EADD;">Or search packages</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THREE FRAMES -->
+  <div style="max-width:1080px;margin:clamp(-108px,-11vw,-118px) auto 0;padding:0 clamp(16px,4vw,32px);position:relative;z-index:30;display:flex;flex-direction:column;gap:clamp(46px,6vw,76px);">
+
+    <!-- FRAME 02 · VIRTUAL TOUR -->
+    <div data-reveal id="tour" style="background:linear-gradient(180deg,#FFFFFF,#FBF7F0);border:1px solid #E6DDCE;border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -28px rgba(42,38,32,0.42);display:flex;flex-direction:column;min-height:438px;">
+      <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:radial-gradient(130% 230% at 88% -70%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;">
+        <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,162,74,0.6),transparent);"></div>
+        <div style="position:relative;display:flex;align-items:center;gap:11px;">
+          <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:8px;padding:4px 9px;box-shadow:0 2px 8px rgba(0,0,0,0.22);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:20px;width:auto;display:block;" /></span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.08em;color:#BFE0CD;">FRAME 02 · VIRTUAL TOUR</span>
+        </div>
+        <span style="position:relative;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);color:#EFF6F1;font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;">15 guided steps</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;flex:1;">
+        <!-- video side -->
+        <div style="position:relative;flex:1 1 340px;min-height:320px;background:#0B2317;overflow:hidden;">
+          <img src="assets/tour/panorama.png" alt="" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:32% center;" />
+          <div style="position:absolute;inset:0;background:linear-gradient(120deg, rgba(6,28,19,0.58) 0%, rgba(8,44,28,0.26) 55%, rgba(6,37,26,0.66) 100%);"></div>
+          <div style="position:absolute;left:0;right:0;bottom:0;height:46%;background:linear-gradient(to top, rgba(5,25,16,0.66), transparent);pointer-events:none;"></div>
+          <span style="position:absolute;top:14px;left:14px;display:inline-flex;align-items:center;gap:7px;background:rgba(6,36,24,0.55);backdrop-filter:blur(6px);color:#EFF6F1;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;padding:6px 12px;border-radius:999px;">VIDEO · 01 / 15</span>
+          <a href="AUJ Virtual Tour.dc.html" aria-label="Play virtual tour" style="position:absolute;inset:0;margin:auto;width:78px;height:78px;border-radius:50%;background:rgba(15,81,50,0.96);display:flex;align-items:center;justify-content:center;box-shadow:0 14px 34px rgba(0,0,0,0.4);text-decoration:none;animation:auj-pingG 2.8s ease-out infinite;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="#fff" stroke="none"><path d="M8 5v14l11-7z"/></svg>
+          </a>
+          <span style="position:absolute;left:16px;bottom:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,0.72);">Tap to walk through each rite</span>
+        </div>
+        <!-- text side -->
+        <div style="flex:1 1 320px;padding:clamp(20px,2.4vw,28px);display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;align-items:center;gap:11px;">
+            <div style="width:42px;height:42px;border-radius:11px;background:#0F5132;color:#fff;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600;flex-shrink:0;">01</div>
+            <div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:#2F6F8F;">STEP 1 OF 15</div>
+              <div style="font-family:'IBM Plex Serif',serif;font-size:19px;font-weight:600;color:#2A2620;margin-top:1px;">Enter the state of Ihram</div>
+            </div>
+          </div>
+          <div dir="rtl" style="background:#FAF6EF;border:1px solid #F1EADD;border-radius:13px;padding:13px 15px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;">
+              <span style="font-size:12.5px;font-weight:600;color:#B5791E;font-family:'IBM Plex Sans Arabic','IBM Plex Sans',sans-serif;">الميقات · النية</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:#0F5132;background:#DCEDE4;border-radius:6px;padding:3px 7px;">AR</span>
+            </div>
+            <div style="font-family:'IBM Plex Sans Arabic','IBM Plex Serif',serif;font-size:17px;line-height:1.7;color:#2A2620;">ابدأ رحلتك بالنية والتلبية عند الميقات قبل دخول مكة المكرمة.</div>
+          </div>
+          <div style="background:#FAF6EF;border:1px solid #F1EADD;border-radius:13px;padding:13px 15px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;">
+              <span style="font-size:12px;font-weight:600;color:#B5791E;">Miqat · Intention</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:#0F5132;background:#DCEDE4;border-radius:6px;padding:3px 7px;">EN</span>
+            </div>
+            <div style="font-size:14.5px;line-height:1.6;color:#4A4337;">Begin with the intention and Talbiyah at the Miqat, before entering Makkah.</div>
+          </div>
+          <div style="margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:4px;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#7A7263;">EN · العربية · اردو · DE</span>
+            <a href="AUJ Virtual Tour.dc.html" style="text-decoration:none;display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:600;color:#156440;">Open virtual tour <span>→</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FRAME 03 · SEARCH -->
+    <div data-reveal id="search" style="background:linear-gradient(180deg,#FFFFFF,#FBF7F0);border:1px solid #E6DDCE;border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -28px rgba(42,38,32,0.42);display:flex;flex-direction:column;min-height:438px;">
+      <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:radial-gradient(130% 230% at 88% -70%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;">
+        <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,162,74,0.6),transparent);"></div>
+        <div style="position:relative;display:flex;align-items:center;gap:11px;">
+          <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:8px;padding:4px 9px;box-shadow:0 2px 8px rgba(0,0,0,0.22);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:20px;width:auto;display:block;" /></span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.08em;color:#BFE0CD;">FRAME 03 · SEARCH</span>
+        </div>
+        <span style="position:relative;font-size:12.5px;color:#BFE0CD;">FX today · 1 € = ₨310.8 · charged in EUR</span>
+      </div>
+      <div style="padding:clamp(18px,2.4vw,26px);flex:1;display:flex;flex-direction:column;justify-content:center;">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px;">
+          <div style="display:flex;gap:5px;background:#F1EADD;padding:4px;border-radius:13px;flex-wrap:wrap;">
+            <sc-for list="{{ searchTabs }}" as="t" hint-placeholder-count="3">
+              <button onClick="{{ t.onClick }}" style="cursor:pointer;border:none;font-family:inherit;font-size:14px;font-weight:600;padding:10px 24px;border-radius:10px;background:{{ t.bg }};color:{{ t.fg }};box-shadow:{{ t.shadow }};transition:all .18s;">{{ t.name }}</button>
+            </sc-for>
+          </div>
+          <span style="font-size:13px;color:#7A7263;">Search the verified catalogue</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;align-items:end;">
+          <div>
+            <div style="font-size:11px;color:#7A7263;font-weight:600;letter-spacing:0.06em;margin-bottom:6px;">FROM</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;border:1.5px solid #C9BCA6;border-radius:11px;padding:12px 13px;font-size:14.5px;font-weight:500;">Vilnius (VNO) <span style="color:#7A7263;">▾</span></div>
+          </div>
+          <div>
+            <div style="font-size:11px;color:#7A7263;font-weight:600;letter-spacing:0.06em;margin-bottom:6px;">DESTINATION</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;border:1.5px solid #C9BCA6;border-radius:11px;padding:12px 13px;font-size:14.5px;font-weight:500;">{{ searchDest }} <span style="color:#7A7263;">▾</span></div>
+          </div>
+          <div>
+            <div style="font-size:11px;color:#7A7263;font-weight:600;letter-spacing:0.06em;margin-bottom:6px;">DATES</div>
+            <div style="display:flex;align-items:center;gap:9px;border:1.5px solid #C9BCA6;border-radius:11px;padding:12px 13px;font-size:14.5px;font-weight:500;"><span style="color:#2F6F8F;">◷</span> 12–26 Sep · 14 nts</div>
+          </div>
+          <div>
+            <div style="font-size:11px;color:#7A7263;font-weight:600;letter-spacing:0.06em;margin-bottom:6px;">PILGRIMS</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;border:1.5px solid #C9BCA6;border-radius:11px;padding:6px 8px;">
+              <button onClick="{{ decPax }}" style="width:34px;height:34px;border-radius:9px;border:1px solid #E6DDCE;background:#FAF6EF;color:#156440;font-size:18px;cursor:pointer;transition:background .15s;" style-hover="background:#F1EADD;">−</button>
+              <span style="font-size:15px;font-weight:600;">{{ pax }}</span>
+              <button onClick="{{ incPax }}" style="width:34px;height:34px;border-radius:9px;border:none;background:#0F5132;color:#fff;font-size:18px;cursor:pointer;transition:background .15s;" style-hover="background:#156440;">+</button>
+            </div>
+          </div>
+        </div>
+        <button style="position:relative;overflow:hidden;width:100%;height:54px;margin-top:12px;cursor:pointer;background:#0F5132;color:#fff;border:none;font-family:inherit;font-size:15px;font-weight:600;padding:0 26px;border-radius:12px;box-shadow:0 8px 18px rgba(15,81,50,0.28);transition:background .15s;" style-hover="background:#156440;">
+          <span style="position:absolute;top:0;left:0;width:40%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);animation:auj-sheen 4.5s ease-in-out infinite;"></span>
+          <span style="position:relative;">Search {{ searchCount }} →</span>
+        </button>
+      </div>
+    </div>
+
+    <div data-reveal style="display:flex;align-items:center;gap:14px;margin-top:clamp(8px,1.4vw,16px);">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.12em;color:#2F6F8F;white-space:nowrap;">PREPARE TO TRAVEL</span>
+      <span style="flex:1;height:1px;background:#E6DDCE;"></span>
+    </div>
+
+    <!-- FRAME 04 · LUGGAGE WIZARD -->
+    <div data-reveal style="background:linear-gradient(180deg,#FFFFFF,#FBF7F0);border:1px solid #E6DDCE;border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -28px rgba(42,38,32,0.42);display:flex;flex-direction:column;min-height:438px;">
+      <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:radial-gradient(130% 230% at 88% -70%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;">
+        <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,162,74,0.6),transparent);"></div>
+        <div style="position:relative;display:flex;align-items:center;gap:11px;">
+          <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:8px;padding:4px 9px;box-shadow:0 2px 8px rgba(0,0,0,0.22);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:20px;width:auto;display:block;" /></span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.08em;color:#BFE0CD;">FRAME 04 · LUGGAGE WIZARD</span>
+        </div>
+        <span style="position:relative;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);color:#EFF6F1;font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;">8 steps · video</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;flex:1;">
+        <div style="position:relative;flex:1 1 300px;min-height:236px;background:radial-gradient(120% 130% at 75% 12%, #156440 0%, #0A3D26 52%, #06251A 100%);overflow:hidden;color:#EFF6F1;padding:clamp(20px,2.4vw,26px);display:flex;flex-direction:column;justify-content:space-between;">
+          <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 12px);pointer-events:none;"></div>
+          <div style="position:absolute;top:-46px;right:-40px;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle, rgba(200,162,74,0.22), transparent 70%);pointer-events:none;"></div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:#9CC6AE;">CHECK-IN → CHECK-OUT</div>
+          <div style="position:relative;display:flex;align-items:center;gap:14px;">
+            <div style="width:56px;height:56px;border-radius:16px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E8C36A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="7" width="17" height="13" rx="2.5"/><path d="M8.5 7V4.5h7V7M3.5 12h17M12 12v8"/></svg></div>
+            <div style="font-family:'IBM Plex Serif',serif;font-size:clamp(20px,2.4vw,24px);font-weight:600;line-height:1.15;">What you can pack, by the rules</div>
+          </div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#BFE0CD;">SAUDI CUSTOMS RULES · EN · العربية</div>
+        </div>
+        <div style="flex:1 1 320px;padding:clamp(22px,2.4vw,28px);display:flex;flex-direction:column;gap:14px;">
+          <h3 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(20px,2.4vw,25px);letter-spacing:-0.01em;margin:0;color:#2A2620;">Luggage &amp; packing guide</h3>
+          <p style="font-size:14.5px;line-height:1.6;color:#4A4337;margin:0;">A complete step-by-step guide from check-in to check-out — what you can bring, what to declare and what is prohibited, with a short video on every step.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;color:#2A2620;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:999px;padding:6px 12px;"><span style="width:9px;height:9px;border-radius:50%;background:#1C7A4F;"></span>Allowed</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;color:#2A2620;background:#FBF4E6;border:1px solid #F0E2C4;border-radius:999px;padding:6px 12px;"><span style="width:9px;height:9px;border-radius:50%;background:#B5791E;"></span>Declare</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;color:#2A2620;background:#FBF1EF;border:1px solid #F0D9D3;border-radius:999px;padding:6px 12px;"><span style="width:9px;height:9px;border-radius:50%;background:#B23A2E;"></span>Prohibited</span>
+          </div>
+          <a href="AUJ Luggage Wizard.dc.html" style="margin-top:auto;align-self:flex-start;text-decoration:none;display:inline-flex;align-items:center;gap:8px;background:#0F5132;color:#fff;font-size:14px;font-weight:600;padding:13px 22px;border-radius:12px;box-shadow:0 8px 18px rgba(15,81,50,0.26);transition:background .15s;" style-hover="background:#156440;">Open luggage wizard <span>→</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- FRAME 05 · AIRPORT WIZARD -->
+    <div data-reveal style="background:linear-gradient(180deg,#FFFFFF,#FBF7F0);border:1px solid #E6DDCE;border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -28px rgba(42,38,32,0.42);display:flex;flex-direction:column;min-height:438px;">
+      <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:radial-gradient(130% 230% at 88% -70%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;">
+        <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,162,74,0.6),transparent);"></div>
+        <div style="position:relative;display:flex;align-items:center;gap:11px;">
+          <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:8px;padding:4px 9px;box-shadow:0 2px 8px rgba(0,0,0,0.22);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:20px;width:auto;display:block;" /></span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.08em;color:#BFE0CD;">FRAME 05 · AIRPORT WIZARD</span>
+        </div>
+        <span style="position:relative;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);color:#EFF6F1;font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;">7 steps · video</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;flex:1;">
+        <div style="position:relative;flex:1 1 300px;min-height:236px;background:radial-gradient(120% 130% at 75% 12%, #2F6F8F 0%, #123A4A 52%, #06251A 100%);overflow:hidden;color:#EFF6F1;padding:clamp(20px,2.4vw,26px);display:flex;flex-direction:column;justify-content:space-between;">
+          <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 12px);pointer-events:none;"></div>
+          <div style="position:absolute;top:-46px;right:-40px;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle, rgba(200,162,74,0.2), transparent 70%);pointer-events:none;"></div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:#BFE0CD;">VILNIUS → JEDDAH / MADINAH</div>
+          <div style="position:relative;display:flex;align-items:center;gap:14px;">
+            <div style="width:56px;height:56px;border-radius:16px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="28" height="28" viewBox="0 0 24 24" fill="#E8C36A" stroke="none"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg></div>
+            <div style="font-family:'IBM Plex Serif',serif;font-size:clamp(20px,2.4vw,24px);font-weight:600;line-height:1.15;">From check-in to your hotel transfer</div>
+          </div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#BFE0CD;">ARRIVAL GUIDE · EN · العربية</div>
+        </div>
+        <div style="flex:1 1 320px;padding:clamp(22px,2.4vw,28px);display:flex;flex-direction:column;gap:14px;">
+          <h3 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(20px,2.4vw,25px);letter-spacing:-0.01em;margin:0;color:#2A2620;">Airport wizard</h3>
+          <p style="font-size:14.5px;line-height:1.6;color:#4A4337;margin:0;">Every airport step explained — check-in, security, boarding, the flight, immigration, baggage and your transfer — with a short video and a “have ready” checklist on each step.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;color:#2A2620;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:999px;padding:6px 12px;"><span style="width:9px;height:9px;border-radius:50%;background:#1C7A4F;"></span>Check-in</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;color:#2A2620;background:#E2EEF3;border:1px solid #C9DEE8;border-radius:999px;padding:6px 12px;"><span style="width:9px;height:9px;border-radius:50%;background:#2F6F8F;"></span>Immigration</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;color:#2A2620;background:#F7EBD3;border:1px solid #F0E2C4;border-radius:999px;padding:6px 12px;"><span style="width:9px;height:9px;border-radius:50%;background:#B5791E;"></span>Transfer</span>
+          </div>
+          <a href="AUJ Airport Wizard.dc.html" style="margin-top:auto;align-self:flex-start;text-decoration:none;display:inline-flex;align-items:center;gap:8px;background:#0F5132;color:#fff;font-size:14px;font-weight:600;padding:13px 22px;border-radius:12px;box-shadow:0 8px 18px rgba(15,81,50,0.26);transition:background .15s;" style-hover="background:#156440;">Open airport wizard <span>→</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div data-reveal style="display:flex;align-items:center;gap:14px;margin-top:clamp(8px,1.4vw,16px);">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.12em;color:#2F6F8F;white-space:nowrap;">SACRED SITES · ZIYARAT</span>
+      <span style="flex:1;height:1px;background:#E6DDCE;"></span>
+    </div>
+
+    <!-- FRAME 06 · MAKKA ZIYARAT -->
+    <div data-reveal style="background:linear-gradient(180deg,#FFFFFF,#FBF7F0);border:1px solid #E6DDCE;border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -28px rgba(42,38,32,0.42);display:flex;flex-direction:column;min-height:438px;">
+      <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:radial-gradient(130% 230% at 88% -70%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;">
+        <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,162,74,0.6),transparent);"></div>
+        <div style="position:relative;display:flex;align-items:center;gap:11px;">
+          <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:8px;padding:4px 9px;box-shadow:0 2px 8px rgba(0,0,0,0.22);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:20px;width:auto;display:block;" /></span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.08em;color:#BFE0CD;">FRAME 06 · MAKKA ZIYARAT</span>
+        </div>
+        <span style="position:relative;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);color:#EFF6F1;font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;">16 sites · video</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;flex:1;">
+        <div style="position:relative;flex:1 1 300px;min-height:236px;background:radial-gradient(120% 130% at 75% 12%, #156440 0%, #0A3D26 52%, #06251A 100%);overflow:hidden;color:#EFF6F1;padding:clamp(20px,2.4vw,26px);display:flex;flex-direction:column;justify-content:space-between;">
+          <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 12px);pointer-events:none;"></div>
+          <div style="position:absolute;top:-46px;right:-40px;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle, rgba(200,162,74,0.22), transparent 70%);pointer-events:none;"></div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:#9CC6AE;">SACRED SITES OF MAKKAH</div>
+          <div style="position:relative;display:flex;align-items:center;gap:14px;">
+            <div style="width:56px;height:56px;border-radius:16px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E8C36A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="11" rx="1.5"/><path d="M4 12h16M12 8v11"/></svg></div>
+            <div style="font-family:'IBM Plex Serif',serif;font-size:clamp(20px,2.4vw,24px);font-weight:600;line-height:1.15;">The Haram, holy sites &amp; museums</div>
+          </div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#BFE0CD;">EN · العربية · WITH VIDEO</div>
+        </div>
+        <div style="flex:1 1 320px;padding:clamp(22px,2.4vw,28px);display:flex;flex-direction:column;gap:14px;">
+          <h3 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(20px,2.4vw,25px);letter-spacing:-0.01em;margin:0;color:#2A2620;">Makka Ziyarat</h3>
+          <p style="font-size:14.5px;line-height:1.6;color:#4A4337;margin:0;">Every sacred place of Makkah in one guide — Masjid al-Haram, the Kaaba, Safa &amp; Marwah, Mina, Arafat, the museums and more — with a short video on each site.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:999px;padding:6px 12px;">Masjid al-Haram</span>
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:999px;padding:6px 12px;">Safa &amp; Marwah</span>
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#F7EBD3;border:1px solid #F0E2C4;border-radius:999px;padding:6px 12px;">Museums</span>
+          </div>
+          <a href="AUJ Makka Ziyarat Wizard.dc.html" style="margin-top:auto;align-self:flex-start;text-decoration:none;display:inline-flex;align-items:center;gap:8px;background:#0F5132;color:#fff;font-size:14px;font-weight:600;padding:13px 22px;border-radius:12px;box-shadow:0 8px 18px rgba(15,81,50,0.26);transition:background .15s;" style-hover="background:#156440;">Open Makka ziyarat <span>→</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- FRAME 07 · MADINA ZIYARAT -->
+    <div data-reveal style="background:linear-gradient(180deg,#FFFFFF,#FBF7F0);border:1px solid #E6DDCE;border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -28px rgba(42,38,32,0.42);display:flex;flex-direction:column;min-height:438px;">
+      <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:radial-gradient(130% 230% at 88% -70%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;">
+        <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,162,74,0.6),transparent);"></div>
+        <div style="position:relative;display:flex;align-items:center;gap:11px;">
+          <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:8px;padding:4px 9px;box-shadow:0 2px 8px rgba(0,0,0,0.22);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:20px;width:auto;display:block;" /></span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.08em;color:#BFE0CD;">FRAME 07 · MADINA ZIYARAT</span>
+        </div>
+        <span style="position:relative;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);color:#EFF6F1;font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;">14 sites · video</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;flex:1;">
+        <div style="position:relative;flex:1 1 300px;min-height:236px;background:radial-gradient(120% 130% at 75% 12%, #3FA77E 0%, #156440 52%, #07301E 100%);overflow:hidden;color:#EFF6F1;padding:clamp(20px,2.4vw,26px);display:flex;flex-direction:column;justify-content:space-between;">
+          <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 12px);pointer-events:none;"></div>
+          <div style="position:absolute;top:-46px;right:-40px;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle, rgba(200,162,74,0.2), transparent 70%);pointer-events:none;"></div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:#BFE0CD;">SACRED SITES OF MADINAH</div>
+          <div style="position:relative;display:flex;align-items:center;gap:14px;">
+            <div style="width:56px;height:56px;border-radius:16px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E8C36A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c2.5 1.8 4 4 4 6.5H8C8 7 9.5 4.8 12 3z"/><path d="M5 20v-9M19 20v-9M5 13h14v7H5z"/></svg></div>
+            <div style="font-family:'IBM Plex Serif',serif;font-size:clamp(20px,2.4vw,24px);font-weight:600;line-height:1.15;">An-Nabawi, Quba, Uhud &amp; museums</div>
+          </div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#BFE0CD;">EN · العربية · WITH VIDEO</div>
+        </div>
+        <div style="flex:1 1 320px;padding:clamp(22px,2.4vw,28px);display:flex;flex-direction:column;gap:14px;">
+          <h3 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(20px,2.4vw,25px);letter-spacing:-0.01em;margin:0;color:#2A2620;">Madina Ziyarat</h3>
+          <p style="font-size:14.5px;line-height:1.6;color:#4A4337;margin:0;">All the blessed sites of Madinah — Masjid an-Nabawi, Ar-Rawdah, al-Baqi, Quba, Mount Uhud and the museums — each explained with a short video.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:999px;padding:6px 12px;">An-Nabawi</span>
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:999px;padding:6px 12px;">Quba &amp; Uhud</span>
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#F7EBD3;border:1px solid #F0E2C4;border-radius:999px;padding:6px 12px;">Museums</span>
+          </div>
+          <a href="AUJ Madina Ziyarat Wizard.dc.html" style="margin-top:auto;align-self:flex-start;text-decoration:none;display:inline-flex;align-items:center;gap:8px;background:#0F5132;color:#fff;font-size:14px;font-weight:600;padding:13px 22px;border-radius:12px;box-shadow:0 8px 18px rgba(15,81,50,0.26);transition:background .15s;" style-hover="background:#156440;">Open Madina ziyarat <span>→</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div data-reveal style="display:flex;align-items:center;gap:14px;margin-top:clamp(8px,1.4vw,16px);">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.12em;color:#2F6F8F;white-space:nowrap;">WHERE TO STAY</span>
+      <span style="flex:1;height:1px;background:#E6DDCE;"></span>
+    </div>
+
+    <!-- FRAME 08 · MAKKAH HOTELS -->
+    <div data-reveal style="background:linear-gradient(180deg,#FFFFFF,#FBF7F0);border:1px solid #E6DDCE;border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -28px rgba(42,38,32,0.42);display:flex;flex-direction:column;min-height:438px;">
+      <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:radial-gradient(130% 230% at 88% -70%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;">
+        <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,162,74,0.6),transparent);"></div>
+        <div style="position:relative;display:flex;align-items:center;gap:11px;">
+          <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:8px;padding:4px 9px;box-shadow:0 2px 8px rgba(0,0,0,0.22);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:20px;width:auto;display:block;" /></span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.08em;color:#BFE0CD;">FRAME 08 · MAKKAH HOTELS</span>
+        </div>
+        <span style="position:relative;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);color:#EFF6F1;font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;">by distance</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;flex:1;">
+        <div style="position:relative;flex:1 1 300px;min-height:236px;background:radial-gradient(120% 130% at 75% 12%, #D9B45E 0%, #B5791E 52%, #5A3D12 100%);overflow:hidden;color:#FFF8EC;padding:clamp(20px,2.4vw,26px);display:flex;flex-direction:column;justify-content:space-between;">
+          <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 12px);pointer-events:none;"></div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:#F6E7C6;">NEAR MASJID AL-HARAM</div>
+          <div style="position:relative;display:flex;align-items:center;gap:14px;">
+            <div style="width:56px;height:56px;border-radius:16px;background:rgba(255,255,255,0.16);border:1px solid rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V6a1 1 0 0 1 1-1h6v15M11 20h9V11a1 1 0 0 0-1-1h-8M7 8h1M7 11h1M7 14h1M15 14h1M15 17h1"/></svg></div>
+            <div style="font-family:'IBM Plex Serif',serif;font-size:clamp(20px,2.4vw,24px);font-weight:600;line-height:1.15;">Famous hotels, by walking distance</div>
+          </div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#F6E7C6;">0–250 M → SHUTTLE · REAL NAMES</div>
+        </div>
+        <div style="flex:1 1 320px;padding:clamp(22px,2.4vw,28px);display:flex;flex-direction:column;gap:14px;">
+          <h3 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(20px,2.4vw,25px);letter-spacing:-0.01em;margin:0;color:#2A2620;">Hotels in Makkah</h3>
+          <p style="font-size:14.5px;line-height:1.6;color:#4A4337;margin:0;">Browse real, famous hotels grouped by distance to the Haram — from the Clock Tower towers and Jabal Omar down to value stays with a shuttle.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:999px;padding:6px 12px;">0–250 m</span>
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#F7EBD3;border:1px solid #F0E2C4;border-radius:999px;padding:6px 12px;">Jabal Omar</span>
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#F1EADD;border:1px solid #E6DDCE;border-radius:999px;padding:6px 12px;">Shuttle</span>
+          </div>
+          <a href="AUJ Makkah Hotels.dc.html" style="margin-top:auto;align-self:flex-start;text-decoration:none;display:inline-flex;align-items:center;gap:8px;background:#0F5132;color:#fff;font-size:14px;font-weight:600;padding:13px 22px;border-radius:12px;box-shadow:0 8px 18px rgba(15,81,50,0.26);transition:background .15s;" style-hover="background:#156440;">Open Makkah hotels <span>→</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- FRAME 09 · MADINA HOTELS -->
+    <div data-reveal style="background:linear-gradient(180deg,#FFFFFF,#FBF7F0);border:1px solid #E6DDCE;border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -28px rgba(42,38,32,0.42);display:flex;flex-direction:column;min-height:438px;">
+      <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:radial-gradient(130% 230% at 88% -70%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;">
+        <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,162,74,0.6),transparent);"></div>
+        <div style="position:relative;display:flex;align-items:center;gap:11px;">
+          <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:8px;padding:4px 9px;box-shadow:0 2px 8px rgba(0,0,0,0.22);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:20px;width:auto;display:block;" /></span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.08em;color:#BFE0CD;">FRAME 09 · MADINA HOTELS</span>
+        </div>
+        <span style="position:relative;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);color:#EFF6F1;font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;">by distance</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;flex:1;">
+        <div style="position:relative;flex:1 1 300px;min-height:236px;background:radial-gradient(120% 130% at 75% 12%, #3C86A8 0%, #2F6F8F 52%, #123A4A 100%);overflow:hidden;color:#EAF4F8;padding:clamp(20px,2.4vw,26px);display:flex;flex-direction:column;justify-content:space-between;">
+          <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 12px);pointer-events:none;"></div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:#CDE6F0;">NEAR MASJID AN-NABAWI</div>
+          <div style="position:relative;display:flex;align-items:center;gap:14px;">
+            <div style="width:56px;height:56px;border-radius:16px;background:rgba(255,255,255,0.16);border:1px solid rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-5h13a2 2 0 0 1 2 2v3M3 14h15M6 13V9h4M21 18v-4"/></svg></div>
+            <div style="font-family:'IBM Plex Serif',serif;font-size:clamp(20px,2.4vw,24px);font-weight:600;line-height:1.15;">Stays around the Prophet’s Mosque</div>
+          </div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#CDE6F0;">CENTRAL → SHUTTLE · REAL NAMES</div>
+        </div>
+        <div style="flex:1 1 320px;padding:clamp(22px,2.4vw,28px);display:flex;flex-direction:column;gap:14px;">
+          <h3 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(20px,2.4vw,25px);letter-spacing:-0.01em;margin:0;color:#2A2620;">Hotels in Madinah</h3>
+          <p style="font-size:14.5px;line-height:1.6;color:#4A4337;margin:0;">Real, famous hotels by distance to Masjid an-Nabawi — from the central Piazza right by the Haram to comfortable outer-district stays with a shuttle.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:999px;padding:6px 12px;">Central Piazza</span>
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#E2EEF3;border:1px solid #C9DEE8;border-radius:999px;padding:6px 12px;">Outer ring</span>
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#F1EADD;border:1px solid #E6DDCE;border-radius:999px;padding:6px 12px;">Shuttle</span>
+          </div>
+          <a href="AUJ Madina Hotels.dc.html" style="margin-top:auto;align-self:flex-start;text-decoration:none;display:inline-flex;align-items:center;gap:8px;background:#0F5132;color:#fff;font-size:14px;font-weight:600;padding:13px 22px;border-radius:12px;box-shadow:0 8px 18px rgba(15,81,50,0.26);transition:background .15s;" style-hover="background:#156440;">Open Madinah hotels <span>→</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div data-reveal style="display:flex;align-items:center;gap:14px;margin-top:clamp(8px,1.4vw,16px);">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.12em;color:#2F6F8F;white-space:nowrap;">ON THE GROUND</span>
+      <span style="flex:1;height:1px;background:#E6DDCE;"></span>
+    </div>
+
+    <!-- FRAME 10 · FOOD & DINING -->
+    <div data-reveal style="background:linear-gradient(180deg,#FFFFFF,#FBF7F0);border:1px solid #E6DDCE;border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -28px rgba(42,38,32,0.42);display:flex;flex-direction:column;min-height:438px;">
+      <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:radial-gradient(130% 230% at 88% -70%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;">
+        <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,162,74,0.6),transparent);"></div>
+        <div style="position:relative;display:flex;align-items:center;gap:11px;">
+          <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:8px;padding:4px 9px;box-shadow:0 2px 8px rgba(0,0,0,0.22);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:20px;width:auto;display:block;" /></span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.08em;color:#BFE0CD;">FRAME 10 · FOOD &amp; DINING</span>
+        </div>
+        <span style="position:relative;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);color:#EFF6F1;font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;">Makkah &amp; Madinah</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;flex:1;">
+        <div style="position:relative;flex:1 1 300px;min-height:236px;background:radial-gradient(120% 130% at 75% 12%, #2A9468 0%, #0F5132 52%, #062418 100%);overflow:hidden;color:#EFF6F1;padding:clamp(20px,2.4vw,26px);display:flex;flex-direction:column;justify-content:space-between;">
+          <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 12px);pointer-events:none;"></div>
+          <div style="position:absolute;top:-46px;right:-40px;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle, rgba(200,162,74,0.22), transparent 70%);pointer-events:none;"></div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:#9CC6AE;">GOOD EATS &amp; ONLINE ORDERS</div>
+          <div style="position:relative;display:flex;align-items:center;gap:14px;">
+            <div style="width:56px;height:56px;border-radius:16px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E8C36A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v8a2 2 0 0 0 4 0V3M8 11v10M16 3c-1.5 0-2.5 1.5-2.5 4s1 4 2.5 4v10"/></svg></div>
+            <div style="font-family:'IBM Plex Serif',serif;font-size:clamp(20px,2.4vw,24px);font-weight:600;line-height:1.15;">Restaurants &amp; food delivery</div>
+          </div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#BFE0CD;">DESI · ARAB · TURKISH · CAFÉS · APPS</div>
+        </div>
+        <div style="flex:1 1 320px;padding:clamp(22px,2.4vw,28px);display:flex;flex-direction:column;gap:14px;">
+          <h3 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(20px,2.4vw,25px);letter-spacing:-0.01em;margin:0;color:#2A2620;">Food &amp; dining</h3>
+          <p style="font-size:14.5px;line-height:1.6;color:#4A4337;margin:0;">Good restaurants near the Haram in both cities — Desi, Arab, Turkish and cafés — plus the delivery apps to order straight to your hotel.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:999px;padding:6px 12px;">Near the Haram</span>
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:999px;padding:6px 12px;">Desi &amp; Arab</span>
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#F7EBD3;border:1px solid #F0E2C4;border-radius:999px;padding:6px 12px;">Order online</span>
+          </div>
+          <a href="AUJ Food Guide.dc.html" style="margin-top:auto;align-self:flex-start;text-decoration:none;display:inline-flex;align-items:center;gap:8px;background:#0F5132;color:#fff;font-size:14px;font-weight:600;padding:13px 22px;border-radius:12px;box-shadow:0 8px 18px rgba(15,81,50,0.26);transition:background .15s;" style-hover="background:#156440;">Open food guide <span>→</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- FRAME 11 · HOSPITALS & CARE -->
+    <div data-reveal style="background:linear-gradient(180deg,#FFFFFF,#FBF7F0);border:1px solid #E6DDCE;border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -28px rgba(42,38,32,0.42);display:flex;flex-direction:column;min-height:438px;">
+      <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:radial-gradient(130% 230% at 88% -70%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;">
+        <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,162,74,0.6),transparent);"></div>
+        <div style="position:relative;display:flex;align-items:center;gap:11px;">
+          <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:8px;padding:4px 9px;box-shadow:0 2px 8px rgba(0,0,0,0.22);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:20px;width:auto;display:block;" /></span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.08em;color:#BFE0CD;">FRAME 11 · HOSPITALS &amp; CARE</span>
+        </div>
+        <span style="position:relative;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);color:#EFF6F1;font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;">Makkah &amp; Madinah</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;flex:1;">
+        <div style="position:relative;flex:1 1 300px;min-height:236px;background:radial-gradient(120% 130% at 75% 12%, #A33B2E 0%, #6E241B 52%, #2A0E0A 100%);overflow:hidden;color:#FBEDEA;padding:clamp(20px,2.4vw,26px);display:flex;flex-direction:column;justify-content:space-between;">
+          <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 12px);pointer-events:none;"></div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:#F3C9C1;">EMERGENCY · 997 / 911</div>
+          <div style="position:relative;display:flex;align-items:center;gap:14px;">
+            <div style="width:56px;height:56px;border-radius:16px;background:rgba(255,255,255,0.16);border:1px solid rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="28" height="28" viewBox="0 0 24 24" fill="#fff" stroke="none"><path d="M10 4h4v4h4v4h-4v4h-4v-4H6V8h4z"/></svg></div>
+            <div style="font-family:'IBM Plex Serif',serif;font-size:clamp(20px,2.4vw,24px);font-weight:600;line-height:1.15;">Hospitals, clinics &amp; pharmacies</div>
+          </div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#F3C9C1;">GOVT · PRIVATE · 24H PHARMACIES</div>
+        </div>
+        <div style="flex:1 1 320px;padding:clamp(22px,2.4vw,28px);display:flex;flex-direction:column;gap:14px;">
+          <h3 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(20px,2.4vw,25px);letter-spacing:-0.01em;margin:0;color:#2A2620;">Hospitals &amp; care</h3>
+          <p style="font-size:14.5px;line-height:1.6;color:#4A4337;margin:0;">Emergency numbers and the main hospitals, private clinics and 24‑hour pharmacies in Makkah and Madinah — so you always know where to go.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#FBF1EF;border:1px solid #F0D9D3;border-radius:999px;padding:6px 12px;">Emergency 997</span>
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:999px;padding:6px 12px;">Hospitals</span>
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#F7EBD3;border:1px solid #F0E2C4;border-radius:999px;padding:6px 12px;">24h pharmacy</span>
+          </div>
+          <a href="AUJ Hospitals Guide.dc.html" style="margin-top:auto;align-self:flex-start;text-decoration:none;display:inline-flex;align-items:center;gap:8px;background:#0F5132;color:#fff;font-size:14px;font-weight:600;padding:13px 22px;border-radius:12px;box-shadow:0 8px 18px rgba(15,81,50,0.26);transition:background .15s;" style-hover="background:#156440;">Open hospitals guide <span>→</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- FRAME 12 · TRANSPORT -->
+    <div data-reveal style="background:linear-gradient(180deg,#FFFFFF,#FBF7F0);border:1px solid #E6DDCE;border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -28px rgba(42,38,32,0.42);display:flex;flex-direction:column;min-height:438px;">
+      <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:radial-gradient(130% 230% at 88% -70%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;">
+        <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,162,74,0.6),transparent);"></div>
+        <div style="position:relative;display:flex;align-items:center;gap:11px;">
+          <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:8px;padding:4px 9px;box-shadow:0 2px 8px rgba(0,0,0,0.22);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:20px;width:auto;display:block;" /></span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.08em;color:#BFE0CD;">FRAME 12 · TRANSPORT</span>
+        </div>
+        <span style="position:relative;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);color:#EFF6F1;font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;">options · fares</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;flex:1;">
+        <div style="position:relative;flex:1 1 300px;min-height:236px;background:radial-gradient(120% 130% at 75% 12%, #3C86A8 0%, #235B73 52%, #0A2A36 100%);overflow:hidden;color:#EAF4F8;padding:clamp(20px,2.4vw,26px);display:flex;flex-direction:column;justify-content:space-between;">
+          <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 12px);pointer-events:none;"></div>
+          <div style="position:absolute;top:-46px;right:-40px;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle, rgba(200,162,74,0.2), transparent 70%);pointer-events:none;"></div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:#CDE6F0;">GETTING AROUND · FARES</div>
+          <div style="position:relative;display:flex;align-items:center;gap:14px;">
+            <div style="width:56px;height:56px;border-radius:16px;background:rgba(255,255,255,0.16);border:1px solid rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="11" rx="2.5"/><path d="M4 11h16M8 16v2M16 16v2"/><circle cx="8" cy="13.5" r="0.6"/><circle cx="16" cy="13.5" r="0.6"/></svg></div>
+            <div style="font-family:'IBM Plex Serif',serif;font-size:clamp(20px,2.4vw,24px);font-weight:600;line-height:1.15;">Rail, ride-hailing, buses &amp; taxis</div>
+          </div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#CDE6F0;">HARAMAIN RAIL · CAREEM · SAPTCO</div>
+        </div>
+        <div style="flex:1 1 320px;padding:clamp(22px,2.4vw,28px);display:flex;flex-direction:column;gap:14px;">
+          <h3 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(20px,2.4vw,25px);letter-spacing:-0.01em;margin:0;color:#2A2620;">Transport</h3>
+          <p style="font-size:14.5px;line-height:1.6;color:#4A4337;margin:0;">Every way to move — the Haramain high-speed train, airport transfers, ride-hailing apps, intercity coaches, local buses and private cars — with indicative fares and the companies to use.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#E2EEF3;border:1px solid #C9DEE8;border-radius:999px;padding:6px 12px;">Haramain rail</span>
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:999px;padding:6px 12px;">Ride-hailing</span>
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#F7EBD3;border:1px solid #F0E2C4;border-radius:999px;padding:6px 12px;">Fares</span>
+          </div>
+          <a href="AUJ Transport Guide.dc.html" style="margin-top:auto;align-self:flex-start;text-decoration:none;display:inline-flex;align-items:center;gap:8px;background:#0F5132;color:#fff;font-size:14px;font-weight:600;padding:13px 22px;border-radius:12px;box-shadow:0 8px 18px rgba(15,81,50,0.26);transition:background .15s;" style-hover="background:#156440;">Open transport guide <span>→</span></a>
+        </div>
+      </div>
+    </div>
+    <!-- FRAME 13 · LAUNDRY -->
+    <div data-reveal style="background:linear-gradient(180deg,#FFFFFF,#FBF7F0);border:1px solid #E6DDCE;border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -28px rgba(42,38,32,0.42);display:flex;flex-direction:column;min-height:438px;">
+      <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:radial-gradient(130% 230% at 88% -70%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;">
+        <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,162,74,0.6),transparent);"></div>
+        <div style="position:relative;display:flex;align-items:center;gap:11px;">
+          <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:8px;padding:4px 9px;box-shadow:0 2px 8px rgba(0,0,0,0.22);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:20px;width:auto;display:block;" /></span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.08em;color:#BFE0CD;">FRAME 13 · LAUNDRY</span>
+        </div>
+        <span style="position:relative;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);color:#EFF6F1;font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;">Makkah &amp; Madinah</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;flex:1;">
+        <div style="position:relative;flex:1 1 300px;min-height:236px;background:radial-gradient(120% 130% at 75% 12%, #2F6F8F 0%, #156440 52%, #06251A 100%);overflow:hidden;color:#EAF4F8;padding:clamp(20px,2.4vw,26px);display:flex;flex-direction:column;justify-content:space-between;">
+          <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 12px);pointer-events:none;"></div>
+          <div style="position:absolute;top:-46px;right:-40px;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle, rgba(200,162,74,0.2), transparent 70%);pointer-events:none;"></div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:#CDE6F0;">WASH · IRON · PICKUP</div>
+          <div style="position:relative;display:flex;align-items:center;gap:14px;">
+            <div style="width:56px;height:56px;border-radius:16px;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.28);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E8C36A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><circle cx="12" cy="13" r="4.5"/><circle cx="12" cy="13" r="1.6"/><path d="M8 6h.01M11 6h.01"/></svg></div>
+            <div style="font-family:'IBM Plex Serif',serif;font-size:clamp(20px,2.4vw,24px);font-weight:600;line-height:1.15;">Clean ihram &amp; clothes, fast</div>
+          </div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#CDE6F0;">SHOPS · EXPRESS · PICKUP APPS</div>
+        </div>
+        <div style="flex:1 1 320px;padding:clamp(22px,2.4vw,28px);display:flex;flex-direction:column;gap:14px;">
+          <h3 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(20px,2.4vw,25px);letter-spacing:-0.01em;margin:0;color:#2A2620;">Laundry</h3>
+          <p style="font-size:14.5px;line-height:1.6;color:#4A4337;margin:0;">Where to wash, iron and dry-clean in both cities — hotel laundry, walk-in shops near the Haram, express &amp; 24-hour, and pickup apps that collect from your hotel.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:999px;padding:6px 12px;">Near the Haram</span>
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#E2EEF3;border:1px solid #C9DEE8;border-radius:999px;padding:6px 12px;">Express 24h</span>
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#F7EBD3;border:1px solid #F0E2C4;border-radius:999px;padding:6px 12px;">Pickup apps</span>
+          </div>
+          <a href="AUJ Laundry Guide.dc.html" style="margin-top:auto;align-self:flex-start;text-decoration:none;display:inline-flex;align-items:center;gap:8px;background:#0F5132;color:#fff;font-size:14px;font-weight:600;padding:13px 22px;border-radius:12px;box-shadow:0 8px 18px rgba(15,81,50,0.26);transition:background .15s;" style-hover="background:#156440;">Open laundry guide <span>→</span></a>
+        </div>
+      </div>
+    </div>
+    <!-- FRAME 14 · GIFTS & SHOPPING -->
+    <div data-reveal style="background:linear-gradient(180deg,#FFFFFF,#FBF7F0);border:1px solid #E6DDCE;border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -28px rgba(42,38,32,0.42);display:flex;flex-direction:column;min-height:438px;">
+      <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:radial-gradient(130% 230% at 88% -70%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;">
+        <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,162,74,0.6),transparent);"></div>
+        <div style="position:relative;display:flex;align-items:center;gap:11px;">
+          <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:8px;padding:4px 9px;box-shadow:0 2px 8px rgba(0,0,0,0.22);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:20px;width:auto;display:block;" /></span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.08em;color:#BFE0CD;">FRAME 14 · GIFTS &amp; SHOPPING</span>
+        </div>
+        <span style="position:relative;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);color:#EFF6F1;font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;">Makkah · Madinah · Jeddah</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;flex:1;">
+        <div style="position:relative;flex:1 1 300px;min-height:236px;background:radial-gradient(120% 130% at 75% 12%, #D9B45E 0%, #B5791E 52%, #5A3D12 100%);overflow:hidden;color:#FFF8EC;padding:clamp(20px,2.4vw,26px);display:flex;flex-direction:column;justify-content:space-between;">
+          <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 12px);pointer-events:none;"></div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:#F6E7C6;">DATES · ZAMZAM · GIFTS</div>
+          <div style="position:relative;display:flex;align-items:center;gap:14px;">
+            <div style="width:56px;height:56px;border-radius:16px;background:rgba(255,255,255,0.16);border:1px solid rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="9" width="16" height="11" rx="1.5"/><path d="M4 13h16M12 9v11M12 9c-1.2-3-5.5-2.8-5 .3M12 9c1.2-3 5.5-2.8 5 .3"/></svg></div>
+            <div style="font-family:'IBM Plex Serif',serif;font-size:clamp(20px,2.4vw,24px);font-weight:600;line-height:1.15;">Dates, Zamzam &amp; souvenirs</div>
+          </div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#F6E7C6;">MAKKAH · MADINAH · JEDDAH</div>
+        </div>
+        <div style="flex:1 1 320px;padding:clamp(22px,2.4vw,28px);display:flex;flex-direction:column;gap:14px;">
+          <h3 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(20px,2.4vw,25px);letter-spacing:-0.01em;margin:0;color:#2A2620;">Gifts &amp; shopping</h3>
+          <p style="font-size:14.5px;line-height:1.6;color:#4A4337;margin:0;">Where to buy the famous gifts — sealed Zamzam, Ajwa and dates, attar, prayer mats and souvenirs — across Makkah, Madinah and Jeddah, plus online options that ship home.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:999px;padding:6px 12px;">Dates &amp; Zamzam</span>
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#F7EBD3;border:1px solid #F0E2C4;border-radius:999px;padding:6px 12px;">Souqs &amp; malls</span>
+            <span style="font-size:12.5px;font-weight:500;color:#2A2620;background:#E2EEF3;border:1px solid #C9DEE8;border-radius:999px;padding:6px 12px;">Order online</span>
+          </div>
+          <a href="AUJ Gifts Guide.dc.html" style="margin-top:auto;align-self:flex-start;text-decoration:none;display:inline-flex;align-items:center;gap:8px;background:#0F5132;color:#fff;font-size:14px;font-weight:600;padding:13px 22px;border-radius:12px;box-shadow:0 8px 18px rgba(15,81,50,0.26);transition:background .15s;" style-hover="background:#156440;">Open gifts guide <span>→</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div data-reveal style="display:flex;align-items:center;gap:14px;margin-top:clamp(8px,1.4vw,16px);">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.12em;color:#2F6F8F;white-space:nowrap;">DAILY LIFE & SUPPORT</span>
+      <span style="flex:1;height:1px;background:#E6DDCE;"></span>
+    </div>
+
+    <!-- FRAME 15 · DAY PLANNER -->
+    <div data-reveal style="background:linear-gradient(180deg,#FFFFFF,#FBF7F0);border:1px solid #E6DDCE;border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -28px rgba(42,38,32,0.42);display:flex;flex-direction:column;min-height:438px;">
+      <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:radial-gradient(130% 230% at 88% -70%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;">
+        <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,162,74,0.6),transparent);"></div>
+        <div style="position:relative;display:flex;align-items:center;gap:11px;">
+          <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:8px;padding:4px 9px;box-shadow:0 2px 8px rgba(0,0,0,0.22);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:20px;width:auto;display:block;" /></span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.08em;color:#BFE0CD;">FRAME 15 · DAY PLANNER</span>
+        </div>
+        <span style="position:relative;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);color:#EFF6F1;font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;">jamaat times · weather</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;flex:1;">
+        <div style="position:relative;flex:1 1 300px;min-height:236px;background:radial-gradient(120% 130% at 75% 12%, #156440 0%, #0A3D26 52%, #06251A 100%);overflow:hidden;color:#EFF6F1;padding:clamp(20px,2.4vw,26px);display:flex;flex-direction:column;justify-content:space-between;">
+          <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 12px);pointer-events:none;"></div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:#9CC6AE;">DAWN TO NIGHT</div>
+          <div style="position:relative;font-family:'IBM Plex Serif',serif;font-size:clamp(20px,2.4vw,24px);font-weight:600;line-height:1.15;">Your day, by jamaat times</div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#BFE0CD;">HOURLY TEMPERATURE · ADJUSTABLE</div>
+        </div>
+        <div style="flex:1 1 320px;padding:clamp(22px,2.4vw,28px);display:flex;flex-direction:column;gap:14px;">
+          <h3 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(20px,2.4vw,25px);letter-spacing:-0.01em;margin:0;color:#2A2620;">Day planner</h3>
+          <p style="font-size:14.5px;line-height:1.6;color:#4A4337;margin:0;">A full day mapped around the Haram jamaat — wake-up, breakfast, prayers, lunch and activities — with the hour-by-hour temperature and a one-tap time adjustment.</p>
+          <a href="AUJ Day Planner.dc.html" style="margin-top:auto;align-self:flex-start;text-decoration:none;display:inline-flex;align-items:center;gap:8px;background:#0F5132;color:#fff;font-size:14px;font-weight:600;padding:13px 22px;border-radius:12px;box-shadow:0 8px 18px rgba(15,81,50,0.26);transition:background .15s;" style-hover="background:#156440;">Open day planner <span>→</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- FRAME 16 · PERSONAL DIARY -->
+    <div data-reveal style="background:linear-gradient(180deg,#FFFFFF,#FBF7F0);border:1px solid #E6DDCE;border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -28px rgba(42,38,32,0.42);display:flex;flex-direction:column;min-height:438px;">
+      <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:radial-gradient(130% 230% at 88% -70%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;">
+        <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,162,74,0.6),transparent);"></div>
+        <div style="position:relative;display:flex;align-items:center;gap:11px;">
+          <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:8px;padding:4px 9px;box-shadow:0 2px 8px rgba(0,0,0,0.22);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:20px;width:auto;display:block;" /></span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.08em;color:#BFE0CD;">FRAME 16 · PERSONAL DIARY</span>
+        </div>
+        <span style="position:relative;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);color:#EFF6F1;font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;">saved on device</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;flex:1;">
+        <div style="position:relative;flex:1 1 300px;min-height:236px;background:radial-gradient(120% 130% at 75% 12%, #3FA77E 0%, #156440 52%, #07301E 100%);overflow:hidden;color:#EFF6F1;padding:clamp(20px,2.4vw,26px);display:flex;flex-direction:column;justify-content:space-between;">
+          <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 12px);pointer-events:none;"></div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:#BFE0CD;">QURAN · NAFL · DUA</div>
+          <div style="position:relative;font-family:'IBM Plex Serif',serif;font-size:clamp(20px,2.4vw,24px);font-weight:600;line-height:1.15;">Your spiritual journal</div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#BFE0CD;">PRIVATE · CUSTOM TO YOU</div>
+        </div>
+        <div style="flex:1 1 320px;padding:clamp(22px,2.4vw,28px);display:flex;flex-direction:column;gap:14px;">
+          <h3 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(20px,2.4vw,25px);letter-spacing:-0.01em;margin:0;color:#2A2620;">Personal diary</h3>
+          <p style="font-size:14.5px;line-height:1.6;color:#4A4337;margin:0;">Track your Quran target, nafl &amp; sunnah prayers and dua list, and write daily reflections — all saved privately on your device and personal to you.</p>
+          <a href="AUJ Personal Diary.dc.html" style="margin-top:auto;align-self:flex-start;text-decoration:none;display:inline-flex;align-items:center;gap:8px;background:#0F5132;color:#fff;font-size:14px;font-weight:600;padding:13px 22px;border-radius:12px;box-shadow:0 8px 18px rgba(15,81,50,0.26);transition:background .15s;" style-hover="background:#156440;">Open personal diary <span>→</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- FRAME 17 · HELPLINE & SOS -->
+    <div data-reveal style="background:linear-gradient(180deg,#FFFFFF,#FBF7F0);border:1px solid #E6DDCE;border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -28px rgba(42,38,32,0.42);display:flex;flex-direction:column;min-height:438px;">
+      <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:radial-gradient(130% 230% at 88% -70%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;">
+        <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,162,74,0.6),transparent);"></div>
+        <div style="position:relative;display:flex;align-items:center;gap:11px;">
+          <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:8px;padding:4px 9px;box-shadow:0 2px 8px rgba(0,0,0,0.22);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:20px;width:auto;display:block;" /></span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.08em;color:#BFE0CD;">FRAME 17 · HELPLINE & SOS</span>
+        </div>
+        <span style="position:relative;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);color:#EFF6F1;font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;">997 · 911 · 937</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;flex:1;">
+        <div style="position:relative;flex:1 1 300px;min-height:236px;background:radial-gradient(120% 130% at 75% 12%, #A33B2E 0%, #6E241B 52%, #2A0E0A 100%);overflow:hidden;color:#FBEDEA;padding:clamp(20px,2.4vw,26px);display:flex;flex-direction:column;justify-content:space-between;">
+          <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 12px);pointer-events:none;"></div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:#F3C9C1;">EMERGENCY · REGISTER</div>
+          <div style="position:relative;font-family:'IBM Plex Serif',serif;font-size:clamp(20px,2.4vw,24px);font-weight:600;line-height:1.15;">Helplines &amp; what to do</div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#F3C9C1;">EMBASSY · LOST &amp; FOUND</div>
+        </div>
+        <div style="flex:1 1 320px;padding:clamp(22px,2.4vw,28px);display:flex;flex-direction:column;gap:14px;">
+          <h3 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(20px,2.4vw,25px);letter-spacing:-0.01em;margin:0;color:#2A2620;">Helpline &amp; SOS</h3>
+          <p style="font-size:14.5px;line-height:1.6;color:#4A4337;margin:0;">All the emergency numbers, the official apps to register, embassy guidance, and what to do if you are separated from your group — for Makkah and Madinah.</p>
+          <a href="AUJ Helpline Guide.dc.html" style="margin-top:auto;align-self:flex-start;text-decoration:none;display:inline-flex;align-items:center;gap:8px;background:#0F5132;color:#fff;font-size:14px;font-weight:600;padding:13px 22px;border-radius:12px;box-shadow:0 8px 18px rgba(15,81,50,0.26);transition:background .15s;" style-hover="background:#156440;">Open helpline guide <span>→</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- FRAME 18 · CONNECTIVITY -->
+    <div data-reveal style="background:linear-gradient(180deg,#FFFFFF,#FBF7F0);border:1px solid #E6DDCE;border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -28px rgba(42,38,32,0.42);display:flex;flex-direction:column;min-height:438px;">
+      <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:radial-gradient(130% 230% at 88% -70%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;">
+        <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,162,74,0.6),transparent);"></div>
+        <div style="position:relative;display:flex;align-items:center;gap:11px;">
+          <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:8px;padding:4px 9px;box-shadow:0 2px 8px rgba(0,0,0,0.22);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:20px;width:auto;display:block;" /></span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.08em;color:#BFE0CD;">FRAME 18 · CONNECTIVITY</span>
+        </div>
+        <span style="position:relative;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);color:#EFF6F1;font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;">SIM · wifi · location</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;flex:1;">
+        <div style="position:relative;flex:1 1 300px;min-height:236px;background:radial-gradient(120% 130% at 75% 12%, #3C86A8 0%, #235B73 52%, #0A2A36 100%);overflow:hidden;color:#EAF4F8;padding:clamp(20px,2.4vw,26px);display:flex;flex-direction:column;justify-content:space-between;">
+          <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 12px);pointer-events:none;"></div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:#CDE6F0;">SIM · INTERNET · LOCATION</div>
+          <div style="position:relative;font-family:'IBM Plex Serif',serif;font-size:clamp(20px,2.4vw,24px);font-weight:600;line-height:1.15;">Stay connected to home</div>
+          <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#CDE6F0;">STC · WHATSAPP · NUSUK</div>
+        </div>
+        <div style="flex:1 1 320px;padding:clamp(22px,2.4vw,28px);display:flex;flex-direction:column;gap:14px;">
+          <h3 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(20px,2.4vw,25px);letter-spacing:-0.01em;margin:0;color:#2A2620;">Connectivity</h3>
+          <p style="font-size:14.5px;line-height:1.6;color:#4A4337;margin:0;">SIM &amp; eSIM options, data and wifi, staying in touch with your guardian back home, live location sharing for the crowds, and every official Saudi website and app.</p>
+          <a href="AUJ Connectivity Guide.dc.html" style="margin-top:auto;align-self:flex-start;text-decoration:none;display:inline-flex;align-items:center;gap:8px;background:#0F5132;color:#fff;font-size:14px;font-weight:600;padding:13px 22px;border-radius:12px;box-shadow:0 8px 18px rgba(15,81,50,0.26);transition:background .15s;" style-hover="background:#156440;">Open connectivity guide <span>→</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRUST MARQUEE -->
+  <section style="margin-top:clamp(40px,5vw,52px);overflow:hidden;border-top:1px solid #E6DDCE;border-bottom:1px solid #E6DDCE;background:#FCFAF5;">
+    <div style="display:flex;width:max-content;animation:auj-marquee 32s linear infinite;">
+      <sc-for list="{{ trustLoop }}" as="b" hint-placeholder-count="10">
+        <span style="display:inline-flex;align-items:center;gap:9px;font-size:14px;font-weight:600;color:#4A4337;padding:16px 30px;white-space:nowrap;"><span style="color:#1C7A4F;">✓</span>{{ b }}</span>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- JOURNEY TYPES -->
+  <section style="max-width:1200px;margin:0 auto;padding:clamp(56px,8vw,80px) clamp(16px,4vw,32px) 0;">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:34px;">
+      <div data-reveal>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#2F6F8F;margin-bottom:8px;">01 · WHERE TO BEGIN</div>
+        <h2 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(28px,3.8vw,40px);letter-spacing:-0.02em;margin:0;">Choose your journey</h2>
+      </div>
+      <p data-reveal style="font-size:15.5px;color:#7A7263;max-width:420px;line-height:1.6;margin:0;">Every package is verified, near-Haram where it matters, and priced in full — no surprises at checkout.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;">
+      <sc-for list="{{ journeys }}" as="j" hint-placeholder-count="3">
+        <a data-reveal href="#search" style="text-decoration:none;color:inherit;background:#fff;border:1px solid #E6DDCE;border-radius:18px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(42,38,32,0.05);transition:transform .25s, box-shadow .25s, border-color .25s;" style-hover="border-color:#C9BCA6;box-shadow:0 22px 44px -22px rgba(42,38,32,0.34);transform:translateY(-4px);">
+          <div style="position:relative;height:184px;background:{{ j.img }};overflow:hidden;">
+            <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.06) 0 2px, transparent 2px 10px);"></div>
+            <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(6,37,26,0.55), transparent 55%);"></div>
+            <span style="position:absolute;top:14px;left:14px;background:rgba(255,255,255,0.94);font-size:12px;font-weight:600;color:#0F5132;padding:5px 11px;border-radius:999px;">{{ j.season }}</span>
+            <span style="position:absolute;left:16px;bottom:13px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.06em;color:rgba(255,255,255,0.82);">{{ j.photo }}</span>
+          </div>
+          <div style="padding:22px 22px 24px;display:flex;flex-direction:column;flex:1;">
+            <div style="font-family:'IBM Plex Serif',serif;font-size:25px;font-weight:600;margin-bottom:8px;">{{ j.title }}</div>
+            <div style="font-size:14.5px;line-height:1.6;color:#4A4337;flex:1;">{{ j.body }}</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;padding-top:18px;border-top:1px solid #F1EADD;">
+              <span style="font-size:13px;color:#7A7263;">{{ j.fromLabel }} <span style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;color:#0F5132;">{{ j.price }}</span></span>
+              <span style="display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:#156440;">Explore <span>→</span></span>
+            </div>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- EXPLORE & STAY -->
+  <section style="max-width:1200px;margin:0 auto;padding:clamp(56px,8vw,80px) clamp(16px,4vw,32px) 0;">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:34px;">
+      <div data-reveal>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#2F6F8F;margin-bottom:8px;">EXPLORE &amp; STAY</div>
+        <h2 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(28px,3.8vw,40px);letter-spacing:-0.02em;margin:0;">Ziyarat, transfers &amp; stays</h2>
+      </div>
+      <p data-reveal style="font-size:15.5px;color:#7A7263;max-width:420px;line-height:1.6;margin:0;">Plan the sacred visits, your arrival and where you&#39;ll rest — all verified and near the Haram.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:20px;">
+      <sc-for list="{{ exploreCards }}" as="c" hint-placeholder-count="5">
+        <a data-reveal href="{{ c.href }}" style="text-decoration:none;color:inherit;background:#fff;border:1px solid #E6DDCE;border-radius:18px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(42,38,32,0.05);transition:transform .25s, box-shadow .25s, border-color .25s;" style-hover="border-color:#C9BCA6;box-shadow:0 22px 44px -22px rgba(42,38,32,0.34);transform:translateY(-4px);">
+          <div style="position:relative;height:148px;background:{{ c.img }};overflow:hidden;">
+            <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.06) 0 2px, transparent 2px 10px);"></div>
+            <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(6,37,26,0.55), transparent 55%);"></div>
+            <span style="position:absolute;top:13px;left:13px;background:rgba(255,255,255,0.94);font-size:12px;font-weight:600;color:#0F5132;padding:5px 11px;border-radius:999px;">{{ c.tag }}</span>
+            <span style="position:absolute;left:14px;bottom:12px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.06em;color:rgba(255,255,255,0.82);">{{ c.photo }}</span>
+          </div>
+          <div style="padding:20px 20px 22px;display:flex;flex-direction:column;flex:1;">
+            <div style="font-family:'IBM Plex Serif',serif;font-size:21px;font-weight:600;margin-bottom:8px;">{{ c.title }}</div>
+            <div style="font-size:14px;line-height:1.6;color:#4A4337;flex:1;">{{ c.body }}</div>
+            <span style="display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:#156440;margin-top:18px;padding-top:16px;border-top:1px solid #F1EADD;">{{ c.link }} <span>→</span></span>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ONE CART -->
+  <section style="margin-top:clamp(56px,8vw,84px);background:#ECE7DD;border-top:1px solid #E6DDCE;border-bottom:1px solid #E6DDCE;">
+    <div style="max-width:1200px;margin:0 auto;padding:clamp(48px,7vw,76px) clamp(16px,4vw,32px);display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:clamp(36px,5vw,56px);align-items:center;">
+      <div data-reveal>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#2F6F8F;margin-bottom:8px;">02 · FINANCIAL PLANNER</div>
+        <h2 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(28px,3.8vw,40px);letter-spacing:-0.02em;line-height:1.1;margin:0 0 18px;">Hotel, flights, transfers and ziyarat — one price.</h2>
+        <p style="font-size:16.5px;line-height:1.65;color:#4A4337;margin:0 0 26px;">Your AUJ package bundles hotel, flights, ground and ziyarat into one EUR price. Plan the full trip budget — package plus private spending like food and clothes — for a 10‑ or 15‑day stay.</p>
+        <a href="AUJ Financial Planner.dc.html" style="text-decoration:none;display:inline-flex;align-items:center;gap:9px;background:#0F5132;color:#fff;font-size:15px;font-weight:600;padding:13px 22px;border-radius:12px;box-shadow:0 8px 18px rgba(15,81,50,0.26);margin-bottom:26px;transition:background .15s;" style-hover="background:#156440;">Open financial planner <span>→</span></a>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <sc-for list="{{ cartFeatures }}" as="f" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:14px;">
+              <div style="width:46px;height:46px;border-radius:13px;background:{{ f.iconBg }};display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#0F5132;">{{ f.icon }}</div>
+              <div>
+                <div style="font-size:15.5px;font-weight:600;">{{ f.title }}</div>
+                <div style="font-size:13.5px;color:#7A7263;">{{ f.body }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div data-reveal style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;box-shadow:0 28px 64px -30px rgba(42,38,32,0.42);overflow:hidden;">
+        <div style="padding:18px 22px;border-bottom:1px solid #F1EADD;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+          <span style="font-size:14px;font-weight:700;">Your package</span>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="font-size:12.5px;color:#7A7263;">4 pilgrims · 14 nts</span>
+            <div style="display:flex;gap:3px;background:#F1EADD;padding:3px;border-radius:9px;">
+              <sc-for list="{{ ccyTabs }}" as="c" hint-placeholder-count="2">
+                <button onClick="{{ c.onClick }}" style="cursor:pointer;border:none;font-family:inherit;font-size:12px;font-weight:700;padding:5px 11px;border-radius:7px;background:{{ c.bg }};color:{{ c.fg }};transition:all .15s;">{{ c.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        <div style="padding:8px 22px;">
+          <sc-for list="{{ cartItems }}" as="c" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid #F4EEE3;">
+              <div style="width:44px;height:44px;border-radius:12px;background:{{ c.iconBg }};display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#0F5132;">{{ c.icon }}</div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:11px;font-weight:600;color:#7A7263;letter-spacing:0.06em;">{{ c.kind }}</div>
+                <div style="font-size:14.5px;font-weight:600;">{{ c.title }}</div>
+              </div>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;">{{ c.price }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="background:#FAF6EF;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:14px;font-weight:700;">Total</div>
+            <div style="font-size:11px;color:#7A7263;">incl. taxes &amp; visa fees</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:27px;font-weight:700;color:#0F5132;">{{ cartTotal }}</div>
+            <div style="font-size:12px;color:#7A7263;font-family:'IBM Plex Mono',monospace;">{{ cartTotalAlt }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how" style="max-width:1200px;margin:0 auto;padding:clamp(56px,8vw,84px) clamp(16px,4vw,32px) 0;">
+    <div data-reveal style="text-align:center;margin-bottom:46px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#2F6F8F;margin-bottom:8px;">03 · HOW IT WORKS</div>
+      <h2 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(28px,3.8vw,40px);letter-spacing:-0.02em;margin:0 0 12px;">From search to sacred — in four calm steps</h2>
+      <p style="font-size:16px;color:#7A7263;max-width:560px;margin:0 auto;line-height:1.6;">A linear, reassuring booking flow. You always know what's next, what's paid, and where your visa stands.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px;">
+      <sc-for list="{{ steps }}" as="s" hint-placeholder-count="4">
+        <div data-reveal style="background:#fff;border:1px solid #E6DDCE;border-radius:16px;padding:26px 22px;box-shadow:0 1px 2px rgba(42,38,32,0.05);transition:transform .25s, box-shadow .25s;" style-hover="transform:translateY(-4px);box-shadow:0 18px 38px -22px rgba(42,38,32,0.3);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+            <div style="width:46px;height:46px;border-radius:13px;background:#DCEDE4;display:flex;align-items:center;justify-content:center;color:#0F5132;">{{ s.icon }}</div>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:600;color:#E6DDCE;">{{ s.num }}</span>
+          </div>
+          <div style="font-size:16.5px;font-weight:600;margin-bottom:8px;">{{ s.title }}</div>
+          <div style="font-size:14px;line-height:1.6;color:#4A4337;">{{ s.body }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- VISA ROUTE -->
+  <section style="max-width:1200px;margin:0 auto;padding:clamp(56px,8vw,84px) clamp(16px,4vw,32px) 0;">
+    <div data-reveal style="background:linear-gradient(135deg,#0A3D26,#06251A);border-radius:26px;padding:clamp(32px,5vw,56px) clamp(24px,4vw,52px);color:#EFF6F1;position:relative;overflow:hidden;">
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.02) 0 2px, transparent 2px 11px);"></div>
+      <div style="position:absolute;top:-60px;right:-40px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle, rgba(200,162,74,0.18), transparent 70%);animation:auj-glow 8s ease-in-out infinite;"></div>
+      <div style="position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(32px,4vw,48px);align-items:center;">
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#9CC6AE;margin-bottom:10px;">04 · VISA, SORTED</div>
+          <h2 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(27px,3.6vw,38px);letter-spacing:-0.02em;line-height:1.12;margin:0 0 16px;">Know your visa route before you book.</h2>
+          <p style="font-size:16px;line-height:1.65;color:#C6DDCF;margin:0;">We read each pilgrim's passport and automatically set the right path — an online e-Visa or our licensed agent channel. Mixed-nationality families are fully supported, every route tracked live to your booking reference.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <sc-for list="{{ visaPaths }}" as="v" hint-placeholder-count="2">
+            <div style="background:rgba(255,255,255,0.06);border:1px solid {{ v.border }};border-radius:16px;padding:20px 22px;transition:background .2s;" style-hover="background:rgba(255,255,255,0.1);">
+              <div style="display:flex;align-items:center;gap:13px;margin-bottom:10px;">
+                <div style="width:44px;height:44px;border-radius:12px;background:{{ v.dot }};display:flex;align-items:center;justify-content:center;">{{ v.icon }}</div>
+                <div>
+                  <div style="font-size:17px;font-weight:700;color:#fff;">{{ v.title }}</div>
+                  <div style="font-size:12.5px;color:{{ v.tagColor }};font-weight:600;">{{ v.tag }}</div>
+                </div>
+              </div>
+              <div style="font-size:14px;line-height:1.6;color:#C6DDCF;">{{ v.body }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED PACKAGES -->
+  <section style="max-width:1200px;margin:0 auto;padding:clamp(56px,8vw,84px) clamp(16px,4vw,32px) 0;">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:34px;">
+      <div data-reveal>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#2F6F8F;margin-bottom:8px;">05 · POPULAR FROM VILNIUS</div>
+        <h2 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(28px,3.8vw,40px);letter-spacing:-0.02em;margin:0;">Featured packages</h2>
+      </div>
+      <a data-reveal href="#search" style="text-decoration:none;font-size:14.5px;font-weight:600;color:#156440;display:inline-flex;align-items:center;gap:7px;">See all 58 packages <span>→</span></a>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;">
+      <sc-for list="{{ packages }}" as="p" hint-placeholder-count="3">
+        <div data-reveal style="background:#fff;border:1px solid #E6DDCE;border-radius:18px;overflow:hidden;box-shadow:0 1px 2px rgba(42,38,32,0.05);transition:transform .25s, box-shadow .25s;" style-hover="box-shadow:0 22px 44px -22px rgba(42,38,32,0.34);transform:translateY(-4px);">
+          <div style="position:relative;height:170px;background:{{ p.img }};overflow:hidden;">
+            <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.06) 0 2px, transparent 2px 10px);"></div>
+            <span style="position:absolute;top:12px;left:12px;display:inline-flex;align-items:center;gap:6px;background:{{ p.vbg }};color:{{ p.vfg }};font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;"><span style="width:6px;height:6px;border-radius:50%;background:{{ p.vfg }};"></span>{{ p.visa }}</span>
+            <span style="position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.92);font-size:16px;padding:4px 9px;border-radius:10px;color:#B23A2E;">♡</span>
+          </div>
+          <div style="padding:16px 18px 18px;">
+            <div style="display:flex;align-items:start;justify-content:space-between;gap:10px;">
+              <div>
+                <div style="font-size:16.5px;font-weight:600;line-height:1.25;">{{ p.name }}</div>
+                <div style="font-size:12.5px;color:#C8A24A;margin-top:4px;">{{ p.stars }}</div>
+              </div>
+              <div style="text-align:right;flex-shrink:0;">
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:600;color:#0F5132;">{{ p.price }}</div>
+                <div style="font-size:11px;color:#7A7263;">per pilgrim</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:7px;flex-wrap:wrap;margin:13px 0 16px;">
+              <sc-for list="{{ p.chips }}" as="ch" hint-placeholder-count="3">
+                <span style="font-size:11.5px;color:#4A4337;background:#F1EADD;padding:4px 10px;border-radius:7px;">{{ ch }}</span>
+              </sc-for>
+            </div>
+            <div style="display:flex;gap:10px;">
+              <button style="flex:1;cursor:pointer;background:#fff;color:#156440;border:1.5px solid #C9BCA6;font-family:inherit;font-size:13.5px;font-weight:600;padding:11px;border-radius:11px;transition:background .15s;" style-hover="background:#F1EADD;">Details</button>
+              <button style="flex:1.5;cursor:pointer;background:#0F5132;color:#fff;border:none;font-family:inherit;font-size:13.5px;font-weight:600;padding:11px;border-radius:11px;transition:background .15s;" style-hover="background:#156440;">Build package</button>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- MULTILINGUAL -->
+  <section style="max-width:1200px;margin:0 auto;padding:clamp(56px,8vw,84px) clamp(16px,4vw,32px) 0;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:clamp(32px,4vw,52px);align-items:center;">
+      <div data-reveal>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#2F6F8F;margin-bottom:8px;">06 · IN YOUR LANGUAGE</div>
+        <h2 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(27px,3.6vw,40px);letter-spacing:-0.02em;line-height:1.1;margin:0 0 18px;">English, Lietuvių, اردو, العربية — fully right-to-left.</h2>
+        <p style="font-size:16px;line-height:1.65;color:#4A4337;margin:0 0 24px;">Built for the EU and the Pakistani diaspora. Every screen mirrors for Arabic and Urdu, with the IBM Plex Arabic typeface — so the whole family can follow along.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <sc-for list="{{ langTabs }}" as="l" hint-placeholder-count="4">
+            <button onClick="{{ l.onClick }}" style="cursor:pointer;font-family:inherit;font-size:14px;font-weight:600;padding:10px 18px;border-radius:11px;border:1.5px solid {{ l.border }};background:{{ l.bg }};color:{{ l.fg }};transition:all .15s;">{{ l.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <div data-reveal dir="{{ langView.dir }}" style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:clamp(24px,3vw,38px);box-shadow:0 24px 56px -30px rgba(42,38,32,0.42);min-height:248px;">
+        <div dir="ltr" style="display:flex;justify-content:{{ langView.justify }};margin-bottom:18px;">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#7A7263;background:#F1EADD;padding:5px 11px;border-radius:999px;">{{ langView.code }} · {{ langView.dirLabel }}</span>
+        </div>
+        <div style="font-family:{{ langView.font }};font-weight:600;font-size:clamp(24px,3vw,32px);line-height:1.25;margin-bottom:14px;">{{ langView.h }}</div>
+        <div style="font-family:{{ langView.font }};font-size:16px;line-height:1.7;color:#4A4337;margin-bottom:24px;">{{ langView.b }}</div>
+        <div style="display:flex;gap:10px;{{ langView.flex }}">
+          <span style="background:#0F5132;color:#fff;font-family:{{ langView.font }};font-size:14px;font-weight:600;padding:11px 20px;border-radius:11px;">{{ langView.cta }}</span>
+          <span style="background:#DCEDE4;color:#156440;font-family:{{ langView.font }};font-size:14px;font-weight:600;padding:11px 20px;border-radius:999px;">{{ langView.tag }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRACK BOOKING -->
+  <section style="max-width:1200px;margin:0 auto;padding:clamp(56px,8vw,84px) clamp(16px,4vw,32px) 0;">
+    <div data-reveal style="background:#ECE7DD;border:1px solid #E6DDCE;border-radius:26px;padding:clamp(32px,5vw,52px) clamp(24px,4vw,48px);display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(32px,4vw,52px);align-items:center;">
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#2F6F8F;margin-bottom:8px;">07 · AFTER YOU BOOK</div>
+        <h2 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(27px,3.6vw,38px);letter-spacing:-0.02em;line-height:1.12;margin:0 0 16px;">One reference. Live status. Total peace of mind.</h2>
+        <p style="font-size:16px;line-height:1.65;color:#4A4337;margin:0 0 24px;">Every booking gets a single BRN and a per-pilgrim breakdown. Watch each visa move from submitted to issued, keep your documents in one place, and reach a human 24/7.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;">
+          <sc-for list="{{ trackTags }}" as="t" hint-placeholder-count="4">
+            <span style="display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid #E6DDCE;font-size:13.5px;font-weight:600;color:#4A4337;padding:8px 14px;border-radius:999px;"><span style="color:#1C7A4F;">✓</span>{{ t }}</span>
+          </sc-for>
+        </div>
+      </div>
+      <div style="background:#0F5132;border-radius:20px;overflow:hidden;box-shadow:0 30px 64px -30px rgba(7,48,30,0.6);max-width:420px;width:100%;justify-self:center;">
+        <div style="padding:22px 24px;color:#EFF6F1;">
+          <div style="font-size:11px;color:#9CC6AE;letter-spacing:0.06em;">BOOKING REFERENCE</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;margin:4px 0 6px;">BRN-26-VNO-00481</div>
+          <div style="font-family:'IBM Plex Serif',serif;font-size:18px;font-weight:500;">Umrah Premium · 14 nights</div>
+          <div style="font-size:12.5px;color:#BFE0CD;">12 – 26 Sep 2026 · 4 pilgrims</div>
+        </div>
+        <div style="background:#fff;border-radius:22px 22px 0 0;padding:20px 22px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+            <span style="font-size:13.5px;font-weight:700;color:#2A2620;">Live visa status</span>
+            <span style="display:inline-flex;align-items:center;gap:5px;background:#F7EBD3;color:#8A5A12;font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:999px;"><span style="width:6px;height:6px;border-radius:50%;background:#B5791E;animation:auj-ping 2.2s ease-out infinite;"></span>In progress</span>
+          </div>
+          <sc-for list="{{ visaSteps }}" as="v" hint-placeholder-count="4">
+            <div style="display:flex;gap:12px;">
+              <div style="display:flex;flex-direction:column;align-items:center;">
+                <div style="width:22px;height:22px;border-radius:50%;background:{{ v.dotBg }};border:2px solid {{ v.dotBorder }};display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">{{ v.mark }}</div>
+                <div style="width:2px;flex:1;background:{{ v.line }};min-height:16px;"></div>
+              </div>
+              <div style="padding-bottom:12px;">
+                <div style="font-size:13.5px;font-weight:600;color:{{ v.titleColor }};">{{ v.title }}</div>
+                <div style="font-size:12px;color:#7A7263;">{{ v.sub }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section style="max-width:1200px;margin:0 auto;padding:clamp(56px,8vw,84px) clamp(16px,4vw,32px) 0;">
+    <div data-reveal style="text-align:center;margin-bottom:42px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#2F6F8F;margin-bottom:8px;">08 · PILGRIM STORIES</div>
+      <h2 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(28px,3.8vw,40px);letter-spacing:-0.02em;margin:0;">Trusted across the EU</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;">
+      <sc-for list="{{ testimonials }}" as="t" hint-placeholder-count="3">
+        <div data-reveal style="background:#fff;border:1px solid #E6DDCE;border-radius:18px;padding:28px 26px;display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(42,38,32,0.05);">
+          <div style="font-size:17px;color:#C8A24A;margin-bottom:14px;letter-spacing:2px;">★★★★★</div>
+          <p style="font-family:'IBM Plex Serif',serif;font-size:18px;line-height:1.5;color:#2A2620;margin:0 0 22px;flex:1;">{{ t.quote }}</p>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:42px;height:42px;border-radius:50%;background:{{ t.av }};color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;">{{ t.initials }}</div>
+            <div>
+              <div style="font-size:14px;font-weight:600;">{{ t.name }}</div>
+              <div style="font-size:12.5px;color:#7A7263;">{{ t.meta }}</div>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section style="max-width:880px;margin:0 auto;padding:clamp(56px,8vw,84px) clamp(16px,4vw,32px) 0;">
+    <div data-reveal style="text-align:center;margin-bottom:42px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#2F6F8F;margin-bottom:8px;">09 · GOOD TO KNOW</div>
+      <h2 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(28px,3.8vw,40px);letter-spacing:-0.02em;margin:0;">Questions, answered</h2>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <sc-for list="{{ faqs }}" as="f" hint-placeholder-count="5">
+        <div data-reveal style="background:#fff;border:1px solid {{ f.border }};border-radius:14px;overflow:hidden;transition:border-color .2s;">
+          <button onClick="{{ f.onClick }}" style="width:100%;cursor:pointer;background:none;border:none;font-family:inherit;text-align:left;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+            <span style="font-size:16.5px;font-weight:600;color:#2A2620;">{{ f.q }}</span>
+            <span style="font-size:24px;color:#2F6F8F;flex-shrink:0;line-height:1;">{{ f.sign }}</span>
+          </button>
+          <sc-if value="{{ f.open }}" hint-placeholder-val="{{ true }}">
+            <div style="padding:0 24px 22px;font-size:15px;line-height:1.65;color:#4A4337;">{{ f.a }}</div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section style="max-width:1200px;margin:0 auto;padding:clamp(56px,8vw,84px) clamp(16px,4vw,32px);">
+    <div data-reveal style="background:radial-gradient(130% 140% at 78% -10%, #1C7A4F 0%, #0A3D26 48%, #06251A 100%);border-radius:30px;padding:clamp(44px,6vw,72px) clamp(24px,4vw,56px);text-align:center;color:#EFF6F1;position:relative;overflow:hidden;animation:auj-hue 16s ease-in-out infinite;">
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 11px);"></div>
+      <div style="position:absolute;top:-50px;left:50%;transform:translateX(-50%);width:300px;height:160px;background:radial-gradient(ellipse, rgba(200,162,74,0.22), transparent 70%);animation:auj-glow 7s ease-in-out infinite;"></div>
+      <div style="position:relative;">
+        <div style="width:58px;height:58px;border-radius:17px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M6.5 20V12a5.5 5.5 0 0 1 11 0v8" stroke="#FAF6EF" stroke-width="1.7" fill="none" stroke-linecap="round"/><g transform="translate(5.4 -0.6) scale(0.55)"><path d="M12 3l2.2 5.4L20 9.2l-4 3.9 1 5.7L12 16l-5 2.8 1-5.7-4-3.9 5.8-.8L12 3z" fill="#C8A24A"/></g></svg>
+        </div>
+        <h2 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(30px,4.6vw,46px);letter-spacing:-0.02em;line-height:1.08;margin:0 0 16px;">Your journey begins with a single search.</h2>
+        <p style="font-size:17px;line-height:1.6;color:#C6DDCF;max-width:540px;margin:0 auto 32px;">Compare verified Umrah, Hajj and Ziyarat packages from your city — with visas, flights and hotels handled in one calm place.</p>
+        <div style="display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;">
+          <a href="#search" style="text-decoration:none;display:inline-flex;align-items:center;gap:9px;background:#FAF6EF;color:#0A3D26;font-size:16px;font-weight:600;padding:16px 30px;border-radius:13px;box-shadow:0 14px 34px rgba(7,48,30,0.45);transition:transform .18s;" style-hover="transform:translateY(-2px);">Search packages <span>→</span></a>
+          <a href="#" style="text-decoration:none;display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:#EFF6F1;font-size:16px;font-weight:600;padding:16px 28px;border-radius:13px;transition:background .18s;" style-hover="background:rgba(255,255,255,0.16);">Talk to an advisor</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="background:#06251A;color:#C6DDCF;">
+    <div style="max-width:1200px;margin:0 auto;padding:clamp(44px,6vw,64px) clamp(16px,4vw,32px) 32px;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:36px;padding-bottom:44px;border-bottom:1px solid rgba(255,255,255,0.12);">
+        <div style="grid-column:1 / -1;max-width:320px;">
+          <div style="display:inline-flex;align-items:center;background:#FAF6EF;border-radius:14px;padding:10px 16px;margin-bottom:16px;box-shadow:0 8px 22px rgba(0,0,0,0.22);">
+            <img src="assets/auj-logo-trim.png" alt="AUJ — Pilgrimage &amp; travel" style="height:46px;width:auto;display:block;" />
+          </div>
+          <p style="font-size:13.5px;line-height:1.65;color:#9CC6AE;margin:0 0 18px;">Calm, trustworthy pilgrimage and travel for the EU and the Pakistani diaspora. Licensed, bonded and multilingual.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="background:rgba(255,255,255,0.08);font-size:12px;font-weight:600;padding:6px 11px;border-radius:8px;color:#BFE0CD;">€ EUR</span>
+            <span style="background:rgba(255,255,255,0.08);font-size:12px;font-weight:600;padding:6px 11px;border-radius:8px;color:#BFE0CD;">₨ PKR</span>
+            <span style="background:rgba(255,255,255,0.08);font-size:12px;font-weight:600;padding:6px 11px;border-radius:8px;color:#BFE0CD;">SEPA secure</span>
+          </div>
+        </div>
+        <sc-for list="{{ footerCols }}" as="col" hint-placeholder-count="4">
+          <div>
+            <div style="font-size:12px;font-weight:700;color:#EFF6F1;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:16px;">{{ col.title }}</div>
+            <div style="display:flex;flex-direction:column;gap:11px;">
+              <sc-for list="{{ col.links }}" as="lnk" hint-placeholder-count="4">
+                <a href="#" style="text-decoration:none;font-size:14px;color:#9CC6AE;transition:color .15s;" style-hover="color:#fff;">{{ lnk }}</a>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;padding-top:26px;">
+        <div style="font-size:13px;color:#7FA993;">© 2026 AUJ Travel. All rights reserved. · Licensed pilgrimage operator.</div>
+        <div style="display:flex;align-items:center;gap:22px;font-size:13px;flex-wrap:wrap;">
+          <a href="#" style="text-decoration:none;color:#9CC6AE;">Terms</a>
+          <a href="#" style="text-decoration:none;color:#9CC6AE;">Privacy</a>
+          <a href="#" style="text-decoration:none;color:#9CC6AE;">Cookies</a>
+          <span style="color:#7FA993;">EN · LT · UR · AR</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  state = { tab: 'Umrah', pax: 4, lang: 'EN', faq: 0, ccy: 'EUR' };
+
+  fmtEUR(n) { return '€' + n.toLocaleString('en-US'); }
+  fmtPKR(n) { return '₨' + Math.round(n).toLocaleString('en-US'); }
+
+  renderVals() {
+    const FX = 310.8;
+    const stars = [];
+    const srng = (s) => { const x = Math.sin(s) * 10000; return x - Math.floor(x); };
+    for (let i = 0; i < 38; i++) {
+      const r1 = srng(i + 1), r2 = srng(i + 50), r3 = srng(i + 90), r4 = srng(i + 130);
+      stars.push({
+        x: (r1 * 100).toFixed(2),
+        y: (r2 * 62).toFixed(2),
+        s: (0.8 + r3 * 2.2).toFixed(2),
+        g: (2 + r3 * 6).toFixed(1),
+        c: r4 > 0.78 ? '#E8C36A' : '#EAF3EC',
+        dur: (2.4 + r3 * 3.4).toFixed(2),
+        delay: (r4 * 4).toFixed(2)
+      });
+    }
+    const particles = [];
+    for (let i = 0; i < 14; i++) {
+      const r1 = srng(i + 200), r2 = srng(i + 260), r3 = srng(i + 320);
+      particles.push({
+        x: (r1 * 100).toFixed(2),
+        s: (2 + r2 * 3).toFixed(2),
+        dur: (8 + r3 * 7).toFixed(2),
+        delay: (r1 * 9).toFixed(2)
+      });
+    }
+
+    const counts = { Umrah: 38, Hajj: 6, Ziyarat: 14 };
+    const dests = { Umrah: 'Makkah', Hajj: 'Makkah · Mina', Ziyarat: 'Madinah · Najaf' };
+    const tabs = ['Umrah', 'Hajj', 'Ziyarat'];
+    const searchTabs = tabs.map((name) => ({
+      name,
+      bg: this.state.tab === name ? '#fff' : 'transparent',
+      fg: this.state.tab === name ? '#0F5132' : '#7A7263',
+      shadow: this.state.tab === name ? '0 1px 3px rgba(42,38,32,0.12)' : 'none',
+      onClick: () => this.setState({ tab: name })
+    }));
+
+    const ccyTabs = ['EUR', 'PKR'].map((label) => ({
+      label,
+      bg: this.state.ccy === label ? '#0F5132' : 'transparent',
+      fg: this.state.ccy === label ? '#fff' : '#7A7263',
+      onClick: () => this.setState({ ccy: label })
+    }));
+    const totalEUR = 9920;
+    const isEUR = this.state.ccy === 'EUR';
+    const cartTotal = isEUR ? this.fmtEUR(totalEUR) : this.fmtPKR(totalEUR * FX);
+    const cartTotalAlt = isEUR ? ('≈ ' + this.fmtPKR(totalEUR * FX)) : ('= ' + this.fmtEUR(totalEUR) + ' charged');
+    const itemPrices = [3200, 4480, 1240, 1000];
+    const cartItems = [
+      { kind: 'HOTEL · 14 NIGHTS', title: 'Swissôtel Al Maqam, Makkah', icon: '⌂', iconBg: '#DCEDE4', eur: 3200 },
+      { kind: 'FLIGHTS · ROUND TRIP', title: 'VNO → JED, 4 pilgrims', icon: '✈', iconBg: '#E2EEF3', eur: 4480 },
+      { kind: 'GROUND · TRANSFERS', title: 'Airport + Haram + Ziyarat', icon: '⛟', iconBg: '#F7EBD3', eur: 1240 },
+      { kind: 'VISA & SERVICES', title: 'e-Visa guidance + SIM + Ihram', icon: '✓', iconBg: '#DCEDE4', eur: 1000 }
+    ].map((c) => ({ ...c, price: isEUR ? this.fmtEUR(c.eur) : this.fmtPKR(c.eur * FX) }));
+
+    const langData = {
+      EN: { code: 'EN', dirLabel: 'LTR', dir: 'ltr', justify: 'flex-start', flex: '', font: "'IBM Plex Sans', sans-serif",
+        h: 'Begin a sacred journey, with calm.',
+        b: 'Umrah, Hajj & Ziyarat from across the EU — hotel, transport, ground and flights in one place.',
+        cta: 'Search packages', tag: 'e-Visa ready' },
+      LT: { code: 'LT', dirLabel: 'LTR', dir: 'ltr', justify: 'flex-start', flex: '', font: "'IBM Plex Sans', sans-serif",
+        h: 'Pradėkite šventą kelionę ramiai.',
+        b: 'Umra, hadžas ir zijaratas iš visos ES — viešbutis, transportas ir skrydžiai vienoje vietoje.',
+        cta: 'Ieškoti paketų', tag: 'e-Viza paruošta' },
+      UR: { code: 'UR', dirLabel: 'RTL', dir: 'rtl', justify: 'flex-end', flex: 'flex-direction: row-reverse;', font: "'IBM Plex Sans Arabic', sans-serif",
+        h: 'پُرسکون انداز میں مقدّس سفر کا آغاز کریں۔',
+        b: 'یورپ بھر سے عمرہ، حج اور زیارت — ہوٹل، ٹرانسپورٹ اور پروازیں ایک ہی جگہ۔',
+        cta: 'پیکجز تلاش کریں', tag: 'ای ویزا' },
+      AR: { code: 'AR', dirLabel: 'RTL', dir: 'rtl', justify: 'flex-end', flex: 'flex-direction: row-reverse;', font: "'IBM Plex Sans Arabic', sans-serif",
+        h: 'ابدأ رحلة مقدّسة بسكينة.',
+        b: 'عمرة وحج وزيارات من جميع أنحاء الاتحاد الأوروبي — الفندق والنقل والرحلات في مكان واحد.',
+        cta: 'ابحث عن الباقات', tag: 'تأشيرة إلكترونية' }
+    };
+    const langTabs = ['EN', 'LT', 'UR', 'AR'].map((code) => ({
+      label: code,
+      bg: this.state.lang === code ? '#0F5132' : '#fff',
+      fg: this.state.lang === code ? '#fff' : '#4A4337',
+      border: this.state.lang === code ? '#0F5132' : '#C9BCA6',
+      onClick: () => this.setState({ lang: code })
+    }));
+
+    const faqData = [
+      { q: 'Which visa route applies to me?', a: 'We auto-detect from each pilgrim\u2019s passport: EU/EEA passports use the online e-Visa route; Pakistani and other passports go through our licensed agent channel. Mixed-nationality groups are fully supported, each route tracked individually.' },
+      { q: 'Can I see prices and pay in PKR?', a: 'Prices are charged in EUR. We show an indicative PKR equivalent at the live rate (1 \u20AC = \u20A8310.8) throughout, so you always know the amount in both currencies before you confirm.' },
+      { q: 'What\u2019s included in one package?', a: 'A single cart combines your hotel, flights, ground transfers and excursions \u2014 with full visa guidance \u2014 at one transparent total. Swap or remove any item before you pay.' },
+      { q: 'Do you handle group and family bookings?', a: 'Yes. Families and groups of up to 49 pilgrims can be booked together, with per-pilgrim documents, visa routes and a shared booking reference.' },
+      { q: 'Which cities do you depart from?', a: 'We currently operate departures from six EU cities including Vilnius, with direct and one-stop routings to Jeddah, Madinah and Najaf. More cities are added each season.' }
+    ];
+    const faqs = faqData.map((f, i) => ({
+      q: f.q, a: f.a,
+      open: this.state.faq === i,
+      sign: this.state.faq === i ? '\u2212' : '+',
+      border: this.state.faq === i ? '#C9BCA6' : '#E6DDCE',
+      onClick: () => this.setState({ faq: this.state.faq === i ? -1 : i })
+    }));
+
+    return {
+      navLinks: ['Packages', 'How it works', 'Visa help', 'For agents', 'Support'],
+      lang: this.state.lang,
+      stars, particles,
+      searchTabs,
+      searchDest: dests[this.state.tab],
+      searchCount: counts[this.state.tab] + ' ' + this.state.tab + ' packages',
+      pax: this.state.pax,
+      incPax: () => this.setState({ pax: Math.min(49, this.state.pax + 1) }),
+      decPax: () => this.setState({ pax: Math.max(1, this.state.pax - 1) }),
+      trustLoop: ['IATA accredited', 'GDPR compliant', 'SEPA secure payments', 'Licensed pilgrimage operator', 'ATOL-style bonded', 'IATA accredited', 'GDPR compliant', 'SEPA secure payments', 'Licensed pilgrimage operator', 'ATOL-style bonded'],
+      journeys: [
+        { title: 'Umrah', season: 'Year-round', photo: 'PHOTO · MASJID AL-HARAM', img: 'radial-gradient(120% 100% at 70% 20%, #2A9468, #0F5132 55%, #062418)', body: 'The lesser pilgrimage, on your schedule. 7–21 night packages near the Haram, with flexible dates all year.', fromLabel: 'from', price: '€1,180' },
+        { title: 'Hajj', season: 'Dhul-Hijjah', photo: 'PHOTO · MINA TENTS', img: 'radial-gradient(120% 100% at 70% 20%, #4FAE86, #156440 55%, #07301E)', body: 'The fifth pillar, fully organised — Mina, Arafat and Muzdalifah logistics handled, guided every step.', fromLabel: 'from', price: '€6,400' },
+        { title: 'Ziyarat', season: 'Seasonal', photo: 'PHOTO · MASJID AN-NABAWI', img: 'radial-gradient(120% 100% at 70% 20%, #3C86A8, #2F6F8F 50%, #0A3D26)', body: 'Visit the sacred sites of Madinah, Najaf and Karbala with knowledgeable guides and calm pacing.', fromLabel: 'from', price: '€980' }
+      ],
+      exploreCards: [
+        { title: 'Airport Summary', tag: 'Arrival guide', href: 'AUJ Airport Wizard.dc.html', photo: 'JED · MED TRANSFERS', img: 'radial-gradient(120% 100% at 70% 20%, #5C9AB6, #2F6F8F 52%, #123A4A)', body: 'Your arrival, immigration and transfers at Jeddah or Madinah — summarised clearly, step by step.', link: 'Open airport wizard' },
+        { title: 'Makka Ziyarat', tag: 'Guide', href: 'AUJ Makka Ziyarat Wizard.dc.html', photo: 'MASJID AL-HARAM', img: 'radial-gradient(120% 100% at 70% 20%, #2A9468, #0F5132 55%, #062418)', body: 'Masjid al-Haram, Jabal al-Nour, Mina and the historic sites of Makkah, at a calm, guided pace.', link: 'Explore sites' },
+        { title: 'Madina Ziyarat', tag: 'Guide', href: 'AUJ Madina Ziyarat Wizard.dc.html', photo: 'MASJID AN-NABAWI', img: 'radial-gradient(120% 100% at 70% 20%, #3FA77E, #156440 55%, #07301E)', body: 'Masjid an-Nabawi, Quba, Uhud and the gardens of Madinah, with knowledgeable local guides.', link: 'Explore sites' },
+        { title: 'Hotels in Makka', tag: 'from €120 / nt', href: 'AUJ Makkah Hotels.dc.html', photo: 'NEAR THE HARAM', img: 'radial-gradient(120% 100% at 70% 20%, #D9B45E, #B5791E 55%, #5A3D12)', body: 'Verified hotels by real distance to Masjid al-Haram — honest stars, real photos, near the Haram.', link: 'Browse hotels' },
+        { title: 'Hotels in Madina', tag: 'from €90 / nt', href: 'AUJ Madina Hotels.dc.html', photo: 'NEAR AN-NABAWI', img: 'radial-gradient(120% 100% at 70% 20%, #4FAE86, #2F6F8F 55%, #0A3D26)', body: 'Comfortable, vetted stays just steps from Masjid an-Nabawi — bonded and calm.', link: 'Browse hotels' }
+      ],
+      cartFeatures: [
+        { icon: '⌂', iconBg: '#DCEDE4', title: 'Hotels near the Haram', body: 'Verified distance, real photos, honest stars.' },
+        { icon: '✈', iconBg: '#E2EEF3', title: 'Flights from your city', body: 'Direct and one-stop, bundled in the price.' },
+        { icon: '⛟', iconBg: '#F7EBD3', title: 'Ground & ziyarat', body: 'Transfers and guided visits, pre-arranged.' },
+        { icon: '✓', iconBg: '#DCEDE4', title: 'One transparent total', body: 'Taxes and visa fees included — no surprises.' }
+      ],
+      ccyTabs, cartItems, cartTotal, cartTotalAlt,
+      steps: [
+        { num: '01', icon: '⌕', title: 'Search & compare', body: 'Pick your journey, city and dates. See verified packages with full prices.' },
+        { num: '02', icon: '⊞', title: 'Build your cart', body: 'Combine hotel, flights, transfers and ziyarat. Swap any item freely.' },
+        { num: '03', icon: '⎙', title: 'Visa, sorted', body: 'We detect each pilgrim\u2019s route and guide the e-Visa or agent channel.' },
+        { num: '04', icon: '✓', title: 'Travel with calm', body: 'One reference, live status and 24/7 human support, every step.' }
+      ],
+      visaPaths: [
+        { title: 'e-Visa route', tag: 'EU / EEA passports', tagColor: '#7FE0AE', border: 'rgba(127,224,174,0.4)', dot: 'rgba(42,148,104,0.25)', icon: '🛂', body: 'Submitted online to MOFA, typically issued in 2–3 days. Tracked live to your booking reference.' },
+        { title: 'Licensed agent channel', tag: 'Pakistani & other passports', tagColor: '#9FCFE6', border: 'rgba(159,207,230,0.4)', dot: 'rgba(60,134,168,0.25)', icon: '🤝', body: 'Handled by our licensed partners with document support. Mixed-nationality families fully supported.' }
+      ],
+      packages: [
+        { name: 'Makkah Premium · Swissôtel', stars: '★★★★★ · 200m to Haram', price: '€2,480', visa: 'e-Visa', vbg: '#DCEDE4', vfg: '#1C7A4F', img: 'radial-gradient(120% 100% at 70% 20%, #2A9468, #0F5132 55%, #062418)', chips: ['14 nights', 'Half board', 'Direct flight'] },
+        { name: 'Madinah Comfort · Dar Al Taqwa', stars: '★★★★ · 150m to Masjid', price: '€1,640', visa: 'e-Visa', vbg: '#DCEDE4', vfg: '#1C7A4F', img: 'radial-gradient(120% 100% at 70% 20%, #3C86A8, #2F6F8F 50%, #0A3D26)', chips: ['10 nights', 'Breakfast', '1 stop'] },
+        { name: 'Najaf & Karbala Ziyarat', stars: '★★★★ · Guided', price: '€1,180', visa: 'Agent visa', vbg: '#E2EEF3', vfg: '#2F6F8F', img: 'radial-gradient(120% 100% at 70% 20%, #4FAE86, #156440 55%, #07301E)', chips: ['8 nights', 'Full board', 'Guide'] }
+      ],
+      langTabs, langView: langData[this.state.lang],
+      trackTags: ['Single BRN', 'Per-pilgrim visa', 'Documents vault', 'QR digital pass', '24/7 support'],
+      visaSteps: [
+        { mark: '✓', dotBg: '#1C7A4F', dotBorder: '#1C7A4F', line: '#1C7A4F', titleColor: '#2A2620', title: 'Booking confirmed', sub: '12 Aug · Payment received' },
+        { mark: '✓', dotBg: '#1C7A4F', dotBorder: '#1C7A4F', line: '#B5791E', titleColor: '#2A2620', title: 'Documents collected', sub: '14 Aug · 4 of 4 pilgrims' },
+        { mark: '', dotBg: '#B5791E', dotBorder: '#B5791E', line: '#E6DDCE', titleColor: '#2A2620', title: 'Visa processing', sub: 'Submitted to MOFA · est. 2–3 days' },
+        { mark: '', dotBg: '#fff', dotBorder: '#C9BCA6', line: 'transparent', titleColor: '#9A9183', title: 'Travel & departure', sub: '12 Sep · Vilnius → Jeddah' }
+      ],
+      testimonials: [
+        { quote: '\u201CEverything in one place. The visa was handled, the hotel was exactly as shown, and I always knew what was next.\u201D', initials: 'AK', name: 'Aisha K.', meta: 'Umrah · Vilnius', av: '#0F5132' },
+        { quote: '\u201CBooking for my parents from Lithuania felt impossible until AUJ. Mixed passports, sorted automatically.\u201D', initials: 'MR', name: 'Mahmoud R.', meta: 'Family Hajj · Kaunas', av: '#2F6F8F' },
+        { quote: '\u201CCalm, clear and honest pricing. The live booking status gave my whole family real peace of mind.\u201D', initials: 'SF', name: 'Sana F.', meta: 'Ziyarat · Riga', av: '#B5791E' }
+      ],
+      faqs,
+      footerCols: [
+        { title: 'Journeys', links: ['Umrah', 'Hajj', 'Ziyarat', 'Group bookings'] },
+        { title: 'Company', links: ['About AUJ', 'Licensing', 'Careers', 'Contact'] },
+        { title: 'Support', links: ['Help centre', 'Visa help', 'Track booking', 'For agents'] }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;} body{margin:0;} ::selection{background:#C8A24A;color:#07301E;}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:radial-gradient(120% 90% at 50% 0%, #FFFDF8 0%, #F3EEE4 100%);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:clamp(20px,4vw,44px) clamp(14px,4vw,32px);display:flex;flex-direction:column;align-items:center;">
+  <div style="width:100%;max-width:1060px;">
+
+    <!-- HEADER -->
+    <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:18px 22px;border-radius:20px;background:radial-gradient(130% 230% at 88% -60%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;box-shadow:0 24px 60px -34px rgba(5,28,18,0.6);color:#EFF6F1;">
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+      <div style="position:relative;display:flex;align-items:center;gap:14px;">
+        <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:11px;padding:6px 12px;box-shadow:0 10px 26px -8px rgba(0,0,0,0.45);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:clamp(46px,6.5vw,62px);width:auto;display:block;" /></span>
+        <div>
+          <div style="font-family:'IBM Plex Serif',serif;font-size:20px;font-weight:600;color:#fff;">Service Providers</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#BFE0CD;margin-top:3px;">ADMIN · INTEGRATIONS BEHIND THE CONNECTOR SEAM</div>
+        </div>
+      </div>
+      <button style="position:relative;cursor:pointer;background:#C8A24A;color:#07301E;border:none;border-radius:11px;font-family:inherit;font-size:13.5px;font-weight:600;padding:11px 17px;" style-active="transform:scale(0.98)">+ Add provider</button>
+    </div>
+
+    <!-- STATUS SUMMARY -->
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">
+      <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+        <div style="flex:1;min-width:130px;background:#fff;border:1px solid #E6DDCE;border-radius:14px;padding:13px 15px;box-shadow:0 1px 2px rgba(42,38,32,0.05);">
+          <div style="display:flex;align-items:center;gap:7px;"><span style="width:9px;height:9px;border-radius:50%;background:{{ s.dot }};"></span><span style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;color:#2A2620;">{{ s.count }}</span></div>
+          <div style="font-size:12px;color:#7A7263;margin-top:3px;">{{ s.label }}</div>
+        </div>
+      </sc-for>
+    </div>
+
+    <!-- PROVIDER TABLE -->
+    <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:8px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);margin-top:16px;">
+      <sc-for list="{{ providers }}" as="p" hint-placeholder-count="7">
+        <div onClick="{{ p.onClick }}" style="display:flex;align-items:center;gap:14px;padding:14px;border-radius:14px;cursor:pointer;background:{{ p.rowBg }};transition:background .15s;" style-hover="background:#FAF6EF">
+          <span style="width:42px;height:42px;border-radius:11px;background:{{ p.iconBg }};color:{{ p.iconFg }};display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;flex-shrink:0;">{{ p.code }}</span>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:14.5px;font-weight:600;color:#2A2620;">{{ p.name }}</div>
+            <div style="font-size:12.5px;color:#7A7263;">{{ p.kind }} · <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;">{{ p.adapter }}</span></div>
+          </div>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9A9183;display:{{ p.latDisplay }};">{{ p.latency }}</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:{{ p.stFg }};background:{{ p.stBg }};border-radius:999px;padding:5px 12px;white-space:nowrap;"><span style="width:7px;height:7px;border-radius:50%;background:{{ p.stDot }};"></span>{{ p.status }}</span>
+          <span style="color:#B5A88F;font-size:18px;">{{ p.chevron }}</span>
+        </div>
+        <sc-if value="{{ p.open }}" hint-placeholder-val="{{ false }}">
+          <div style="margin:0 14px 12px;padding:16px;background:#FCFAF5;border:1px solid #F1EADD;border-radius:14px;">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;">
+              <div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#7A7263;margin-bottom:8px;">CAPABILITIES</div>
+                <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                  <sc-for list="{{ p.caps }}" as="c" hint-placeholder-count="4"><span style="font-size:11.5px;font-weight:500;color:#0F5132;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:999px;padding:4px 11px;">{{ c }}</span></sc-for>
+                </div>
+              </div>
+              <div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#7A7263;margin-bottom:8px;">ENV BINDING</div>
+                <div style="display:flex;flex-direction:column;gap:5px;">
+                  <sc-for list="{{ p.envKeys }}" as="k" hint-placeholder-count="2"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#2A2620;background:#fff;border:1px solid #E6DDCE;border-radius:7px;padding:6px 9px;">{{ k }}</span></sc-for>
+                </div>
+                <div style="font-size:11.5px;color:#7A7263;margin-top:8px;">{{ p.agentLine }}</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:9px;margin-top:15px;flex-wrap:wrap;">
+              <button style="cursor:pointer;background:#0F5132;color:#fff;border:none;border-radius:10px;font-family:inherit;font-size:12.5px;font-weight:600;padding:9px 14px;" style-active="transform:scale(0.98)">Test connection</button>
+              <button style="cursor:pointer;background:#fff;color:#156440;border:1.5px solid #C9BCA6;border-radius:10px;font-family:inherit;font-size:12.5px;font-weight:600;padding:9px 14px;">Rotate credentials</button>
+              <button style="cursor:pointer;background:#fff;color:#7A7263;border:1.5px solid #E6DDCE;border-radius:10px;font-family:inherit;font-size:12.5px;font-weight:600;padding:9px 14px;">{{ p.toggleLabel }}</button>
+            </div>
+          </div>
+        </sc-if>
+      </sc-for>
+    </div>
+
+    <div style="margin-top:16px;display:flex;align-items:flex-start;gap:11px;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:14px;padding:13px 16px;">
+      <span style="width:24px;height:24px;border-radius:7px;background:#0F5132;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;">i</span>
+      <span style="font-size:12.5px;color:#2A4A39;line-height:1.55;">Registry‑driven — new providers appear here without changing product modules. Each maps 1:1 to an adapter behind <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;">SaudiConnector / TravelSupplier / PaymentProvider / DocumentStore</span>. Real credentials live in a secrets vault, never in the DB or UI.</span>
+    </div>
+
+    <div style="margin-top:20px;text-align:center;"><a href="AUJ Landing Cinematic.dc.html" style="text-decoration:none;font-size:13.5px;color:#7A7263;">← Back to AUJ home</a></div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1100,&quot;height&quot;:880}}">
+class Component extends DCLogic {
+  state = { open: 'nusuk' };
+
+  data() {
+    return [
+      { id: 'nusuk', code: 'NUS', name: 'Nusuk Masar / Maqam GDS', kind: 'Saudi pilgrimage', adapter: 'connector-saudi', status: 'Gated', st: 'gated', latency: '—', caps: ['Hotels', 'Transport', 'Ground / ziyarah', 'e-Visa', 'Rawdah permit', 'BRN'], envKeys: ['SAUDI_CONNECTOR=saudi', 'NUSUK_AGENT_CODE', 'NUSUK_API_KEY'], agentLine: 'External-agent code required · awaiting Ministry authorization' },
+      { id: 'tbo', code: 'TBO', name: 'TBO Holidays', kind: 'General hotels', adapter: 'connector-travel', status: 'Sandbox', st: 'sandbox', latency: '120ms', caps: ['Hotels', 'Book', 'Cancel', 'Net rates'], envKeys: ['TRAVEL_SUPPLIER=tbo', 'TBO_USERNAME', 'TBO_PASSWORD'], agentLine: 'Open developer API · sandbox credentials set' },
+      { id: 'hb', code: 'HB', name: 'Hotelbeds', kind: 'General hotels', adapter: 'connector-travel', status: 'Sandbox', st: 'sandbox', latency: '142ms', caps: ['Hotels', 'Book', 'Cancel'], envKeys: ['HOTELBEDS_KEY', 'HOTELBEDS_SECRET'], agentLine: 'APItude sandbox' },
+      { id: 'am', code: 'AM', name: 'Amadeus', kind: 'Flights (GDS)', adapter: 'connector-travel', status: 'Sandbox', st: 'sandbox', latency: '210ms', caps: ['Flight search', 'Book', 'Cancel'], envKeys: ['AMADEUS_CLIENT_ID', 'AMADEUS_CLIENT_SECRET'], agentLine: 'Self-service dev program' },
+      { id: 'stripe', code: 'ST', name: 'Stripe', kind: 'Payments · EUR', adapter: 'payments (StripeProvider)', status: 'Sandbox', st: 'sandbox', latency: '98ms', caps: ['Card', 'SEPA', 'Refund', 'Webhook'], envKeys: ['PAYMENTS_EUR=stripe', 'STRIPE_SECRET_KEY', 'STRIPE_WEBHOOK_SECRET'], agentLine: 'Test mode keys' },
+      { id: 'pkr', code: 'PK', name: 'Safepay / PayFast', kind: 'Payments · PKR', adapter: 'payments (PkrGatewayProvider)', status: 'Sandbox', st: 'sandbox', latency: '260ms', caps: ['Card', 'Wallet', 'Refund'], envKeys: ['PAYMENTS_PKR=safepay', 'SAFEPAY_API_KEY'], agentLine: 'PKR-indicative · EUR charged of record' },
+      { id: 's3', code: 'S3', name: 'S3 / MinIO', kind: 'Document store', adapter: 'core-booking DocumentStore', status: 'Not configured', st: 'none', latency: '—', caps: ['Put', 'Get', 'Signed URL'], envKeys: ['DOCUMENT_STORE=s3', 'S3_BUCKET', 'S3_ACCESS_KEY'], agentLine: 'Set bucket + keys to enable' },
+      { id: 'ocr', code: 'OCR', name: 'Passport OCR', kind: 'Documents', adapter: 'core-booking PassportOcr', status: 'Not configured', st: 'none', latency: '—', caps: ['MRZ read', 'Field extract'], envKeys: ['OCR_PROVIDER', 'OCR_API_KEY'], agentLine: 'Powers the dashboard passport scan' }
+    ];
+  }
+
+  renderVals() {
+    const STYLE = {
+      gated: { stFg: '#9A6512', stBg: '#FBF4E6', stDot: '#C9A04A', iconBg: '#FBF4E6', iconFg: '#9A6512' },
+      sandbox: { stFg: '#235B73', stBg: '#E2EEF3', stDot: '#2F6F8F', iconBg: '#E2EEF3', iconFg: '#235B73' },
+      connected: { stFg: '#0F5132', stBg: '#DCEDE4', stDot: '#1C7A4F', iconBg: '#DCEDE4', iconFg: '#0F5132' },
+      none: { stFg: '#9A8F7C', stBg: '#F1EDE6', stDot: '#B5A88F', iconBg: '#F1EDE6', iconFg: '#9A8F7C' }
+    };
+    const D = this.data();
+    const providers = D.map((p) => {
+      const s = STYLE[p.st];
+      const open = this.state.open === p.id;
+      return {
+        ...p, ...s, open,
+        onClick: () => this.setState({ open: open ? '' : p.id }),
+        rowBg: open ? '#FAF6EF' : '#fff',
+        chevron: open ? '\u2303' : '\u203A',
+        latDisplay: p.latency === '\u2014' ? 'none' : 'inline',
+        toggleLabel: p.st === 'none' ? 'Enable' : 'Disable'
+      };
+    });
+
+    const count = (st) => D.filter((p) => p.st === st).length;
+    const stats = [
+      { label: 'Connected', count: count('connected'), dot: '#1C7A4F' },
+      { label: 'Sandbox', count: count('sandbox'), dot: '#2F6F8F' },
+      { label: 'Gated', count: count('gated'), dot: '#C9A04A' },
+      { label: 'Not configured', count: count('none'), dot: '#B5A88F' }
+    ];
+
+    return { providers, stats };
+  }
+}
+</script>
+</body>
+</html>

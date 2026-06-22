@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;}
+  ::selection{background:#C8A24A;color:#07301E;}
+  @media (max-width:840px){ .aw-body{flex-direction:column!important;} .aw-media{min-height:240px!important;} }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:radial-gradient(120% 90% at 50% 0%, #FFFDF8 0%, #F3EEE4 100%);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:clamp(20px,4vw,48px) clamp(14px,4vw,32px);display:flex;flex-direction:column;align-items:center;">
+
+  <div style="width:100%;max-width:1040px;background:#fff;border:1px solid #E6DDCE;border-radius:24px;overflow:hidden;box-shadow:0 40px 90px -40px rgba(42,38,32,0.5), 0 2px 6px rgba(42,38,32,0.04);">
+
+    <!-- HEADER -->
+    <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:15px 20px;background:radial-gradient(130% 230% at 88% -70%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;">
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+      <div style="position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,162,74,0.6),transparent);"></div>
+      <div style="position:relative;display:flex;align-items:center;gap:12px;">
+        <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:9px;padding:5px 10px;box-shadow:0 10px 26px -8px rgba(0,0,0,0.45);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:clamp(42px,6vw,58px);width:auto;display:block;" /></span>
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.1em;color:#E8C36A;">AIRPORT WIZARD</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#BFE0CD;margin-top:2px;">{{ routeLabel }}</div>
+        </div>
+      </div>
+      <div style="position:relative;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <div style="display:flex;gap:5px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);padding:4px;border-radius:11px;">
+          <sc-for list="{{ langButtons }}" as="l" hint-placeholder-count="4">
+            <button onClick="{{ l.onClick }}" style="cursor:pointer;font-family:inherit;font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:8px;background:{{ l.bg }};color:{{ l.fg }};border:1px solid {{ l.border }};transition:all .15s;">{{ l.label }}</button>
+          </sc-for>
+        </div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#fff;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);padding:6px 11px;border-radius:999px;">{{ counter }}</span>
+      </div>
+    </div>
+
+    <!-- STEPPER RAIL -->
+    <div style="position:relative;padding:18px 22px;border-bottom:1px solid #F1EADD;overflow-x:auto;background:#FCFAF5;">
+      <div style="position:relative;display:flex;gap:4px;min-width:580px;">
+        <div style="position:absolute;left:14px;right:14px;top:14px;height:2px;background:#EADFCE;"></div>
+        <sc-for list="{{ rail }}" as="s" hint-placeholder-count="7">
+          <button onClick="{{ s.onClick }}" style="position:relative;flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;background:none;border:none;font-family:inherit;padding:0;">
+            <div style="width:30px;height:30px;border-radius:50%;background:{{ s.dotBg }};border:2px solid {{ s.dotBorder }};color:{{ s.dotFg }};display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;transition:all .2s;">{{ s.num }}</div>
+            <span style="font-size:10.5px;font-weight:600;color:{{ s.labelColor }};text-align:center;line-height:1.2;max-width:78px;">{{ s.short }}</span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="aw-body" style="display:flex;flex-wrap:wrap;">
+
+      <!-- VIDEO-VIRTUAL PANEL -->
+      <div class="aw-media" style="position:relative;flex:1 1 360px;min-height:380px;background:#0B2317;overflow:hidden;">
+        <sc-if value="{{ isEmbedVideo }}" hint-placeholder-val="{{ false }}">
+          <video ref="{{ vidRef }}" controls playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000;z-index:3;"></video>
+        </sc-if>
+        <sc-if value="{{ isEmbedIframe }}" hint-placeholder-val="{{ false }}">
+          <iframe ref="{{ frameRef }}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0;background:#000;z-index:3;"></iframe>
+        </sc-if>
+
+        <sc-if value="{{ noVid }}" hint-placeholder-val="{{ true }}">
+          <div style="position:absolute;inset:0;background:radial-gradient(120% 130% at 75% 12%, #156440 0%, #0A3D26 52%, #06251A 100%);"></div>
+          <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 12px);"></div>
+          <div style="position:absolute;top:-50px;right:-44px;width:210px;height:210px;border-radius:50%;background:radial-gradient(circle, rgba(200,162,74,0.22), transparent 70%);"></div>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(20px,2.6vw,28px);color:#EFF6F1;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:#9CC6AE;">STEP {{ stepNum }} · VIDEO</div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;">
+              <div style="width:74px;height:74px;border-radius:50%;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="13" height="12" rx="3"/><path d="M15.5 10.2 21.5 7v10l-6-3.2z"/></svg></div>
+              <div style="font-size:14px;font-weight:600;max-width:220px;">{{ vidPrompt }}</div>
+            </div>
+            <div style="font-family:'IBM Plex Serif',serif;font-size:clamp(46px,8vw,72px);font-weight:600;line-height:1;color:rgba(255,255,255,0.12);">{{ stepNum }}</div>
+          </div>
+        </sc-if>
+
+        <div style="position:absolute;left:0;right:0;bottom:0;z-index:5;display:flex;gap:6px;flex-wrap:wrap;padding:10px;background:linear-gradient(to top, rgba(5,25,16,0.9), transparent);">
+          <input ref="{{ linkInputRef }}" type="url" placeholder="{{ vidPh }}" dir="ltr" style="flex:1;min-width:120px;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.28);border-radius:9px;color:#fff;font-family:inherit;font-size:12.5px;padding:9px 11px;outline:none;" />
+          <button onClick="{{ onAddLink }}" style="cursor:pointer;background:#0F5132;color:#fff;border:1px solid #2A9468;border-radius:9px;font-family:inherit;font-size:12.5px;font-weight:600;padding:9px 13px;">Add</button>
+          <label style="cursor:pointer;display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.28);border-radius:9px;padding:9px 11px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg><input type="file" accept="video/*" onChange="{{ onAddVideo }}" style="display:none;" /></label>
+          <sc-if value="{{ hasVid }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ onDeleteVid }}" title="Remove" style="cursor:pointer;background:rgba(163,59,46,0.85);color:#fff;border:1px solid rgba(255,255,255,0.25);border-radius:9px;font-family:inherit;font-size:13px;font-weight:600;padding:9px 12px;">✕</button>
+          </sc-if>
+        </div>
+      </div>
+
+      <!-- STEP INFO -->
+      <div style="flex:1 1 360px;padding:clamp(22px,2.6vw,30px);display:flex;flex-direction:column;gap:14px;">
+        <div dir="{{ selDir }}">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:7px;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.08em;color:#2F6F8F;">{{ phaseSub }}</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:#0F5132;background:#DCEDE4;border-radius:6px;padding:3px 7px;">{{ selCode }}</span>
+          </div>
+          <h2 style="font-family:{{ selHeadFont }};font-weight:600;font-size:clamp(21px,2.5vw,27px);line-height:1.22;letter-spacing:-0.01em;margin:0 0 8px;color:#2A2620;">{{ selTitle }}</h2>
+          <p style="font-family:{{ selFont }};font-size:14.5px;line-height:1.6;color:#4A4337;margin:0;">{{ selBody }}</p>
+        </div>
+
+        <sc-if value="{{ showAr }}" hint-placeholder-val="{{ true }}">
+          <div dir="rtl" style="background:#FAF6EF;border:1px solid #F1EADD;border-radius:13px;padding:13px 15px;">
+            <h3 style="font-family:'IBM Plex Sans Arabic','IBM Plex Serif',serif;font-weight:600;font-size:18px;line-height:1.45;margin:0 0 5px;color:#2A2620;">{{ arTitle }}</h3>
+            <p style="font-family:'IBM Plex Sans Arabic','IBM Plex Sans',sans-serif;font-size:14.5px;line-height:1.8;color:#4A4337;margin:0;">{{ arBody }}</p>
+          </div>
+        </sc-if>
+
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.08em;color:#7A7263;margin-bottom:8px;">HAVE READY</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <sc-for list="{{ items }}" as="it" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:9px;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:10px;padding:9px 11px;">
+                <span style="width:19px;height:19px;border-radius:50%;background:#1C7A4F;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">✓</span>
+                <span style="font-size:12.5px;font-weight:500;color:#2A2620;line-height:1.3;">{{ it }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:flex-start;gap:10px;background:#FBF4E6;border:1px solid #F0E2C4;border-radius:12px;padding:12px 14px;">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="#B5791E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px;"><circle cx="10" cy="10" r="7.5"/><path d="M10 9v4M10 6.7v.1"/></svg>
+          <span style="font-size:13px;line-height:1.55;color:#5A4422;">{{ tip }}</span>
+        </div>
+
+        <div style="margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:6px;">
+          <button onClick="{{ prev }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:7px;background:{{ prevBg }};color:{{ prevColor }};border:1.5px solid {{ prevBorder }};border-radius:11px;font-family:inherit;font-size:14px;font-weight:600;padding:11px 16px;transition:all .15s;"><span>←</span> Back</button>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#7A7263;">{{ counter }}</span>
+          <button onClick="{{ next }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:7px;background:#0F5132;color:#fff;border:none;border-radius:11px;font-family:inherit;font-size:14px;font-weight:600;padding:11px 18px;box-shadow:0 8px 18px rgba(15,81,50,0.26);transition:background .15s;" style-hover="background:#156440;">{{ nextLabel }} <span>→</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:18px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center;">
+    <a href="AUJ Landing Cinematic.dc.html" style="text-decoration:none;font-size:13.5px;color:#7A7263;display:inline-flex;align-items:center;gap:6px;">← Back to AUJ home</a>
+    <a href="AUJ Luggage Wizard.dc.html" style="text-decoration:none;font-size:13.5px;font-weight:600;color:#156440;display:inline-flex;align-items:center;gap:6px;">Luggage &amp; packing guide <span>→</span></a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1080,&quot;height&quot;:840}}">
+class Component extends DCLogic {
+  state = { i: 0, lang: 'EN' };
+  vids = {};
+  _vidUrls = {};
+
+  componentDidMount() {
+    try { this.vids = JSON.parse(localStorage.getItem('auj-airport-vids') || '{}') || {}; this.forceUpdate(); } catch (e) {}
+  }
+
+  data() {
+    return [
+      {
+        short: 'Check-in', sub: 'DEPARTURE · CHECK-IN',
+        en: { t: 'Check-in & bag drop', b: 'Arrive about 3 hours early at Vilnius. Drop your checked bags, collect boarding passes, and keep your passport and Ihram bag in hand.' },
+        ur: { t: '\u0686\u06CC\u06A9 \u0627\u0650\u0646 \u0627\u0648\u0631 \u0628\u06CC\u06AF \u0688\u0631\u0627\u067E', b: '\u0648\u0644\u0646\u06CC\u0626\u0633 \u0627\u06CC\u0626\u0631\u067E\u0648\u0631\u0679 \u067E\u0631 \u062A\u0642\u0631\u06CC\u0628\u0627\u064B 3 \u06AF\u06BE\u0646\u0679\u06D2 \u067E\u06C1\u0644\u06D2 \u067E\u06C1\u0646\u0686\u06CC\u06BA\u06D4 \u0633\u0627\u0645\u0627\u0646 \u062C\u0645\u0639 \u06A9\u0631\u0627\u0626\u06CC\u06BA\u060C \u0628\u0648\u0631\u0688\u0646\u06AF \u067E\u0627\u0633 \u0644\u06CC\u06BA \u0627\u0648\u0631 \u067E\u0627\u0633\u067E\u0648\u0631\u0679 \u0648 \u0627\u062D\u0631\u0627\u0645 \u0628\u06CC\u06AF \u0633\u0627\u062A\u06BE \u0631\u06A9\u06BE\u06CC\u06BA\u06D4' },
+        ar: { t: '\u062A\u0633\u062C\u064A\u0644 \u0627\u0644\u0648\u0635\u0648\u0644 \u0648\u062A\u0633\u0644\u064A\u0645 \u0627\u0644\u0623\u0645\u062A\u0639\u0629', b: '\u0627\u062D\u0636\u0631 \u0625\u0644\u0649 \u0645\u0637\u0627\u0631 \u0641\u064A\u0644\u0646\u064A\u0648\u0633 \u0642\u0628\u0644 \u0646\u062D\u0648 \u0663 \u0633\u0627\u0639\u0627\u062A. \u0633\u0644\u0651\u0645 \u0623\u0645\u062A\u0639\u062A\u0643 \u0648\u0627\u0633\u062A\u0644\u0645 \u0628\u0637\u0627\u0642\u0627\u062A \u0627\u0644\u0635\u0639\u0648\u062F \u0648\u0627\u062D\u062A\u0641\u0638 \u0628\u062C\u0648\u0627\u0632 \u0627\u0644\u0633\u0641\u0631 \u0648\u062D\u0642\u064A\u0628\u0629 \u0627\u0644\u0625\u062D\u0631\u0627\u0645 \u0645\u0639\u0643.' },
+        de: { t: 'Check-in & Gep\u00E4ckabgabe', b: 'Seien Sie etwa 3 Stunden fr\u00FCher in Vilnius. Geben Sie Ihr Gep\u00E4ck ab, holen Sie die Bordkarten und behalten Sie Pass und Ihram-Tasche bei sich.' },
+        items: ['Passport & visa', 'Booking reference', 'Bags weighed', 'Ihram bag in hand'],
+        tip: 'Tip: weigh your bag at home — usually 23 kg checked, 7 kg cabin.'
+      },
+      {
+        short: 'Security', sub: 'SECURITY · PASSPORT',
+        en: { t: 'Security & passport control', b: 'Pass security and exit immigration. Liquids stay under 100 ml; place phones, belts and coins in the tray.' },
+        ur: { t: '\u0633\u06CC\u06A9\u06CC\u0648\u0631\u0679\u06CC \u0627\u0648\u0631 \u067E\u0627\u0633\u067E\u0648\u0631\u0679 \u06A9\u0646\u0679\u0631\u0648\u0644', b: '\u0633\u06CC\u06A9\u06CC\u0648\u0631\u0679\u06CC \u0627\u0648\u0631 \u0627\u0645\u06CC\u06AF\u0631\u06CC\u0634\u0646 \u0633\u06D2 \u06AF\u0632\u0631\u06CC\u06BA\u06D4 \u0645\u0627\u0626\u0639\u0627\u062A 100 \u0645\u0644\u06CC \u0644\u06CC\u0679\u0631 \u0633\u06D2 \u06A9\u0645 \u0631\u06A9\u06BE\u06CC\u06BA\u061B \u0641\u0648\u0646\u060C \u0628\u06CC\u0644\u0679 \u0627\u0648\u0631 \u0633\u06A9\u06D2 \u0679\u0631\u06D2 \u0645\u06CC\u06BA \u0631\u06A9\u06BE\u06CC\u06BA\u06D4' },
+        ar: { t: '\u0627\u0644\u062A\u0641\u062A\u064A\u0634 \u0627\u0644\u0623\u0645\u0646\u064A \u0648\u062C\u0648\u0627\u0632\u0627\u062A \u0627\u0644\u0633\u0641\u0631', b: '\u0627\u062C\u062A\u0632 \u0627\u0644\u062A\u0641\u062A\u064A\u0634 \u0627\u0644\u0623\u0645\u0646\u064A \u0648\u0627\u0644\u062C\u0648\u0627\u0632\u0627\u062A. \u0627\u062C\u0639\u0644 \u0627\u0644\u0633\u0648\u0627\u0626\u0644 \u0623\u0642\u0644 \u0645\u0646 \u0661\u0660\u0660 \u0645\u0644\u060C \u0648\u0636\u0639 \u0627\u0644\u0647\u0627\u062A\u0641 \u0648\u0627\u0644\u062D\u0632\u0627\u0645 \u0648\u0627\u0644\u0646\u0642\u0648\u062F \u0641\u064A \u0627\u0644\u0635\u064A\u0646\u064A\u0629.' },
+        de: { t: 'Sicherheit & Passkontrolle', b: 'Passieren Sie Sicherheit und Ausreise. Fl\u00FCssigkeiten unter 100 ml; Handy, G\u00FCrtel und M\u00FCnzen ins Fach.' },
+        items: ['Boarding pass', 'Liquids under 100 ml', 'Electronics out', 'Belt & coins in tray'],
+        tip: 'Tip: enter Ihram before or at the Miqat — ask your AUJ guide when.'
+      },
+      {
+        short: 'Boarding', sub: 'BOARDING',
+        en: { t: 'Boarding the flight', b: 'Board by zone when your group is called. Find your seat, stow the cabin bag overhead, and settle in calmly.' },
+        ur: { t: '\u0641\u0644\u0627\u0626\u0679 \u0645\u06CC\u06BA \u0633\u0648\u0627\u0631 \u06C1\u0648\u0646\u0627', b: '\u0627\u067E\u0646\u06D2 \u0632\u0648\u0646 \u06A9\u06CC \u0628\u0627\u0631\u06CC \u067E\u0631 \u0633\u0648\u0627\u0631 \u06C1\u0648\u06BA\u06D4 \u0646\u0634\u0633\u062A \u062A\u0644\u0627\u0634 \u06A9\u0631\u06CC\u06BA\u060C \u06A9\u06CC\u0628\u0646 \u0628\u06CC\u06AF \u0627\u0648\u067E\u0631 \u0631\u06A9\u06BE\u06CC\u06BA \u0627\u0648\u0631 \u0633\u06A9\u0648\u0646 \u0633\u06D2 \u0628\u06CC\u0679\u06BE \u062C\u0627\u0626\u06CC\u06BA\u06D4' },
+        ar: { t: '\u0627\u0644\u0635\u0639\u0648\u062F \u0625\u0644\u0649 \u0627\u0644\u0637\u0627\u0626\u0631\u0629', b: '\u0627\u0635\u0639\u062F \u062D\u0633\u0628 \u0627\u0644\u0645\u062C\u0645\u0648\u0639\u0629 \u0639\u0646\u062F \u0627\u0644\u0646\u062F\u0627\u0621. \u0627\u0639\u062B\u0631 \u0639\u0644\u0649 \u0645\u0642\u0639\u062F\u0643 \u0648\u0636\u0639 \u062D\u0642\u064A\u0628\u0629 \u0627\u0644\u064A\u062F \u0641\u064A \u0627\u0644\u0623\u0639\u0644\u0649 \u0648\u0627\u0633\u062A\u0642\u0631 \u0628\u0647\u062F\u0648\u0621.' },
+        de: { t: 'Einsteigen', b: 'Steigen Sie nach Zone ein, wenn Ihre Gruppe aufgerufen wird. Suchen Sie Ihren Sitz, verstauen Sie das Handgep\u00E4ck und kommen Sie an.' },
+        items: ['Boarding pass / zone', 'Seat number', 'Stow cabin bag', 'Calm & seated'],
+        tip: 'Tip: keep your documents in the seat pocket — you will need them on arrival.'
+      },
+      {
+        short: 'In-flight', sub: 'IN-FLIGHT · TO KSA',
+        en: { t: 'Flight to Jeddah / Madinah', b: 'Rest and drink water. The crew hands out arrival cards — fill them in before landing and set your watch to KSA time.' },
+        ur: { t: '\u062C\u062F\u06C1 / \u0645\u062F\u06CC\u0646\u06C1 \u06A9\u06CC \u067E\u0631\u0648\u0627\u0632', b: '\u0622\u0631\u0627\u0645 \u06A9\u0631\u06CC\u06BA \u0627\u0648\u0631 \u067E\u0627\u0646\u06CC \u067E\u06CC\u062A\u06D2 \u0631\u06C1\u06CC\u06BA\u06D4 \u0639\u0645\u0644\u06C1 \u0622\u0645\u062F \u06A9\u0627\u0631\u0688 \u062F\u06D2 \u06AF\u0627 \u2014 \u0644\u06CC\u0646\u0688\u0646\u06AF \u0633\u06D2 \u067E\u06C1\u0644\u06D2 \u0628\u06BE\u0631 \u0644\u06CC\u06BA \u0627\u0648\u0631 \u06AF\u06BE\u0691\u06CC \u0633\u0639\u0648\u062F\u06CC \u0648\u0642\u062A \u067E\u0631 \u06A9\u0631 \u0644\u06CC\u06BA\u06D4' },
+        ar: { t: '\u0627\u0644\u0631\u062D\u0644\u0629 \u0625\u0644\u0649 \u062C\u062F\u0629 / \u0627\u0644\u0645\u062F\u064A\u0646\u0629', b: '\u0627\u0633\u062A\u0631\u062D \u0648\u0627\u0634\u0631\u0628 \u0627\u0644\u0645\u0627\u0621. \u0633\u064A\u0648\u0632\u0651\u0639 \u0627\u0644\u0637\u0627\u0642\u0645 \u0628\u0637\u0627\u0642\u0627\u062A \u0627\u0644\u0648\u0635\u0648\u0644 \u2014 \u0627\u0645\u0644\u0623\u0647\u0627 \u0642\u0628\u0644 \u0627\u0644\u0647\u0628\u0648\u0637 \u0648\u0627\u0636\u0628\u0637 \u0633\u0627\u0639\u062A\u0643 \u0639\u0644\u0649 \u062A\u0648\u0642\u064A\u062A \u0627\u0644\u0633\u0639\u0648\u062F\u064A\u0629.' },
+        de: { t: 'Flug nach Jeddah / Madinah', b: 'Ruhen und trinken Sie. Die Crew verteilt Ankunftskarten — f\u00FCllen Sie sie vor der Landung aus und stellen Sie die Uhr auf KSA-Zeit.' },
+        items: ['Arrival card filled', 'Hydrate', 'Watch on KSA time', 'Rest'],
+        tip: 'Tip: KSA time is UTC+3 — adjust your watch and phone on board.'
+      },
+      {
+        short: 'Immigration', sub: 'ARRIVAL · IMMIGRATION',
+        en: { t: 'Immigration & biometrics', b: 'At Jeddah or Madinah, follow the “Hajj / Umrah” signs. Give your fingerprints and a photo at the counter.' },
+        ur: { t: '\u0627\u0645\u06CC\u06AF\u0631\u06CC\u0634\u0646 \u0627\u0648\u0631 \u0628\u0627\u06CC\u0648\u0645\u06CC\u0679\u0631\u06A9\u0633', b: '\u062C\u062F\u06C1 \u06CC\u0627 \u0645\u062F\u06CC\u0646\u06C1 \u0645\u06CC\u06BA \u2019\u062D\u062C/\u0639\u0645\u0631\u06C1\u2018 \u06A9\u06D2 \u0646\u0634\u0627\u0646\u0627\u062A \u067E\u0631 \u0686\u0644\u06CC\u06BA\u06D4 \u06A9\u0627\u0624\u0646\u0679\u0631 \u067E\u0631 \u0641\u0646\u06AF\u0631\u067E\u0631\u0646\u0679 \u0627\u0648\u0631 \u062A\u0635\u0648\u06CC\u0631 \u062F\u06CC\u06BA\u06D4' },
+        ar: { t: '\u0627\u0644\u062C\u0648\u0627\u0632\u0627\u062A \u0648\u0627\u0644\u0628\u0635\u0645\u0627\u062A', b: '\u0641\u064A \u062C\u062F\u0629 \u0623\u0648 \u0627\u0644\u0645\u062F\u064A\u0646\u0629\u060C \u0627\u062A\u0628\u0639 \u0644\u0627\u0641\u062A\u0627\u062A «\u0627\u0644\u062D\u062C/\u0627\u0644\u0639\u0645\u0631\u0629». \u0642\u062F\u0651\u0645 \u0628\u0635\u0645\u0627\u062A\u0643 \u0648\u0635\u0648\u0631\u062A\u0643 \u0639\u0646\u062F \u0627\u0644\u0645\u0646\u0641\u0630.' },
+        de: { t: 'Einreise & Biometrie', b: 'In Jeddah oder Madinah den „Hadsch/Umrah“-Schildern folgen. Geben Sie Fingerabdr\u00FCcke und ein Foto am Schalter ab.' },
+        items: ['Hajj / Umrah signs', 'Fingerprints', 'Photo at counter', 'BRN ready'],
+        tip: 'Tip: have your booking reference (BRN) ready on your phone.'
+      },
+      {
+        short: 'Baggage', sub: 'BAGGAGE · CUSTOMS',
+        en: { t: 'Baggage claim & customs', b: 'Collect your checked bags from the belt for your flight number, then walk through the green customs channel.' },
+        ur: { t: '\u0633\u0627\u0645\u0627\u0646 \u0627\u0648\u0631 \u06A9\u0633\u0679\u0645\u0632', b: '\u0627\u067E\u0646\u06CC \u0641\u0644\u0627\u0626\u0679 \u0646\u0645\u0628\u0631 \u0648\u0627\u0644\u06CC \u0628\u06CC\u0644\u0679 \u0633\u06D2 \u0633\u0627\u0645\u0627\u0646 \u0644\u06CC\u06BA\u060C \u067E\u06BE\u0631 \u0633\u0628\u0632 \u06A9\u0633\u0679\u0645\u0632 \u0686\u06CC\u0646\u0644 \u0633\u06D2 \u06AF\u0632\u0631\u06CC\u06BA\u06D4' },
+        ar: { t: '\u0627\u0633\u062A\u0644\u0627\u0645 \u0627\u0644\u0623\u0645\u062A\u0639\u0629 \u0648\u0627\u0644\u062C\u0645\u0627\u0631\u0643', b: '\u0627\u0633\u062A\u0644\u0645 \u0623\u0645\u062A\u0639\u062A\u0643 \u0645\u0646 \u0627\u0644\u0633\u064A\u0631 \u0627\u0644\u062E\u0627\u0635 \u0628\u0631\u0642\u0645 \u0631\u062D\u0644\u062A\u0643\u060C \u062B\u0645 \u0627\u0639\u0628\u0631 \u0645\u0646 \u0645\u0645\u0631 \u0627\u0644\u062C\u0645\u0627\u0631\u0643 \u0627\u0644\u0623\u062E\u0636\u0631.' },
+        de: { t: 'Gep\u00E4ck & Zoll', b: 'Holen Sie Ihr Gep\u00E4ck vom Band Ihrer Flugnummer und gehen Sie durch den gr\u00FCnen Zollkanal.' },
+        items: ['Correct flight belt', 'Free trolley', 'All bags collected', 'Green customs channel'],
+        tip: 'Tip: trolleys are free — keep small change handy for a porter.'
+      },
+      {
+        short: 'Transfer', sub: 'TRANSFER · TO HOTEL',
+        en: { t: 'Meet, SIM & transfer', b: 'Find your AUJ representative at the meeting point. Collect your local SIM and board the transfer to your hotel.' },
+        ur: { t: '\u0627\u0633\u062A\u0642\u0628\u0627\u0644\u060C \u0633\u0645 \u0627\u0648\u0631 \u0679\u0631\u0627\u0646\u0633\u0641\u0631', b: '\u0645\u0644\u0627\u0642\u0627\u062A \u06A9\u06D2 \u0645\u0642\u0627\u0645 \u067E\u0631 AUJ \u0646\u0645\u0627\u0626\u0646\u062F\u06D2 \u0633\u06D2 \u0645\u0644\u06CC\u06BA\u06D4 \u0644\u0648\u06A9\u0644 \u0633\u0645 \u0644\u06CC\u06BA \u0627\u0648\u0631 \u06C1\u0648\u0679\u0644 \u06A9\u06CC \u0679\u0631\u0627\u0646\u0633\u0641\u0631 \u0645\u06CC\u06BA \u0628\u06CC\u0679\u06BE \u062C\u0627\u0626\u06CC\u06BA\u06D4' },
+        ar: { t: '\u0627\u0644\u0627\u0633\u062A\u0642\u0628\u0627\u0644 \u0648\u0627\u0644\u0634\u0631\u064A\u062D\u0629 \u0648\u0627\u0644\u062A\u0648\u0635\u064A\u0644', b: '\u0642\u0627\u0628\u0644 \u0645\u0646\u062F\u0648\u0628 AUJ \u0639\u0646\u062F \u0646\u0642\u0637\u0629 \u0627\u0644\u0644\u0642\u0627\u0621. \u0627\u0633\u062A\u0644\u0645 \u0634\u0631\u064A\u062D\u062A\u0643 \u0627\u0644\u0645\u062D\u0644\u064A\u0629 \u0648\u0627\u0631\u0643\u0628 \u0648\u0633\u064A\u0644\u0629 \u0627\u0644\u0646\u0642\u0644 \u0625\u0644\u0649 \u0641\u0646\u062F\u0642\u0643.' },
+        de: { t: 'Empfang, SIM & Transfer', b: 'Treffen Sie Ihren AUJ-Vertreter am Treffpunkt. Holen Sie Ihre lokale SIM und fahren Sie zum Hotel.' },
+        items: ['Find AUJ rep', 'Collect local SIM', 'Board transfer', 'Hotel address ready'],
+        tip: 'Tip: your driver holds an AUJ sign with your booking name.'
+      }
+    ];
+  }
+
+  saveVids() { try { localStorage.setItem('auj-airport-vids', JSON.stringify(this.vids || {})); } catch (e) {} }
+  parseEmbed(raw) {
+    const s = (raw || '').trim();
+    if (!s) return { kind: null, url: '' };
+    let m;
+    if ((m = s.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([\w-]{6,})/i))) return { kind: 'iframe', url: 'https://www.youtube.com/embed/' + m[1] };
+    if ((m = s.match(/vimeo\.com\/(?:video\/)?(\d+)/i))) return { kind: 'iframe', url: 'https://player.vimeo.com/video/' + m[1] };
+    if (/^(https?:|blob:|data:)/i.test(s)) return { kind: 'video', url: s };
+    return { kind: null, url: '' };
+  }
+  addLink() {
+    const val = this._linkInput ? this._linkInput.value : '';
+    const emb = this.parseEmbed(val);
+    if (!emb.kind) return;
+    const i = this.state.i;
+    if (this._vidUrls && this._vidUrls[i]) { try { URL.revokeObjectURL(this._vidUrls[i]); } catch (_) {} delete this._vidUrls[i]; }
+    if (!this.vids) this.vids = {};
+    this.vids[i] = { link: val.trim() };
+    this.saveVids();
+    if (this._linkInput) this._linkInput.value = '';
+    this.forceUpdate();
+  }
+  addVideo(e) {
+    const file = e && e.target && e.target.files && e.target.files[0];
+    if (e && e.target) e.target.value = '';
+    if (!file) return;
+    const i = this.state.i;
+    if (!this.vids) this.vids = {};
+    if (!this._vidUrls) this._vidUrls = {};
+    if (this._vidUrls[i]) { try { URL.revokeObjectURL(this._vidUrls[i]); } catch (_) {} }
+    this._vidUrls[i] = URL.createObjectURL(file);
+    this.vids[i] = { name: file.name };
+    this.forceUpdate();
+    const r = new FileReader();
+    r.onload = () => {
+      try { if (this.vids[i]) { this.vids[i].data = r.result; localStorage.setItem('auj-airport-vids', JSON.stringify(this.vids)); } }
+      catch (err) { if (this.vids[i]) delete this.vids[i].data; }
+      this.forceUpdate();
+    };
+    r.readAsDataURL(file);
+  }
+  deleteVid() {
+    const i = this.state.i;
+    if (this._vidUrls && this._vidUrls[i]) { try { URL.revokeObjectURL(this._vidUrls[i]); } catch (_) {} delete this._vidUrls[i]; }
+    if (this.vids) delete this.vids[i];
+    this.saveVids();
+    this.forceUpdate();
+  }
+
+  renderVals() {
+    const S = this.data();
+    const total = S.length;
+    const i = Math.max(0, Math.min(this.state.i, total - 1));
+    const st = S[i];
+    const lang = this.state.lang;
+    const sel = st[lang.toLowerCase()] || st.en;
+    const rtl = (lang === 'AR' || lang === 'UR');
+    const arFont = "'IBM Plex Sans Arabic','IBM Plex Sans',sans-serif";
+    const pad2 = (n) => ('0' + n).slice(-2);
+
+    const langButtons = ['EN', 'UR', 'AR', 'DE'].map((L) => ({
+      label: L, onClick: () => this.setState({ lang: L }),
+      bg: this.state.lang === L ? 'rgba(255,255,255,0.18)' : 'transparent',
+      fg: this.state.lang === L ? '#fff' : '#BFE0CD',
+      border: this.state.lang === L ? 'rgba(255,255,255,0.32)' : 'transparent'
+    }));
+
+    const rail = S.map((s, k) => ({
+      num: pad2(k + 1), short: s.short,
+      onClick: () => this.setState({ i: k }),
+      dotBg: k === i ? '#0F5132' : (k < i ? '#DCEDE4' : '#fff'),
+      dotBorder: k === i ? '#0F5132' : (k < i ? '#9CC6AE' : '#E6DDCE'),
+      dotFg: k === i ? '#fff' : (k < i ? '#0F5132' : '#9A9183'),
+      labelColor: k === i ? '#0F5132' : '#9A9183'
+    }));
+
+    const curVid = this.vids && this.vids[i];
+    const curLink = curVid && curVid.link;
+    const fileSrc = (this._vidUrls && this._vidUrls[i]) || (curVid && curVid.data) || '';
+    const emb = curLink ? this.parseEmbed(curLink) : (fileSrc ? { kind: 'video', url: fileSrc } : { kind: null, url: '' });
+    const isEmbedIframe = emb.kind === 'iframe';
+    const isEmbedVideo = emb.kind === 'video';
+    const hasVid = isEmbedIframe || isEmbedVideo;
+
+    return {
+      routeLabel: i <= 3 ? 'VILNIUS → JEDDAH / MADINAH' : 'ARRIVAL · JEDDAH / MADINAH',
+      counter: pad2(i + 1) + ' / ' + pad2(total),
+      stepNum: pad2(i + 1),
+      phaseSub: st.sub,
+      selDir: rtl ? 'rtl' : 'ltr',
+      selFont: rtl ? arFont : "'IBM Plex Sans',sans-serif",
+      selHeadFont: rtl ? arFont : "'IBM Plex Serif',serif",
+      selCode: lang, selTitle: sel.t, selBody: sel.b,
+      showAr: lang !== 'AR', arTitle: st.ar.t, arBody: st.ar.b,
+      tip: st.tip, items: st.items, rail, langButtons,
+      isEmbedVideo, isEmbedIframe, hasVid, noVid: !hasVid,
+      vidPrompt: 'Add a short clip for this step',
+      vidPh: 'Paste a video link (YouTube, Vimeo, MP4)',
+      onAddLink: () => this.addLink(),
+      onAddVideo: (e) => this.addVideo(e),
+      onDeleteVid: () => this.deleteVid(),
+      linkInputRef: (el) => { this._linkInput = el; },
+      vidRef: (el) => { if (!el) return; if (emb.url && el.src !== emb.url) el.src = emb.url; },
+      frameRef: (el) => { if (!el) return; if (emb.url && el.getAttribute('src') !== emb.url) el.setAttribute('src', emb.url); },
+      prev: () => this.setState({ i: Math.max(0, i - 1) }),
+      next: () => this.setState({ i: Math.min(total - 1, i + 1) }),
+      prevBg: i === 0 ? '#F4EEE3' : '#fff',
+      prevColor: i === 0 ? '#B8AE9C' : '#156440',
+      prevBorder: i === 0 ? '#EADFCE' : '#C9BCA6',
+      nextLabel: i === total - 1 ? 'Done' : 'Next step'
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;} body{margin:0;} ::selection{background:#C8A24A;color:#07301E;}
+  input[type=range]{-webkit-appearance:none;appearance:none;height:6px;border-radius:999px;background:#E6DDCE;outline:none;}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#0F5132;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.25);cursor:pointer;}
+  input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#0F5132;border:3px solid #fff;cursor:pointer;}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:radial-gradient(120% 90% at 50% 0%, #FFFDF8 0%, #F3EEE4 100%);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:clamp(20px,4vw,44px) clamp(14px,4vw,32px);display:flex;flex-direction:column;align-items:center;">
+  <div style="width:100%;max-width:1060px;">
+
+    <!-- HEADER -->
+    <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:18px 22px;border-radius:20px;background:radial-gradient(130% 230% at 88% -60%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;box-shadow:0 24px 60px -34px rgba(5,28,18,0.6);color:#EFF6F1;">
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+      <div style="position:relative;display:flex;align-items:center;gap:14px;">
+        <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:11px;padding:6px 12px;box-shadow:0 10px 26px -8px rgba(0,0,0,0.45);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:clamp(46px,6.5vw,62px);width:auto;display:block;" /></span>
+        <div>
+          <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;"><span style="font-family:'IBM Plex Serif',serif;font-size:20px;font-weight:600;color:#fff;">Al-Noor Travels</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:#07301E;background:#7CE2B0;border-radius:6px;padding:3px 8px;">APPROVED</span></div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#BFE0CD;margin-top:3px;">AUJ B2B PORTAL · GOLD AGENT · AG-LT-0042</div>
+        </div>
+      </div>
+      <div style="position:relative;text-align:right;">
+        <div style="font-size:11px;color:#9CC6AE;">Wallet available</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:600;color:#E8C36A;">{{ available }}</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin-top:18px;">
+      <!-- WALLET -->
+      <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px;"><div style="font-size:16px;font-weight:600;color:#2A2620;">Wallet &amp; credit</div><button style="cursor:pointer;background:#0F5132;color:#fff;border:none;border-radius:10px;font-family:inherit;font-size:13px;font-weight:600;padding:8px 14px;">+ Top up</button></div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #F1EADD;padding-bottom:9px;"><span style="font-size:13.5px;color:#7A7263;">Cash balance</span><span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#2A2620;">{{ balance }}</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #F1EADD;padding-bottom:9px;"><span style="font-size:13.5px;color:#7A7263;">Credit limit</span><span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#2A2620;">{{ credit }}</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #F1EADD;padding-bottom:9px;"><span style="font-size:13.5px;color:#7A7263;">On hold</span><span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#B23A2E;">−{{ hold }}</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding-top:2px;"><span style="font-size:13.5px;font-weight:600;color:#0F5132;">Available to book</span><span style="font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:700;color:#0F5132;">{{ available }}</span></div>
+        </div>
+        <div style="margin-top:14px;display:flex;gap:5px;flex-wrap:wrap;">
+          <sc-for list="{{ curBtns }}" as="c" hint-placeholder-count="4"><button onClick="{{ c.onClick }}" style="cursor:pointer;font-family:inherit;font-size:11.5px;font-weight:600;padding:5px 11px;border-radius:8px;background:{{ c.bg }};color:{{ c.fg }};border:1px solid {{ c.border }};transition:all .15s;">{{ c.label }}</button></sc-for>
+        </div>
+      </div>
+
+      <!-- MARKUP ENGINE -->
+      <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);">
+        <div style="font-size:16px;font-weight:600;color:#2A2620;margin-bottom:4px;">Markup engine</div>
+        <div style="font-size:12.5px;color:#7A7263;margin-bottom:16px;">Set your sell margin on the Umrah Premium package.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><span style="font-size:13px;color:#7A7263;">Your markup</span><span style="font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:700;color:#0F5132;">{{ markup }}%</span></div>
+        <input type="range" min="0" max="20" step="0.5" value="{{ markup }}" onInput="{{ onMarkup }}" style="width:100%;" />
+        <div style="display:flex;gap:10px;margin-top:16px;">
+          <div style="flex:1;background:#FAF6EF;border:1px solid #F1EADD;border-radius:12px;padding:12px;"><div style="font-size:11px;color:#7A7263;">Net (your cost)</div><div style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;color:#2A2620;margin-top:3px;">{{ net }}</div></div>
+          <div style="flex:1;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:12px;padding:12px;"><div style="font-size:11px;color:#0F5132;">Sell price</div><div style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:700;color:#0F5132;margin-top:3px;">{{ sell }}</div></div>
+        </div>
+        <div style="margin-top:12px;display:flex;align-items:center;justify-content:space-between;background:#FBF4E6;border:1px solid #F0E2C4;border-radius:10px;padding:10px 13px;"><span style="font-size:13px;font-weight:600;color:#9A6512;">Your commission / pax</span><span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:700;color:#9A6512;">{{ commission }}</span></div>
+      </div>
+    </div>
+
+    <!-- BOOKINGS -->
+    <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);margin-top:18px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;flex-wrap:wrap;"><div style="font-size:16px;font-weight:600;color:#2A2620;">Group bookings</div><button style="cursor:pointer;background:#0F5132;color:#fff;border:none;border-radius:10px;font-family:inherit;font-size:13px;font-weight:600;padding:9px 15px;">+ New booking (up to 49 pax)</button></div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <sc-for list="{{ bookings }}" as="b" hint-placeholder-count="3">
+          <div style="display:flex;align-items:center;gap:12px;border:1px solid #F1EADD;border-radius:12px;padding:12px 14px;flex-wrap:wrap;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;color:#2F6F8F;width:140px;">{{ b.ref }}</span>
+            <span style="flex:1;min-width:120px;font-size:14px;font-weight:600;color:#2A2620;">{{ b.title }}</span>
+            <span style="font-size:12.5px;color:#7A7263;">{{ b.pax }} pax</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;color:#0F5132;width:96px;text-align:right;">{{ b.value }}</span>
+            <span style="font-size:11.5px;font-weight:600;color:{{ b.statusFg }};background:{{ b.statusBg }};border-radius:7px;padding:4px 9px;">{{ b.status }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- QUOTES + STATEMENTS -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin-top:18px;">
+      <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;"><div style="font-size:16px;font-weight:600;color:#2A2620;">Quotations</div><button style="cursor:pointer;background:#fff;color:#156440;border:1.5px solid #C9BCA6;border-radius:10px;font-family:inherit;font-size:13px;font-weight:600;padding:8px 13px;">Build quote</button></div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <sc-for list="{{ quotes }}" as="q" hint-placeholder-count="2">
+            <div style="display:flex;align-items:center;gap:10px;border:1px solid #F1EADD;border-radius:11px;padding:11px 13px;"><div style="flex:1;min-width:0;"><div style="font-size:13.5px;font-weight:600;color:#2A2620;">{{ q.title }}</div><div style="font-size:12px;color:#7A7263;">{{ q.meta }}</div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;font-weight:600;color:#0F5132;">{{ q.value }}</span><span style="cursor:pointer;font-size:12px;font-weight:600;color:#156440;">Share</span></div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);">
+        <div style="font-size:16px;font-weight:600;color:#2A2620;margin-bottom:6px;">Statements &amp; reports</div>
+        <div style="font-size:12.5px;color:#7A7263;margin-bottom:14px;">Sales, ledger and commission, reconciled monthly.</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #F1EADD;padding-bottom:9px;"><span style="font-size:13.5px;color:#7A7263;">Sales this month</span><span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#2A2620;">{{ salesMonth }}</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #F1EADD;padding-bottom:9px;"><span style="font-size:13.5px;color:#7A7263;">Commission earned</span><span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#9A6512;">{{ commMonth }}</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:13.5px;color:#7A7263;">Sub-agents</span><span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#2A2620;">6 active</span></div>
+        </div>
+        <div style="display:flex;gap:9px;margin-top:16px;flex-wrap:wrap;">
+          <button style="cursor:pointer;background:#0F5132;color:#fff;border:none;border-radius:10px;font-family:inherit;font-size:12.5px;font-weight:600;padding:9px 14px;">Export CSV</button>
+          <button style="cursor:pointer;background:#fff;color:#156440;border:1.5px solid #C9BCA6;border-radius:10px;font-family:inherit;font-size:12.5px;font-weight:600;padding:9px 14px;">Export Excel</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;text-align:center;"><a href="AUJ Landing Cinematic.dc.html" style="text-decoration:none;font-size:13.5px;color:#7A7263;">← Back to AUJ home</a></div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1100,&quot;height&quot;:860}}">
+class Component extends DCLogic {
+  state = { markup: 8, cur: 'EUR' };
+  componentDidMount() { try { const s = JSON.parse(localStorage.getItem('auj-b2b') || 'null'); if (s) this.setState(s); } catch (e) {} }
+  persist() { try { localStorage.setItem('auj-b2b', JSON.stringify(this.state)); } catch (e) {} }
+  set(p) { this.setState(p, () => this.persist()); }
+
+  renderVals() {
+    const CUR = { EUR: ['\u20AC', 1], USD: ['$', 1.08], SAR: ['\uFDFC ', 4.05], PKR: ['\u20A8', 310.8] };
+    const cur = this.state.cur || 'EUR';
+    const f = (n) => CUR[cur][0] + Math.round(n * CUR[cur][1]).toLocaleString('en-US');
+    const m = this.state.markup;
+
+    const balance = 12480, credit = 25000, hold = 3200;
+    const net = 1910, sell = net * (1 + m / 100);
+
+    const curBtns = ['EUR', 'USD', 'SAR', 'PKR'].map((c) => ({
+      label: c, onClick: () => this.set({ cur: c }),
+      bg: cur === c ? '#0F5132' : '#FAF6EF', fg: cur === c ? '#fff' : '#4A4337', border: cur === c ? '#0F5132' : '#E6DDCE'
+    }));
+
+    return {
+      available: f(balance + credit - hold), balance: f(balance), credit: f(credit), hold: f(hold),
+      curBtns,
+      markup: m, onMarkup: (e) => this.set({ markup: parseFloat(e.target.value) }),
+      net: f(net), sell: f(sell), commission: f(sell - net),
+      bookings: [
+        { ref: 'BRN-26-VNO-00712', title: 'Umrah · Vilnius group', pax: 41, value: f(78310), status: 'Confirmed', statusFg: '#0F5132', statusBg: '#DCEDE4' },
+        { ref: 'BRN-26-KUN-00688', title: 'Family Umrah · Kaunas', pax: 6, value: f(11460), status: 'Visa pending', statusFg: '#9A6512', statusBg: '#FBF4E6' },
+        { ref: 'BRN-26-RIX-00701', title: 'Ziyarat · Riga', pax: 22, value: f(25960), status: 'Deposit due', statusFg: '#B23A2E', statusBg: '#FBF1EF' }
+      ],
+      quotes: [
+        { title: 'Hajj 2026 · 30 pax', meta: 'Draft · valid 14 days', value: f(192000) },
+        { title: 'Umrah Ramadan · 18 pax', meta: 'Sent · awaiting client', value: f(41220) }
+      ],
+      salesMonth: f(284500), commMonth: f(19340)
+    };
+  }
+}
+</script>
+</body>
+</html>

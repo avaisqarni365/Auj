@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;} body{margin:0;} ::selection{background:#C8A24A;color:#07301E;}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:radial-gradient(120% 90% at 50% 0%, #FFFDF8 0%, #F3EEE4 100%);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:clamp(20px,4vw,44px) clamp(14px,4vw,32px);display:flex;flex-direction:column;align-items:center;">
+  <div style="width:100%;max-width:1060px;">
+
+    <!-- HEADER -->
+    <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:18px 22px;border-radius:20px;background:radial-gradient(130% 230% at 88% -60%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;box-shadow:0 24px 60px -34px rgba(5,28,18,0.6);color:#EFF6F1;">
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+      <div style="position:relative;display:flex;align-items:center;gap:14px;">
+        <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:11px;padding:6px 12px;box-shadow:0 10px 26px -8px rgba(0,0,0,0.45);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:clamp(46px,6.5vw,62px);width:auto;display:block;" /></span>
+        <div>
+          <div style="font-family:'IBM Plex Serif',serif;font-size:20px;font-weight:600;color:#fff;">SaudiConnector contract</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#BFE0CD;margin-top:3px;">THE SEAM · packages/contracts · BUILD FIRST</div>
+        </div>
+      </div>
+      <span style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:#07301E;background:#E8C36A;border-radius:999px;padding:6px 13px;">v1.0.0</span>
+    </div>
+
+    <!-- DEPENDENCY NOTE -->
+    <div style="margin-top:16px;display:flex;align-items:center;gap:13px;background:#fff;border:1px solid #E6DDCE;border-radius:16px;padding:14px 18px;box-shadow:0 1px 2px rgba(42,38,32,0.05);flex-wrap:wrap;">
+      <span style="font-size:13px;color:#7A7263;">Consumed by</span>
+      <sc-for list="{{ consumers }}" as="c" hint-placeholder-count="5"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:#235B73;background:#E2EEF3;border:1px solid #C9DEE8;border-radius:8px;padding:5px 10px;">{{ c }}</span></sc-for>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px;margin-top:18px;align-items:start;">
+      <!-- INTERFACE -->
+      <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);">
+        <div style="font-size:16px;font-weight:600;color:#2A2620;margin-bottom:14px;">Interface methods</div>
+        <div style="display:flex;flex-direction:column;gap:7px;">
+          <sc-for list="{{ methods }}" as="m" hint-placeholder-count="8">
+            <div style="display:flex;align-items:center;gap:11px;background:#FAF6EF;border:1px solid #F1EADD;border-radius:11px;padding:11px 13px;">
+              <span style="width:7px;height:7px;border-radius:50%;background:{{ m.dot }};flex-shrink:0;"></span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;color:#2A2620;flex:1;min-width:0;">{{ m.sig }}</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#156440;white-space:nowrap;">{{ m.ret }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <!-- TYPES -->
+      <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);">
+        <div style="font-size:16px;font-weight:600;color:#2A2620;margin-bottom:14px;">Domain types</div>
+        <div style="display:flex;flex-wrap:wrap;gap:7px;">
+          <sc-for list="{{ types }}" as="t" hint-placeholder-count="10"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;color:#2A2620;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:8px;padding:6px 11px;">{{ t }}</span></sc-for>
+        </div>
+        <div style="margin-top:16px;padding-top:14px;border-top:1px solid #F1EADD;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#7A7263;margin-bottom:9px;">CORE RULES</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <sc-for list="{{ rules }}" as="r" hint-placeholder-count="3"><div style="display:flex;align-items:center;gap:9px;"><span style="width:18px;height:18px;border-radius:50%;background:#0F5132;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">✓</span><span style="font-size:12.5px;color:#2A2620;">{{ r }}</span></div></sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ZOD + CONTRACT TESTS -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin-top:18px;">
+      <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);">
+        <div style="font-size:16px;font-weight:600;color:#2A2620;margin-bottom:4px;">Zod validation at boundaries</div>
+        <div style="font-size:12.5px;color:#7A7263;margin-bottom:14px;">Schemas mirror each type — parse fixtures both ways.</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <sc-for list="{{ fixtures }}" as="x" hint-placeholder-count="3">
+            <div style="display:flex;align-items:center;gap:11px;border:1px solid #F1EADD;border-radius:11px;padding:10px 13px;">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#2A2620;flex:1;">{{ x.name }}</span>
+              <span style="font-size:11px;font-weight:600;color:{{ x.fg }};background:{{ x.bg }};border-radius:7px;padding:4px 9px;">{{ x.result }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="background:linear-gradient(165deg,#0F5132,#06251A);border:1px solid #0A3D26;border-radius:20px;padding:20px;color:#EFF6F1;box-shadow:0 18px 44px -30px rgba(5,28,18,0.6);">
+        <div style="font-size:16px;font-weight:600;">Shared contract tests</div>
+        <div style="font-size:12.5px;color:#C6DDCF;margin-top:4px;margin-bottom:16px;">Importable by both the mock and the real adapter — any implementation must pass.</div>
+        <div style="display:flex;gap:11px;">
+          <div style="flex:1;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);border-radius:13px;padding:14px;text-align:center;"><div style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;">connector-mock</div><div style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#7CE2B0;margin-top:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#7CE2B0;"></span>green</div></div>
+          <div style="flex:1;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);border-radius:13px;padding:14px;text-align:center;"><div style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;">connector-saudi</div><div style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#E8C36A;margin-top:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#E8C36A;"></span>on sandbox</div></div>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#9CC6AE;margin-top:14px;">semver · breaking change → major bump</div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;display:flex;align-items:flex-start;gap:11px;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:14px;padding:13px 16px;">
+      <span style="width:24px;height:24px;border-radius:7px;background:#0F5132;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;">i</span>
+      <span style="font-size:12.5px;color:#2A4A39;line-height:1.55;">The only Saudi‑facing surface product modules may import. No network code, no vendor payloads — those live in <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;">connector-saudi</span>, mapped INTO these types.</span>
+    </div>
+
+    <div style="margin-top:20px;text-align:center;"><a href="AUJ Landing Cinematic.dc.html" style="text-decoration:none;font-size:13.5px;color:#7A7263;">← Back to AUJ home</a></div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1100,&quot;height&quot;:800}}">
+class Component extends DCLogic {
+  renderVals() {
+    const methods = [
+      { sig: 'searchHotels(c)', ret: 'HotelOffer[]', dot: '#2F6F8F' },
+      { sig: 'searchTransport(c)', ret: 'TransportOffer[]', dot: '#2F6F8F' },
+      { sig: 'searchGroundServices(c)', ret: 'GroundOffer[]', dot: '#2F6F8F' },
+      { sig: 'hold(offerIds, pilgrims)', ret: 'HoldRef', dot: '#C9A04A' },
+      { sig: 'confirm(holdId, payment)', ret: 'BookingResult', dot: '#1C7A4F' },
+      { sig: 'createVisaApplication(...)', ret: 'VisaApplication', dot: '#1C7A4F' },
+      { sig: 'getVisaStatus(visaRef)', ret: 'VisaStatus', dot: '#2F6F8F' },
+      { sig: 'cancel(bookingRef)', ret: '{ cancelled, refund? }', dot: '#B23A2E' }
+    ];
+    const types = ['Money', 'Currency', 'Pilgrim', 'SearchCriteria', 'HotelOffer', 'TransportOffer', 'GroundOffer', 'HoldRef', 'BookingResult', 'VisaApplication', 'VisaRoute', 'VisaStatus'];
+    const rules = ['Money in minor units (EUR/PKR/SAR)', 'BRNs passed through verbatim', 'Visa route per pilgrim'];
+    const fixtures = [
+      { name: 'valid Pilgrim', result: 'parse ✓', fg: '#0F5132', bg: '#DCEDE4' },
+      { name: 'bad nationality code', result: 'reject ✓', fg: '#0F5132', bg: '#DCEDE4' },
+      { name: 'mixed-currency Money', result: 'reject ✓', fg: '#0F5132', bg: '#DCEDE4' }
+    ];
+    const consumers = ['booking', 'visa-router', 'b2c', 'b2b', 'mock + real adapter'];
+    return { methods, types, rules, fixtures, consumers };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;}
+  ::selection{background:#C8A24A;color:#07301E;}
+  @keyframes auj-twinkle{0%,100%{opacity:.15;transform:scale(.7)}50%{opacity:1;transform:scale(1)}}
+  @keyframes auj-glow{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.85;transform:scale(1.12)}}
+  @keyframes auj-dhint{0%,100%{transform:translateX(-4px)}50%{transform:translateX(4px)}}
+  @keyframes auj-detin{from{transform:translateY(12px)}to{transform:none}}
+  @keyframes auj-ken{0%{transform:scale(1.02) translate(0,0)}100%{transform:scale(1.12) translate(-1.5%,-2%)}}
+  @keyframes auj-recpulse{0%,100%{opacity:1}50%{opacity:.35}}
+  @keyframes auj-ring{0%{transform:scale(.85);opacity:.7}100%{transform:scale(1.45);opacity:0}}
+  @media (max-width:760px){ .auj-tabs{flex-wrap:wrap!important;} }
+  @media (max-width:680px){
+    .auj-screen{flex-direction:column!important;}
+    .auj-vside{min-height:200px!important;flex:1 1 auto!important;width:100%!important;}
+    .auj-iside{flex:1 1 auto!important;width:100%!important;}
+    .auj-dethead{flex-wrap:wrap!important;}
+    .auj-detactions{width:100%!important;}
+  }
+  @media (max-width:430px){
+    .auj-vside{min-height:170px!important;}
+    .auj-tabs > div{font-size:13px!important;padding:9px 13px!important;}
+  }
+  @media (prefers-reduced-motion: reduce){*{animation:none!important}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:radial-gradient(120% 90% at 50% 0%, #F4EEE3 0%, #ECE7DD 100%);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:clamp(20px,4vw,44px) clamp(14px,4vw,32px);">
+  <div style="max-width:980px;margin:0 auto;">
+
+    <!-- TABS -->
+    <div class="auj-tabs" style="display:flex;gap:10px;justify-content:center;margin-bottom:clamp(22px,3vw,32px);">
+      <div style="display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;padding:10px 17px;border-radius:999px;background:rgba(255,255,255,0.55);color:#7A7263;border:1px solid #E6DDCE;">
+        <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="#7A7263" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 18V3l9 1.5L5 6"/><circle cx="14" cy="15" r="2.4"/><path d="M14 12.6V6"/></svg>Smart planner
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;padding:10px 17px;border-radius:999px;background:rgba(255,255,255,0.55);color:#7A7263;border:1px solid #E6DDCE;">
+        <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="#7A7263" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6"/><path d="M14 14l3.5 3.5"/></svg>Search packages
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;padding:10px 17px;border-radius:999px;background:rgba(255,255,255,0.55);color:#7A7263;border:1px solid #E6DDCE;">
+        <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="#7A7263" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5A1.5 1.5 0 0 1 4.5 3H10v14H4.5A1.5 1.5 0 0 1 3 15.5z"/><path d="M17 4.5A1.5 1.5 0 0 0 15.5 3H10v14h5.5A1.5 1.5 0 0 0 17 15.5z"/></svg>Umrah Guide
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;padding:10px 17px;border-radius:999px;background:#fff;color:#0F5132;border:1px solid #fff;box-shadow:0 6px 16px rgba(15,81,50,0.12);">
+        <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="#0F5132" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M8 7l5 3-5 3z" fill="#0F5132" stroke="none"/></svg>Virtual tour
+      </div>
+    </div>
+
+    <!-- HEADER -->
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px;">
+      <div>
+        <h1 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(30px,4vw,42px);letter-spacing:-0.02em;margin:0 0 6px;color:#2A2620;">{{ ui.pageTitle }}</h1>
+        <p style="font-size:15.5px;color:#7A7263;margin:0;">{{ ui.pageSub }}</p>
+      </div>
+      <a href="#" style="text-decoration:none;display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid #C9BCA6;border-radius:999px;font-size:14px;font-weight:600;color:#156440;padding:11px 18px;transition:all .15s;" style-hover="border-color:#2A9468;background:#F4FBF6;">{{ ui.guide }} <span>→</span></a>
+    </div>
+
+    <!-- LANGUAGE SWITCHER -->
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px;padding:10px 12px;background:rgba(255,255,255,0.6);border:1px solid #E6DDCE;border-radius:16px;">
+      <div style="display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:#7A7263;padding-left:4px;">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#7A7263" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7.5"/><path d="M2.5 10h15M10 2.5c2.4 2.2 2.4 12.8 0 15M10 2.5c-2.4 2.2-2.4 12.8 0 15"/></svg>{{ ui.langLabel }}
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <sc-for list="{{ langBtns }}" as="l" hint-placeholder-count="4">
+          <button onClick="{{ l.onClick }}" lang="{{ l.htmlLang }}" style="cursor:pointer;font-family:{{ l.font }};font-size:13.5px;font-weight:600;padding:8px 15px;border-radius:999px;background:{{ l.bg }};color:{{ l.fg }};border:1.5px solid {{ l.border }};transition:all .15s;" style-hover="border-color:#2A9468;">{{ l.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- NUMBERED STEPPER -->
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:22px 0 24px;">
+      <sc-for list="{{ dots }}" as="d" hint-placeholder-count="15">
+        <button onClick="{{ d.onClick }}" title="{{ d.label }}" style="cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;width:34px;height:34px;border-radius:50%;background:{{ d.bg }};color:{{ d.fg }};border:2px solid {{ d.border }};display:flex;align-items:center;justify-content:center;transition:all .18s;" style-hover="border-color:#2A9468;">{{ d.mark }}</button>
+      </sc-for>
+    </div>
+
+    <!-- STEP VIEWER -->
+    <div data-detail>
+      <div class="auj-dethead" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px;">
+        <div style="width:54px;height:54px;border-radius:14px;background:#0F5132;color:#fff;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:23px;font-weight:600;flex-shrink:0;box-shadow:0 10px 24px -10px rgba(15,81,50,0.5);">{{ station.num }}</div>
+        <div style="flex:1;min-width:180px;" dir="{{ textDir }}">
+          <h2 style="font-family:{{ headFont }};font-weight:600;font-size:clamp(21px,2.8vw,29px);letter-spacing:-0.02em;line-height:1.18;margin:0;color:#2A2620;">{{ station.title }}</h2>
+          <div style="font-size:14.5px;color:#B5791E;font-weight:600;margin-top:3px;">{{ station.subtitle }}</div>
+        </div>
+        <div class="auj-detactions" style="display:flex;gap:9px;">
+          <button onClick="{{ onListen }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:8px;background:{{ listenBg }};color:{{ listenFg }};border:1.5px solid {{ listenBorder }};border-radius:11px;font-family:inherit;font-size:13.5px;font-weight:600;padding:10px 15px;transition:all .15s;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="{{ listenFg }}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 6a8 8 0 0 1 0 12"/></svg>{{ listenLabel }}
+          </button>
+          <button onClick="{{ toggleDua }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:8px;background:{{ duaBg }};color:{{ duaFg }};border:1.5px solid {{ duaBorder }};border-radius:11px;font-family:inherit;font-size:13.5px;font-weight:600;padding:10px 15px;transition:all .15s;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="{{ duaFg }}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4c2.4-1.9 6-1.4 6 1.6 0 2.2-2.6 3.9-6 5.9-3.4-2-6-3.7-6-5.9 0-3 3.6-3.5 6-1.6z"/><path d="M12 13v7M9 17h6"/></svg>{{ ui.dua }}
+          </button>
+        </div>
+      </div>
+
+      <!-- translated lead text -->
+      <p dir="{{ textDir }}" style="font-family:{{ bodyFont }};font-size:16px;line-height:1.65;color:#544F45;margin:0 0 16px;max-width:760px;">{{ station.body }}</p>
+
+      <!-- DYNAMIC VIRTUAL SCREEN — video side + Arabic & chosen language -->
+      <div class="auj-screen" style="display:flex;flex-wrap:wrap;border-radius:18px;overflow:hidden;border:1px solid #E6DDCE;box-shadow:0 26px 60px -30px rgba(42,38,32,0.5);background:#0B2317;">
+
+        <!-- LEFT: video side -->
+        <div class="auj-vside" style="position:relative;flex:1 1 340px;min-height:340px;background:#0B2317;overflow:hidden;">
+          <img ref="{{ imgRef }}" alt="" aria-hidden="true" style="position:absolute;inset:-7%;width:114%;height:114%;object-fit:cover;filter:blur(22px) brightness(0.55) saturate(1.15);will-change:transform;" />
+          <div style="position:absolute;inset:0;background:linear-gradient(120deg, rgba(6,28,19,0.5) 0%, rgba(8,44,28,0.65) 100%);"></div>
+
+          <!-- uploaded clip / direct video link -->
+          <sc-if value="{{ isEmbedVideo }}" hint-placeholder-val="{{ false }}">
+            <video ref="{{ vidRef }}" controls playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000;z-index:3;"></video>
+          </sc-if>
+          <!-- YouTube / Vimeo link -->
+          <sc-if value="{{ isEmbedIframe }}" hint-placeholder-val="{{ false }}">
+            <iframe ref="{{ frameRef }}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0;background:#000;z-index:3;"></iframe>
+          </sc-if>
+
+          <!-- video poster + play (virtual walk) when no clip -->
+          <sc-if value="{{ noVid }}" hint-placeholder-val="{{ true }}">
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:16px;">
+              <div style="display:inline-flex;align-self:flex-start;align-items:center;gap:8px;background:rgba(6,36,24,0.55);backdrop-filter:blur(6px);color:#EFF6F1;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.12em;padding:6px 12px;border-radius:999px;">
+                <sc-if value="{{ playing }}" hint-placeholder-val="{{ false }}"><span style="width:7px;height:7px;border-radius:50%;background:#7CE2B0;animation:auj-recpulse 1.2s ease-in-out infinite;"></span></sc-if>
+                {{ videoSideLabel }}
+              </div>
+              <button onClick="{{ toggleWalk }}" aria-label="Play" style="position:absolute;inset:0;margin:auto;width:74px;height:74px;cursor:pointer;border:none;border-radius:50%;background:rgba(15,81,50,0.92);display:flex;align-items:center;justify-content:center;box-shadow:0 14px 34px rgba(0,0,0,0.4);">
+                <sc-if value="{{ notPlaying }}" hint-placeholder-val="{{ true }}">
+                  <span style="position:absolute;inset:0;border-radius:50%;border:2px solid rgba(255,255,255,0.5);animation:auj-ring 2.2s ease-out infinite;"></span>
+                  <svg width="30" height="30" viewBox="0 0 24 24" fill="#fff" stroke="none"><path d="M8 5v14l11-7z"/></svg>
+                </sc-if>
+                <sc-if value="{{ playing }}" hint-placeholder-val="{{ false }}"><svg width="26" height="26" viewBox="0 0 24 24" fill="#fff" stroke="none"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></sc-if>
+              </button>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,0.7);align-self:flex-start;">{{ vidHintShort }}</div>
+            </div>
+          </sc-if>
+        </div>
+
+        <!-- RIGHT: Arabic + chosen language, dynamic -->
+        <div class="auj-iside" style="flex:1 1 340px;background:#0E2A1C;padding:clamp(18px,2.4vw,26px);display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+            <div style="display:inline-flex;align-items:center;gap:11px;">
+              <div style="width:42px;height:42px;border-radius:11px;background:#0F5132;border:1px solid rgba(255,255,255,0.18);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:600;flex-shrink:0;">{{ station.num }}</div>
+              <div>
+                <div style="display:inline-flex;align-items:center;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.12em;color:#E8C36A;">
+                  <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="#E8C36A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7.5"/><path d="M2.5 10h15M10 2.5c2.4 2.2 2.4 12.8 0 15M10 2.5c-2.4 2.2-2.4 12.8 0 15"/></svg>
+                  {{ screenLabel }}
+                </div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:rgba(255,255,255,0.85);margin-top:2px;">{{ stepLabel }}</div>
+              </div>
+            </div>
+            <button onClick="{{ toggleWalk }}" aria-label="Read" style="cursor:pointer;display:inline-flex;align-items:center;gap:8px;background:{{ screenBtnBg }};color:{{ screenBtnFg }};border:1.5px solid {{ screenBtnBorder }};border-radius:999px;font-family:inherit;font-size:13px;font-weight:600;padding:9px 15px;transition:all .15s;">
+              <sc-if value="{{ notPlaying }}" hint-placeholder-val="{{ true }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="{{ screenBtnFg }}" stroke="none"><path d="M8 5v14l11-7z"/></svg></sc-if>
+              <sc-if value="{{ playing }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="{{ screenBtnFg }}" stroke="none"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></sc-if>
+              {{ screenBtnLabel }}
+            </button>
+          </div>
+
+          <!-- Arabic (always) -->
+          <div dir="rtl" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px 16px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;">
+              <span style="font-size:13px;font-weight:600;color:#E8C36A;font-family:'Noto Naskh Arabic','IBM Plex Sans',sans-serif;">{{ arStation.subtitle }}</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.08em;color:#0F5132;background:#CFE6D8;border-radius:6px;padding:3px 7px;">AR</span>
+            </div>
+            <h3 style="font-family:'Noto Naskh Arabic','IBM Plex Serif',serif;font-weight:600;font-size:clamp(21px,2.6vw,28px);line-height:1.4;margin:0 0 8px;color:#fff;">{{ arStation.title }}</h3>
+            <p style="font-family:'Noto Naskh Arabic','IBM Plex Sans',sans-serif;font-size:clamp(14px,1.5vw,16.5px);line-height:1.8;color:rgba(255,255,255,0.92);margin:0;">{{ arStation.body }}</p>
+          </div>
+
+          <!-- Chosen language (when not Arabic) -->
+          <sc-if value="{{ showSel }}" hint-placeholder-val="{{ true }}">
+            <div dir="{{ selDir }}" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px 16px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;">
+                <span style="font-size:12.5px;font-weight:600;color:#E8C36A;font-family:{{ selFont }};">{{ selStation.subtitle }}</span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.08em;color:#0F5132;background:#CFE6D8;border-radius:6px;padding:3px 7px;">{{ selCode }}</span>
+              </div>
+              <h3 style="font-family:{{ selHeadFont }};font-weight:600;font-size:clamp(19px,2.3vw,25px);line-height:1.25;letter-spacing:-0.01em;margin:0 0 7px;color:#fff;">{{ selStation.title }}</h3>
+              <p style="font-family:{{ selFont }};font-size:clamp(13.5px,1.5vw,16px);line-height:1.65;color:rgba(255,255,255,0.92);margin:0;">{{ selStation.body }}</p>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+
+      <!-- big virtual-walk button -->
+      <button onClick="{{ toggleWalk }}" style="margin-top:14px;width:100%;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;background:{{ walkBg }};color:{{ walkFg }};border:1.5px solid {{ walkBorder }};border-radius:14px;font-family:inherit;font-size:14.5px;font-weight:600;padding:14px 18px;transition:all .15s;">
+        <sc-if value="{{ notPlaying }}" hint-placeholder-val="{{ true }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="{{ walkFg }}" stroke="none"><path d="M8 5v14l11-7z"/></svg></sc-if>
+        <sc-if value="{{ playing }}" hint-placeholder-val="{{ false }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="{{ walkFg }}" stroke="none"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></sc-if>
+        {{ walkLabel }}
+      </button>
+
+      <!-- PERSONAL VOICE RECORDER -->
+      <sc-if value="{{ showRecorder }}" hint-placeholder-val="{{ true }}">
+        <div style="margin-top:14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:#fff;border:1px solid #E6DDCE;border-radius:16px;padding:14px 16px;">
+          <div style="width:42px;height:42px;border-radius:12px;background:{{ micWrapBg }};display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{ micFg }}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+          </div>
+          <div style="flex:1;min-width:160px;" dir="{{ textDir }}">
+            <div style="font-size:14px;font-weight:600;color:#2A2620;">{{ ui.myVoice }}</div>
+            <div style="font-size:12.5px;color:#8A8273;margin-top:2px;">{{ recStatusText }}</div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button onClick="{{ onRecToggle }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:8px;background:{{ recBtnBg }};color:{{ recBtnFg }};border:1.5px solid {{ recBtnBorder }};border-radius:11px;font-family:inherit;font-size:13.5px;font-weight:600;padding:10px 15px;transition:all .15s;">
+              <span style="width:9px;height:9px;border-radius:{{ recDotRadius }};background:{{ recBtnFg }};{{ recDotAnim }}"></span>{{ recBtnLabel }}
+            </button>
+            <sc-if value="{{ hasRec }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ onPlayRec }}" title="{{ ui.play }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:7px;background:#fff;color:#156440;border:1.5px solid #C9BCA6;border-radius:11px;font-family:inherit;font-size:13.5px;font-weight:600;padding:10px 14px;transition:all .15s;" style-hover="border-color:#2A9468;"><svg width="15" height="15" viewBox="0 0 24 24" fill="#156440" stroke="none"><path d="M8 5v14l11-7z"/></svg>{{ ui.play }}</button>
+              <button onClick="{{ onDeleteRec }}" title="{{ ui.del }}" style="cursor:pointer;display:inline-flex;align-items:center;justify-content:center;background:#fff;color:#A33B2E;border:1.5px solid #E3C7C1;border-radius:11px;font-family:inherit;padding:10px 12px;transition:all .15s;" style-hover="border-color:#C0594A;background:#FBF2F0;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A33B2E" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13"/></svg></button>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- STEP VIDEO -->
+      <div style="margin-top:14px;background:#fff;border:1px solid #E6DDCE;border-radius:16px;padding:14px 16px;">
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+          <div style="width:42px;height:42px;border-radius:12px;background:#F0F6F2;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F5132" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="13" height="12" rx="3"/><path d="M15.5 10.2 21.5 7v10l-6-3.2z"/></svg>
+          </div>
+          <div style="flex:1;min-width:160px;" dir="{{ textDir }}">
+            <div style="font-size:14px;font-weight:600;color:#2A2620;">{{ vidUi.title }}</div>
+            <div style="font-size:12.5px;color:#8A8273;margin-top:2px;">{{ vidStatusText }}</div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <label style="cursor:pointer;display:inline-flex;align-items:center;gap:8px;background:#0F5132;color:#fff;border:1.5px solid #0F5132;border-radius:11px;font-family:inherit;font-size:13.5px;font-weight:600;padding:10px 15px;transition:all .15s;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg>{{ vidBtnLabel }}
+              <input type="file" accept="video/*" onChange="{{ onAddVideo }}" style="display:none;" />
+            </label>
+            <sc-if value="{{ hasVid }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ onDeleteVid }}" title="{{ vidUi.remove }}" style="cursor:pointer;display:inline-flex;align-items:center;justify-content:center;background:#fff;color:#A33B2E;border:1.5px solid #E3C7C1;border-radius:11px;font-family:inherit;padding:10px 12px;transition:all .15s;" style-hover="border-color:#C0594A;background:#FBF2F0;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A33B2E" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13"/></svg></button>
+            </sc-if>
+          </div>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+          <input ref="{{ linkInputRef }}" type="url" placeholder="{{ vidUi.linkPh }}" dir="ltr" style="flex:1;min-width:170px;background:#FBFAF8;border:1.5px solid #D9CFBE;border-radius:11px;font-family:inherit;font-size:13.5px;color:#2A2620;padding:10px 13px;outline:none;" style-focus="border-color:#2A9468;" />
+          <button onClick="{{ onAddLink }}" style="cursor:pointer;background:#fff;color:#156440;border:1.5px solid #C9BCA6;border-radius:11px;font-family:inherit;font-size:13.5px;font-weight:600;padding:10px 16px;transition:all .15s;" style-hover="border-color:#2A9468;">{{ vidUi.addLink }}</button>
+        </div>
+      </div>
+
+      <sc-if value="{{ showDua }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:18px;background:linear-gradient(135deg,#0A3D26,#06251A);border:1px solid #0F5132;border-radius:18px;padding:clamp(20px,3vw,28px);color:#EFF6F1;position:relative;overflow:hidden;">
+          <div style="position:absolute;top:-40px;right:-30px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle, rgba(200,162,74,0.18), transparent 70%);"></div>
+          <div style="position:relative;">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#E8C36A;">{{ ui.duaTitle }}</div>
+              <button onClick="{{ onPlayDua }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.22);color:#fff;border-radius:999px;font-family:inherit;font-size:12.5px;font-weight:600;padding:7px 13px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff" stroke="none"><path d="M8 5v14l11-7z"/></svg>{{ ui.playMeaning }}</button>
+            </div>
+            <sc-if value="{{ hasDua }}" hint-placeholder-val="{{ true }}">
+              <div dir="rtl" style="font-family:'Noto Naskh Arabic','IBM Plex Serif',serif;font-size:clamp(22px,3vw,30px);line-height:1.85;margin-bottom:14px;color:#fff;">{{ dua.ar }}</div>
+              <div style="font-size:14.5px;font-style:italic;color:#BFE0CD;margin-bottom:8px;">{{ dua.tr }}</div>
+              <div dir="{{ textDir }}" style="font-size:14.5px;line-height:1.6;color:#EFF6F1;">{{ duaMeaning }}</div>
+            </sc-if>
+            <sc-if value="{{ noDua }}" hint-placeholder-val="{{ false }}">
+              <div dir="{{ textDir }}" style="font-size:15px;line-height:1.65;color:#C6DDCF;">{{ ui.noDua }}</div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:22px;">
+        <button onClick="{{ prev }}" style="cursor:{{ prevCursor }};background:#fff;border:1.5px solid #C9BCA6;border-radius:12px;font-family:inherit;font-size:14px;font-weight:600;color:{{ prevColor }};padding:13px 20px;display:inline-flex;align-items:center;gap:7px;transition:all .15s;">‹ {{ prevLabel }}</button>
+        <button onClick="{{ next }}" style="cursor:{{ nextCursor }};background:#0F5132;border:none;border-radius:12px;font-family:inherit;font-size:14.5px;font-weight:600;color:#fff;padding:13px 24px;display:inline-flex;align-items:center;gap:8px;box-shadow:0 8px 18px rgba(15,81,50,0.26);transition:all .15s;opacity:{{ nextOpacity }};" style-hover="background:#156440;">{{ nextLabel }} <span>→</span></button>
+      </div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1000,&quot;height&quot;:1120},&quot;defaultLang&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;en&quot;,&quot;ur&quot;,&quot;ar&quot;,&quot;de&quot;],&quot;default&quot;:&quot;en&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;showRecorder&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;autoAdvance&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = { i: 0, lang: 'en', showDua: false, recording: false, recError: null, playing: false, recTick: 0 };
+
+  componentDidMount() {
+    let saved = {};
+    try { saved = JSON.parse(localStorage.getItem('auj-tour-state') || '{}'); } catch (e) {}
+    try { this.recs = JSON.parse(localStorage.getItem('auj-tour-recs') || '{}'); } catch (e) { this.recs = {}; }
+    if (!this.recs) this.recs = {};
+    try { this.vids = JSON.parse(localStorage.getItem('auj-tour-vids') || '{}'); } catch (e) { this.vids = {}; }
+    if (!this.vids) this.vids = {};
+    this._vidUrls = {};
+    const lang = saved.lang || this.props.defaultLang || 'en';
+    const i = (typeof saved.i === 'number') ? saved.i : 0;
+    this.setState({ lang: lang, i: Math.max(0, Math.min(this.stations().length - 1, i)) });
+  }
+  componentDidUpdate(pp, ps) {
+    ps = ps || {};
+    if (ps.i !== this.state.i || ps.lang !== this.state.lang) this.persist();
+    if (this.state.playing && !ps.playing) { this.startPan(); this.playStep(); }
+    else if (this.state.playing && ps.i !== this.state.i) { this.playStep(); }
+    if (!this.state.playing && ps.playing) { this.stopPan(); this.clearKen(); }
+  }
+  componentWillUnmount() { this.stopWalk(); this.stopRec(); this.stopVoice(); }
+  persist() { try { localStorage.setItem('auj-tour-state', JSON.stringify({ i: this.state.i, lang: this.state.lang })); } catch (e) {} }
+
+  animDetail() {
+    requestAnimationFrame(() => {
+      var el = document.querySelector('[data-detail]');
+      if (!el) return;
+      el.style.animation = 'none'; void el.offsetHeight;
+      el.style.animation = 'auj-detin .45s cubic-bezier(.2,.7,.2,1)';
+      var clear = function(){ el.style.animation = ''; };
+      el.addEventListener('animationend', clear, { once: true });
+      setTimeout(clear, 600);
+    });
+  }
+  go(n) { const t = this.stations().length; clearTimeout(this._advTimer); if (!this.state.playing) this.stopVoice(); this.setState({ i: Math.max(0, Math.min(t - 1, n)), showDua: false }); this.animDetail(); }
+
+  ttsLang(l) { return ({ en: 'en-US', ur: 'ur-PK', ar: 'ar-SA', de: 'de-DE' })[l] || 'en-US'; }
+  setLang(l) { this.stopVoice(); this.stopWalk(); this.setState({ lang: l }); }
+
+  stations() {
+    return [
+      { label: 'Ihram', img: 'assets/tour/s1.png', title: 'Niyyah & Ihram', subtitle: 'Enter the sacred state at the Miqat',
+        body: 'At the Miqat you make your intention and enter Ihram \u2014 the white garments and the inward state of devotion that begin your Umrah.' },
+      { label: 'Talbiyah', img: 'assets/tour/s2.png', title: 'The Talbiyah', subtitle: 'Proclaim your response to Allah',
+        body: 'From the Miqat onward, recite the Talbiyah often as you travel toward Makkah \u2014 men aloud, women softly.' },
+      { label: 'Enter Haram', img: 'assets/tour/s3.png', title: 'Enter Masjid al-Haram', subtitle: 'Step into the Sacred Mosque',
+        body: 'Approach the gates of the Sacred Mosque in Makkah and enter with calm, humility and presence.' },
+      { label: 'See the Kaaba', img: 'assets/tour/s4.png', title: 'First sight of the Kaaba', subtitle: 'Raise your hands and make du\u2018a',
+        body: 'On first seeing the Kaaba, pause \u2014 this is a moment in which du\u2018a is answered. Speak from the heart.' },
+      { label: 'Prepare', img: 'assets/tour/s5.png', title: 'Prepare for Tawaf', subtitle: 'Idtiba & facing the Black Stone',
+        body: 'Men uncover the right shoulder (Idtiba). Stop the Talbiyah and move toward the Black Stone to begin.' },
+      { label: 'Tawaf', img: 'assets/tour/s6.png', title: 'Tawaf \u2014 start your 7 circles', subtitle: 'Walk around the Kaaba seven times',
+        body: 'Begin at the Black Stone and circle the Kaaba anticlockwise, keeping it on your left. This is the central rite of Umrah.' },
+      { label: '7 Rounds', img: 'assets/tour/s7.png', title: 'Complete 7 rounds', subtitle: 'Finish all seven circuits',
+        body: 'Continue around the Kaaba until you have completed seven full rounds, each beginning and ending at the Black Stone.' },
+      { label: '2 Rak\u2018ahs', img: 'assets/tour/s8.png', title: 'Pray 2 Rak\u2018ahs', subtitle: 'Behind Maqam Ibrahim, if possible',
+        body: 'After Tawaf, pray two rak\u2018ahs near the Station of Ibrahim \u2014 or anywhere in the mosque if it is crowded.' },
+      { label: 'Zamzam', img: 'assets/tour/s9.png', title: 'Drink Zamzam', subtitle: 'Drink of the blessed well',
+        body: 'Drink your fill of Zamzam, facing the Qibla, and make du\u2018a \u2014 it is \u201Cfor whatever it is drunk for.\u201D' },
+      { label: 'Sa\u2018i', img: 'assets/tour/s10.png', title: 'Sa\u2018i \u2014 Safa & Marwa', subtitle: 'Seven circuits between the hills',
+        body: 'Walk seven times between Safa and Marwa, starting at Safa and ending at Marwa, recalling Hajar\u2019s search for water.' },
+      { label: 'Complete Sa\u2018i', img: 'assets/tour/s11.png', title: 'Complete your Sa\u2018i', subtitle: 'End at Marwa',
+        body: 'On reaching Marwa the seventh time, your Sa\u2018i is complete. Ask Allah to accept it from you.' },
+      { label: 'Halq / Taqsir', img: 'assets/tour/s12.png', title: 'Trim or shave', subtitle: 'Halq or Taqsir',
+        body: 'Men shave (Halq) or trim (Taqsir) their hair; women trim a fingertip\u2019s length. With this the rites are complete.' },
+      { label: 'Umrah done', img: 'assets/tour/s13.png', title: 'Umrah complete', subtitle: 'Ihram restrictions are lifted',
+        body: 'With the haircut your Umrah is complete and the restrictions of Ihram are lifted. You may return to normal dress.' },
+      { label: 'Madinah', img: 'assets/tour/s14.png', title: 'Ziyarat \u2014 Madinah', subtitle: 'Visiting the Prophet\u2019s Mosque',
+        body: 'Many pilgrims travel on to Madinah to pray in Masjid an-Nabawi and send greetings upon the Prophet \uFDFA.' },
+      { label: 'Rawdah', img: 'assets/tour/s15.png', title: 'The Rawdah & farewell', subtitle: 'A garden of Paradise',
+        body: 'If granted access, pray in the Rawdah \u2014 the blessed garden \u2014 then carry its peace home with you.' }
+    ];
+  }
+
+  translations() {
+    return {
+      de: [
+        { title: 'Niyyah & Ihram', subtitle: 'Am Miqat den Weihezustand annehmen', body: 'Am Miqat fasst du die Absicht und trittst in den Ihram ein \u2013 die wei\u00DFen T\u00FCcher und die innere Hingabe, mit denen deine Umrah beginnt.' },
+        { title: 'Die Talbiyah', subtitle: 'Antworte auf den Ruf Allahs', body: 'Ab dem Miqat sprichst du auf dem Weg nach Mekka oft die Talbiyah \u2013 M\u00E4nner laut, Frauen leise.' },
+        { title: 'Betritt die Heilige Moschee', subtitle: 'Tritt in al-Masjid al-Haram ein', body: 'N\u00E4here dich den Toren der Heiligen Moschee in Mekka und tritt ruhig, dem\u00FCtig und gegenw\u00E4rtig ein.' },
+        { title: 'Erster Anblick der Kaaba', subtitle: 'Hebe die H\u00E4nde und bitte', body: 'Beim ersten Anblick der Kaaba halte inne \u2013 ein Moment, in dem Bittgebete erh\u00F6rt werden. Sprich aus dem Herzen.' },
+        { title: 'Bereite den Tawaf vor', subtitle: 'Idtiba & zum Schwarzen Stein', body: 'M\u00E4nner entbl\u00F6\u00DFen die rechte Schulter (Idtiba). Beende die Talbiyah und gehe zum Schwarzen Stein, um zu beginnen.' },
+        { title: 'Tawaf \u2013 beginne 7 Runden', subtitle: 'Siebenmal um die Kaaba', body: 'Beginne am Schwarzen Stein und umkreise die Kaaba gegen den Uhrzeigersinn, sie zu deiner Linken. Dies ist der zentrale Ritus der Umrah.' },
+        { title: 'Vollende 7 Runden', subtitle: 'Beende alle sieben Uml\u00E4ufe', body: 'Umkreise die Kaaba weiter, bis du sieben volle Runden vollendet hast, jede beginnt und endet am Schwarzen Stein.' },
+        { title: 'Bete 2 Rak\u2019ahs', subtitle: 'Hinter Maqam Ibrahim, wenn m\u00F6glich', body: 'Bete nach dem Tawaf zwei Rak\u2019ahs nahe der St\u00E4tte Ibrahims \u2013 oder bei Gedr\u00E4nge irgendwo in der Moschee.' },
+        { title: 'Trinke Zamzam', subtitle: 'Trinke vom gesegneten Brunnen', body: 'Trinke dich satt an Zamzam, zur Qibla gewandt, und bitte \u2013 es ist \u201Ef\u00FCr das, wof\u00FCr es getrunken wird\u201C.' },
+        { title: 'Sa\u2019i \u2013 Safa & Marwa', subtitle: 'Sieben G\u00E4nge zwischen den H\u00FCgeln', body: 'Gehe siebenmal zwischen Safa und Marwa, beginnend bei Safa und endend bei Marwa, im Gedenken an Hajars Suche nach Wasser.' },
+        { title: 'Vollende deinen Sa\u2019i', subtitle: 'Ende bei Marwa', body: 'Wenn du Marwa zum siebten Mal erreichst, ist dein Sa\u2019i vollendet. Bitte Allah, ihn von dir anzunehmen.' },
+        { title: 'K\u00FCrzen oder rasieren', subtitle: 'Halq oder Taqsir', body: 'M\u00E4nner rasieren (Halq) oder k\u00FCrzen (Taqsir) ihr Haar; Frauen k\u00FCrzen eine Fingerspitzenl\u00E4nge. Damit sind die Riten vollendet.' },
+        { title: 'Umrah vollendet', subtitle: 'Die Ihram-Beschr\u00E4nkungen enden', body: 'Mit dem Haarschnitt ist deine Umrah vollendet und die Beschr\u00E4nkungen des Ihram enden. Du darfst normale Kleidung tragen.' },
+        { title: 'Ziyarat \u2013 Madinah', subtitle: 'Besuch der Prophetenmoschee', body: 'Viele Pilger reisen weiter nach Madinah, um in Masjid an-Nabawi zu beten und den Propheten \uFDFA zu gr\u00FC\u00DFen.' },
+        { title: 'Die Rawdah & Abschied', subtitle: 'Ein Garten des Paradieses', body: 'Wenn dir Zugang gew\u00E4hrt wird, bete in der Rawdah \u2013 dem gesegneten Garten \u2013 und trage ihren Frieden mit nach Hause.' }
+      ],
+      ur: [
+        { title: '\u0646\u06CC\u0651\u062A \u0648 \u0627\u062D\u0631\u0627\u0645', subtitle: '\u0645\u06CC\u0642\u0627\u062A \u067E\u0631 \u0627\u062D\u0631\u0627\u0645 \u0628\u0627\u0646\u062F\u06BE\u06CC\u06BA', body: '\u0645\u06CC\u0642\u0627\u062A \u067E\u0631 \u0646\u06CC\u0651\u062A \u06A9\u0631\u06CC\u06BA \u0627\u0648\u0631 \u0627\u062D\u0631\u0627\u0645 \u0628\u0627\u0646\u062F\u06BE\u06CC\u06BA \u2014 \u0633\u0641\u06CC\u062F \u06A9\u067E\u0691\u06D2 \u0627\u0648\u0631 \u062F\u0644 \u06A9\u06CC \u0639\u0627\u062C\u0632\u06CC \u062C\u0633 \u0633\u06D2 \u0622\u067E \u06A9\u0627 \u0639\u0645\u0631\u06C1 \u0634\u0631\u0648\u0639 \u06C1\u0648\u062A\u0627 \u06C1\u06D2\u06D4' },
+        { title: '\u062A\u0644\u0628\u06CC\u06C1', subtitle: '\u0627\u0644\u0644\u06C1 \u06A9\u06CC \u067E\u06A9\u0627\u0631 \u06A9\u0627 \u062C\u0648\u0627\u0628 \u062F\u06CC\u06BA', body: '\u0645\u06CC\u0642\u0627\u062A \u06A9\u06D2 \u0628\u0639\u062F \u0645\u06A9\u06C1 \u06A9\u06CC \u0637\u0631\u0641 \u0633\u0641\u0631 \u0645\u06CC\u06BA \u06A9\u062B\u0631\u062A \u0633\u06D2 \u062A\u0644\u0628\u06CC\u06C1 \u067E\u0691\u06BE\u06CC\u06BA \u2014 \u0645\u0631\u062F \u0628\u0644\u0646\u062F \u0622\u0648\u0627\u0632 \u0633\u06D2\u060C \u0639\u0648\u0631\u062A\u06CC\u06BA \u0622\u06C1\u0633\u062A\u06C1\u06D4' },
+        { title: '\u0645\u0633\u062C\u062F \u0627\u0644\u062D\u0631\u0627\u0645 \u0645\u06CC\u06BA \u062F\u0627\u062E\u0644\u06C1', subtitle: '\u062D\u0631\u0645 \u0634\u0631\u06CC\u0641 \u0645\u06CC\u06BA \u0642\u062F\u0645 \u0631\u06A9\u06BE\u06CC\u06BA', body: '\u0645\u06A9\u06C1 \u0645\u06CC\u06BA \u0645\u0633\u062C\u062F \u0627\u0644\u062D\u0631\u0627\u0645 \u06A9\u06D2 \u062F\u0631\u0648\u0627\u0632\u0648\u06BA \u06A9\u06CC \u0637\u0631\u0641 \u0628\u0691\u06BE\u06CC\u06BA \u0627\u0648\u0631 \u0633\u06A9\u0648\u0646\u060C \u0639\u0627\u062C\u0632\u06CC \u0627\u0648\u0631 \u062D\u0636\u0648\u0631\u0650 \u0642\u0644\u0628 \u06A9\u06D2 \u0633\u0627\u062A\u06BE \u062F\u0627\u062E\u0644 \u06C1\u0648\u06BA\u06D4' },
+        { title: '\u06A9\u0639\u0628\u06C1 \u06A9\u0627 \u067E\u06C1\u0644\u0627 \u062F\u06CC\u062F\u0627\u0631', subtitle: '\u06C1\u0627\u062A\u06BE \u0627\u0679\u06BE\u0627 \u06A9\u0631 \u062F\u0639\u0627 \u06A9\u0631\u06CC\u06BA', body: '\u06A9\u0639\u0628\u06C1 \u06A9\u0648 \u067E\u06C1\u0644\u06CC \u0628\u0627\u0631 \u062F\u06CC\u06A9\u06BE\u062A\u06D2 \u06C1\u06CC \u0679\u06BE\u06C1\u0631 \u062C\u0627\u0626\u06CC\u06BA \u2014 \u06CC\u06C1 \u062F\u0639\u0627 \u06A9\u06CC \u0642\u0628\u0648\u0644\u06CC\u062A \u06A9\u0627 \u0644\u0645\u062D\u06C1 \u06C1\u06D2\u06D4 \u062F\u0644 \u0633\u06D2 \u0645\u0627\u0646\u06AF\u06CC\u06BA\u06D4' },
+        { title: '\u0637\u0648\u0627\u0641 \u06A9\u06CC \u062A\u06CC\u0627\u0631\u06CC', subtitle: '\u0627\u0636\u0637\u0628\u0627\u0639 \u0627\u0648\u0631 \u062D\u062C\u0631\u0650 \u0627\u0633\u0648\u062F \u06A9\u06CC \u0637\u0631\u0641', body: '\u0645\u0631\u062F \u062F\u0627\u06CC\u0627\u06BA \u06A9\u0646\u062F\u06BE\u0627 \u06A9\u06BE\u0648\u0644\u06CC\u06BA (\u0627\u0636\u0637\u0628\u0627\u0639)\u06D4 \u062A\u0644\u0628\u06CC\u06C1 \u0631\u0648\u06A9 \u062F\u06CC\u06BA \u0627\u0648\u0631 \u0622\u063A\u0627\u0632 \u06A9\u06D2 \u0644\u06CC\u06D2 \u062D\u062C\u0631\u0650 \u0627\u0633\u0648\u062F \u06A9\u06CC \u0637\u0631\u0641 \u0628\u0691\u06BE\u06CC\u06BA\u06D4' },
+        { title: '\u0637\u0648\u0627\u0641 \u2014 \u0633\u0627\u062A \u0686\u06A9\u0631 \u0634\u0631\u0648\u0639 \u06A9\u0631\u06CC\u06BA', subtitle: '\u06A9\u0639\u0628\u06D2 \u06A9\u06D2 \u06AF\u0631\u062F \u0633\u0627\u062A \u0628\u0627\u0631', body: '\u062D\u062C\u0631\u0650 \u0627\u0633\u0648\u062F \u0633\u06D2 \u0622\u063A\u0627\u0632 \u06A9\u0631\u06CC\u06BA \u0627\u0648\u0631 \u06A9\u0639\u0628\u06D2 \u06A9\u0648 \u0628\u0627\u0626\u06CC\u06BA \u0637\u0631\u0641 \u0631\u06A9\u06BE\u062A\u06D2 \u06C1\u0648\u0626\u06D2 \u0637\u0648\u0627\u0641 \u06A9\u0631\u06CC\u06BA\u06D4 \u06CC\u06C1 \u0639\u0645\u0631\u06D2 \u06A9\u0627 \u0645\u0631\u06A9\u0632\u06CC \u0631\u06A9\u0646 \u06C1\u06D2\u06D4' },
+        { title: '\u0633\u0627\u062A \u0686\u06A9\u0631 \u0645\u06A9\u0645\u0644 \u06A9\u0631\u06CC\u06BA', subtitle: '\u0633\u0627\u062A\u0648\u06BA \u0686\u06A9\u0631 \u067E\u0648\u0631\u06D2 \u06A9\u0631\u06CC\u06BA', body: '\u06A9\u0639\u0628\u06D2 \u06A9\u06D2 \u06AF\u0631\u062F \u0686\u06A9\u0631 \u062C\u0627\u0631\u06CC \u0631\u06A9\u06BE\u06CC\u06BA \u06CC\u06C1\u0627\u06BA \u062A\u06A9 \u06A9\u06C1 \u0633\u0627\u062A \u0645\u06A9\u0645\u0644 \u0686\u06A9\u0631 \u067E\u0648\u0631\u06D2 \u06C1\u0648 \u062C\u0627\u0626\u06CC\u06BA\u06D4' },
+        { title: '\u062F\u0648 \u0631\u06A9\u0639\u062A \u0646\u0645\u0627\u0632', subtitle: '\u062D\u0633\u0628\u0650 \u062A\u0648\u0641\u06CC\u0642 \u0645\u0642\u0627\u0645\u0650 \u0627\u0628\u0631\u0627\u06C1\u06CC\u0645 \u06A9\u06D2 \u067E\u06CC\u0686\u06BE\u06D2', body: '\u0637\u0648\u0627\u0641 \u06A9\u06D2 \u0628\u0639\u062F \u0645\u0642\u0627\u0645\u0650 \u0627\u0628\u0631\u0627\u06C1\u06CC\u0645 \u06A9\u06D2 \u0642\u0631\u06CC\u0628 \u062F\u0648 \u0631\u06A9\u0639\u062A \u067E\u0691\u06BE\u06CC\u06BA \u2014 \u06CC\u0627 \u06C1\u062C\u0648\u0645 \u06C1\u0648 \u062A\u0648 \u0645\u0633\u062C\u062F \u0645\u06CC\u06BA \u06A9\u06C1\u06CC\u06BA \u0628\u06BE\u06CC\u06D4' },
+        { title: '\u0622\u0628\u0650 \u0632\u0645\u0632\u0645 \u067E\u0626\u06CC\u06BA', subtitle: '\u0628\u0627\u0628\u0631\u06A9\u062A \u06A9\u0646\u0648\u06CC\u06BA \u0633\u06D2 \u067E\u0626\u06CC\u06BA', body: '\u0642\u0628\u0644\u06C1 \u0631\u062E \u06C1\u0648 \u06A9\u0631 \u0633\u06CC\u0631 \u06C1\u0648 \u06A9\u0631 \u0632\u0645\u0632\u0645 \u067E\u0626\u06CC\u06BA \u0627\u0648\u0631 \u062F\u0639\u0627 \u06A9\u0631\u06CC\u06BA \u2014 \u06CC\u06C1 \u062C\u0633 \u0646\u06CC\u0651\u062A \u0633\u06D2 \u067E\u06CC\u0627 \u062C\u0627\u0626\u06D2\u06D4' },
+        { title: '\u0633\u0639\u06CC \u2014 \u0635\u0641\u0627 \u0648 \u0645\u0631\u0648\u06C1', subtitle: '\u062F\u0648\u0646\u0648\u06BA \u067E\u06C1\u0627\u0691\u06CC\u0648\u06BA \u06A9\u06D2 \u062F\u0631\u0645\u06CC\u0627\u0646 \u0633\u0627\u062A \u0628\u0627\u0631', body: '\u0635\u0641\u0627 \u0633\u06D2 \u0634\u0631\u0648\u0639 \u06A9\u0631 \u06A9\u06D2 \u0645\u0631\u0648\u06C1 \u062A\u06A9 \u0633\u0627\u062A \u0628\u0627\u0631 \u0686\u0644\u06CC\u06BA\u060C \u062D\u0636\u0631\u062A \u06C1\u0627\u062C\u0631\u06C1\u0654 \u06A9\u06CC \u067E\u0627\u0646\u06CC \u06A9\u06CC \u062A\u0644\u0627\u0634 \u06A9\u0648 \u06CC\u0627\u062F \u06A9\u0631\u062A\u06D2 \u06C1\u0648\u0626\u06D2\u06D4' },
+        { title: '\u0627\u067E\u0646\u06CC \u0633\u0639\u06CC \u0645\u06A9\u0645\u0644 \u06A9\u0631\u06CC\u06BA', subtitle: '\u0645\u0631\u0648\u06C1 \u067E\u0631 \u0627\u062E\u062A\u062A\u0627\u0645', body: '\u0633\u0627\u062A\u0648\u06CC\u06BA \u0628\u0627\u0631 \u0645\u0631\u0648\u06C1 \u067E\u06C1\u0646\u0686\u0646\u06D2 \u067E\u0631 \u0622\u067E \u06A9\u06CC \u0633\u0639\u06CC \u0645\u06A9\u0645\u0644 \u06C1\u0648 \u062C\u0627\u062A\u06CC \u06C1\u06D2\u06D4 \u0627\u0644\u0644\u06C1 \u0633\u06D2 \u0642\u0628\u0648\u0644\u06CC\u062A \u06A9\u06CC \u062F\u0639\u0627 \u06A9\u0631\u06CC\u06BA\u06D4' },
+        { title: '\u0628\u0627\u0644 \u06A9\u0679\u0648\u0627\u0626\u06CC\u06BA \u06CC\u0627 \u0645\u0646\u0688\u0648\u0627\u0626\u06CC\u06BA', subtitle: '\u062D\u0644\u0642 \u06CC\u0627 \u062A\u0642\u0635\u06CC\u0631', body: '\u0645\u0631\u062F \u0628\u0627\u0644 \u0645\u0646\u0688\u0648\u0627\u0626\u06CC\u06BA (\u062D\u0644\u0642) \u06CC\u0627 \u06A9\u0679\u0648\u0627\u0626\u06CC\u06BA (\u062A\u0642\u0635\u06CC\u0631)\u061B \u0639\u0648\u0631\u062A\u06CC\u06BA \u0627\u0646\u06AF\u0644\u06CC \u06A9\u06D2 \u067E\u0648\u0631 \u0628\u0631\u0627\u0628\u0631 \u06A9\u0627\u0679\u06CC\u06BA\u06D4 \u0627\u0633 \u0633\u06D2 \u0627\u0631\u06A9\u0627\u0646 \u0645\u06A9\u0645\u0644 \u06C1\u0648 \u062C\u0627\u062A\u06D2 \u06C1\u06CC\u06BA\u06D4' },
+        { title: '\u0639\u0645\u0631\u06C1 \u0645\u06A9\u0645\u0644', subtitle: '\u0627\u062D\u0631\u0627\u0645 \u06A9\u06CC \u067E\u0627\u0628\u0646\u062F\u06CC\u0627\u06BA \u062E\u062A\u0645', body: '\u0628\u0627\u0644 \u06A9\u0627\u0679\u0646\u06D2 \u06A9\u06D2 \u0633\u0627\u062A\u06BE \u0622\u067E \u06A9\u0627 \u0639\u0645\u0631\u06C1 \u0645\u06A9\u0645\u0644 \u0627\u0648\u0631 \u0627\u062D\u0631\u0627\u0645 \u06A9\u06CC \u067E\u0627\u0628\u0646\u062F\u06CC\u0627\u06BA \u062E\u062A\u0645 \u06C1\u0648 \u062C\u0627\u062A\u06CC \u06C1\u06CC\u06BA\u06D4 \u0622\u067E \u0639\u0627\u0645 \u0644\u0628\u0627\u0633 \u067E\u06C1\u0646 \u0633\u06A9\u062A\u06D2 \u06C1\u06CC\u06BA\u06D4' },
+        { title: '\u0632\u06CC\u0627\u0631\u062A \u2014 \u0645\u062F\u06CC\u0646\u06C1', subtitle: '\u0645\u0633\u062C\u062F \u0646\u0628\u0648\u06CC \u06A9\u06CC \u0632\u06CC\u0627\u0631\u062A', body: '\u0628\u06C1\u062A \u0633\u06D2 \u0632\u0627\u0626\u0631\u06CC\u0646 \u0645\u062F\u06CC\u0646\u06C1 \u062C\u0627\u062A\u06D2 \u06C1\u06CC\u06BA \u062A\u0627\u06A9\u06C1 \u0645\u0633\u062C\u062F \u0646\u0628\u0648\u06CC \u0645\u06CC\u06BA \u0646\u0645\u0627\u0632 \u067E\u0691\u06BE\u06CC\u06BA \u0627\u0648\u0631 \u0646\u0628\u06CC \uFDFA \u067E\u0631 \u0633\u0644\u0627\u0645 \u0628\u06BE\u06CC\u062C\u06CC\u06BA\u06D4' },
+        { title: '\u0631\u0648\u0636\u06C1 \u0648 \u0627\u0644\u0648\u062F\u0627\u0639', subtitle: '\u062C\u0646\u062A \u06A9\u0627 \u0627\u06CC\u06A9 \u0628\u0627\u063A', body: '\u0627\u06AF\u0631 \u0645\u0648\u0642\u0639 \u0645\u0644\u06D2 \u062A\u0648 \u0631\u0648\u0636\u06C1 \u0634\u0631\u06CC\u0641 \u0645\u06CC\u06BA \u0646\u0645\u0627\u0632 \u067E\u0691\u06BE\u06CC\u06BA \u2014 \u0648\u06C1 \u0628\u0627\u0628\u0631\u06A9\u062A \u0628\u0627\u063A \u2014 \u0627\u0648\u0631 \u0627\u0633 \u06A9\u0627 \u0633\u06A9\u0648\u0646 \u0627\u067E\u0646\u06D2 \u0633\u0627\u062A\u06BE \u06AF\u06BE\u0631 \u0644\u06D2 \u062C\u0627\u0626\u06CC\u06BA\u06D4' }
+      ],
+      ar: [
+        { title: '\u0627\u0644\u0646\u064A\u0629 \u0648\u0627\u0644\u0625\u062D\u0631\u0627\u0645', subtitle: '\u0627\u062F\u062E\u0644 \u0641\u064A \u0627\u0644\u0625\u062D\u0631\u0627\u0645 \u0639\u0646\u062F \u0627\u0644\u0645\u064A\u0642\u0627\u062A', body: '\u0639\u0646\u062F \u0627\u0644\u0645\u064A\u0642\u0627\u062A \u062A\u0646\u0648\u064A \u0648\u062A\u062F\u062E\u0644 \u0641\u064A \u0627\u0644\u0625\u062D\u0631\u0627\u0645 \u2014 \u0627\u0644\u062B\u064A\u0627\u0628 \u0627\u0644\u0628\u064A\u0636\u0627\u0621 \u0648\u062D\u0627\u0644\u0629 \u0627\u0644\u062E\u0634\u0648\u0639 \u0627\u0644\u062A\u064A \u062A\u0628\u062F\u0623 \u0628\u0647\u0627 \u0639\u0645\u0631\u062A\u0643.' },
+        { title: '\u0627\u0644\u062A\u0644\u0628\u064A\u0629', subtitle: '\u0623\u062C\u0628 \u0646\u062F\u0627\u0621 \u0627\u0644\u0644\u0647', body: '\u0645\u0646 \u0627\u0644\u0645\u064A\u0642\u0627\u062A \u0641\u0635\u0627\u0639\u062F\u064B\u0627 \u0623\u0643\u062B\u0631 \u0645\u0646 \u0627\u0644\u062A\u0644\u0628\u064A\u0629 \u0648\u0623\u0646\u062A \u0645\u062A\u062C\u0647 \u0625\u0644\u0649 \u0645\u0643\u0629 \u2014 \u0627\u0644\u0631\u062C\u0627\u0644 \u062C\u0647\u0631\u064B\u0627 \u0648\u0627\u0644\u0646\u0633\u0627\u0621 \u0633\u0631\u064B\u0627.' },
+        { title: '\u062F\u062E\u0648\u0644 \u0627\u0644\u0645\u0633\u062C\u062F \u0627\u0644\u062D\u0631\u0627\u0645', subtitle: '\u0627\u062F\u062E\u0644 \u0627\u0644\u0628\u064A\u062A \u0627\u0644\u062D\u0631\u0627\u0645', body: '\u0627\u0642\u062A\u0631\u0628 \u0645\u0646 \u0623\u0628\u0648\u0627\u0628 \u0627\u0644\u0645\u0633\u062C\u062F \u0627\u0644\u062D\u0631\u0627\u0645 \u0641\u064A \u0645\u0643\u0629 \u0648\u0627\u062F\u062E\u0644 \u0628\u0633\u0643\u064A\u0646\u0629 \u0648\u062E\u0634\u0648\u0639 \u0648\u062D\u0636\u0648\u0631 \u0642\u0644\u0628.' },
+        { title: '\u0623\u0648\u0644 \u0646\u0638\u0631\u0629 \u0625\u0644\u0649 \u0627\u0644\u0643\u0639\u0628\u0629', subtitle: '\u0627\u0631\u0641\u0639 \u064A\u062F\u064A\u0643 \u0648\u0627\u062F\u0639\u064F', body: '\u0639\u0646\u062F \u0631\u0624\u064A\u0629 \u0627\u0644\u0643\u0639\u0628\u0629 \u0644\u0623\u0648\u0644 \u0645\u0631\u0629 \u062A\u0648\u0642\u0651\u0641 \u2014 \u0625\u0646\u0647\u0627 \u0644\u062D\u0638\u0629 \u064A\u064F\u0633\u062A\u062C\u0627\u0628 \u0641\u064A\u0647\u0627 \u0627\u0644\u062F\u0639\u0627\u0621. \u0627\u062F\u0639\u064F \u0645\u0646 \u0642\u0644\u0628\u0643.' },
+        { title: '\u0627\u0644\u0627\u0633\u062A\u0639\u062F\u0627\u062F \u0644\u0644\u0637\u0648\u0627\u0641', subtitle: '\u0627\u0644\u0627\u0636\u0637\u0628\u0627\u0639 \u0648\u0627\u0633\u062A\u0642\u0628\u0627\u0644 \u0627\u0644\u062D\u062C\u0631 \u0627\u0644\u0623\u0633\u0648\u062F', body: '\u064A\u0643\u0634\u0641 \u0627\u0644\u0631\u062C\u0627\u0644 \u0627\u0644\u0643\u062A\u0641 \u0627\u0644\u0623\u064A\u0645\u0646 (\u0627\u0644\u0627\u0636\u0637\u0628\u0627\u0639). \u0627\u0642\u0637\u0639 \u0627\u0644\u062A\u0644\u0628\u064A\u0629 \u0648\u062A\u0648\u062C\u0651\u0647 \u0625\u0644\u0649 \u0627\u0644\u062D\u062C\u0631 \u0627\u0644\u0623\u0633\u0648\u062F \u0644\u0644\u0628\u062F\u0621.' },
+        { title: '\u0627\u0644\u0637\u0648\u0627\u0641 \u2014 \u0627\u0628\u062F\u0623 \u0633\u0628\u0639\u0629 \u0623\u0634\u0648\u0627\u0637', subtitle: '\u0637\u064F\u0641 \u062D\u0648\u0644 \u0627\u0644\u0643\u0639\u0628\u0629 \u0633\u0628\u0639\u064B\u0627', body: '\u0627\u0628\u062F\u0623 \u0645\u0646 \u0627\u0644\u062D\u062C\u0631 \u0627\u0644\u0623\u0633\u0648\u062F \u0648\u0637\u064F\u0641 \u062D\u0648\u0644 \u0627\u0644\u0643\u0639\u0628\u0629 \u0639\u0643\u0633 \u0639\u0642\u0627\u0631\u0628 \u0627\u0644\u0633\u0627\u0639\u0629 \u0648\u0647\u064A \u0639\u0646 \u064A\u0633\u0627\u0631\u0643. \u0647\u0630\u0627 \u0647\u0648 \u0631\u0643\u0646 \u0627\u0644\u0639\u0645\u0631\u0629.' },
+        { title: '\u0623\u0643\u0645\u0644 \u0633\u0628\u0639\u0629 \u0623\u0634\u0648\u0627\u0637', subtitle: '\u0623\u062A\u0645\u0651 \u0627\u0644\u0623\u0634\u0648\u0627\u0637 \u0627\u0644\u0633\u0628\u0639\u0629', body: '\u0627\u0633\u062A\u0645\u0631 \u0641\u064A \u0627\u0644\u0637\u0648\u0627\u0641 \u062D\u062A\u0649 \u062A\u064F\u0643\u0645\u0644 \u0633\u0628\u0639\u0629 \u0623\u0634\u0648\u0627\u0637 \u0643\u0627\u0645\u0644\u0629\u060C \u064A\u0628\u062F\u0623 \u0643\u0644 \u0634\u0648\u0637 \u0648\u064A\u0646\u062A\u0647\u064A \u0639\u0646\u062F \u0627\u0644\u062D\u062C\u0631 \u0627\u0644\u0623\u0633\u0648\u062F.' },
+        { title: '\u0635\u0644\u0651 \u0631\u0643\u0639\u062A\u064A\u0646', subtitle: '\u062E\u0644\u0641 \u0645\u0642\u0627\u0645 \u0625\u0628\u0631\u0627\u0647\u064A\u0645 \u0625\u0646 \u0623\u0645\u0643\u0646', body: '\u0628\u0639\u062F \u0627\u0644\u0637\u0648\u0627\u0641 \u0635\u0644\u0651 \u0631\u0643\u0639\u062A\u064A\u0646 \u0642\u0631\u0628 \u0645\u0642\u0627\u0645 \u0625\u0628\u0631\u0627\u0647\u064A\u0645 \u2014 \u0623\u0648 \u0641\u064A \u0623\u064A \u0645\u0643\u0627\u0646 \u0645\u0646 \u0627\u0644\u0645\u0633\u062C\u062F \u0639\u0646\u062F \u0627\u0644\u0632\u062D\u0627\u0645.' },
+        { title: '\u0627\u0634\u0631\u0628 \u0645\u0646 \u0632\u0645\u0632\u0645', subtitle: '\u0627\u0634\u0631\u0628 \u0645\u0646 \u0627\u0644\u0628\u0626\u0631 \u0627\u0644\u0645\u0628\u0627\u0631\u0643', body: '\u0627\u0634\u0631\u0628 \u0645\u0646 \u0632\u0645\u0632\u0645 \u062D\u062A\u0649 \u062A\u0631\u062A\u0648\u064A \u0645\u0633\u062A\u0642\u0628\u0644\u064B\u0627 \u0627\u0644\u0642\u0628\u0644\u0629 \u0648\u0627\u062F\u0639\u064F \u2014 \u0641\u0645\u0627\u0621 \u0632\u0645\u0632\u0645 \u0644\u0645\u0627 \u0634\u064F\u0631\u0628 \u0644\u0647.' },
+        { title: '\u0627\u0644\u0633\u0639\u064A \u2014 \u0627\u0644\u0635\u0641\u0627 \u0648\u0627\u0644\u0645\u0631\u0648\u0629', subtitle: '\u0633\u0628\u0639\u0629 \u0623\u0634\u0648\u0627\u0637 \u0628\u064A\u0646 \u0627\u0644\u062C\u0628\u0644\u064A\u0646', body: '\u0627\u0633\u0639\u064E \u0633\u0628\u0639\u064B\u0627 \u0628\u064A\u0646 \u0627\u0644\u0635\u0641\u0627 \u0648\u0627\u0644\u0645\u0631\u0648\u0629\u060C \u062A\u0628\u062F\u0623 \u0628\u0627\u0644\u0635\u0641\u0627 \u0648\u062A\u0646\u062A\u0647\u064A \u0628\u0627\u0644\u0645\u0631\u0648\u0629\u060C \u0645\u062A\u0630\u0643\u0631\u064B\u0627 \u0633\u0639\u064A \u0647\u0627\u062C\u0631 \u0644\u0644\u0645\u0627\u0621.' },
+        { title: '\u0623\u0643\u0645\u0644 \u0633\u0639\u064A\u0643', subtitle: '\u0627\u0644\u0627\u0646\u062A\u0647\u0627\u0621 \u0639\u0646\u062F \u0627\u0644\u0645\u0631\u0648\u0629', body: '\u0639\u0646\u062F \u0628\u0644\u0648\u063A \u0627\u0644\u0645\u0631\u0648\u0629 \u0641\u064A \u0627\u0644\u0634\u0648\u0637 \u0627\u0644\u0633\u0627\u0628\u0639 \u064A\u0643\u062A\u0645\u0644 \u0633\u0639\u064A\u0643. \u0627\u0633\u0623\u0644 \u0627\u0644\u0644\u0647 \u0623\u0646 \u064A\u062A\u0642\u0628\u0644\u0647 \u0645\u0646\u0643.' },
+        { title: '\u0642\u0635\u0651\u0631 \u0623\u0648 \u0627\u062D\u0644\u0642', subtitle: '\u0627\u0644\u062D\u0644\u0642 \u0623\u0648 \u0627\u0644\u062A\u0642\u0635\u064A\u0631', body: '\u064A\u062D\u0644\u0642 \u0627\u0644\u0631\u062C\u0627\u0644 (\u0627\u0644\u062D\u0644\u0642) \u0623\u0648 \u064A\u0642\u0635\u0651\u0631\u0648\u0646 (\u0627\u0644\u062A\u0642\u0635\u064A\u0631)\u061B \u0648\u0627\u0644\u0646\u0633\u0627\u0621 \u064A\u0642\u0635\u0651\u0631\u0646 \u0642\u062F\u0631 \u0623\u0646\u0645\u0644\u0629. \u0628\u0647\u0630\u0627 \u062A\u0643\u062A\u0645\u0644 \u0627\u0644\u0645\u0646\u0627\u0633\u0643.' },
+        { title: '\u0627\u0643\u062A\u0645\u0644\u062A \u0627\u0644\u0639\u0645\u0631\u0629', subtitle: '\u062A\u064F\u0631\u0641\u0639 \u0645\u062D\u0638\u0648\u0631\u0627\u062A \u0627\u0644\u0625\u062D\u0631\u0627\u0645', body: '\u0628\u0627\u0644\u062D\u0644\u0642 \u062A\u0643\u062A\u0645\u0644 \u0639\u0645\u0631\u062A\u0643 \u0648\u062A\u064F\u0631\u0641\u0639 \u0645\u062D\u0638\u0648\u0631\u0627\u062A \u0627\u0644\u0625\u062D\u0631\u0627\u0645. \u0648\u064A\u0645\u0643\u0646\u0643 \u0627\u0644\u0639\u0648\u062F\u0629 \u0625\u0644\u0649 \u0644\u0628\u0627\u0633\u0643 \u0627\u0644\u0645\u0639\u062A\u0627\u062F.' },
+        { title: '\u0627\u0644\u0632\u064A\u0627\u0631\u0629 \u2014 \u0627\u0644\u0645\u062F\u064A\u0646\u0629', subtitle: '\u0632\u064A\u0627\u0631\u0629 \u0627\u0644\u0645\u0633\u062C\u062F \u0627\u0644\u0646\u0628\u0648\u064A', body: '\u064A\u0633\u0627\u0641\u0631 \u0643\u062B\u064A\u0631 \u0645\u0646 \u0627\u0644\u062D\u062C\u0627\u062C \u0625\u0644\u0649 \u0627\u0644\u0645\u062F\u064A\u0646\u0629 \u0644\u0644\u0635\u0644\u0627\u0629 \u0641\u064A \u0627\u0644\u0645\u0633\u062C\u062F \u0627\u0644\u0646\u0628\u0648\u064A \u0648\u0627\u0644\u0633\u0644\u0627\u0645 \u0639\u0644\u0649 \u0627\u0644\u0646\u0628\u064A \uFDFA.' },
+        { title: '\u0627\u0644\u0631\u0648\u0636\u0629 \u0648\u0627\u0644\u0648\u062F\u0627\u0639', subtitle: '\u0631\u0648\u0636\u0629 \u0645\u0646 \u0631\u064A\u0627\u0636 \u0627\u0644\u062C\u0646\u0629', body: '\u0625\u0646 \u062A\u064A\u0633\u0651\u0631 \u0644\u0643\u060C \u0635\u0644\u0651 \u0641\u064A \u0627\u0644\u0631\u0648\u0636\u0629 \u2014 \u0627\u0644\u0631\u0648\u0636\u0629 \u0627\u0644\u0645\u0628\u0627\u0631\u0643\u0629 \u2014 \u062B\u0645 \u0627\u062D\u0645\u0644 \u0633\u0643\u064A\u0646\u062A\u0647\u0627 \u0645\u0639\u0643 \u0625\u0644\u0649 \u0628\u064A\u062A\u0643.' }
+      ]
+    };
+  }
+
+  tr(lang) {
+    const en = this.stations().map((s) => ({ title: s.title, subtitle: s.subtitle, body: s.body }));
+    if (lang === 'en') return en;
+    const T = this.translations()[lang];
+    if (!T) return en;
+    return en.map((e, i) => T[i] || e);
+  }
+
+  uiStrings() {
+    return {
+      en: { pageTitle: 'Virtual tour', pageSub: 'A calm walk-through of the holy places.', guide: 'Step-by-step guide', drag: 'Drag to look around', dua: 'Du\u2018a', listen: 'Listen', stop: 'Stop', walkPlay: 'Play virtual walk', walkStop: 'Pause walk', walkStatus: 'Playing guided walk', myVoice: 'My voice note', recHint: 'Record your own du\u2018a or reflection for this step.', record: 'Record', recStop: 'Stop', play: 'Play', del: 'Delete', recSaved: 'Voice note saved \u2014 play it back any time.', recError: 'Microphone unavailable. Check browser permissions.', next: 'Next step', complete: 'Tour complete', start: 'Start', step: 'Step', duaTitle: 'DU\u2018A FOR THIS STEP', playMeaning: 'Play meaning', noDua: 'There is no fixed du\u2018a for this step \u2014 make your own heartfelt supplication and dhikr, and send blessings upon the Prophet \uFDFA.', langLabel: 'Language' },
+      de: { pageTitle: 'Virtuelle Tour', pageSub: 'Ein ruhiger Rundgang durch die heiligen St\u00E4tten.', guide: 'Schritt-f\u00FCr-Schritt-Anleitung', drag: 'Zum Umsehen ziehen', dua: 'Bittgebet', listen: 'Anh\u00F6ren', stop: 'Stopp', walkPlay: 'Virtuellen Rundgang abspielen', walkStop: 'Rundgang pausieren', walkStatus: 'Gef\u00FChrter Rundgang l\u00E4uft', myVoice: 'Meine Sprachnotiz', recHint: 'Nimm dein eigenes Bittgebet oder deine Reflexion auf.', record: 'Aufnehmen', recStop: 'Stopp', play: 'Abspielen', del: 'L\u00F6schen', recSaved: 'Sprachnotiz gespeichert \u2014 jederzeit abspielbar.', recError: 'Mikrofon nicht verf\u00FCgbar. Pr\u00FCfe die Berechtigungen.', next: 'N\u00E4chster Schritt', complete: 'Tour beendet', start: 'Start', step: 'Schritt', duaTitle: 'BITTGEBET F\u00DCR DIESEN SCHRITT', playMeaning: 'Bedeutung abspielen', noDua: 'F\u00FCr diesen Schritt gibt es kein festes Bittgebet \u2014 sprich dein eigenes aufrichtiges Bittgebet und Gedenken und sende Segensw\u00FCnsche auf den Propheten \uFDFA.', langLabel: 'Sprache' },
+      ur: { pageTitle: '\u0648\u0631\u0686\u0648\u0626\u0644 \u0679\u0648\u0631', pageSub: '\u0645\u0642\u062F\u0651\u0633 \u0645\u0642\u0627\u0645\u0627\u062A \u06A9\u06CC \u0627\u06CC\u06A9 \u067E\u064F\u0631\u0633\u06A9\u0648\u0646 \u0633\u06CC\u0631\u06D4', guide: '\u0645\u0631\u062D\u0644\u06C1 \u0648\u0627\u0631 \u0631\u06C1\u0646\u0645\u0627\u0626\u06CC', drag: '\u062F\u06CC\u06A9\u06BE\u0646\u06D2 \u06A9\u06D2 \u0644\u06CC\u06D2 \u06AF\u06BE\u0633\u06CC\u0679\u06CC\u06BA', dua: '\u062F\u0639\u0627', listen: '\u0633\u0646\u06CC\u06BA', stop: '\u0631\u0648\u06A9\u06CC\u06BA', walkPlay: '\u0648\u0631\u0686\u0648\u0626\u0644 \u0633\u06CC\u0631 \u0686\u0644\u0627\u0626\u06CC\u06BA', walkStop: '\u0633\u06CC\u0631 \u0631\u0648\u06A9\u06CC\u06BA', walkStatus: '\u0631\u06C1\u0646\u0645\u0627\u0626\u06CC \u0648\u0627\u0644\u06CC \u0633\u06CC\u0631 \u062C\u0627\u0631\u06CC \u06C1\u06D2', myVoice: '\u0645\u06CC\u0631\u0627 \u0635\u0648\u062A\u06CC \u0646\u0648\u0679', recHint: '\u0627\u0633 \u0645\u0631\u062D\u0644\u06D2 \u06A9\u06D2 \u0644\u06CC\u06D2 \u0627\u067E\u0646\u06CC \u062F\u0639\u0627 \u06CC\u0627 \u0633\u0648\u0686 \u0631\u06CC\u06A9\u0627\u0631\u0688 \u06A9\u0631\u06CC\u06BA\u06D4', record: '\u0631\u06CC\u06A9\u0627\u0631\u0688', recStop: '\u0631\u0648\u06A9\u06CC\u06BA', play: '\u0686\u0644\u0627\u0626\u06CC\u06BA', del: '\u062D\u0630\u0641', recSaved: '\u0635\u0648\u062A\u06CC \u0646\u0648\u0679 \u0645\u062D\u0641\u0648\u0638 \u2014 \u062C\u0628 \u0686\u0627\u06C1\u06CC\u06BA \u0633\u0646\u06CC\u06BA\u06D4', recError: '\u0645\u0627\u0626\u06CC\u06A9\u0631\u0648\u0641\u0648\u0646 \u062F\u0633\u062A\u06CC\u0627\u0628 \u0646\u06C1\u06CC\u06BA\u06D4 \u0627\u062C\u0627\u0632\u062A \u0686\u06CC\u06A9 \u06A9\u0631\u06CC\u06BA\u06D4', next: '\u0627\u06AF\u0644\u0627 \u0645\u0631\u062D\u0644\u06C1', complete: '\u0679\u0648\u0631 \u0645\u06A9\u0645\u0644', start: '\u0622\u063A\u0627\u0632', step: '\u0645\u0631\u062D\u0644\u06C1', duaTitle: '\u0627\u0633 \u0645\u0631\u062D\u0644\u06D2 \u06A9\u06CC \u062F\u0639\u0627', playMeaning: '\u0645\u0637\u0644\u0628 \u0633\u0646\u06CC\u06BA', noDua: '\u0627\u0633 \u0645\u0631\u062D\u0644\u06D2 \u06A9\u06D2 \u0644\u06CC\u06D2 \u06A9\u0648\u0626\u06CC \u0645\u0642\u0631\u0631\u06C1 \u062F\u0639\u0627 \u0646\u06C1\u06CC\u06BA \u2014 \u0627\u067E\u0646\u06D2 \u062F\u0644 \u0633\u06D2 \u062F\u0639\u0627 \u0648 \u0630\u06A9\u0631 \u06A9\u0631\u06CC\u06BA \u0627\u0648\u0631 \u0646\u0628\u06CC \uFDFA \u067E\u0631 \u062F\u0631\u0648\u062F \u0628\u06BE\u06CC\u062C\u06CC\u06BA\u06D4', langLabel: '\u0632\u0628\u0627\u0646' },
+      ar: { pageTitle: '\u062C\u0648\u0644\u0629 \u0627\u0641\u062A\u0631\u0627\u0636\u064A\u0629', pageSub: '\u062C\u0648\u0644\u0629 \u0647\u0627\u062F\u0626\u0629 \u0641\u064A \u0627\u0644\u0623\u0645\u0627\u0643\u0646 \u0627\u0644\u0645\u0642\u062F\u0633\u0629.', guide: '\u062F\u0644\u064A\u0644 \u062E\u0637\u0648\u0629 \u0628\u062E\u0637\u0648\u0629', drag: '\u0627\u0633\u062D\u0628 \u0644\u0644\u0646\u0638\u0631 \u062D\u0648\u0644\u0643', dua: '\u062F\u0639\u0627\u0621', listen: '\u0627\u0633\u062A\u0645\u0627\u0639', stop: '\u0625\u064A\u0642\u0627\u0641', walkPlay: '\u062A\u0634\u063A\u064A\u0644 \u0627\u0644\u062C\u0648\u0644\u0629 \u0627\u0644\u0627\u0641\u062A\u0631\u0627\u0636\u064A\u0629', walkStop: '\u0625\u064A\u0642\u0627\u0641 \u0627\u0644\u062C\u0648\u0644\u0629', walkStatus: '\u062C\u0627\u0631\u064D \u062A\u0634\u063A\u064A\u0644 \u0627\u0644\u062C\u0648\u0644\u0629 \u0627\u0644\u0645\u0648\u062C\u0651\u0647\u0629', myVoice: '\u0645\u0644\u0627\u062D\u0638\u062A\u064A \u0627\u0644\u0635\u0648\u062A\u064A\u0629', recHint: '\u0633\u062C\u0651\u0644 \u062F\u0639\u0627\u0621\u0643 \u0623\u0648 \u062A\u0623\u0645\u0651\u0644\u0643 \u0627\u0644\u062E\u0627\u0635 \u0644\u0647\u0630\u0647 \u0627\u0644\u062E\u0637\u0648\u0629.', record: '\u062A\u0633\u062C\u064A\u0644', recStop: '\u0625\u064A\u0642\u0627\u0641', play: '\u062A\u0634\u063A\u064A\u0644', del: '\u062D\u0630\u0641', recSaved: '\u062A\u0645 \u062D\u0641\u0638 \u0627\u0644\u0645\u0644\u0627\u062D\u0638\u0629 \u0627\u0644\u0635\u0648\u062A\u064A\u0629 \u2014 \u0634\u063A\u0651\u0644\u0647\u0627 \u0641\u064A \u0623\u064A \u0648\u0642\u062A.', recError: '\u0627\u0644\u0645\u064A\u0643\u0631\u0648\u0641\u0648\u0646 \u063A\u064A\u0631 \u0645\u062A\u0627\u062D. \u062A\u062D\u0642\u0651\u0642 \u0645\u0646 \u0627\u0644\u0623\u0630\u0648\u0646\u0627\u062A.', next: '\u0627\u0644\u062E\u0637\u0648\u0629 \u0627\u0644\u062A\u0627\u0644\u064A\u0629', complete: '\u0627\u0646\u062A\u0647\u062A \u0627\u0644\u062C\u0648\u0644\u0629', start: '\u0627\u0644\u0628\u062F\u0627\u064A\u0629', step: '\u062E\u0637\u0648\u0629', duaTitle: '\u062F\u0639\u0627\u0621 \u0647\u0630\u0647 \u0627\u0644\u062E\u0637\u0648\u0629', playMeaning: '\u062A\u0634\u063A\u064A\u0644 \u0627\u0644\u0645\u0639\u0646\u0649', noDua: '\u0644\u0627 \u064A\u0648\u062C\u062F \u062F\u0639\u0627\u0621 \u0645\u062D\u062F\u0651\u062F \u0644\u0647\u0630\u0647 \u0627\u0644\u062E\u0637\u0648\u0629 \u2014 \u0627\u062F\u0639\u064F \u0628\u0645\u0627 \u0641\u064A \u0642\u0644\u0628\u0643 \u0648\u0627\u0630\u0643\u0631 \u0627\u0644\u0644\u0647 \u0648\u0635\u0644\u0651 \u0639\u0644\u0649 \u0627\u0644\u0646\u0628\u064A \uFDFA.', langLabel: '\u0627\u0644\u0644\u063A\u0629' }
+    };
+  }
+
+  ptrX(e) { return (e.touches && e.touches[0]) ? e.touches[0].clientX : e.clientX; }
+
+  duas() {
+    return [
+      { ar: '\u0627\u0644\u0644\u0651\u064E\u0647\u064F\u0645\u0651\u064E \u0625\u0650\u0646\u0651\u0650\u064A \u0623\u064F\u0631\u0650\u064A\u062F\u064F \u0627\u0644\u0652\u0639\u064F\u0645\u0652\u0631\u064E\u0629\u064E \u0641\u064E\u064A\u064E\u0633\u0651\u0650\u0631\u0652\u0647\u064E\u0627 \u0644\u0650\u064A \u0648\u064E\u062A\u064E\u0642\u064E\u0628\u0651\u064E\u0644\u0652\u0647\u064E\u0627 \u0645\u0650\u0646\u0651\u0650\u064A', tr: 'Allahumma inni uridu\u2019l-\u2018umrata fa-yassirha li wa taqabbalha minni', en: 'O Allah, I intend Umrah, so make it easy for me and accept it from me.', de: 'O Allah, ich beabsichtige die Umrah, so erleichtere sie mir und nimm sie von mir an.', ur: '\u0627\u06D2 \u0627\u0644\u0644\u06C1! \u0645\u06CC\u06BA \u0639\u0645\u0631\u06D2 \u06A9\u0627 \u0627\u0631\u0627\u062F\u06C1 \u06A9\u0631\u062A\u0627 \u06C1\u0648\u06BA\u060C \u0627\u0633\u06D2 \u0645\u06CC\u0631\u06D2 \u0644\u06CC\u06D2 \u0622\u0633\u0627\u0646 \u06A9\u0631 \u062F\u06D2 \u0627\u0648\u0631 \u0642\u0628\u0648\u0644 \u0641\u0631\u0645\u0627\u06D4' },
+      { ar: '\u0644\u064E\u0628\u0651\u064E\u064A\u0652\u0643\u064E \u0627\u0644\u0644\u0651\u064E\u0647\u064F\u0645\u0651\u064E \u0644\u064E\u0628\u0651\u064E\u064A\u0652\u0643\u064E\u060C \u0644\u064E\u0628\u0651\u064E\u064A\u0652\u0643\u064E \u0644\u064E\u0627 \u0634\u064E\u0631\u0650\u064A\u0643\u064E \u0644\u064E\u0643\u064E \u0644\u064E\u0628\u0651\u064E\u064A\u0652\u0643\u064E', tr: 'Labbayka-llahumma labbayk, labbayka la sharika laka labbayk', en: 'Here I am, O Allah, here I am. You have no partner, here I am.', de: 'Hier bin ich, o Allah, hier bin ich. Du hast keinen Teilhaber, hier bin ich.', ur: '\u062D\u0627\u0636\u0631 \u06C1\u0648\u06BA \u0627\u06D2 \u0627\u0644\u0644\u06C1! \u062D\u0627\u0636\u0631 \u06C1\u0648\u06BA\u060C \u062A\u06CC\u0631\u0627 \u06A9\u0648\u0626\u06CC \u0634\u0631\u06CC\u06A9 \u0646\u06C1\u06CC\u06BA\u060C \u062D\u0627\u0636\u0631 \u06C1\u0648\u06BA\u06D4' },
+      { ar: '\u0627\u0644\u0644\u0651\u064E\u0647\u064F\u0645\u0651\u064E \u0627\u0641\u0652\u062A\u064E\u062D\u0652 \u0644\u0650\u064A \u0623\u064E\u0628\u0652\u0648\u064E\u0627\u0628\u064E \u0631\u064E\u062D\u0652\u0645\u064E\u062A\u0650\u0643\u064E', tr: 'Allahumma-ftah li abwaba rahmatik', en: 'O Allah, open for me the gates of Your mercy.', de: 'O Allah, \u00F6ffne mir die Tore Deiner Barmherzigkeit.', ur: '\u0627\u06D2 \u0627\u0644\u0644\u06C1! \u0645\u06CC\u0631\u06D2 \u0644\u06CC\u06D2 \u0627\u067E\u0646\u06CC \u0631\u062D\u0645\u062A \u06A9\u06D2 \u062F\u0631\u0648\u0627\u0632\u06D2 \u06A9\u06BE\u0648\u0644 \u062F\u06D2\u06D4' },
+      { ar: '\u0627\u0644\u0644\u0651\u064E\u0647\u064F\u0645\u0651\u064E \u0623\u064E\u0646\u0652\u062A\u064E \u0627\u0644\u0633\u0651\u064E\u0644\u064E\u0627\u0645\u064F \u0648\u064E\u0645\u0650\u0646\u0652\u0643\u064E \u0627\u0644\u0633\u0651\u064E\u0644\u064E\u0627\u0645\u064F', tr: 'Allahumma anta as-salamu wa minka as-salam', en: 'O Allah, You are Peace and from You comes peace.', de: 'O Allah, Du bist der Friede und von Dir kommt der Friede.', ur: '\u0627\u06D2 \u0627\u0644\u0644\u06C1! \u062A\u0648 \u0633\u0644\u0627\u0645\u062A\u06CC \u06C1\u06D2 \u0627\u0648\u0631 \u062A\u062C\u06BE \u06C1\u06CC \u0633\u06D2 \u0633\u0644\u0627\u0645\u062A\u06CC \u06C1\u06D2\u06D4' },
+      null,
+      { ar: '\u0631\u064E\u0628\u0651\u064E\u0646\u064E\u0627 \u0622\u062A\u0650\u0646\u064E\u0627 \u0641\u0650\u064A \u0627\u0644\u062F\u0651\u064F\u0646\u0652\u064A\u064E\u0627 \u062D\u064E\u0633\u064E\u0646\u064E\u0629\u064B \u0648\u064E\u0641\u0650\u064A \u0627\u0644\u0652\u0622\u062E\u0650\u0631\u064E\u0629\u0650 \u062D\u064E\u0633\u064E\u0646\u064E\u0629\u064B \u0648\u064E\u0642\u0650\u0646\u064E\u0627 \u0639\u064E\u0630\u064E\u0627\u0628\u064E \u0627\u0644\u0646\u0651\u064E\u0627\u0631\u0650', tr: 'Rabbana atina fi\u2019d-dunya hasanah wa fi\u2019l-akhirati hasanah wa qina \u2018adhaban-nar', en: 'Our Lord, give us good in this world and the Hereafter, and protect us from the Fire.', de: 'Unser Herr, gib uns Gutes in dieser Welt und im Jenseits und bewahre uns vor dem Feuer.', ur: '\u0627\u06D2 \u06C1\u0645\u0627\u0631\u06D2 \u0631\u0628! \u06C1\u0645\u06CC\u06BA \u062F\u0646\u06CC\u0627 \u0645\u06CC\u06BA \u0628\u06BE\u0644\u0627\u0626\u06CC \u0627\u0648\u0631 \u0622\u062E\u0631\u062A \u0645\u06CC\u06BA \u0628\u06BE\u0644\u0627\u0626\u06CC \u0639\u0637\u0627 \u0641\u0631\u0645\u0627 \u0627\u0648\u0631 \u0622\u06AF \u06A9\u06D2 \u0639\u0630\u0627\u0628 \u0633\u06D2 \u0628\u0686\u0627\u06D4' },
+      null,
+      { ar: '\u0633\u064F\u0628\u0652\u062D\u064E\u0627\u0646\u064E \u0631\u064E\u0628\u0651\u0650\u064A\u064E \u0627\u0644\u0652\u0623\u064E\u0639\u0652\u0644\u064E\u0649', tr: 'Subhana Rabbiya\u2019l-A\u2018la', en: 'Glory to my Lord, the Most High.', de: 'Gepriesen sei mein Herr, der H\u00F6chste.', ur: '\u067E\u0627\u06A9 \u06C1\u06D2 \u0645\u06CC\u0631\u0627 \u0631\u0628 \u062C\u0648 \u0633\u0628 \u0633\u06D2 \u0628\u0644\u0646\u062F \u06C1\u06D2\u06D4' },
+      { ar: '\u0627\u0644\u0644\u0651\u064E\u0647\u064F\u0645\u0651\u064E \u0625\u0650\u0646\u0651\u0650\u064A \u0623\u064E\u0633\u0652\u0623\u064E\u0644\u064F\u0643\u064E \u0639\u0650\u0644\u0652\u0645\u064B\u0627 \u0646\u064E\u0627\u0641\u0650\u0639\u064B\u0627 \u0648\u064E\u0631\u0650\u0632\u0652\u0642\u064B\u0627 \u0648\u064E\u0627\u0633\u0650\u0639\u064B\u0627 \u0648\u064E\u0634\u0650\u0641\u064E\u0627\u0621\u064B \u0645\u0650\u0646\u0652 \u0643\u064F\u0644\u0651\u0650 \u062F\u064E\u0627\u0621\u064D', tr: 'Allahumma inni as\u2019aluka \u2018ilman nafi\u2018an wa rizqan wasi\u2018an wa shifa\u2019an min kulli da\u2019', en: 'O Allah, I ask You for beneficial knowledge, abundant provision, and healing from every illness.', de: 'O Allah, ich bitte Dich um n\u00FCtzliches Wissen, reichliche Versorgung und Heilung von jeder Krankheit.', ur: '\u0627\u06D2 \u0627\u0644\u0644\u06C1! \u0645\u06CC\u06BA \u062A\u062C\u06BE \u0633\u06D2 \u0646\u0641\u0639 \u0628\u062E\u0634 \u0639\u0644\u0645\u060C \u0648\u0633\u06CC\u0639 \u0631\u0632\u0642 \u0627\u0648\u0631 \u06C1\u0631 \u0628\u06CC\u0645\u0627\u0631\u06CC \u0633\u06D2 \u0634\u0641\u0627 \u0645\u0627\u0646\u06AF\u062A\u0627 \u06C1\u0648\u06BA\u06D4' },
+      { ar: '\u0625\u0650\u0646\u0651\u064E \u0627\u0644\u0635\u0651\u064E\u0641\u064E\u0627 \u0648\u064E\u0627\u0644\u0652\u0645\u064E\u0631\u0652\u0648\u064E\u0629\u064E \u0645\u0650\u0646\u0652 \u0634\u064E\u0639\u064E\u0627\u0626\u0650\u0631\u0650 \u0627\u0644\u0644\u0651\u064E\u0647\u0650', tr: 'Inna\u2019s-Safa wa\u2019l-Marwata min sha\u2018a\u2019irillah', en: 'Indeed, Safa and Marwa are among the symbols of Allah.', de: 'Wahrlich, Safa und Marwa geh\u00F6ren zu den Symbolen Allahs.', ur: '\u0628\u06CC\u0634\u06A9 \u0635\u0641\u0627 \u0627\u0648\u0631 \u0645\u0631\u0648\u06C1 \u0627\u0644\u0644\u06C1 \u06A9\u06CC \u0646\u0634\u0627\u0646\u06CC\u0648\u06BA \u0645\u06CC\u06BA \u0633\u06D2 \u06C1\u06CC\u06BA\u06D4' },
+      { ar: '\u0631\u064E\u0628\u0651\u0650 \u0627\u063A\u0652\u0641\u0650\u0631\u0652 \u0648\u064E\u0627\u0631\u0652\u062D\u064E\u0645\u0652 \u0625\u0650\u0646\u0651\u064E\u0643\u064E \u0623\u064E\u0646\u0652\u062A\u064E \u0627\u0644\u0652\u0623\u064E\u0639\u064E\u0632\u0651\u064F \u0627\u0644\u0652\u0623\u064E\u0643\u0652\u0631\u064E\u0645\u064F', tr: 'Rabbi-ghfir warham innaka anta\u2019l-a\u2018azzu\u2019l-akram', en: 'My Lord, forgive and have mercy; You are the Most Mighty, Most Generous.', de: 'Mein Herr, vergib und erbarme Dich; Du bist der Allm\u00E4chtigste, Gro\u00DFz\u00FCgigste.', ur: '\u0627\u06D2 \u0645\u06CC\u0631\u06D2 \u0631\u0628! \u0628\u062E\u0634 \u062F\u06D2 \u0627\u0648\u0631 \u0631\u062D\u0645 \u0641\u0631\u0645\u0627\u060C \u0628\u06D2\u0634\u06A9 \u062A\u0648 \u0633\u0628 \u0633\u06D2 \u063A\u0627\u0644\u0628 \u0627\u0648\u0631 \u06A9\u0631\u06CC\u0645 \u06C1\u06D2\u06D4' },
+      null,
+      null,
+      { ar: '\u0627\u0644\u0644\u0651\u064E\u0647\u064F\u0645\u0651\u064E \u0635\u064E\u0644\u0651\u0650 \u0648\u064E\u0633\u064E\u0644\u0651\u0650\u0645\u0652 \u0639\u064E\u0644\u064E\u0649 \u0646\u064E\u0628\u0650\u064A\u0651\u0650\u0646\u064E\u0627 \u0645\u064F\u062D\u064E\u0645\u0651\u064E\u062F', tr: 'Allahumma salli wa sallim \u2018ala nabiyyina Muhammad', en: 'O Allah, send blessings and peace upon our Prophet Muhammad \uFDFA.', de: 'O Allah, sende Segen und Frieden auf unseren Propheten Muhammad \uFDFA.', ur: '\u0627\u06D2 \u0627\u0644\u0644\u06C1! \u06C1\u0645\u0627\u0631\u06D2 \u0646\u0628\u06CC \u0645\u062D\u0645\u062F \uFDFA \u067E\u0631 \u062F\u0631\u0648\u062F \u0648 \u0633\u0644\u0627\u0645 \u0628\u06BE\u06CC\u062C\u06D4' },
+      { ar: '\u0627\u0644\u0644\u0651\u064E\u0647\u064F\u0645\u0651\u064E \u0627\u0631\u0652\u0632\u064F\u0642\u0652\u0646\u0650\u064A \u0627\u0644\u0635\u0651\u064E\u0644\u064E\u0627\u0629\u064E \u0641\u0650\u064A \u0627\u0644\u0631\u0651\u064E\u0648\u0652\u0636\u064E\u0629\u0650 \u0648\u064E\u062A\u064E\u0642\u064E\u0628\u0651\u064E\u0644\u0652 \u0645\u0650\u0646\u0651\u0650\u064A', tr: 'Allahumma-rzuqni\u2019s-salata fi\u2019r-rawdati wa taqabbal minni', en: 'O Allah, grant me prayer in the Rawdah and accept it from me.', de: 'O Allah, gew\u00E4hre mir das Gebet in der Rawdah und nimm es von mir an.', ur: '\u0627\u06D2 \u0627\u0644\u0644\u06C1! \u0645\u062C\u06BE\u06D2 \u0631\u0648\u0636\u06D2 \u0645\u06CC\u06BA \u0646\u0645\u0627\u0632 \u06A9\u06CC \u062A\u0648\u0641\u06CC\u0642 \u0639\u0637\u0627 \u0641\u0631\u0645\u0627 \u0627\u0648\u0631 \u0642\u0628\u0648\u0644 \u0641\u0631\u0645\u0627\u06D4' }
+    ];
+  }
+
+  speak(text, lang) {
+    try {
+      const s = window.speechSynthesis; if (!s) return;
+      s.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = this.ttsLang(lang || this.state.lang);
+      u.rate = 0.9;
+      this._speaking = true;
+      u.onend = () => { this._speaking = false; this.forceUpdate(); };
+      u.onerror = () => { this._speaking = false; this.forceUpdate(); };
+      s.speak(u);
+      this.forceUpdate();
+    } catch (e) {}
+  }
+  speakThen(text, lang, cb) {
+    try {
+      const s = window.speechSynthesis;
+      if (!s) { this._advTimer = setTimeout(cb, 4500); return; }
+      s.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = this.ttsLang(lang); u.rate = 0.9;
+      this._speaking = true; this.forceUpdate();
+      u.onend = () => { this._speaking = false; this.forceUpdate(); if (cb) cb(); };
+      u.onerror = () => { this._speaking = false; this.forceUpdate(); if (cb) cb(); };
+      s.speak(u);
+    } catch (e) { this._advTimer = setTimeout(cb, 4500); }
+  }
+  stopVoice() { try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) {} this._speaking = false; this.forceUpdate(); }
+
+  // ---- Virtual walk (video-like auto play) ----
+  toggleWalk() { if (this.state.playing) this.stopWalk(); else this.setState({ playing: true }); }
+  stopWalk() { clearTimeout(this._advTimer); this.stopVoice(); if (this.state.playing) this.setState({ playing: false }); else { this.stopPan(); this.clearKen(); } }
+  playStep() {
+    if (!this.state.playing) return;
+    clearTimeout(this._advTimer);
+    const i = this.state.i, lang = this.state.lang;
+    const last = this.stations().length - 1;
+    const t = this.tr(lang)[i];
+    if (this._img) { this._img.style.animation = 'none'; void this._img.offsetHeight; this._img.style.animation = 'auj-ken 10s ease-in-out both'; }
+    const advance = () => {
+      if (!this.state.playing) return;
+      this._advTimer = setTimeout(() => {
+        if (!this.state.playing) return;
+        if (i < last) this.go(i + 1); else this.stopWalk();
+      }, 900);
+    };
+    if ((this.props.autoAdvance ?? true) === false && i < last) {
+      this.speakThen(t.title + '. ' + t.body, lang, () => {});
+    } else {
+      this.speakThen(t.title + '. ' + t.body, lang, advance);
+    }
+  }
+  startPan() {
+    this.stopPan();
+    const inner = this._inner; if (!inner) return;
+    const p = inner.parentElement; if (!p) return;
+    const min = Math.min(0, p.clientWidth - inner.scrollWidth);
+    let x = this._cur || 0; let dir = (x <= min + 1) ? 1 : -1;
+    const stepFn = () => {
+      if (!this.state.playing) return;
+      x += dir * 0.45;
+      if (x <= min) { x = min; dir = 1; }
+      if (x >= 0) { x = 0; dir = -1; }
+      this._cur = x; inner.style.transform = 'translateX(' + x + 'px)';
+      this._panRaf = requestAnimationFrame(stepFn);
+    };
+    this._panRaf = requestAnimationFrame(stepFn);
+  }
+  stopPan() { if (this._panRaf) cancelAnimationFrame(this._panRaf); this._panRaf = null; }
+  clearKen() { if (this._img) this._img.style.animation = ''; }
+
+  // ---- Personal voice recording ----
+  saveRecs() { try { localStorage.setItem('auj-tour-recs', JSON.stringify(this.recs || {})); } catch (e) {} }
+  startRec() {
+    try {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { this.setState({ recError: 'nodev' }); return; }
+      navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+        const mr = new MediaRecorder(stream);
+        this._chunks = [];
+        mr.ondataavailable = (e) => { if (e.data && e.data.size) this._chunks.push(e.data); };
+        mr.onstop = () => {
+          stream.getTracks().forEach((t) => t.stop());
+          const blob = new Blob(this._chunks, { type: mr.mimeType || 'audio/webm' });
+          const r = new FileReader();
+          r.onload = () => { if (!this.recs) this.recs = {}; this.recs[this.state.i] = r.result; this.saveRecs(); this.setState({ recording: false }); };
+          r.readAsDataURL(blob);
+        };
+        this._mr = mr; mr.start();
+        this.setState({ recording: true, recError: null });
+      }).catch(() => { this.setState({ recError: 'denied' }); });
+    } catch (e) { this.setState({ recError: 'denied' }); }
+  }
+  stopRec() { try { if (this._mr && this._mr.state !== 'inactive') this._mr.stop(); } catch (e) {} }
+  playRec() { try { const d = this.recs && this.recs[this.state.i]; if (!d) return; if (this._aud) { this._aud.pause(); } this._aud = new Audio(d); this._aud.play(); } catch (e) {} }
+  deleteRec() { if (this.recs) delete this.recs[this.state.i]; this.saveRecs(); this.forceUpdate(); }
+
+  // ---- Per-step video ----
+  saveVids() { try { localStorage.setItem('auj-tour-vids', JSON.stringify(this.vids || {})); } catch (e) {} }
+  addVideo(e) {
+    const file = e && e.target && e.target.files && e.target.files[0];
+    if (e && e.target) e.target.value = '';
+    if (!file) return;
+    const i = this.state.i;
+    if (!this.vids) this.vids = {};
+    if (!this._vidUrls) this._vidUrls = {};
+    if (this._vidUrls[i]) { try { URL.revokeObjectURL(this._vidUrls[i]); } catch (_) {} }
+    this._vidUrls[i] = URL.createObjectURL(file);
+    this.vids[i] = { name: file.name };
+    this.forceUpdate();
+    const r = new FileReader();
+    r.onload = () => {
+      try {
+        if (!this.vids[i]) return;
+        this.vids[i].data = r.result;
+        localStorage.setItem('auj-tour-vids', JSON.stringify(this.vids));
+      } catch (err) {
+        if (this.vids[i]) delete this.vids[i].data;
+      }
+      this.forceUpdate();
+    };
+    r.readAsDataURL(file);
+  }
+  deleteVid() {
+    const i = this.state.i;
+    if (this._vidUrls && this._vidUrls[i]) { try { URL.revokeObjectURL(this._vidUrls[i]); } catch (_) {} delete this._vidUrls[i]; }
+    if (this.vids) delete this.vids[i];
+    this.saveVids();
+    this.forceUpdate();
+  }
+  parseEmbed(raw) {
+    const s = (raw || '').trim();
+    if (!s) return { kind: null, url: '' };
+    let m;
+    if ((m = s.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([\w-]{6,})/i))) return { kind: 'iframe', url: 'https://www.youtube.com/embed/' + m[1] };
+    if ((m = s.match(/vimeo\.com\/(?:video\/)?(\d+)/i))) return { kind: 'iframe', url: 'https://player.vimeo.com/video/' + m[1] };
+    if (/^(https?:|blob:|data:)/i.test(s)) return { kind: 'video', url: s };
+    return { kind: null, url: '' };
+  }
+  addLink() {
+    const val = this._linkInput ? this._linkInput.value : '';
+    const emb = this.parseEmbed(val);
+    if (!emb.kind) { this.setState({ vidLinkErr: true }); return; }
+    const i = this.state.i;
+    if (this._vidUrls && this._vidUrls[i]) { try { URL.revokeObjectURL(this._vidUrls[i]); } catch (_) {} delete this._vidUrls[i]; }
+    if (!this.vids) this.vids = {};
+    this.vids[i] = { link: val.trim() };
+    this.saveVids();
+    if (this._linkInput) this._linkInput.value = '';
+    this.setState({ vidLinkErr: false });
+  }
+
+  renderVals() {
+    const st = this.stations();
+    const i = this.state.i;
+    const lang = this.state.lang;
+    const T = this.tr(lang);
+    const ui = (this.uiStrings()[lang]) || this.uiStrings().en;
+    const rtl = (lang === 'ar' || lang === 'ur');
+    const textDir = rtl ? 'rtl' : 'ltr';
+    const arFont = "'Noto Naskh Arabic','IBM Plex Sans',sans-serif";
+
+    const innerRef = (el) => { this._inner = el; };
+    const onPanoDown = (e) => { if (this.state.playing) return; this._dragging = true; this._startX = this.ptrX(e) - (this._cur || 0); };
+    const onPanoMove = (e) => {
+      if (!this._dragging || !this._inner) return;
+      const p = this._inner.parentElement;
+      const min = Math.min(0, p.clientWidth - this._inner.scrollWidth);
+      const x = Math.max(min, Math.min(0, this.ptrX(e) - this._startX));
+      this._cur = x;
+      this._inner.style.transform = 'translateX(' + x + 'px)';
+    };
+    const onPanoEnd = () => { this._dragging = false; };
+    const last = st.length - 1;
+
+    const dots = st.map((s, idx) => {
+      const done = idx < i, active = idx === i;
+      return {
+        mark: done ? '\u2713' : String(idx + 1),
+        label: s.label,
+        bg: active ? '#0F5132' : (done ? '#DCEDE4' : '#fff'),
+        fg: active ? '#fff' : (done ? '#0F5132' : '#7A7263'),
+        border: active ? '#0F5132' : (done ? '#9FCBB1' : '#C9BCA6'),
+        onClick: () => this.go(idx)
+      };
+    });
+
+    const tr = T[i] || st[i];
+    const station = { title: tr.title, subtitle: tr.subtitle, body: tr.body, num: ('0' + (i + 1)).slice(-2) };
+
+    const langDefs = [
+      { code: 'en', label: 'English', font: "'IBM Plex Sans',sans-serif", htmlLang: 'en' },
+      { code: 'ur', label: '\u0627\u0631\u062F\u0648', font: arFont, htmlLang: 'ur' },
+      { code: 'ar', label: '\u0627\u0644\u0639\u0631\u0628\u064A\u0629', font: arFont, htmlLang: 'ar' },
+      { code: 'de', label: 'Deutsch', font: "'IBM Plex Sans',sans-serif", htmlLang: 'de' }
+    ];
+    const langBtns = langDefs.map((l) => {
+      const on = l.code === lang;
+      return { label: l.label, htmlLang: l.htmlLang, font: l.font,
+        onClick: () => this.setLang(l.code),
+        bg: on ? '#0F5132' : '#fff', fg: on ? '#fff' : '#544F45', border: on ? '#0F5132' : '#D9CFBE' };
+    });
+
+    const dRaw = this.duas()[i];
+    const dua = dRaw || { ar: '', tr: '' };
+    const duaMeaning = dRaw ? (dRaw[lang] || dRaw.en) : '';
+    const speaking = !!this._speaking;
+    const showDua = this.state.showDua;
+    const playing = this.state.playing;
+
+    const hasRec = !!(this.recs && this.recs[i]);
+    const recording = this.state.recording;
+    const recErr = this.state.recError;
+    const recStatusText = recErr ? ui.recError : (recording ? '\u25CF REC' : (hasRec ? ui.recSaved : ui.recHint));
+
+    const vidStrings = {
+      en: { title: 'Step video', add: 'Add video', replace: 'Replace', remove: 'Remove', hint: 'Attach a short clip \u2014 it runs in the main frame, above the picture.', saved: 'Video added \u2014 playing in the main frame above.', session: 'Added for now \u2014 too large to save permanently.' , linkPh: 'Paste a video link (YouTube, Vimeo, MP4)', addLink: 'Add link' },
+      de: { title: 'Video zu diesem Schritt', add: 'Video hinzuf\u00FCgen', replace: 'Ersetzen', remove: 'Entfernen', hint: 'F\u00FCge einen kurzen Clip hinzu \u2014 er l\u00E4uft oben im Hauptfenster.', saved: 'Video hinzugef\u00FCgt \u2014 wird oben im Hauptfenster gezeigt.', session: 'Vorerst hinzugef\u00FCgt \u2014 zu gro\u00DF zum dauerhaften Speichern.' , linkPh: 'Videolink einf\u00FCgen (YouTube, Vimeo, MP4)', addLink: 'Link hinzuf\u00FCgen' },
+      ur: { title: '\u0627\u0633 \u0645\u0631\u062D\u0644\u06D2 \u06A9\u06CC \u0648\u06CC\u0688\u06CC\u0648', add: '\u0648\u06CC\u0688\u06CC\u0648 \u0634\u0627\u0645\u0644 \u06A9\u0631\u06CC\u06BA', replace: '\u062A\u0628\u062F\u06CC\u0644 \u06A9\u0631\u06CC\u06BA', remove: '\u06C1\u0679\u0627\u0626\u06CC\u06BA', hint: '\u0627\u0633 \u0645\u0631\u062D\u0644\u06D2 \u06A9\u06D2 \u0633\u0627\u062A\u06BE \u062F\u06A9\u06BE\u0627\u0646\u06D2 \u06A9\u06D2 \u0644\u06CC\u06D2 \u0627\u06CC\u06A9 \u0645\u062E\u062A\u0635\u0631 \u0648\u06CC\u0688\u06CC\u0648 \u0644\u06AF\u0627\u0626\u06CC\u06BA\u06D4', saved: '\u0648\u06CC\u0688\u06CC\u0648 \u0634\u0627\u0645\u0644 \u2014 \u0627\u0633 \u0645\u0631\u062D\u0644\u06D2 \u067E\u0631 \u0686\u0644\u06D2 \u06AF\u06CC\u06D4', session: '\u0641\u06CC \u0627\u0644\u062D\u0627\u0644 \u0634\u0627\u0645\u0644 \u2014 \u0645\u0633\u062A\u0642\u0644 \u0645\u062D\u0641\u0648\u0638 \u06A9\u0631\u0646\u06D2 \u06A9\u06D2 \u0644\u06CC\u06D2 \u0628\u06C1\u062A \u0628\u0691\u06CC\u06D4' , linkPh: '\u0648\u06CC\u0688\u06CC\u0648 \u0644\u0646\u06A9 \u067E\u06CC\u0633\u0679 \u06A9\u0631\u06CC\u06BA (YouTube\u060C Vimeo\u060C MP4)', addLink: '\u0644\u0646\u06A9 \u0634\u0627\u0645\u0644 \u06A9\u0631\u06CC\u06BA' },
+      ar: { title: '\u0641\u064A\u062F\u064A\u0648 \u0627\u0644\u062E\u0637\u0648\u0629', add: '\u0625\u0636\u0627\u0641\u0629 \u0641\u064A\u062F\u064A\u0648', replace: '\u0627\u0633\u062A\u0628\u062F\u0627\u0644', remove: '\u0625\u0632\u0627\u0644\u0629', hint: '\u0623\u0636\u0641 \u0645\u0642\u0637\u0639\u064B\u0627 \u0642\u0635\u064A\u0631\u064B\u0627 \u0644\u0639\u0631\u0636\u0647 \u0645\u0639 \u0647\u0630\u0647 \u0627\u0644\u062E\u0637\u0648\u0629.', saved: '\u062A\u0645\u062A \u0625\u0636\u0627\u0641\u0629 \u0627\u0644\u0641\u064A\u062F\u064A\u0648 \u2014 \u064A\u064F\u0639\u0631\u0636 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u062E\u0637\u0648\u0629.', session: '\u0623\u064F\u0636\u064A\u0641 \u0645\u0624\u0642\u062A\u064B\u0627 \u2014 \u0623\u0643\u0628\u0631 \u0645\u0646 \u0623\u0646 \u064A\u064F\u062D\u0641\u0638 \u062F\u0627\u0626\u0645\u064B\u0627.' , linkPh: '\u0627\u0644\u0635\u0642 \u0631\u0627\u0628\u0637 \u0641\u064A\u062F\u064A\u0648 (YouTube\u060C Vimeo\u060C MP4)', addLink: '\u0625\u0636\u0627\u0641\u0629 \u0631\u0627\u0628\u0637' }
+    };
+    const vidUi = vidStrings[lang] || vidStrings.en;
+    const curVid = this.vids && this.vids[i];
+    const curLink = curVid && curVid.link;
+    const fileSrc = (this._vidUrls && this._vidUrls[i]) || (curVid && curVid.data) || '';
+    const emb = curLink ? this.parseEmbed(curLink) : (fileSrc ? { kind: 'video', url: fileSrc } : { kind: null, url: '' });
+    const isEmbedIframe = emb.kind === 'iframe';
+    const isEmbedVideo = emb.kind === 'video';
+    const hasVid = isEmbedIframe || isEmbedVideo;
+    const vidSaved = !!(curLink || (curVid && curVid.data));
+    const vidStatusText = !hasVid ? vidUi.hint : (vidSaved ? vidUi.saved : vidUi.session);
+
+    const langNames = { en: 'English', ur: '\u0627\u0631\u062F\u0648', ar: '\u0627\u0644\u0639\u0631\u0628\u064A\u0629', de: 'Deutsch' };
+    const screenLabels = { en: 'VIRTUAL SCREEN', de: 'VIRTUELLER BILDSCHIRM', ur: '\u0648\u0631\u0686\u0648\u0626\u0644 \u0627\u0633\u06A9\u0631\u06CC\u0646', ar: '\u0634\u0627\u0634\u0629 \u0627\u0641\u062A\u0631\u0627\u0636\u064A\u0629' };
+    const videoSideLabels = { en: 'VIDEO', de: 'VIDEO', ur: '\u0648\u06CC\u0688\u06CC\u0648', ar: '\u0641\u064A\u062F\u064A\u0648' };
+    const vidHints = { en: 'Tap play to begin', de: 'Zum Starten tippen', ur: '\u0634\u0631\u0648\u0639 \u06A9\u06D2 \u0644\u06CC\u06D2 \u062F\u0628\u0627\u0626\u06CC\u06BA', ar: '\u0627\u0636\u063A\u0637 \u0644\u0644\u0628\u062F\u0621' };
+    const arTr = this.tr('ar')[i] || st[i];
+    const arStation = { title: arTr.title, subtitle: arTr.subtitle, body: arTr.body };
+    const selStation = { title: tr.title, subtitle: tr.subtitle, body: tr.body };
+    const showSel = lang !== 'ar';
+
+    return {
+      ui, textDir,
+      headFont: rtl ? arFont : "'IBM Plex Serif',serif",
+      bodyFont: rtl ? arFont : "'IBM Plex Sans',sans-serif",
+      langBtns,
+      innerRef, onPanoDown, onPanoMove, onPanoEnd,
+      imgRef: (el) => { this._img = el; if (el && el.getAttribute('src') !== st[i].img) { el.src = st[i].img; if (!playing) el.style.animation = ''; } },
+      dots,
+      station,
+      stepLabel: (i + 1) + ' / ' + st.length,
+
+      onListen: () => { if (this._speaking) { this.stopVoice(); } else { this.speak(station.title + '. ' + station.subtitle + '. ' + station.body, lang); } },
+      listenLabel: speaking ? ui.stop : ui.listen,
+      listenBg: speaking ? '#0F5132' : '#fff',
+      listenFg: speaking ? '#fff' : '#156440',
+      listenBorder: speaking ? '#0F5132' : '#C9BCA6',
+
+      toggleWalk: () => this.toggleWalk(),
+      playing, notPlaying: !playing,
+      walkLabel: playing ? ui.walkStop : ui.walkPlay,
+      walkBg: playing ? '#0F5132' : '#fff',
+      walkFg: playing ? '#fff' : '#156440',
+      walkBorder: playing ? '#0F5132' : '#C9BCA6',
+
+      showRecorder: (this.props.showRecorder ?? true),
+      hasRec,
+      recStatusText,
+      onRecToggle: () => { if (recording) this.stopRec(); else this.startRec(); },
+      onPlayRec: () => this.playRec(),
+      onDeleteRec: () => this.deleteRec(),
+      recBtnLabel: recording ? ui.recStop : ui.record,
+      recBtnBg: recording ? '#A33B2E' : '#0F5132',
+      recBtnFg: '#fff',
+      recBtnBorder: recording ? '#A33B2E' : '#0F5132',
+      recDotRadius: recording ? '2px' : '50%',
+      recDotAnim: recording ? 'animation:auj-recpulse 1s ease-in-out infinite;' : '',
+      micWrapBg: recording ? '#FBEDEA' : '#F0F6F2',
+      micFg: recording ? '#A33B2E' : '#0F5132',
+
+      vidUi, hasVid, noVid: !hasVid, vidStatusText, vidBtnLabel: hasVid ? vidUi.replace : vidUi.add,
+
+      screenLabel: screenLabels[lang] || screenLabels.en,
+      videoSideLabel: videoSideLabels[lang] || videoSideLabels.en,
+      vidHintShort: vidHints[lang] || vidHints.en,
+      arStation, showSel,
+      selStation, selDir: textDir, selFont: rtl ? arFont : "'IBM Plex Sans',sans-serif", selHeadFont: rtl ? arFont : "'IBM Plex Serif',serif",
+      selCode: (lang || 'en').toUpperCase(),
+      screenBtnLabel: playing ? ui.walkStop : ui.walkPlay,
+      screenBtnBg: playing ? 'rgba(255,255,255,0.16)' : 'rgba(255,255,255,0.95)',
+      screenBtnFg: playing ? '#fff' : '#0F5132',
+      screenBtnBorder: playing ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.95)',
+      onAddVideo: (e) => this.addVideo(e),
+      onDeleteVid: () => this.deleteVid(),
+      onAddLink: () => this.addLink(),
+      linkInputRef: (el) => { this._linkInput = el; },
+      isEmbedVideo, isEmbedIframe,
+      vidRef: (el) => {
+        this._vid = el; if (!el) return;
+        if (emb.url && el.src !== emb.url) el.src = emb.url;
+      },
+      frameRef: (el) => {
+        if (!el) return;
+        if (emb.url && el.getAttribute('src') !== emb.url) el.setAttribute('src', emb.url);
+      },
+
+      toggleDua: () => this.setState({ showDua: !this.state.showDua }),
+      showDua,
+      hasDua: !!dRaw,
+      noDua: !dRaw,
+      dua,
+      duaMeaning,
+      onPlayDua: () => { if (dRaw) { this.speak((dRaw[lang] || dRaw.en), lang); } },
+      duaBg: showDua ? '#0F5132' : '#fff',
+      duaFg: showDua ? '#fff' : '#156440',
+      duaBorder: showDua ? '#0F5132' : '#C9BCA6',
+
+      prev: () => { if (i > 0) this.go(i - 1); },
+      next: () => { if (i < last) this.go(i + 1); },
+      prevLabel: i > 0 ? (ui.step + ' ' + i) : ui.start,
+      prevColor: i > 0 ? '#156440' : '#C9BCA6',
+      prevCursor: i > 0 ? 'pointer' : 'default',
+      nextCursor: i < last ? 'pointer' : 'default',
+      nextOpacity: i < last ? '1' : '0.45',
+      nextLabel: i < last ? ui.next : ui.complete
+    };
+  }
+}
+</script>
+</body>
+</html>

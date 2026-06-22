@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;}
+  ::selection{background:#C8A24A;color:#07301E;}
+  .pd-list::-webkit-scrollbar{width:8px;}
+  .pd-list::-webkit-scrollbar-thumb{background:#E0D6C4;border-radius:8px;}
+  textarea{font-family:inherit;}
+  @media (max-width:840px){ .pd-body{flex-direction:column!important;} .pd-stage{min-height:0!important;} .pd-list{max-height:none!important;} }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:radial-gradient(120% 90% at 50% 0%, #FFFDF8 0%, #F3EEE4 100%);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:clamp(20px,4vw,48px) clamp(14px,4vw,32px);display:flex;flex-direction:column;align-items:center;">
+
+  <div style="width:100%;max-width:1040px;background:#fff;border:1px solid #E6DDCE;border-radius:24px;overflow:hidden;box-shadow:0 40px 90px -40px rgba(42,38,32,0.5), 0 2px 6px rgba(42,38,32,0.04);">
+
+    <!-- HEADER -->
+    <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:15px 20px;background:radial-gradient(130% 230% at 88% -70%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;">
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+      <div style="position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,162,74,0.6),transparent);"></div>
+      <div style="position:relative;display:flex;align-items:center;gap:12px;">
+        <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:9px;padding:5px 10px;box-shadow:0 10px 26px -8px rgba(0,0,0,0.45);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:clamp(42px,6vw,58px);width:auto;display:block;" /></span>
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.1em;color:#E8C36A;">PERSONAL DIARY</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#BFE0CD;margin-top:2px;">QURAN · NAFL · DUA · REFLECTIONS</div>
+        </div>
+      </div>
+      <span style="position:relative;display:inline-flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#BFE0CD;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);padding:6px 12px;border-radius:999px;"><span style="width:7px;height:7px;border-radius:50%;background:#7CE2B0;"></span>Saved on this device</span>
+    </div>
+
+    <!-- BODY -->
+    <div class="pd-body" style="display:flex;flex-wrap:wrap;">
+
+      <!-- LEFT: today summary -->
+      <div class="pd-stage" style="position:relative;flex:1 1 300px;background:radial-gradient(120% 130% at 75% 12%, #156440 0%, #0A3D26 52%, #06251A 100%);overflow:hidden;color:#EFF6F1;padding:clamp(22px,2.6vw,30px);display:flex;flex-direction:column;justify-content:space-between;gap:22px;">
+        <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 12px);pointer-events:none;"></div>
+        <div style="position:absolute;top:-50px;right:-44px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle, rgba(200,162,74,0.22), transparent 70%);pointer-events:none;"></div>
+        <div style="position:relative;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:#9CC6AE;">TODAY</div>
+          <div style="font-family:'IBM Plex Serif',serif;font-size:clamp(26px,3.2vw,34px);font-weight:600;line-height:1.1;margin-top:8px;">Your spiritual journal</div>
+        </div>
+        <div style="position:relative;display:flex;flex-direction:column;gap:16px;">
+          <div>
+            <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:7px;"><span style="font-size:13px;font-weight:600;">Quran target</span><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#E8C36A;">{{ quranDone }} / {{ quranTarget }} juz</span></div>
+            <div style="height:9px;border-radius:999px;background:rgba(255,255,255,0.16);overflow:hidden;"><div style="height:100%;border-radius:999px;background:linear-gradient(90deg,#2A9468,#E8C36A);width:{{ quranBar }}%;"></div></div>
+          </div>
+          <div style="display:flex;gap:12px;">
+            <div style="flex:1;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);border-radius:13px;padding:13px;"><div style="font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:600;">{{ naflTotal }}</div><div style="font-size:12px;color:#9CC6AE;margin-top:2px;">Nafl prayed</div></div>
+            <div style="flex:1;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);border-radius:13px;padding:13px;"><div style="font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:600;">{{ duaDone }}</div><div style="font-size:12px;color:#9CC6AE;margin-top:2px;">Duas marked</div></div>
+          </div>
+        </div>
+        <div style="position:relative;font-size:12px;color:#9CC6AE;line-height:1.5;">Everything is saved privately on your device. Use <button onClick="{{ resetAll }}" style="cursor:pointer;background:none;border:none;color:#E8C36A;font-family:inherit;font-size:12px;font-weight:600;text-decoration:underline;padding:0;">reset day</button> to start fresh.</div>
+      </div>
+
+      <!-- RIGHT: trackers -->
+      <div class="pd-list" style="flex:1 1 360px;padding:clamp(20px,2.4vw,26px);display:flex;flex-direction:column;gap:14px;max-height:560px;overflow-y:auto;">
+
+        <!-- QURAN -->
+        <div style="border:1px solid #F1EADD;border-radius:15px;padding:16px 17px;background:#FFFDFA;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;">
+            <div style="font-size:15px;font-weight:600;color:#2A2620;">Quran listening &amp; reading</div>
+            <div style="display:inline-flex;align-items:center;gap:4px;background:#F1EADD;border-radius:10px;padding:3px;">
+              <button onClick="{{ targetDec }}" style="cursor:pointer;width:30px;height:30px;border-radius:8px;border:none;background:#FAF6EF;color:#156440;font-size:16px;font-weight:600;font-family:inherit;">−</button>
+              <span style="min-width:64px;text-align:center;font-size:12.5px;font-weight:600;color:#2A2620;">{{ quranTarget }} juz/day</span>
+              <button onClick="{{ targetInc }}" style="cursor:pointer;width:30px;height:30px;border-radius:8px;border:none;background:#0F5132;color:#fff;font-size:16px;font-weight:600;font-family:inherit;">+</button>
+            </div>
+          </div>
+          <div style="height:9px;border-radius:999px;background:#F1EADD;overflow:hidden;margin-bottom:13px;"><div style="height:100%;border-radius:999px;background:linear-gradient(90deg,#2A9468,#0F5132);width:{{ quranBar }}%;"></div></div>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <button onClick="{{ addJuz }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:7px;background:#0F5132;color:#fff;border:none;border-radius:11px;font-family:inherit;font-size:13.5px;font-weight:600;padding:10px 16px;">+1 juz done</button>
+            <button onClick="{{ subJuz }}" style="cursor:pointer;background:#fff;color:#156440;border:1.5px solid #C9BCA6;border-radius:11px;font-family:inherit;font-size:13.5px;font-weight:600;padding:10px 14px;">−1</button>
+            <span style="font-size:13px;color:#7A7263;">{{ quranDone }} of {{ quranTarget }} juz today · listen or read</span>
+          </div>
+        </div>
+
+        <!-- NAFL -->
+        <div style="border:1px solid #F1EADD;border-radius:15px;padding:16px 17px;background:#FFFDFA;">
+          <div style="font-size:15px;font-weight:600;color:#2A2620;margin-bottom:12px;">Nafl &amp; Sunnah prayers</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <sc-for list="{{ naflRows }}" as="n" hint-placeholder-count="5">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:#2A2620;">{{ n.label }}</div><div style="font-size:12px;color:#7A7263;">{{ n.note }}</div></div>
+                <div style="display:inline-flex;align-items:center;gap:4px;background:#F1EADD;border-radius:10px;padding:3px;">
+                  <button onClick="{{ n.dec }}" style="cursor:pointer;width:30px;height:30px;border-radius:8px;border:none;background:#FAF6EF;color:#156440;font-size:16px;font-weight:600;font-family:inherit;">−</button>
+                  <span style="min-width:26px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:700;color:#0F5132;">{{ n.count }}</span>
+                  <button onClick="{{ n.inc }}" style="cursor:pointer;width:30px;height:30px;border-radius:8px;border:none;background:#0F5132;color:#fff;font-size:16px;font-weight:600;font-family:inherit;">+</button>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- DUA -->
+        <div style="border:1px solid #F1EADD;border-radius:15px;padding:16px 17px;background:#FFFDFA;">
+          <div style="font-size:15px;font-weight:600;color:#2A2620;margin-bottom:12px;">Dua list — tap when made</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <sc-for list="{{ duaRows }}" as="d" hint-placeholder-count="6">
+              <button onClick="{{ d.toggle }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-family:inherit;font-size:13px;font-weight:500;padding:9px 13px;border-radius:11px;background:{{ d.bg }};color:{{ d.fg }};border:1.5px solid {{ d.border }};transition:all .15s;"><span style="width:17px;height:17px;border-radius:50%;background:{{ d.dotBg }};color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;">{{ d.mark }}</span>{{ d.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- DIARY NOTE -->
+        <div style="border:1px solid #F1EADD;border-radius:15px;padding:16px 17px;background:#FFFDFA;">
+          <div style="font-size:15px;font-weight:600;color:#2A2620;margin-bottom:10px;">Today&#39;s reflection</div>
+          <textarea value="{{ note }}" onInput="{{ onNote }}" placeholder="What touched your heart today? Write a dua, a moment, a goal…" style="width:100%;min-height:120px;resize:vertical;background:#FBFAF8;border:1.5px solid #E6DDCE;border-radius:12px;padding:13px 14px;font-size:14px;line-height:1.6;color:#2A2620;outline:none;"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:18px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center;">
+    <a href="AUJ Landing Cinematic.dc.html" style="text-decoration:none;font-size:13.5px;color:#7A7263;display:inline-flex;align-items:center;gap:6px;">← Back to AUJ home</a>
+    <a href="AUJ Day Planner.dc.html" style="text-decoration:none;font-size:13.5px;font-weight:600;color:#156440;display:inline-flex;align-items:center;gap:6px;">Day planner <span>→</span></a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1080,&quot;height&quot;:760}}">
+class Component extends DCLogic {
+  state = { quranTarget: 1, quranDone: 0, nafl: { tahajjud: 0, duha: 0, witr: 0, rawatib: 0, extra: 0 }, duas: {}, note: '' };
+
+  componentDidMount() {
+    try { const s = JSON.parse(localStorage.getItem('auj-diary') || 'null'); if (s && typeof s === 'object') this.setState(s); } catch (e) {}
+  }
+  persist() { try { localStorage.setItem('auj-diary', JSON.stringify(this.state)); } catch (e) {} }
+  set(patch) { this.setState(patch, () => this.persist()); }
+
+  renderVals() {
+    const st = this.state;
+    const target = st.quranTarget || 1;
+    const done = st.quranDone || 0;
+    const quranBar = Math.max(0, Math.min(100, Math.round((done / (target || 1)) * 100)));
+
+    const NAFL = [
+      { key: 'tahajjud', label: 'Tahajjud', note: 'Night prayer' },
+      { key: 'duha', label: 'Duha (Chasht)', note: 'Forenoon prayer' },
+      { key: 'witr', label: 'Witr', note: 'After Isha' },
+      { key: 'rawatib', label: 'Sunnah Rawatib', note: 'Before/after fard' },
+      { key: 'extra', label: 'Extra nafl', note: 'Voluntary rak\u2019ah' }
+    ];
+    const naflRows = NAFL.map((n) => ({
+      label: n.label, note: n.note, count: (st.nafl && st.nafl[n.key]) || 0,
+      inc: () => this.set({ nafl: { ...st.nafl, [n.key]: ((st.nafl && st.nafl[n.key]) || 0) + 1 } }),
+      dec: () => this.set({ nafl: { ...st.nafl, [n.key]: Math.max(0, ((st.nafl && st.nafl[n.key]) || 0) - 1) } })
+    }));
+    const naflTotal = NAFL.reduce((a, n) => a + ((st.nafl && st.nafl[n.key]) || 0), 0);
+
+    const DUAS = [
+      { key: 'forgive', label: 'Forgiveness' },
+      { key: 'parents', label: 'For my parents' },
+      { key: 'health', label: 'Health & shifa' },
+      { key: 'ummah', label: 'The Ummah' },
+      { key: 'rizq', label: 'Rizq & guidance' },
+      { key: 'need', label: 'My special need' },
+      { key: 'accept', label: 'Acceptance of Umrah' }
+    ];
+    const duaRows = DUAS.map((d) => {
+      const on = !!(st.duas && st.duas[d.key]);
+      return {
+        label: d.label, mark: on ? '\u2713' : '',
+        toggle: () => this.set({ duas: { ...st.duas, [d.key]: !on } }),
+        bg: on ? '#0F5132' : '#fff', fg: on ? '#fff' : '#4A4337',
+        border: on ? '#0F5132' : '#C9BCA6', dotBg: on ? '#2A9468' : '#D9CFBE'
+      };
+    });
+    const duaDone = DUAS.reduce((a, d) => a + (st.duas && st.duas[d.key] ? 1 : 0), 0);
+
+    return {
+      quranTarget: target, quranDone: done, quranBar,
+      targetInc: () => this.set({ quranTarget: Math.min(10, target + 1) }),
+      targetDec: () => this.set({ quranTarget: Math.max(1, target - 1) }),
+      addJuz: () => this.set({ quranDone: Math.min(30, done + 1) }),
+      subJuz: () => this.set({ quranDone: Math.max(0, done - 1) }),
+      naflRows, naflTotal, duaRows, duaDone,
+      note: st.note || '',
+      onNote: (e) => this.set({ note: e.target.value }),
+      resetAll: () => this.set({ quranDone: 0, nafl: { tahajjud: 0, duha: 0, witr: 0, rawatib: 0, extra: 0 }, duas: {}, note: '' })
+    };
+  }
+}
+</script>
+</body>
+</html>

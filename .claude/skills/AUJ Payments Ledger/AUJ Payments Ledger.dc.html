@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;} body{margin:0;} ::selection{background:#C8A24A;color:#07301E;}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:radial-gradient(120% 90% at 50% 0%, #FFFDF8 0%, #F3EEE4 100%);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:clamp(20px,4vw,44px) clamp(14px,4vw,32px);display:flex;flex-direction:column;align-items:center;">
+  <div style="width:100%;max-width:1060px;">
+
+    <!-- HEADER -->
+    <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:18px 22px;border-radius:20px;background:radial-gradient(130% 230% at 88% -60%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;box-shadow:0 24px 60px -34px rgba(5,28,18,0.6);color:#EFF6F1;">
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+      <div style="position:relative;display:flex;align-items:center;gap:14px;">
+        <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:11px;padding:6px 12px;box-shadow:0 10px 26px -8px rgba(0,0,0,0.45);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:clamp(46px,6.5vw,62px);width:auto;display:block;" /></span>
+        <div>
+          <div style="font-family:'IBM Plex Serif',serif;font-size:20px;font-weight:600;color:#fff;">Payments &amp; Ledger</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#BFE0CD;margin-top:3px;">EUR + PKR · WALLET · DOUBLE-ENTRY</div>
+        </div>
+      </div>
+      <div style="position:relative;display:flex;gap:9px;flex-wrap:wrap;">
+        <sc-for list="{{ gateways }}" as="g" hint-placeholder-count="2"><span style="display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;color:#EFF6F1;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:999px;padding:6px 12px;"><span style="width:7px;height:7px;border-radius:50%;background:#7CE2B0;"></span>{{ g.label }}</span></sc-for>
+      </div>
+    </div>
+
+    <!-- WALLET + LEDGER BALANCE -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:18px;">
+      <div style="background:linear-gradient(165deg,#0F5132,#06251A);border:1px solid #0A3D26;border-radius:20px;padding:20px;color:#EFF6F1;box-shadow:0 18px 44px -30px rgba(5,28,18,0.6);">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;"><span style="font-size:14px;font-weight:600;">Agent wallet · Al-Noor Travels</span><div style="display:flex;gap:4px;background:rgba(0,0,0,0.2);border-radius:8px;padding:3px;"><sc-for list="{{ curBtns }}" as="c" hint-placeholder-count="2"><button onClick="{{ c.onClick }}" style="cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;padding:5px 10px;border-radius:6px;background:{{ c.bg }};color:{{ c.fg }};border:none;">{{ c.label }}</button></sc-for></div></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:36px;font-weight:600;margin-top:14px;">{{ available }}</div>
+        <div style="font-size:12px;color:#9CC6AE;">available to book</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-top:16px;">
+          <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);border-radius:11px;padding:11px;"><div style="font-size:10.5px;color:#9CC6AE;">Balance</div><div style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;margin-top:2px;">{{ balance }}</div></div>
+          <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);border-radius:11px;padding:11px;"><div style="font-size:10.5px;color:#9CC6AE;">Credit</div><div style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;margin-top:2px;">{{ credit }}</div></div>
+          <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);border-radius:11px;padding:11px;"><div style="font-size:10.5px;color:#9CC6AE;">On hold</div><div style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;margin-top:2px;color:#E8C36A;">{{ hold }}</div></div>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);display:flex;flex-direction:column;">
+        <div style="font-size:16px;font-weight:600;color:#2A2620;margin-bottom:4px;">Ledger health</div>
+        <div style="font-size:12.5px;color:#7A7263;margin-bottom:16px;">Double-entry — debits must equal credits.</div>
+        <div style="display:flex;align-items:center;gap:14px;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:14px;padding:15px 17px;">
+          <span style="width:44px;height:44px;border-radius:12px;background:#0F5132;color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;flex-shrink:0;">=</span>
+          <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:#0F5132;">Balanced</div><div style="font-size:12.5px;color:#7A7263;">Σ debit {{ debitSum }} = Σ credit {{ creditSum }}</div></div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:13px;font-size:12.5px;color:#7A7263;"><span>Reconciled to gateway webhooks</span><span style="display:inline-flex;align-items:center;gap:6px;font-weight:600;color:#0F5132;"><span style="width:8px;height:8px;border-radius:50%;background:#1C7A4F;"></span>up to date</span></div>
+      </div>
+    </div>
+
+    <!-- TRANSACTIONS -->
+    <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:8px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);margin-top:18px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 14px 8px;"><div style="font-size:16px;font-weight:600;color:#2A2620;">Recent transactions</div><div style="display:flex;gap:4px;background:#F1EADD;border-radius:9px;padding:3px;"><sc-for list="{{ filterBtns }}" as="f" hint-placeholder-count="3"><button onClick="{{ f.onClick }}" style="cursor:pointer;font-family:inherit;font-size:11.5px;font-weight:600;padding:6px 12px;border-radius:7px;background:{{ f.bg }};color:{{ f.fg }};border:none;transition:all .15s;" style-active="transform:scale(0.97)">{{ f.label }}</button></sc-for></div></div>
+      <sc-for list="{{ txns }}" as="t" hint-placeholder-count="6">
+        <div style="display:flex;align-items:center;gap:13px;padding:12px 14px;border-top:1px solid #F1EADD;">
+          <span style="width:36px;height:36px;border-radius:10px;background:{{ t.iconBg }};color:{{ t.iconFg }};display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0;">{{ t.icon }}</span>
+          <div style="flex:1;min-width:0;"><div style="font-size:13.5px;font-weight:600;color:#2A2620;">{{ t.label }}</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#7A7263;">{{ t.ref }} · {{ t.kind }}</div></div>
+          <span style="font-size:11px;font-weight:600;color:{{ t.stFg }};background:{{ t.stBg }};border-radius:7px;padding:4px 9px;white-space:nowrap;">{{ t.status }}</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:700;color:{{ t.amtColor }};width:120px;text-align:right;">{{ t.amount }}</span>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="margin-top:16px;display:flex;align-items:flex-start;gap:11px;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:14px;padding:13px 16px;">
+      <span style="width:24px;height:24px;border-radius:7px;background:#0F5132;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;">i</span>
+      <span style="font-size:12.5px;color:#2A4A39;line-height:1.55;">Amounts stored in minor units; one currency per ledger entry. PCI: no PANs stored — gateway tokenization only, idempotency keys on capture. Booking calls payments on <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;">confirm</span>; payments never call connectors.</span>
+    </div>
+
+    <div style="margin-top:20px;text-align:center;"><a href="AUJ Landing Cinematic.dc.html" style="text-decoration:none;font-size:13.5px;color:#7A7263;">← Back to AUJ home</a></div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1100,&quot;height&quot;:840}}">
+class Component extends DCLogic {
+  state = { cur: 'EUR', filter: 'all' };
+
+  renderVals() {
+    const CUR = { EUR: ['\u20AC', 1], PKR: ['\u20A8', 310.8] };
+    const cur = this.state.cur;
+    const f = (n) => CUR[cur][0] + Math.round(n * CUR[cur][1]).toLocaleString('en-US');
+
+    const balance = 12480, credit = 25000, hold = 3200;
+    const curBtns = ['EUR', 'PKR'].map((c) => ({ label: c, onClick: () => this.setState({ cur: c }), bg: cur === c ? '#C8A24A' : 'transparent', fg: cur === c ? '#07301E' : '#BFE0CD' }));
+
+    const ALL = [
+      { label: 'Umrah · Vilnius group (41 pax)', ref: 'PAY-26-0712', kind: 'capture', cur: 'EUR', amount: 78310, type: 'capture' },
+      { label: 'Wallet top-up · SEPA', ref: 'TOP-26-0044', kind: 'top-up', cur: 'EUR', amount: 20000, type: 'topup' },
+      { label: 'Family Umrah · Kaunas', ref: 'PAY-26-0688', kind: 'hold', cur: 'EUR', amount: 11460, type: 'hold' },
+      { label: 'Refund · cancelled leg', ref: 'REF-26-0301', kind: 'refund', cur: 'EUR', amount: -1910, type: 'refund' },
+      { label: 'Deposit · Lahore pilgrim', ref: 'PAY-26-0654', kind: 'capture', cur: 'PKR', amount: 950, type: 'capture' },
+      { label: 'Partial refund · meal add-on', ref: 'REF-26-0298', kind: 'refund', cur: 'EUR', amount: -180, type: 'refund' }
+    ];
+    const filterBtns = [['all', 'All'], ['capture', 'Payments'], ['refund', 'Refunds']].map(([k, label]) => ({
+      label, onClick: () => this.setState({ filter: k }),
+      bg: this.state.filter === k ? '#0F5132' : 'transparent', fg: this.state.filter === k ? '#fff' : '#4A4337'
+    }));
+    const filt = this.state.filter;
+    const fm = (sym, n) => sym + Math.abs(n).toLocaleString('en-US');
+    const txns = ALL.filter((t) => filt === 'all' || t.type === filt || (filt === 'capture' && t.type === 'topup')).map((t) => {
+      const sym = t.cur === 'PKR' ? '\u20A8' : '\u20AC';
+      const refund = t.type === 'refund', topup = t.type === 'topup', hold = t.type === 'hold';
+      return {
+        label: t.label, ref: t.ref, kind: t.kind,
+        icon: refund ? '\u21A9' : (topup ? '+' : (hold ? '\u29D7' : '\u2193')),
+        iconBg: refund ? '#FBF1EF' : (hold ? '#FBF4E6' : '#DCEDE4'),
+        iconFg: refund ? '#B23A2E' : (hold ? '#9A6512' : '#0F5132'),
+        status: refund ? 'Refunded' : (hold ? 'On hold' : (topup ? 'Settled' : 'Captured')),
+        stFg: refund ? '#B23A2E' : (hold ? '#9A6512' : '#0F5132'),
+        stBg: refund ? '#FBF1EF' : (hold ? '#FBF4E6' : '#DCEDE4'),
+        amount: (t.amount < 0 ? '\u2212' : '') + fm(sym, t.amount),
+        amtColor: t.amount < 0 ? '#B23A2E' : '#2A2620'
+      };
+    });
+
+    return {
+      gateways: [{ label: 'Stripe · EUR' }, { label: 'Safepay · PKR' }],
+      curBtns, available: f(balance + credit - hold), balance: f(balance), credit: f(credit), hold: f(hold),
+      debitSum: '\u20AC 284.500', creditSum: '\u20AC 284.500',
+      filterBtns, txns
+    };
+  }
+}
+</script>
+</body>
+</html>

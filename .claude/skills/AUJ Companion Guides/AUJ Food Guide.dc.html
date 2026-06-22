@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;}
+  ::selection{background:#C8A24A;color:#07301E;}
+  .hw-list::-webkit-scrollbar{width:8px;}
+  .hw-list::-webkit-scrollbar-thumb{background:#E0D6C4;border-radius:8px;}
+  @media (max-width:840px){ .hw-body{flex-direction:column!important;} .hw-stage{min-height:200px!important;} .hw-list{max-height:none!important;} }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:radial-gradient(120% 90% at 50% 0%, #FFFDF8 0%, #F3EEE4 100%);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:clamp(20px,4vw,48px) clamp(14px,4vw,32px);display:flex;flex-direction:column;align-items:center;">
+
+  <div style="width:100%;max-width:1040px;background:#fff;border:1px solid #E6DDCE;border-radius:24px;overflow:hidden;box-shadow:0 40px 90px -40px rgba(42,38,32,0.5), 0 2px 6px rgba(42,38,32,0.04);">
+
+    <!-- HEADER -->
+    <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:15px 20px;background:radial-gradient(130% 230% at 88% -70%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;">
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+      <div style="position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,162,74,0.6),transparent);"></div>
+      <div style="position:relative;display:flex;align-items:center;gap:12px;">
+        <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:9px;padding:5px 10px;box-shadow:0 10px 26px -8px rgba(0,0,0,0.45);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:clamp(42px,6vw,58px);width:auto;display:block;" /></span>
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.1em;color:#E8C36A;">FOOD &amp; DINING</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#BFE0CD;margin-top:2px;">GOOD EATS &amp; ONLINE ORDERS</div>
+        </div>
+      </div>
+      <div style="position:relative;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <div style="display:flex;gap:5px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);padding:4px;border-radius:11px;">
+          <sc-for list="{{ cityButtons }}" as="c" hint-placeholder-count="2">
+            <button onClick="{{ c.onClick }}" style="cursor:pointer;font-family:inherit;font-size:12.5px;font-weight:600;padding:6px 14px;border-radius:8px;background:{{ c.bg }};color:{{ c.fg }};border:1px solid {{ c.border }};transition:all .15s;">{{ c.label }}</button>
+          </sc-for>
+        </div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#fff;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);padding:6px 11px;border-radius:999px;">{{ counter }}</span>
+      </div>
+    </div>
+
+    <!-- CATEGORY RAIL -->
+    <div style="position:relative;padding:18px 22px;border-bottom:1px solid #F1EADD;overflow-x:auto;background:#FCFAF5;">
+      <div style="position:relative;display:flex;gap:4px;min-width:660px;">
+        <div style="position:absolute;left:14px;right:14px;top:14px;height:2px;background:#EADFCE;"></div>
+        <sc-for list="{{ rail }}" as="s" hint-placeholder-count="6">
+          <button onClick="{{ s.onClick }}" style="position:relative;flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;background:none;border:none;font-family:inherit;padding:0;">
+            <div style="width:30px;height:30px;border-radius:50%;background:{{ s.dotBg }};border:2px solid {{ s.dotBorder }};color:{{ s.dotFg }};display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;transition:all .2s;">{{ s.num }}</div>
+            <span style="font-size:10px;font-weight:600;color:{{ s.labelColor }};text-align:center;line-height:1.2;max-width:80px;">{{ s.short }}</span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="hw-body" style="display:flex;flex-wrap:wrap;">
+
+      <!-- CATEGORY PANEL -->
+      <div class="hw-stage" style="position:relative;flex:1 1 300px;min-height:300px;background:radial-gradient(120% 130% at 75% 12%, #156440 0%, #0A3D26 52%, #06251A 100%);overflow:hidden;color:#EFF6F1;padding:clamp(22px,2.6vw,30px);display:flex;flex-direction:column;justify-content:space-between;">
+        <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 12px);pointer-events:none;"></div>
+        <div style="position:absolute;top:-50px;right:-44px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle, rgba(200,162,74,0.22), transparent 70%);pointer-events:none;"></div>
+        <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:#9CC6AE;">{{ cityLabel }} · DINING</div>
+        <div style="position:relative;">
+          <div style="width:54px;height:54px;border-radius:15px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:16px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#E8C36A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v8a2 2 0 0 0 4 0V3M8 11v10M16 3c-1.5 0-2.5 1.5-2.5 4s1 4 2.5 4v10"/></svg></div>
+          <div style="font-family:'IBM Plex Serif',serif;font-size:clamp(26px,3.4vw,38px);font-weight:600;line-height:1.1;">{{ catName }}</div>
+          <div style="font-size:14px;color:#C6DDCF;margin-top:12px;line-height:1.55;">{{ desc }}</div>
+        </div>
+        <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#BFE0CD;">{{ count }} {{ countNoun }}</div>
+      </div>
+
+      <!-- LIST -->
+      <div style="flex:1 1 360px;padding:clamp(20px,2.4vw,26px);display:flex;flex-direction:column;min-width:0;">
+        <div style="margin-bottom:14px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.08em;color:#2F6F8F;">{{ cityLabel }} · {{ catUpper }}</span></div>
+        <div class="hw-list" style="display:flex;flex-direction:column;gap:9px;max-height:330px;overflow-y:auto;padding-right:4px;">
+          <sc-for list="{{ items }}" as="h" hint-placeholder-count="5">
+            <div style="display:flex;align-items:center;gap:12px;padding:11px 13px;border:1px solid #F1EADD;border-radius:12px;background:#FFFDFA;">
+              <div style="width:44px;height:44px;border-radius:11px;background:{{ h.badgeBg }};color:{{ h.badgeFg }};display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;flex-shrink:0;">{{ h.mark }}</div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:14px;font-weight:600;color:#2A2620;line-height:1.25;">{{ h.name }}</div>
+                <div style="font-size:12px;color:#7A7263;margin-top:1px;">{{ h.note }}</div>
+              </div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#156440;white-space:nowrap;flex-shrink:0;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:7px;padding:4px 8px;">{{ h.tag }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+          <button onClick="{{ prev }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:7px;background:{{ prevBg }};color:{{ prevColor }};border:1.5px solid {{ prevBorder }};border-radius:11px;font-family:inherit;font-size:14px;font-weight:600;padding:11px 16px;transition:all .15s;"><span>←</span> Back</button>
+          <div style="display:flex;align-items:center;gap:7px;">
+            <sc-for list="{{ dots }}" as="d" hint-placeholder-count="6">
+              <button onClick="{{ d.onClick }}" style="cursor:pointer;border:none;height:9px;width:{{ d.w }};border-radius:999px;background:{{ d.bg }};transition:all .2s;padding:0;"></button>
+            </sc-for>
+          </div>
+          <button onClick="{{ next }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:7px;background:#0F5132;color:#fff;border:none;border-radius:11px;font-family:inherit;font-size:14px;font-weight:600;padding:11px 18px;box-shadow:0 8px 18px rgba(15,81,50,0.26);transition:background .15s;" style-hover="background:#156440;">{{ nextLabel }} <span>→</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:18px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center;">
+    <a href="AUJ Landing Cinematic.dc.html" style="text-decoration:none;font-size:13.5px;color:#7A7263;display:inline-flex;align-items:center;gap:6px;">← Back to AUJ home</a>
+    <a href="AUJ Hospitals Guide.dc.html" style="text-decoration:none;font-size:13.5px;font-weight:600;color:#156440;display:inline-flex;align-items:center;gap:6px;">Hospitals guide <span>→</span></a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1080,&quot;height&quot;:760}}">
+class Component extends DCLogic {
+  state = { i: 0, city: 'makkah' };
+
+  data() {
+    const online = { short: 'Order online', name: 'Order online', desc: 'Deliver to your hotel from the apps used across Saudi Arabia. Pay by card or cash on delivery.', noun: 'apps', items: [
+      { name: 'HungerStation', note: 'Largest food-delivery app in KSA', tag: 'App', mark: 'HS' },
+      { name: 'Jahez', note: 'Wide restaurant choice · fast', tag: 'App', mark: 'JZ' },
+      { name: 'ToYou', note: 'Food, groceries & pharmacy', tag: 'App', mark: 'TY' },
+      { name: 'The Chefz', note: 'Premium restaurants & sweets', tag: 'App', mark: 'CH' },
+      { name: 'Mrsool', note: 'Order anything by courier', tag: 'App', mark: 'MR' },
+      { name: 'Careem Food', note: 'Within the Careem super-app', tag: 'App', mark: 'CF' }
+    ] };
+    const mk = (mark) => ({ badgeBg: '#F7EBD3', badgeFg: '#9A6512', mark });
+    const app = { badgeBg: '#DCEDE4', badgeFg: '#0F5132' };
+    return {
+      makkah: [
+        { short: 'Near Haram', name: 'Near the Haram', desc: 'Quick, reliable bites within minutes of Masjid al-Haram and inside the Clock Tower malls.', noun: 'places', items: [
+          { name: 'Al Baik', note: 'Saudi fried chicken · legendary', tag: 'Budget', ...mk('AB') },
+          { name: 'Abraj Al Bait Food Court', note: 'International · inside the towers', tag: 'Mall', ...mk('FC') },
+          { name: 'Herfy', note: 'Saudi burgers & meals', tag: 'Budget', ...mk('HF') },
+          { name: 'KUDU', note: 'Sandwiches & breakfast', tag: 'Budget', ...mk('KD') },
+          { name: 'Zad Almusafer', note: 'Buffet near the Haram', tag: 'Buffet', ...mk('ZM') }
+        ] },
+        { short: 'Desi', name: 'Desi & Pakistani', desc: 'Biryani, karahi and grills loved by the South-Asian pilgrim community.', noun: 'places', items: [
+          { name: 'Bundu Khan', note: 'Pakistani grills & karahi', tag: 'Mid', ...mk('BK') },
+          { name: 'Lahore Karahi', note: 'Pakistani · karahi & naan', tag: 'Budget', ...mk('LK') },
+          { name: 'Kabul Darbar', note: 'Afghan & Pakistani', tag: 'Budget', ...mk('KD') },
+          { name: 'Al Khaima Biryani', note: 'Biryani & rice plates', tag: 'Budget', ...mk('KB') }
+        ] },
+        { short: 'Arab & Grills', name: 'Arab & Grills', desc: 'Traditional Saudi and Levantine grills, mandi and family platters.', noun: 'places', items: [
+          { name: 'Al Tazaj', note: 'Charcoal grilled chicken', tag: 'Budget', ...mk('AT') },
+          { name: 'Al Romansiah', note: 'Saudi traditional · kabsa', tag: 'Mid', ...mk('RM') },
+          { name: 'Najd Village', note: 'Heritage Saudi dining', tag: 'Mid', ...mk('NV') },
+          { name: 'Mataam Al Sharq', note: 'Arab grills & mezze', tag: 'Mid', ...mk('SH') }
+        ] },
+        { short: 'Turkish & Asian', name: 'Turkish & Asian', desc: 'Turkish kebabs and pide, Yemeni mandi, and East-Asian favourites.', noun: 'places', items: [
+          { name: 'Istanbul Restaurant', note: 'Turkish kebab & pide', tag: 'Mid', ...mk('IS') },
+          { name: 'Köfteci Yusuf', note: 'Turkish köfte', tag: 'Mid', ...mk('KY') },
+          { name: 'Hadramout Mandi', note: 'Yemeni mandi & bukhari', tag: 'Budget', ...mk('HM') },
+          { name: 'Asian Wok', note: 'Chinese & Thai', tag: 'Mid', ...mk('AW') }
+        ] },
+        { short: 'Cafés & Sweets', name: 'Cafés & Sweets', desc: 'Arabic coffee, kunafa, baklava and dessert houses for after taraweeh.', noun: 'places', items: [
+          { name: 'Barn\u2019s Café', note: 'Saudi coffee chain', tag: 'Café', ...mk('BR') },
+          { name: 'Saadeddin', note: 'Arabic sweets & baklava', tag: 'Sweets', ...mk('SD') },
+          { name: 'Al Baba Kunafa', note: 'Levantine kunafa', tag: 'Sweets', ...mk('KN') },
+          { name: 'Dunkin / Starbucks', note: 'Coffee & quick bites', tag: 'Café', ...mk('CO') }
+        ] },
+        online
+      ],
+      madinah: [
+        { short: 'Near Haram', name: 'Near the Haram', desc: 'Easy meals around the central Piazza, steps from Masjid an-Nabawi.', noun: 'places', items: [
+          { name: 'Al Baik', note: 'Saudi fried chicken · legendary', tag: 'Budget', ...mk('AB') },
+          { name: 'Zaatar w Zeit', note: 'Levantine manakish & wraps', tag: 'Mid', ...mk('ZZ') },
+          { name: 'Herfy', note: 'Saudi burgers & meals', tag: 'Budget', ...mk('HF') },
+          { name: 'Central Piazza Food Courts', note: 'International · around the mosque', tag: 'Mall', ...mk('FC') },
+          { name: 'Al Sufra Buffet', note: 'Open buffet near the Haram', tag: 'Buffet', ...mk('SF') }
+        ] },
+        { short: 'Desi', name: 'Desi & Pakistani', desc: 'Biryani, karahi and desi breakfast for the South-Asian community.', noun: 'places', items: [
+          { name: 'Bundu Khan', note: 'Pakistani grills & karahi', tag: 'Mid', ...mk('BK') },
+          { name: 'Lahori Tarka', note: 'Pakistani · karahi & naan', tag: 'Budget', ...mk('LT') },
+          { name: 'Kabul Restaurant', note: 'Afghan & Pakistani', tag: 'Budget', ...mk('KR') },
+          { name: 'Madinah Biryani House', note: 'Biryani & rice plates', tag: 'Budget', ...mk('BH') }
+        ] },
+        { short: 'Arab & Grills', name: 'Arab & Grills', desc: 'Saudi heritage dining, grilled chicken and family mandi platters.', noun: 'places', items: [
+          { name: 'Al Romansiah', note: 'Saudi traditional · kabsa', tag: 'Mid', ...mk('RM') },
+          { name: 'Najd Village', note: 'Heritage Saudi dining', tag: 'Mid', ...mk('NV') },
+          { name: 'Al Tazaj', note: 'Charcoal grilled chicken', tag: 'Budget', ...mk('AT') },
+          { name: 'Abu Shakra', note: 'Grills & mezze', tag: 'Mid', ...mk('AS') }
+        ] },
+        { short: 'Turkish & Asian', name: 'Turkish & Asian', desc: 'Turkish ocakbasi, Yemeni mandi and East-Asian options.', noun: 'places', items: [
+          { name: 'Köşk Turkish', note: 'Turkish grills & pide', tag: 'Mid', ...mk('KS') },
+          { name: 'Saray Restaurant', note: 'Turkish & Ottoman', tag: 'Mid', ...mk('SR') },
+          { name: 'Hadramout Mandi', note: 'Yemeni mandi & bukhari', tag: 'Budget', ...mk('HM') },
+          { name: 'China Town', note: 'Chinese & Asian', tag: 'Mid', ...mk('CT') }
+        ] },
+        { short: 'Cafés & Sweets', name: 'Cafés & Sweets', desc: 'Coffee houses, date shops and Ajwa sweets to enjoy and gift.', noun: 'places', items: [
+          { name: 'Barn\u2019s Café', note: 'Saudi coffee chain', tag: 'Café', ...mk('BR') },
+          { name: 'Saadeddin', note: 'Arabic sweets & baklava', tag: 'Sweets', ...mk('SD') },
+          { name: 'Madinah Dates & Ajwa', note: 'Dates, chocolate & gifts', tag: 'Sweets', ...mk('AJ') },
+          { name: 'Starbucks / Dunkin', note: 'Coffee & quick bites', tag: 'Café', ...mk('CO') }
+        ] },
+        online
+      ]
+    };
+  }
+
+  renderVals() {
+    const all = this.data();
+    const city = this.state.city;
+    const S = all[city];
+    const total = S.length;
+    const i = Math.max(0, Math.min(this.state.i, total - 1));
+    const cat = S[i];
+    const pad2 = (n) => ('0' + n).slice(-2);
+
+    const cityButtons = [['makkah', 'Makkah'], ['madinah', 'Madinah']].map(([key, label]) => ({
+      label, onClick: () => this.setState({ city: key }),
+      bg: city === key ? 'rgba(255,255,255,0.18)' : 'transparent',
+      fg: city === key ? '#fff' : '#BFE0CD',
+      border: city === key ? 'rgba(255,255,255,0.32)' : 'transparent'
+    }));
+
+    const rail = S.map((s, k) => ({
+      num: pad2(k + 1), short: s.short,
+      onClick: () => this.setState({ i: k }),
+      dotBg: k === i ? '#0F5132' : (k < i ? '#DCEDE4' : '#fff'),
+      dotBorder: k === i ? '#0F5132' : (k < i ? '#9CC6AE' : '#E6DDCE'),
+      dotFg: k === i ? '#fff' : (k < i ? '#0F5132' : '#9A9183'),
+      labelColor: k === i ? '#0F5132' : '#9A9183'
+    }));
+    const dots = S.map((_, k) => ({
+      onClick: () => this.setState({ i: k }),
+      bg: k === i ? '#0F5132' : (k < i ? '#9CC6AE' : '#E6DDCE'),
+      w: k === i ? '26px' : '9px'
+    }));
+
+    return {
+      counter: pad2(i + 1) + ' / ' + pad2(total),
+      cityLabel: city === 'makkah' ? 'MAKKAH' : 'MADINAH',
+      catName: cat.name, catUpper: cat.short.toUpperCase(), desc: cat.desc,
+      count: cat.items.length, countNoun: cat.noun.toUpperCase(), items: cat.items,
+      rail, dots, cityButtons,
+      prev: () => this.setState({ i: Math.max(0, i - 1) }),
+      next: () => this.setState({ i: Math.min(total - 1, i + 1) }),
+      prevBg: i === 0 ? '#F4EEE3' : '#fff',
+      prevColor: i === 0 ? '#B8AE9C' : '#156440',
+      prevBorder: i === 0 ? '#EADFCE' : '#C9BCA6',
+      nextLabel: i === total - 1 ? 'Done' : 'Next'
+    };
+  }
+}
+</script>
+</body>
+</html>

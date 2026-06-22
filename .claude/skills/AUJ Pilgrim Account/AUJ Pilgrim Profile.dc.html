@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;} body{margin:0;} ::selection{background:#C8A24A;color:#07301E;} input{font-family:inherit;}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:radial-gradient(120% 90% at 50% 0%, #FFFDF8 0%, #F3EEE4 100%);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:clamp(20px,4vw,44px) clamp(14px,4vw,32px);display:flex;flex-direction:column;align-items:center;">
+  <div style="width:100%;max-width:1040px;">
+
+    <!-- COVER -->
+    <div style="position:relative;border-radius:22px;overflow:hidden;background:radial-gradient(130% 230% at 88% -50%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);box-shadow:0 24px 60px -34px rgba(5,28,18,0.6);padding:22px;color:#EFF6F1;">
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+      <div style="position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:16px;">
+          <div style="width:74px;height:74px;border-radius:20px;background:linear-gradient(160deg,#E8C36A,#B5791E);color:#07301E;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Serif',serif;font-size:30px;font-weight:600;flex-shrink:0;box-shadow:0 8px 20px rgba(0,0,0,0.3);">{{ initials }}</div>
+          <div>
+            <div style="font-family:'IBM Plex Serif',serif;font-size:clamp(22px,3vw,28px);font-weight:600;color:#fff;">{{ name }}</div>
+            <div style="display:flex;align-items:center;gap:7px;font-size:13.5px;color:#BFE0CD;margin-top:3px;"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="#9CC6AE" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2.5a4.5 4.5 0 0 1 4.5 4.5c0 3.2-4.5 9-4.5 9S5.5 10.2 5.5 7A4.5 4.5 0 0 1 10 2.5z"/><circle cx="10" cy="7" r="1.6"/></svg>{{ from }}</div>
+            <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#07301E;background:#E8C36A;border-radius:999px;padding:4px 11px;">{{ tier }}</span>
+              <span style="font-size:11.5px;color:#BFE0CD;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);border-radius:999px;padding:4px 11px;">Member since {{ since }}</span>
+              <span style="font-size:11.5px;color:#BFE0CD;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);border-radius:999px;padding:4px 11px;">CRN {{ crn }}</span>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <div style="text-align:center;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);border-radius:13px;padding:11px 16px;"><div style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;">{{ tripCount }}</div><div style="font-size:11px;color:#9CC6AE;">Journeys</div></div>
+          <div style="text-align:center;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);border-radius:13px;padding:11px 16px;"><div style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;">{{ yearsCount }}</div><div style="font-size:11px;color:#9CC6AE;">Years with AUJ</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin-top:18px;">
+      <!-- DETAILS -->
+      <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);">
+        <div style="font-size:16px;font-weight:600;color:#2A2620;margin-bottom:14px;">Personal details</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <sc-for list="{{ fields }}" as="f" hint-placeholder-count="6">
+            <div><div style="font-size:10.5px;font-weight:600;letter-spacing:0.05em;color:#7A7263;margin-bottom:3px;">{{ f.label }}</div><input value="{{ f.value }}" onInput="{{ f.onInput }}" placeholder="{{ f.ph }}" style="width:100%;background:#FBFAF8;border:1.5px solid #E6DDCE;border-radius:9px;padding:9px 11px;font-size:13.5px;color:#2A2620;outline:none;" style-focus="border-color:#2A9468;" /></div>
+          </sc-for>
+        </div>
+        <div style="font-size:11.5px;color:#9A9183;margin-top:12px;">Saved privately on your device.</div>
+      </div>
+
+      <!-- HISTORY -->
+      <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);">
+        <div style="font-size:16px;font-weight:600;color:#2A2620;margin-bottom:14px;">Pilgrimage history</div>
+        <div style="display:flex;flex-direction:column;gap:0;">
+          <sc-for list="{{ history }}" as="h" hint-placeholder-count="4">
+            <div style="display:flex;gap:13px;">
+              <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;"><div style="width:13px;height:13px;border-radius:50%;background:{{ h.dot }};border:2px solid #fff;box-shadow:0 0 0 2px {{ h.dot }};margin-top:4px;"></div><div style="width:2px;flex:1;background:#EADFCE;min-height:14px;"></div></div>
+              <div style="padding-bottom:16px;flex:1;min-width:0;">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;"><span style="font-size:14.5px;font-weight:600;color:#2A2620;">{{ h.title }}</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#156440;">{{ h.year }}</span></div>
+                <div style="font-size:12.5px;color:#7A7263;margin-top:2px;">{{ h.detail }}</div>
+                <div style="font-size:12px;color:#C8A24A;margin-top:3px;">{{ h.stars }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <!-- PREFERENCES -->
+    <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);margin-top:18px;">
+      <div style="font-size:16px;font-weight:600;color:#2A2620;margin-bottom:14px;">Preferences &amp; profile</div>
+      <div style="display:flex;gap:9px;flex-wrap:wrap;">
+        <sc-for list="{{ prefs }}" as="p" hint-placeholder-count="6">
+          <span style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:500;color:#2A2620;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:999px;padding:8px 14px;"><span style="width:7px;height:7px;border-radius:50%;background:#1C7A4F;"></span>{{ p }}</span>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center;">
+      <a href="AUJ Landing Cinematic.dc.html" style="text-decoration:none;font-size:13.5px;color:#7A7263;display:inline-flex;align-items:center;gap:6px;">← Back to AUJ home</a>
+      <a href="AUJ Pilgrim Dashboard.dc.html" style="text-decoration:none;font-size:13.5px;font-weight:600;color:#156440;display:inline-flex;align-items:center;gap:6px;">My dashboard <span>→</span></a>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1080,&quot;height&quot;:820}}">
+class Component extends DCLogic {
+  state = { p: {} };
+  componentDidMount() {
+    let p = {};
+    try { p = JSON.parse(localStorage.getItem('auj-profile') || 'null') || {}; } catch (e) {}
+    if (!p.name) { try { const d = JSON.parse(localStorage.getItem('auj-dashboard') || 'null'); if (d && d.pp && d.pp.name) { p.name = d.pp.name; p.nat = d.pp.nat; } } catch (e) {} }
+    this.setState({ p });
+  }
+  persist() { try { localStorage.setItem('auj-profile', JSON.stringify(this.state.p)); } catch (e) {} }
+  setF(k, v) { const p = { ...this.state.p, [k]: v }; this.setState({ p }, () => this.persist()); }
+
+  renderVals() {
+    const p = this.state.p || {};
+    const name = p.name || 'Aisha Khan';
+    const from = (p.city || 'Vilnius') + ', ' + (p.country || p.nat || 'Lithuania');
+    const initials = name.split(' ').filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
+
+    const FIELDS = [
+      ['name', 'FULL NAME', 'As in passport'],
+      ['city', 'CITY', 'Vilnius'],
+      ['country', 'COUNTRY', 'Lithuania'],
+      ['dob', 'DATE OF BIRTH', 'DD.MM.YYYY'],
+      ['email', 'EMAIL', 'you@email.com'],
+      ['phone', 'PHONE', '+370 …'],
+      ['lang', 'LANGUAGES', 'English, Urdu, Arabic']
+    ];
+    const fields = FIELDS.map(([k, label, ph]) => ({ label, ph, value: p[k] || '', onInput: (e) => this.setF(k, e.target.value) }));
+
+    const history = [
+      { title: 'Umrah Premium', year: '2025', detail: 'Vilnius → Makkah · 14 nights · Swissôtel', stars: '★★★★★', dot: '#1C7A4F' },
+      { title: 'Family Umrah', year: '2023', detail: 'Vilnius → Makkah & Madinah · 10 nights', stars: '★★★★★', dot: '#1C7A4F' },
+      { title: 'Ziyarat tour', year: '2022', detail: 'Madinah · 7 nights · guided', stars: '★★★★☆', dot: '#2F6F8F' },
+      { title: 'First Umrah with AUJ', year: '2019', detail: 'Vilnius → Makkah · 12 nights', stars: '★★★★★', dot: '#B5791E' }
+    ];
+
+    return {
+      initials, name, from,
+      tier: 'GOLD PILGRIM', since: '2019', crn: 'AUJ-19-0481',
+      tripCount: history.length, yearsCount: 7,
+      fields, history,
+      prefs: ['Non-smoking room', 'Near the Haram', 'Halal full board', 'Wheelchair on request', 'Female guide (family)', 'Urdu-speaking rep']
+    };
+  }
+}
+</script>
+</body>
+</html>

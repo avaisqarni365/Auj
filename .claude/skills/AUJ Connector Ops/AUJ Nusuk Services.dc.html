@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;} body{margin:0;} ::selection{background:#C8A24A;color:#07301E;}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:radial-gradient(120% 90% at 50% 0%, #FFFDF8 0%, #F3EEE4 100%);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:clamp(20px,4vw,44px) clamp(14px,4vw,32px);display:flex;flex-direction:column;align-items:center;">
+  <div style="width:100%;max-width:1040px;">
+
+    <!-- HEADER -->
+    <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:18px 22px;border-radius:20px;background:radial-gradient(130% 230% at 88% -60%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;box-shadow:0 24px 60px -34px rgba(5,28,18,0.6);color:#EFF6F1;">
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+      <div style="position:relative;display:flex;align-items:center;gap:14px;">
+        <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:11px;padding:6px 12px;box-shadow:0 10px 26px -8px rgba(0,0,0,0.45);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:clamp(46px,6.5vw,62px);width:auto;display:block;" /></span>
+        <div>
+          <div style="font-family:'IBM Plex Serif',serif;font-size:20px;font-weight:600;color:#fff;">Nusuk Services</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#BFE0CD;margin-top:3px;">APPROVED-AGENT PARITY · BUILT ON THE MOCK</div>
+        </div>
+      </div>
+      <span style="position:relative;display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:#07301E;background:#7CE2B0;border-radius:999px;padding:6px 13px;">Nusuk-approved agent</span>
+    </div>
+
+    <!-- PACKAGE MODE -->
+    <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);margin-top:18px;">
+      <div style="font-size:16px;font-weight:600;color:#2A2620;margin-bottom:3px;">Umrah package mode</div>
+      <div style="font-size:12.5px;color:#7A7263;margin-bottom:15px;">The visa step is conditional on the mode and your per‑pilgrim visa route.</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:11px;">
+        <sc-for list="{{ modes }}" as="m" hint-placeholder-count="3">
+          <button onClick="{{ m.onClick }}" style="text-align:left;cursor:pointer;background:{{ m.bg }};border:1.5px solid {{ m.border }};border-radius:15px;padding:15px 16px;font-family:inherit;transition:all .15s;" style-active="transform:scale(0.99)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;"><span style="font-size:15px;font-weight:600;color:#2A2620;">{{ m.title }}</span><span style="width:20px;height:20px;border-radius:50%;border:2px solid {{ m.dotBorder }};background:{{ m.dotBg }};color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">{{ m.mark }}</span></div>
+            <div style="font-size:12.5px;color:#7A7263;line-height:1.5;">{{ m.note }}</div>
+            <div style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:11px;font-weight:600;color:{{ m.pillFg }};background:{{ m.pillBg }};border-radius:999px;padding:4px 10px;">{{ m.pill }}</div>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- SERVICES GRID -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin-top:18px;">
+      <!-- RAWDAH -->
+      <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;"><div style="font-size:16px;font-weight:600;color:#2A2620;">Rawdah permit</div><span style="font-size:11px;font-weight:600;color:#235B73;background:#E2EEF3;border-radius:999px;padding:4px 10px;">Madinah</span></div>
+        <div style="font-size:12.5px;color:#7A7263;margin-bottom:14px;">Time‑slotted permit to Riyadh ul‑Jannah — pick a slot.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:7px;">
+          <sc-for list="{{ slots }}" as="s" hint-placeholder-count="6">
+            <button onClick="{{ s.onClick }}" style="cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;padding:9px 13px;border-radius:10px;background:{{ s.bg }};color:{{ s.fg }};border:1.5px solid {{ s.border }};transition:all .15s;" style-active="transform:scale(0.97)">{{ s.label }}</button>
+          </sc-for>
+        </div>
+        <div style="margin-top:13px;font-size:12.5px;color:#2A4A39;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:11px;padding:11px 13px;">{{ rawdahMsg }}</div>
+      </div>
+
+      <!-- ADD-ONS -->
+      <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);">
+        <div style="font-size:16px;font-weight:600;color:#2A2620;margin-bottom:14px;">Add to your package</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <sc-for list="{{ addons }}" as="a" hint-placeholder-count="4">
+            <button onClick="{{ a.toggle }}" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;cursor:pointer;background:{{ a.bg }};border:1.5px solid {{ a.border }};border-radius:12px;padding:12px 13px;font-family:inherit;transition:all .12s;">
+              <span style="width:22px;height:22px;border-radius:7px;border:2px solid {{ a.boxBorder }};background:{{ a.boxBg }};color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">{{ a.mark }}</span>
+              <span style="flex:1;min-width:0;"><span style="display:block;font-size:14px;font-weight:600;color:#2A2620;">{{ a.label }}</span><span style="display:block;font-size:12px;color:#7A7263;">{{ a.note }}</span></span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:#0F5132;">{{ a.price }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <!-- GIFT + E-SERVICES -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin-top:18px;">
+      <div style="background:linear-gradient(165deg,#0F5132,#06251A);border:1px solid #0A3D26;border-radius:20px;padding:20px;color:#EFF6F1;box-shadow:0 18px 44px -30px rgba(5,28,18,0.6);">
+        <div style="display:flex;align-items:center;gap:11px;margin-bottom:10px;"><span style="width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#E8C36A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="9" width="16" height="11" rx="1.5"></rect><path d="M4 13h16M12 9v11M12 9c-1.2-3-5.5-2.8-5 .3M12 9c1.2-3 5.5-2.8 5 .3"></path></svg></span><span style="font-family:'IBM Plex Serif',serif;font-size:18px;font-weight:600;">Gift an Umrah</span></div>
+        <div style="font-size:13.5px;color:#C6DDCF;line-height:1.6;">Book and pay a package on behalf of another person — enter the recipient&#39;s details and we issue a gift voucher with their booking reference.</div>
+        <button style="margin-top:15px;cursor:pointer;background:#C8A24A;color:#07301E;border:none;border-radius:11px;font-family:inherit;font-size:14px;font-weight:600;padding:12px 18px;" style-active="transform:scale(0.98)">Send a gift Umrah →</button>
+      </div>
+
+      <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);">
+        <div style="font-size:16px;font-weight:600;color:#2A2620;margin-bottom:14px;">E‑services</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;">
+          <sc-for list="{{ eservices }}" as="e" hint-placeholder-count="6"><div style="display:flex;align-items:center;gap:9px;border:1px solid #F1EADD;border-radius:11px;padding:11px 12px;"><span style="width:8px;height:8px;border-radius:50%;background:{{ e.dot }};flex-shrink:0;"></span><span style="flex:1;font-size:13px;color:#2A2620;">{{ e.label }}</span></div></sc-for>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;display:flex;align-items:flex-start;gap:11px;background:#FBF4E6;border:1px solid #F0E2C4;border-radius:14px;padding:13px 16px;">
+      <span style="width:24px;height:24px;border-radius:7px;background:#B5791E;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;">i</span>
+      <span style="font-size:12.5px;color:#4A4337;line-height:1.55;">Every service runs against <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;">connector-mock</span> today and is a drop‑in for <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;">connector-saudi</span> when real Nusuk Masar access lands — nothing blocks on Ministry authorization. BRNs verbatim · EUR charged / PKR indicative.</span>
+    </div>
+
+    <div style="margin-top:20px;text-align:center;"><a href="AUJ Landing Cinematic.dc.html" style="text-decoration:none;font-size:13.5px;color:#7A7263;">← Back to AUJ home</a></div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1080,&quot;height&quot;:880}}">
+class Component extends DCLogic {
+  state = { mode: 'comprehensive', slot: '', addons: { ziyarah: true, meals: false, transport: true, personalize: false } };
+
+  renderVals() {
+    const mode = this.state.mode;
+    const MODES = [
+      { id: 'comprehensive', title: 'Comprehensive', note: 'Visa included — hotel, transfers, ziyarah and visa in one price.', pill: 'Visa included', pillFg: '#0F5132', pillBg: '#DCEDE4' },
+      { id: 'optional', title: 'Visa-optional', note: 'You already hold a valid visa — book the land package only.', pill: 'Bring your own visa', pillFg: '#235B73', pillBg: '#E2EEF3' },
+      { id: 'custom', title: 'Custom', note: 'Build your own — pick hotels, nights, transport and add-ons.', pill: 'Build your own', pillFg: '#9A6512', pillBg: '#FBF4E6' }
+    ];
+    const modes = MODES.map((m) => {
+      const on = mode === m.id;
+      return { ...m, onClick: () => this.setState({ mode: m.id }),
+        bg: on ? '#F0F6F2' : '#FFFDFA', border: on ? '#1C7A4F' : '#E6DDCE',
+        dotBg: on ? '#0F5132' : '#fff', dotBorder: on ? '#0F5132' : '#C9BCA6', mark: on ? '\u2713' : '' };
+    });
+
+    const SLOTS = ['Fajr', '08:30', '10:00', 'Dhuhr', '16:00', 'Isha'];
+    const slots = SLOTS.map((label) => {
+      const on = this.state.slot === label;
+      return { label, onClick: () => this.setState({ slot: on ? '' : label }),
+        bg: on ? '#0F5132' : '#FFFDFA', fg: on ? '#fff' : '#2A2620', border: on ? '#0F5132' : '#E6DDCE' };
+    });
+    const rawdahMsg = this.state.slot ? ('Permit requested for the ' + this.state.slot + ' slot — confirmation via Nusuk on approval.') : 'Select a slot — permits are limited and confirmed by Nusuk.';
+
+    const ADDONS = [
+      { key: 'ziyarah', label: 'Ziyarah bundle', note: 'Makkah & Madinah heritage sites', price: '\u20AC 60' },
+      { key: 'meals', label: 'Meals / catering', note: 'Half or full board', price: '\u20AC 18/day' },
+      { key: 'transport', label: 'Intercity transport', note: 'Makkah \u2194 Madinah', price: '\u20AC 45' },
+      { key: 'personalize', label: 'Special requests', note: 'Wheelchair, female guide, diet', price: 'Free' }
+    ];
+    const addons = ADDONS.map((a) => {
+      const on = !!this.state.addons[a.key];
+      return { ...a, toggle: () => this.setState({ addons: { ...this.state.addons, [a.key]: !on } }),
+        bg: on ? '#F0F6F2' : '#FFFDFA', border: on ? '#CBE6D6' : '#F1EADD',
+        boxBg: on ? '#0F5132' : '#fff', boxBorder: on ? '#0F5132' : '#C9BCA6', mark: on ? '\u2713' : '' };
+    });
+
+    const eservices = [
+      { label: 'My bookings', dot: '#1C7A4F' }, { label: 'Documents', dot: '#1C7A4F' },
+      { label: 'Support tickets', dot: '#2F6F8F' }, { label: 'Profile & login', dot: '#2F6F8F' },
+      { label: 'Hotels near Haram', dot: '#C9A04A' }, { label: 'Newsletter', dot: '#B5A88F' }
+    ];
+
+    return { modes, slots, rawdahMsg, addons, eservices };
+  }
+}
+</script>
+</body>
+</html>

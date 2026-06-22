@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;} body{margin:0;} ::selection{background:#C8A24A;color:#07301E;} textarea{font-family:inherit;}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:radial-gradient(120% 90% at 50% 0%, #FFFDF8 0%, #F3EEE4 100%);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:clamp(20px,4vw,48px) clamp(14px,4vw,32px);display:flex;flex-direction:column;align-items:center;">
+  <div style="width:100%;max-width:880px;background:#fff;border:1px solid #E6DDCE;border-radius:24px;overflow:hidden;box-shadow:0 40px 90px -40px rgba(42,38,32,0.5), 0 2px 6px rgba(42,38,32,0.04);">
+
+    <!-- HEADER -->
+    <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:15px 20px;background:radial-gradient(130% 230% at 88% -70%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;">
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+      <div style="position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,162,74,0.6),transparent);"></div>
+      <div style="position:relative;display:flex;align-items:center;gap:12px;">
+        <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:9px;padding:5px 10px;box-shadow:0 10px 26px -8px rgba(0,0,0,0.45);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:clamp(42px,6vw,58px);width:auto;display:block;" /></span>
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.1em;color:#E8C36A;">BOOKING PROCESS</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#BFE0CD;margin-top:2px;">PACKAGE CONFIRMED · READY TO START</div>
+        </div>
+      </div>
+      <span style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#fff;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);padding:6px 11px;border-radius:999px;">{{ counter }}</span>
+    </div>
+
+    <!-- RAIL -->
+    <div style="position:relative;padding:16px 20px;border-bottom:1px solid #F1EADD;overflow-x:auto;background:#FCFAF5;">
+      <div style="position:relative;display:flex;gap:4px;min-width:760px;">
+        <div style="position:absolute;left:13px;right:13px;top:13px;height:2px;background:#EADFCE;"></div>
+        <sc-for list="{{ rail }}" as="s" hint-placeholder-count="10">
+          <button onClick="{{ s.onClick }}" style="position:relative;flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;background:none;border:none;font-family:inherit;padding:0;">
+            <div style="width:28px;height:28px;border-radius:50%;background:{{ s.dotBg }};border:2px solid {{ s.dotBorder }};color:{{ s.dotFg }};display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;transition:all .2s;">{{ s.mark }}</div>
+            <span style="font-size:10px;font-weight:600;color:{{ s.labelColor }};text-align:center;line-height:1.15;max-width:74px;">{{ s.short }}</span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div style="padding:clamp(22px,3vw,32px);min-height:330px;display:flex;flex-direction:column;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.08em;color:#2F6F8F;margin-bottom:7px;">STEP {{ stepNum }} OF {{ totalNum }}</div>
+      <h2 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(23px,3vw,30px);letter-spacing:-0.02em;line-height:1.15;margin:0 0 8px;color:#2A2620;">{{ stepTitle }}</h2>
+      <p style="font-size:15px;line-height:1.6;color:#4A4337;margin:0 0 20px;max-width:620px;">{{ stepDesc }}</p>
+
+      <sc-if value="{{ showNames }}" hint-placeholder-val="{{ false }}">
+        <textarea value="{{ names }}" onInput="{{ onNames }}" placeholder="1. Full name (as in passport) — Passport no.&#10;2. …&#10;3. …" style="width:100%;min-height:150px;resize:vertical;background:#FBFAF8;border:1.5px solid #E6DDCE;border-radius:12px;padding:14px;font-size:14px;line-height:1.7;color:#2A2620;outline:none;"></textarea>
+      </sc-if>
+
+      <sc-if value="{{ showOptions }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <sc-for list="{{ options }}" as="o" hint-placeholder-count="3">
+            <button onClick="{{ o.onClick }}" style="display:flex;align-items:center;gap:13px;width:100%;text-align:left;cursor:pointer;background:{{ o.bg }};border:1.5px solid {{ o.border }};border-radius:14px;padding:14px 16px;font-family:inherit;transition:all .12s;">
+              <span style="width:22px;height:22px;border-radius:50%;border:2px solid {{ o.dotBorder }};background:{{ o.dotBg }};color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">{{ o.mark }}</span>
+              <span style="flex:1;min-width:0;"><span style="display:block;font-size:15px;font-weight:600;color:#2A2620;">{{ o.label }}</span><span style="display:block;font-size:13px;color:#7A7263;margin-top:1px;">{{ o.note }}</span></span>
+            </button>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showDone }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#F0F6F2;border:1px solid #DCEDE4;border-radius:16px;padding:18px 20px;">
+          <div style="display:flex;align-items:center;gap:11px;margin-bottom:14px;"><span style="width:34px;height:34px;border-radius:50%;background:#0F5132;color:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;">✓</span><span style="font-family:'IBM Plex Serif',serif;font-size:19px;font-weight:600;color:#0F5132;">Your journey is set</span></div>
+          <div style="display:flex;flex-direction:column;gap:9px;">
+            <sc-for list="{{ summary }}" as="r" hint-placeholder-count="6">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #DCEDE4;padding-bottom:8px;"><span style="font-size:13px;color:#7A7263;">{{ r.label }}</span><span style="font-size:13.5px;font-weight:600;color:#2A2620;text-align:right;">{{ r.value }}</span></div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <div style="margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:24px;">
+        <button onClick="{{ prev }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:7px;background:{{ prevBg }};color:{{ prevColor }};border:1.5px solid {{ prevBorder }};border-radius:11px;font-family:inherit;font-size:14px;font-weight:600;padding:12px 18px;transition:all .15s;"><span>←</span> Back</button>
+        <button onClick="{{ next }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:7px;background:#0F5132;color:#fff;border:none;border-radius:11px;font-family:inherit;font-size:14px;font-weight:600;padding:12px 22px;box-shadow:0 8px 18px rgba(15,81,50,0.26);transition:background .15s;" style-hover="background:#156440;">{{ nextLabel }} <span>→</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:18px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center;">
+    <a href="AUJ Landing Cinematic.dc.html" style="text-decoration:none;font-size:13.5px;color:#7A7263;display:inline-flex;align-items:center;gap:6px;">← Back to AUJ home</a>
+    <a href="AUJ Packing Organizer.dc.html" style="text-decoration:none;font-size:13.5px;font-weight:600;color:#156440;display:inline-flex;align-items:center;gap:6px;">Packing organizer <span>→</span></a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:920,&quot;height&quot;:720}}">
+class Component extends DCLogic {
+  state = { i: 0, choices: {}, names: '' };
+
+  componentDidMount() { try { const s = JSON.parse(localStorage.getItem('auj-booking') || 'null'); if (s && typeof s === 'object') this.setState(s); } catch (e) {} }
+  persist() { try { localStorage.setItem('auj-booking', JSON.stringify(this.state)); } catch (e) {} }
+  set(patch) { this.setState(patch, () => this.persist()); }
+
+  steps() {
+    return [
+      { key: 'pilgrims', short: 'Pilgrims', title: 'Pilgrims & passports', desc: 'Enter each pilgrim\u2019s full name exactly as in the passport, with the passport number. This starts your file.', type: 'names' },
+      { key: 'insurance', short: 'Insurance', title: 'Travel insurance', desc: 'Choose the cover for your group. Medical cover is strongly recommended for every pilgrim.', options: [
+        ['std', 'Standard cover', 'Included · basic medical & trip'],
+        ['prem', 'Premium medical', 'Higher limits · pre-existing conditions'],
+        ['fam', 'Family cover', 'All pilgrims on one policy'] ] },
+      { key: 'visa', short: 'Visa', title: 'Visa route', desc: 'We set the right route from each passport. Mixed-nationality families are fully supported.', options: [
+        ['evisa', 'e-Visa', 'EU / EEA passports · online'],
+        ['agent', 'Agent channel', 'Pakistani & other passports'],
+        ['mixed', 'Mixed group', 'We split routes automatically'] ] },
+      { key: 'tickets', short: 'Tickets', title: 'Flights & airport', desc: 'Pick your departure airport. We route to Jeddah (JED) or Madinah (MED) with direct or one-stop flights.', options: [
+        ['vno', 'Vilnius (VNO)', 'Direct & one-stop to JED'],
+        ['kun', 'Kaunas (KUN)', 'One-stop to JED'],
+        ['rix', 'Riga (RIX)', 'One-stop to JED / MED'],
+        ['waw', 'Warsaw (WAW)', 'Wide choice of routings'] ] },
+      { key: 'luggage', short: 'Luggage', title: 'Luggage allowance', desc: 'Set your baggage. You can change this before you pay.', options: [
+        ['std', 'Standard', '23 kg checked + 7 kg cabin'],
+        ['extra', 'Extra bag', '+23 kg for gifts & Zamzam'],
+        ['light', 'Cabin only', 'Travel light, lower fare'] ] },
+      { key: 'planning', short: 'Planning', title: 'Pre-departure planning session', desc: 'Before you fly, we run an orientation so you arrive confident — rites, documents, health and what to pack.', options: [
+        ['video', 'Online video session', 'Live group call with a guide'],
+        ['inperson', 'In-person briefing', 'At a partner centre near you'],
+        ['self', 'Self-guided', 'Use the AUJ wizards & guides'] ] },
+      { key: 'motivation', short: 'Intention', title: 'Your intention & motivation', desc: 'A pilgrimage begins in the heart. Renew your intention (niyyah) sincerely, seek forgiveness, and travel with calm and patience. We carry the logistics so you can carry your worship.', options: [
+        ['ready', 'I renew my intention', 'Ready in heart and mind'] ] },
+      { key: 'hotel', short: 'Hotel', title: 'Hotel in Makkah', desc: 'Choose where you stay in Makkah. All are verified by real distance to Masjid al-Haram.', options: [
+        ['front', 'Haram-front 5\u2605', 'Clock Tower towers · 0\u2013250 m'],
+        ['jabal', 'Jabal Omar 5\u2605', 'Premium · 250\u2013500 m'],
+        ['ajyad', 'Ajyad 4\u2605', 'Great value · 500 m\u20131 km'] ] },
+      { key: 'travel', short: 'Travel', title: 'Transfers & travel', desc: 'How you move between the airport, your hotel and Madinah.', options: [
+        ['private', 'Private transfer', 'AUJ car, door to door'],
+        ['coach', 'Group coach', 'Travel with your group'],
+        ['rail', 'Haramain rail add-on', 'High-speed train Makkah\u2013Madinah'] ] },
+      { key: 'confirm', short: 'Confirm', title: 'Ready to go', desc: 'Here is your journey at a glance. Confirm to send it to your AUJ adviser, who finalises and issues your booking reference.', type: 'done' }
+    ];
+  }
+
+  renderVals() {
+    const S = this.steps();
+    const total = S.length;
+    const i = Math.max(0, Math.min(this.state.i, total - 1));
+    const st = S[i];
+    const choices = this.state.choices || {};
+    const pad2 = (n) => ('0' + n).slice(-2);
+
+    const rail = S.map((s, k) => {
+      const done = k < i || (s.type === 'names' ? !!(this.state.names || '').trim() : (s.type === 'done' ? false : !!choices[s.key]));
+      return {
+        mark: (k < i && (s.type === 'names' ? !!(this.state.names || '').trim() : (s.type === 'done' ? true : !!choices[s.key]))) ? '\u2713' : pad2(k + 1),
+        short: s.short, onClick: () => this.set({ i: k }),
+        dotBg: k === i ? '#0F5132' : (k < i ? '#DCEDE4' : '#fff'),
+        dotBorder: k === i ? '#0F5132' : (k < i ? '#9CC6AE' : '#E6DDCE'),
+        dotFg: k === i ? '#fff' : (k < i ? '#0F5132' : '#9A9183'),
+        labelColor: k === i ? '#0F5132' : '#9A9183'
+      };
+    });
+
+    const options = (st.options || []).map(([id, label, note]) => {
+      const on = choices[st.key] === id;
+      return {
+        label, note, mark: on ? '\u2713' : '',
+        onClick: () => this.set({ choices: { ...choices, [st.key]: id } }),
+        bg: on ? '#F0F6F2' : '#FFFDFA', border: on ? '#1C7A4F' : '#E6DDCE',
+        dotBg: on ? '#0F5132' : '#fff', dotBorder: on ? '#0F5132' : '#C9BCA6'
+      };
+    });
+
+    const labelFor = (key) => {
+      const step = S.find((x) => x.key === key);
+      const opt = step && step.options && step.options.find((o) => o[0] === choices[key]);
+      return opt ? opt[1] : '—';
+    };
+    const summary = [
+      { label: 'Pilgrims', value: (this.state.names || '').trim() ? ((this.state.names.trim().split('\n').filter(Boolean).length) + ' entered') : 'Not yet' },
+      { label: 'Insurance', value: labelFor('insurance') },
+      { label: 'Visa', value: labelFor('visa') },
+      { label: 'Departure', value: labelFor('tickets') },
+      { label: 'Luggage', value: labelFor('luggage') },
+      { label: 'Hotel in Makkah', value: labelFor('hotel') },
+      { label: 'Transfers', value: labelFor('travel') }
+    ];
+
+    return {
+      counter: pad2(i + 1) + ' / ' + pad2(total),
+      stepNum: pad2(i + 1), totalNum: pad2(total),
+      stepTitle: st.title, stepDesc: st.desc,
+      showNames: st.type === 'names', showDone: st.type === 'done', showOptions: !st.type || st.type === 'select' || (st.options && st.type !== 'names' && st.type !== 'done'),
+      options, summary,
+      names: this.state.names || '', onNames: (e) => this.set({ names: e.target.value }),
+      prev: () => this.set({ i: Math.max(0, i - 1) }),
+      next: () => this.set({ i: Math.min(total - 1, i + 1) }),
+      prevBg: i === 0 ? '#F4EEE3' : '#fff', prevColor: i === 0 ? '#B8AE9C' : '#156440', prevBorder: i === 0 ? '#EADFCE' : '#C9BCA6',
+      nextLabel: i === total - 1 ? 'Confirm booking' : (i === 0 ? 'Start' : 'Next')
+    };
+  }
+}
+</script>
+</body>
+</html>

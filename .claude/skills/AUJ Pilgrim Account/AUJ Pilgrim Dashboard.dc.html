@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;} body{margin:0;} ::selection{background:#C8A24A;color:#07301E;} input{font-family:inherit;}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:radial-gradient(120% 90% at 50% 0%, #FFFDF8 0%, #F3EEE4 100%);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:clamp(20px,4vw,44px) clamp(14px,4vw,32px);display:flex;flex-direction:column;align-items:center;">
+  <div style="width:100%;max-width:1060px;">
+
+    <!-- HEADER -->
+    <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:16px 20px;border-radius:20px;background:radial-gradient(130% 230% at 88% -70%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;box-shadow:0 24px 60px -34px rgba(5,28,18,0.6);">
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+      <div style="position:relative;display:flex;align-items:center;gap:13px;">
+        <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:10px;padding:6px 12px;box-shadow:0 10px 26px -8px rgba(0,0,0,0.45);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:clamp(46px,6.5vw,62px);width:auto;display:block;" /></span>
+        <div>
+          <div style="font-family:'IBM Plex Serif',serif;font-size:20px;font-weight:600;color:#fff;">Assalamu alaikum{{ greetName }}</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#BFE0CD;margin-top:2px;">PILGRIM DASHBOARD · {{ brn }}</div>
+        </div>
+      </div>
+      <div style="position:relative;display:flex;gap:5px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);padding:4px;border-radius:11px;">
+        <sc-for list="{{ profiles }}" as="p" hint-placeholder-count="3">
+          <button onClick="{{ p.onClick }}" style="cursor:pointer;font-family:inherit;font-size:12.5px;font-weight:600;padding:7px 14px;border-radius:8px;background:{{ p.bg }};color:{{ p.fg }};border:1px solid {{ p.border }};transition:all .15s;">{{ p.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- SUCCESS BAR -->
+    <div style="margin-top:14px;background:#fff;border:1px solid #E6DDCE;border-radius:16px;padding:14px 18px;box-shadow:0 1px 2px rgba(42,38,32,0.05);">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;"><span style="font-size:13.5px;font-weight:600;color:#2A2620;">Your booking progress</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:#156440;">{{ successPct }}%</span></div>
+      <div style="height:8px;border-radius:999px;background:#F1EADD;overflow:hidden;"><div style="height:100%;border-radius:999px;background:linear-gradient(90deg,#2A9468,#0F5132);width:{{ successPct }}%;"></div></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;">
+        <sc-for list="{{ stages }}" as="s" hint-placeholder-count="5">
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:{{ s.color }};background:{{ s.bg }};border:1px solid {{ s.border }};border-radius:999px;padding:5px 11px;"><span style="width:15px;height:15px;border-radius:50%;background:{{ s.dot }};color:#fff;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;">{{ s.mark }}</span>{{ s.label }}</span>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- TOP CARDS -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin-top:18px;">
+
+      <!-- PASSPORT -->
+      <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;">
+          <div><div style="font-size:16px;font-weight:600;color:#2A2620;">Passport scan</div><div style="font-size:12.5px;color:#7A7263;">Auto-extracted — check &amp; edit</div></div>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;color:{{ ppStatusColor }};background:{{ ppStatusBg }};border-radius:7px;padding:4px 9px;">{{ ppStatus }}</span>
+        </div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;">
+          <label style="position:relative;width:104px;height:132px;flex-shrink:0;border-radius:12px;border:2px dashed {{ photoBorder }};background:{{ photoBg }};overflow:hidden;cursor:pointer;display:flex;align-items:center;justify-content:center;text-align:center;">
+            <img ref="{{ photoRef }}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:{{ photoDisplay }};" />
+            <sc-if value="{{ noPhoto }}" hint-placeholder-val="{{ true }}"><span style="position:relative;font-size:11.5px;color:#9A8F7C;line-height:1.4;padding:8px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B5A88F" stroke-width="1.6" style="display:block;margin:0 auto 6px;"><rect x="3" y="6" width="18" height="13" rx="2"/><circle cx="9" cy="12" r="2.4"/><path d="M3 17l4.5-3 3 2 3.5-3 7 5"/></svg>Tap to scan passport</span></sc-if>
+            <input type="file" accept="image/*" onChange="{{ onPhoto }}" style="display:none;" />
+          </label>
+          <div style="flex:1;min-width:170px;display:flex;flex-direction:column;gap:8px;">
+            <sc-for list="{{ ppFields }}" as="f" hint-placeholder-count="5">
+              <div><div style="font-size:10.5px;font-weight:600;letter-spacing:0.05em;color:#7A7263;margin-bottom:3px;">{{ f.label }}</div><input value="{{ f.value }}" onInput="{{ f.onInput }}" placeholder="{{ f.ph }}" style="width:100%;background:#FBFAF8;border:1.5px solid #E6DDCE;border-radius:9px;padding:8px 10px;font-size:13.5px;color:#2A2620;outline:none;" style-focus="border-color:#2A9468;" /></div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="font-size:11.5px;color:#9A9183;margin-top:12px;line-height:1.5;">Upload a clear photo of the passport page — the fields are filled for you to check. Stored privately on your device.</div>
+      </div>
+
+      <!-- PAYMENT -->
+      <div style="background:linear-gradient(165deg,#0F5132,#06251A);border:1px solid #0A3D26;border-radius:20px;padding:20px;color:#EFF6F1;box-shadow:0 18px 44px -30px rgba(5,28,18,0.6);display:flex;flex-direction:column;">
+        <div style="font-size:16px;font-weight:600;">Confirm your place</div>
+        <div style="font-size:12.5px;color:#9CC6AE;margin-top:2px;">Pay the deposit to lock your booking</div>
+        <div style="display:flex;gap:5px;margin-top:14px;flex-wrap:wrap;">
+          <sc-for list="{{ curBtns }}" as="c" hint-placeholder-count="4"><button onClick="{{ c.onClick }}" style="cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;padding:6px 13px;border-radius:9px;background:{{ c.bg }};color:{{ c.fg }};border:1px solid {{ c.border }};transition:all .15s;">{{ c.label }}</button></sc-for>
+        </div>
+        <div style="margin-top:18px;"><div style="font-family:'IBM Plex Mono',monospace;font-size:40px;font-weight:600;line-height:1;">{{ deposit }}</div><div style="font-size:12.5px;color:#BFE0CD;margin-top:6px;">deposit now · {{ balance }} balance before travel</div></div>
+        <div style="height:8px;border-radius:999px;background:rgba(255,255,255,0.16);overflow:hidden;margin-top:16px;"><div style="height:100%;border-radius:999px;background:linear-gradient(90deg,#2A9468,#E8C36A);width:{{ payPct }}%;"></div></div>
+        <button onClick="{{ pay }}" style="margin-top:18px;cursor:pointer;background:{{ payBg }};color:{{ payFg }};border:none;border-radius:12px;font-family:inherit;font-size:15px;font-weight:600;padding:14px;box-shadow:0 8px 18px rgba(0,0,0,0.25);transition:all .15s;">{{ payLabel }}</button>
+        <div style="font-size:11.5px;color:#9CC6AE;margin-top:12px;line-height:1.5;">Secure SEPA / card payment. Demo only — no real charge is made here.</div>
+      </div>
+    </div>
+
+    <!-- WIZARDS GRID -->
+    <div style="margin-top:24px;">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.12em;color:#2F6F8F;white-space:nowrap;">YOUR TRIP · ALL TOOLS</span><span style="flex:1;height:1px;background:#E6DDCE;"></span></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;">
+        <sc-for list="{{ links }}" as="l" hint-placeholder-count="12">
+          <a href="{{ l.href }}" style="text-decoration:none;display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #E6DDCE;border-radius:14px;padding:13px 14px;box-shadow:0 1px 2px rgba(42,38,32,0.05);transition:transform .18s, box-shadow .18s, border-color .18s;" style-hover="transform:translateY(-3px);box-shadow:0 16px 34px -20px rgba(42,38,32,0.34);border-color:#C9BCA6;">
+            <span style="width:38px;height:38px;border-radius:11px;background:{{ l.iconBg }};color:{{ l.iconFg }};display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;flex-shrink:0;">{{ l.code }}</span>
+            <span style="flex:1;min-width:0;"><span style="display:block;font-size:13.5px;font-weight:600;color:#2A2620;line-height:1.2;">{{ l.label }}</span><span style="display:block;font-size:11.5px;color:#7A7263;margin-top:1px;">{{ l.note }}</span></span>
+            <span style="color:#156440;font-size:15px;">→</span>
+          </a>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;text-align:center;"><a href="AUJ Landing Cinematic.dc.html" style="text-decoration:none;font-size:13.5px;color:#7A7263;">← Back to AUJ home</a></div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1100,&quot;height&quot;:820}}">
+class Component extends DCLogic {
+  state = { profile: 'me', pp: {}, photo: '', paid: false, cur: 'EUR' };
+
+  componentDidMount() { try { const s = JSON.parse(localStorage.getItem('auj-dashboard') || 'null'); if (s && typeof s === 'object') this.setState(s); } catch (e) {} }
+  persist() { try { localStorage.setItem('auj-dashboard', JSON.stringify(this.state)); } catch (e) {} }
+  set(patch) { this.setState(patch, () => this.persist()); }
+
+  onPhoto(e) {
+    const file = e && e.target && e.target.files && e.target.files[0];
+    if (e && e.target) e.target.value = '';
+    if (!file) return;
+    const r = new FileReader();
+    r.onload = () => {
+      const pp = { ...this.state.pp };
+      // demo auto-extract: prefill any empty fields so the scan feels "read"
+      if (!pp.name) pp.name = 'AHMAD K. (check)';
+      if (!pp.number) pp.number = 'P1234567';
+      if (!pp.nat) pp.nat = 'Lithuania';
+      if (!pp.dob) pp.dob = '01.01.1990';
+      if (!pp.expiry) pp.expiry = '01.01.2030';
+      this.set({ photo: r.result, pp });
+    };
+    r.readAsDataURL(file);
+  }
+
+  renderVals() {
+    const st = this.state;
+    const pp = st.pp || {};
+    const profile = st.profile;
+    const hasPhoto = !!st.photo;
+
+    const FIELDS = [
+      ['name', 'FULL NAME', 'As in passport'],
+      ['number', 'PASSPORT NO.', 'P1234567'],
+      ['nat', 'NATIONALITY', 'Country'],
+      ['dob', 'DATE OF BIRTH', 'DD.MM.YYYY'],
+      ['expiry', 'EXPIRY', 'DD.MM.YYYY']
+    ];
+    const ppFields = FIELDS.map(([k, label, ph]) => ({
+      label, ph, value: pp[k] || '',
+      onInput: (e) => this.set({ pp: { ...pp, [k]: e.target.value } })
+    }));
+    const filled = FIELDS.filter(([k]) => (pp[k] || '').trim()).length;
+
+    const PROF = [['me', 'Me'], ['family', 'Family'], ['group', 'Group']];
+    const profiles = PROF.map(([k, label]) => ({
+      label, onClick: () => this.set({ profile: k }),
+      bg: profile === k ? 'rgba(255,255,255,0.18)' : 'transparent', fg: profile === k ? '#fff' : '#BFE0CD',
+      border: profile === k ? 'rgba(255,255,255,0.32)' : 'transparent'
+    }));
+
+    const dep = profile === 'group' ? 1500 : (profile === 'family' ? 900 : 300);
+    const pkg = profile === 'group' ? 9550 : (profile === 'family' ? 5730 : 1910);
+    const CUR = { EUR: ['\u20AC', 1], USD: ['$', 1.08], SAR: ['\uFDFC ', 4.05], PKR: ['\u20A8', 310.8] };
+    const cur = this.state.cur || 'EUR';
+    const eur = (n) => CUR[cur][0] + Math.round(n * CUR[cur][1]).toLocaleString('en-US');
+    const curBtns = ['EUR', 'USD', 'SAR', 'PKR'].map((c) => ({ label: c, onClick: () => this.set({ cur: c }), bg: cur === c ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.06)', fg: cur === c ? '#fff' : '#BFE0CD', border: cur === c ? 'rgba(255,255,255,0.34)' : 'rgba(255,255,255,0.14)' }));
+    const f5 = filled >= 5;
+    const stageRaw = [['Registered', true], ['Passport', f5], ['Deposit', !!this.state.paid], ['Visa started', f5 && !!this.state.paid], ['Info sent', f5 && !!this.state.paid]];
+    const stages = stageRaw.map((s) => ({ label: s[0], mark: s[1] ? '\u2713' : '', color: s[1] ? '#0F5132' : '#9A9183', bg: s[1] ? '#F0F6F2' : '#FAF6EF', border: s[1] ? '#CBE6D6' : '#EADFCE', dot: s[1] ? '#0F5132' : '#C9BCA6' }));
+    const successPct = Math.round(stageRaw.filter((s) => s[1]).length / stageRaw.length * 100);
+
+    const links = [
+      ['Booking process', 'Start & confirm', 'AUJ Booking Process.dc.html', 'BK', '#DCEDE4', '#0F5132'],
+      ['Smart planner', '7-step planner', 'AUJ Smart Planner.dc.html', 'SP', '#DCEDE4', '#0F5132'],
+      ['Financial planner', 'Package + private', 'AUJ Financial Planner.dc.html', 'FN', '#F7EBD3', '#9A6512'],
+      ['Packing organizer', 'Checklist by stay', 'AUJ Packing Organizer.dc.html', 'PK', '#DCEDE4', '#0F5132'],
+      ['Day planner', 'Jamaat + weather', 'AUJ Day Planner.dc.html', 'DP', '#E2EEF3', '#235B73'],
+      ['Personal diary', 'Quran · nafl · dua', 'AUJ Personal Diary.dc.html', 'DR', '#DCEDE4', '#0F5132'],
+      ['Virtual tour', '15 guided steps', 'AUJ Virtual Tour.dc.html', 'VT', '#E2EEF3', '#235B73'],
+      ['Airport wizard', 'Check-in to hotel', 'AUJ Airport Wizard.dc.html', 'AP', '#E2EEF3', '#235B73'],
+      ['Luggage rules', 'Saudi customs', 'AUJ Luggage Wizard.dc.html', 'LG', '#F7EBD3', '#9A6512'],
+      ['Makka ziyarat', '16 sacred sites', 'AUJ Makka Ziyarat Wizard.dc.html', 'MZ', '#DCEDE4', '#0F5132'],
+      ['Madina ziyarat', '14 sacred sites', 'AUJ Madina Ziyarat Wizard.dc.html', 'MD', '#DCEDE4', '#0F5132'],
+      ['Makkah hotels', 'By distance', 'AUJ Makkah Hotels.dc.html', 'HM', '#F7EBD3', '#9A6512'],
+      ['Madinah hotels', 'By distance', 'AUJ Madina Hotels.dc.html', 'HN', '#F7EBD3', '#9A6512'],
+      ['Food & dining', 'Eats + delivery', 'AUJ Food Guide.dc.html', 'FD', '#F7EBD3', '#9A6512'],
+      ['Transport', 'Fares + companies', 'AUJ Transport Guide.dc.html', 'TR', '#E2EEF3', '#235B73'],
+      ['Connectivity', 'SIM + location', 'AUJ Connectivity Guide.dc.html', 'CN', '#E2EEF3', '#235B73'],
+      ['Gifts & shopping', 'Dates · Zamzam', 'AUJ Gifts Guide.dc.html', 'GF', '#F7EBD3', '#9A6512'],
+      ['Laundry', 'Wash & iron', 'AUJ Laundry Guide.dc.html', 'LD', '#E2EEF3', '#235B73'],
+      ['Hospitals & care', 'Clinics + pharmacy', 'AUJ Hospitals Guide.dc.html', 'HP', '#FBF1EF', '#B23A2E'],
+      ['Helpline & SOS', '997 · register', 'AUJ Helpline Guide.dc.html', 'SO', '#FBF1EF', '#B23A2E']
+    ].map(([label, note, href, code, iconBg, iconFg]) => ({ label, note, href, code, iconBg, iconFg }));
+
+    return {
+      greetName: pp.name ? (', ' + pp.name.split(' ')[0].replace(/[^A-Za-z].*$/, '')) : '',
+      brn: 'BRN-26-VNO-' + (profile === 'group' ? '00712' : (profile === 'family' ? '00509' : '00481')),
+      profiles,
+      ppStatus: filled >= 5 ? 'COMPLETE' : (hasPhoto ? 'CHECK FIELDS' : 'NOT SCANNED'),
+      ppStatusColor: filled >= 5 ? '#0F5132' : '#9A6512', ppStatusBg: filled >= 5 ? '#DCEDE4' : '#FBF4E6',
+      ppFields,
+      photoRef: (el) => { if (el && st.photo && el.src !== st.photo) el.src = st.photo; },
+      photoDisplay: hasPhoto ? 'block' : 'none', noPhoto: !hasPhoto,
+      photoBorder: hasPhoto ? '#0F5132' : '#D9CFBE', photoBg: hasPhoto ? '#000' : '#FAF6EF',
+      onPhoto: (e) => this.onPhoto(e),
+      deposit: eur(dep), balance: eur(pkg - dep), payPct: st.paid ? 100 : Math.round((dep / pkg) * 100),
+      pay: () => this.set({ paid: !st.paid }),
+      payLabel: st.paid ? 'Deposit paid \u2713 — undo' : ('Pay ' + eur(dep) + ' deposit'),
+      payBg: st.paid ? 'rgba(255,255,255,0.16)' : '#C8A24A', payFg: st.paid ? '#fff' : '#07301E',
+      links, curBtns, stages, successPct
+    };
+  }
+}
+</script>
+</body>
+</html>

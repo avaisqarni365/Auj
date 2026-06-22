@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;} body{margin:0;} ::selection{background:#C8A24A;color:#07301E;}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:radial-gradient(120% 90% at 50% 0%, #FFFDF8 0%, #F3EEE4 100%);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:clamp(20px,4vw,44px) clamp(14px,4vw,32px);display:flex;flex-direction:column;align-items:center;">
+  <div style="width:100%;max-width:1040px;">
+
+    <!-- HEADER -->
+    <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:18px 22px;border-radius:20px;background:radial-gradient(130% 230% at 88% -60%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;box-shadow:0 24px 60px -34px rgba(5,28,18,0.6);color:#EFF6F1;">
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+      <div style="position:relative;display:flex;align-items:center;gap:14px;">
+        <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:11px;padding:6px 12px;box-shadow:0 10px 26px -8px rgba(0,0,0,0.45);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:clamp(46px,6.5vw,62px);width:auto;display:block;" /></span>
+        <div>
+          <div style="font-family:'IBM Plex Serif',serif;font-size:20px;font-weight:600;color:#fff;">Connector Mock</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#BFE0CD;margin-top:3px;">IN-MEMORY · UNBLOCKS EVERY MODULE · OFFLINE</div>
+        </div>
+      </div>
+      <span style="position:relative;display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:#07301E;background:#7CE2B0;border-radius:999px;padding:6px 13px;">default in dev &amp; test</span>
+    </div>
+
+    <!-- EDGE TOGGLES -->
+    <div style="background:#fff;border:1px solid #E6DDCE;border-radius:18px;padding:15px 18px;box-shadow:0 1px 2px rgba(42,38,32,0.05);margin-top:16px;display:flex;align-items:center;gap:13px;flex-wrap:wrap;">
+      <span style="font-size:13px;font-weight:600;color:#2A2620;">Simulate edge case</span>
+      <sc-for list="{{ edgeBtns }}" as="e" hint-placeholder-count="4"><button onClick="{{ e.onClick }}" style="cursor:pointer;font-family:inherit;font-size:12.5px;font-weight:600;padding:8px 14px;border-radius:10px;background:{{ e.bg }};color:{{ e.fg }};border:1.5px solid {{ e.border }};transition:all .15s;" style-active="transform:scale(0.97)">{{ e.label }}</button></sc-for>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1.1fr;gap:18px;margin-top:18px;align-items:start;">
+      <!-- DEMO FLOW -->
+      <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;"><div style="font-size:16px;font-weight:600;color:#2A2620;">Scripted demo</div><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#7A7263;">step {{ stepLabel }}</span></div>
+        <div style="display:flex;flex-direction:column;gap:7px;">
+          <sc-for list="{{ flow }}" as="s" hint-placeholder-count="6">
+            <div style="display:flex;align-items:center;gap:12px;border:1px solid {{ s.border }};background:{{ s.bg }};border-radius:12px;padding:12px 13px;">
+              <span style="width:26px;height:26px;border-radius:50%;background:{{ s.dotBg }};color:{{ s.dotFg }};display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;flex-shrink:0;">{{ s.mark }}</span>
+              <div style="flex:1;min-width:0;"><div style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;color:#2A2620;">{{ s.call }}</div><div style="font-size:11.5px;color:#7A7263;">{{ s.out }}</div></div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;gap:9px;margin-top:15px;">
+          <button onClick="{{ next }}" style="flex:1;cursor:pointer;background:#0F5132;color:#fff;border:none;border-radius:11px;font-family:inherit;font-size:14px;font-weight:600;padding:12px;box-shadow:0 8px 18px rgba(15,81,50,0.26);transition:all .15s;" style-active="transform:scale(0.98)">{{ runLabel }}</button>
+          <button onClick="{{ reset }}" style="cursor:pointer;background:#fff;color:#156440;border:1.5px solid #C9BCA6;border-radius:11px;font-family:inherit;font-size:14px;font-weight:600;padding:12px 16px;">Reset</button>
+        </div>
+      </div>
+
+      <!-- CATALOG -->
+      <div style="background:#fff;border:1px solid #E6DDCE;border-radius:20px;padding:20px;box-shadow:0 18px 44px -30px rgba(42,38,32,0.4);">
+        <div style="font-size:16px;font-weight:600;color:#2A2620;margin-bottom:4px;">Seed catalog</div>
+        <div style="font-size:12.5px;color:#7A7263;margin-bottom:14px;">Deterministic hotels — net prices in SAR, mixed Nusuk approval.</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <sc-for list="{{ catalog }}" as="h" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:12px;border:1px solid #F1EADD;border-radius:12px;padding:11px 13px;">
+              <span style="width:34px;height:34px;border-radius:9px;background:#DCEDE4;color:#0F5132;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;flex-shrink:0;">{{ h.stars }}</span>
+              <div style="flex:1;min-width:0;"><div style="font-size:13.5px;font-weight:600;color:#2A2620;">{{ h.name }}</div><div style="font-size:11.5px;color:#7A7263;">{{ h.city }} · {{ h.dist }}</div></div>
+              <span style="font-size:10.5px;font-weight:600;color:{{ h.apFg }};background:{{ h.apBg }};border-radius:6px;padding:3px 7px;white-space:nowrap;">{{ h.approved }}</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;color:#0F5132;white-space:nowrap;">{{ h.net }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top:13px;display:flex;align-items:center;gap:10px;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:11px;padding:10px 13px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:#0F5132;">✓</span><span style="font-size:12px;color:#2A4A39;">Shared contract-tests green · 100% of interface implemented</span></div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;display:flex;align-items:flex-start;gap:11px;background:#FBF4E6;border:1px solid #F0E2C4;border-radius:14px;padding:13px 16px;">
+      <span style="width:24px;height:24px;border-radius:7px;background:#B5791E;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;">i</span>
+      <span style="font-size:12.5px;color:#4A4337;line-height:1.55;">No network, no persistence, no real pricing — deterministic in‑memory data so every product module builds and tests offline. Drop‑in for <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;">connector-saudi</span> when real access lands.</span>
+    </div>
+
+    <div style="margin-top:20px;text-align:center;"><a href="AUJ Landing Cinematic.dc.html" style="text-decoration:none;font-size:13.5px;color:#7A7263;">← Back to AUJ home</a></div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1080,&quot;height&quot;:760}}">
+class Component extends DCLogic {
+  state = { step: 0, edge: 'none' };
+
+  steps() {
+    const e = this.state.edge;
+    return [
+      { call: 'searchHotels(MAKKAH)', okOut: '4 offers · 2 Nusuk-approved' },
+      { call: 'hold(offerIds, pilgrims)', okOut: 'holdId · expires in 15:00', failAt: 'expiry', failOut: 'HoldExpiredError — hold no longer valid' },
+      { call: 'confirm(holdId, payment)', okOut: 'status CONFIRMED · BRN per item' },
+      { call: 'BRN issued', okOut: 'BRN-26-VNO-00481 (verbatim)' },
+      { call: 'createVisaApplication(...)', okOut: 'route EVISA_DIRECT · status DRAFT', failAt: 'visa', failOut: 'status REJECTED — agent channel required' },
+      { call: 'getVisaStatus() ×2', okOut: 'DRAFT → SUBMITTED → ISSUED' }
+    ];
+  }
+
+  renderVals() {
+    const S = this.steps();
+    const step = this.state.step;
+    const edge = this.state.edge;
+
+    const flow = S.map((s, k) => {
+      const reached = k < step;
+      const failed = reached && s.failAt === edge;
+      const isSoldOut = edge === 'soldout' && k === 0 && reached;
+      return {
+        call: s.call,
+        out: !reached ? 'pending' : (failed ? s.failOut : (isSoldOut ? '0 offers — hotel sold out' : s.okOut)),
+        mark: !reached ? (k + 1) : (failed || isSoldOut ? '\u2715' : '\u2713'),
+        bg: !reached ? '#FFFDFA' : (failed || isSoldOut ? '#FBF1EF' : '#F0F6F2'),
+        border: !reached ? '#F1EADD' : (failed || isSoldOut ? '#F0D9D3' : '#DCEDE4'),
+        dotBg: !reached ? '#fff' : (failed || isSoldOut ? '#B23A2E' : '#0F5132'),
+        dotFg: !reached ? '#9A9183' : '#fff'
+      };
+    });
+
+    const edges = [['none', 'None'], ['expiry', 'Hold expiry'], ['visa', 'Rejected visa'], ['soldout', 'Sold-out hotel']];
+    const edgeBtns = edges.map(([k, label]) => ({
+      label, onClick: () => this.setState({ edge: k, step: 0 }),
+      bg: edge === k ? '#0F5132' : '#FAF6EF', fg: edge === k ? '#fff' : '#4A4337',
+      border: edge === k ? '#0F5132' : '#E6DDCE'
+    }));
+
+    const catalog = [
+      { name: 'Swissôtel Makkah', city: 'Makkah', dist: '190 m', stars: '5★', approved: 'Nusuk ✓', apFg: '#0F5132', apBg: '#DCEDE4', net: '﷼ 920' },
+      { name: 'Hilton Suites', city: 'Makkah', dist: '480 m', stars: '5★', approved: 'Nusuk ✓', apFg: '#0F5132', apBg: '#DCEDE4', net: '﷼ 760' },
+      { name: 'Anjum Hotel', city: 'Makkah', dist: '240 m', stars: '4★', approved: 'not appr.', apFg: '#9A6512', apBg: '#FBF4E6', net: '﷼ 540' },
+      { name: 'Dar Al Taqwa', city: 'Madinah', dist: '120 m', stars: '5★', approved: 'Nusuk ✓', apFg: '#0F5132', apBg: '#DCEDE4', net: '﷼ 880' }
+    ];
+
+    return {
+      flow, catalog,
+      stepLabel: Math.min(step, S.length) + '/' + S.length,
+      next: () => this.setState({ step: Math.min(S.length, step + 1) }),
+      reset: () => this.setState({ step: 0 }),
+      runLabel: step >= S.length ? 'Demo complete' : (step === 0 ? 'Run demo' : 'Next step'),
+      edgeBtns
+    };
+  }
+}
+</script>
+</body>
+</html>

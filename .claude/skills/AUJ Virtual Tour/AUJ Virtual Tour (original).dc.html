@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;}
+  ::selection{background:#C8A24A;color:#07301E;}
+  @keyframes auj-twinkle{0%,100%{opacity:.15;transform:scale(.7)}50%{opacity:1;transform:scale(1)}}
+  @keyframes auj-glow{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.85;transform:scale(1.12)}}
+  @keyframes auj-dhint{0%,100%{transform:translateX(-4px)}50%{transform:translateX(4px)}}
+  @keyframes auj-detin{from{transform:translateY(12px)}to{transform:none}}
+  @media (max-width:760px){ .auj-tabs{flex-wrap:wrap!important;} }
+  @media (prefers-reduced-motion: reduce){*{animation:none!important}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:radial-gradient(120% 90% at 50% 0%, #F4EEE3 0%, #ECE7DD 100%);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:clamp(20px,4vw,44px) clamp(14px,4vw,32px);">
+  <div style="max-width:980px;margin:0 auto;">
+
+    <!-- TABS -->
+    <div class="auj-tabs" style="display:flex;gap:10px;justify-content:center;margin-bottom:clamp(22px,3vw,32px);">
+      <div style="display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;padding:10px 17px;border-radius:999px;background:rgba(255,255,255,0.55);color:#7A7263;border:1px solid #E6DDCE;">
+        <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="#7A7263" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 18V3l9 1.5L5 6"/><circle cx="14" cy="15" r="2.4"/><path d="M14 12.6V6"/></svg>Smart planner
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;padding:10px 17px;border-radius:999px;background:rgba(255,255,255,0.55);color:#7A7263;border:1px solid #E6DDCE;">
+        <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="#7A7263" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6"/><path d="M14 14l3.5 3.5"/></svg>Search packages
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;padding:10px 17px;border-radius:999px;background:rgba(255,255,255,0.55);color:#7A7263;border:1px solid #E6DDCE;">
+        <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="#7A7263" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5A1.5 1.5 0 0 1 4.5 3H10v14H4.5A1.5 1.5 0 0 1 3 15.5z"/><path d="M17 4.5A1.5 1.5 0 0 0 15.5 3H10v14h5.5A1.5 1.5 0 0 0 17 15.5z"/></svg>Umrah Guide
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;padding:10px 17px;border-radius:999px;background:#fff;color:#0F5132;border:1px solid #fff;box-shadow:0 6px 16px rgba(15,81,50,0.12);">
+        <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="#0F5132" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M8 7l5 3-5 3z" fill="#0F5132" stroke="none"/></svg>Virtual tour
+      </div>
+    </div>
+
+    <!-- HEADER -->
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px;">
+      <div>
+        <h1 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(30px,4vw,42px);letter-spacing:-0.02em;margin:0 0 6px;color:#2A2620;">Virtual tour</h1>
+        <p style="font-size:15.5px;color:#7A7263;margin:0;">A calm walk-through of the holy places.</p>
+      </div>
+      <a href="#" style="text-decoration:none;display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid #C9BCA6;border-radius:999px;font-size:14px;font-weight:600;color:#156440;padding:11px 18px;transition:all .15s;" style-hover="border-color:#2A9468;background:#F4FBF6;">Step-by-step guide <span>→</span></a>
+    </div>
+
+    <!-- PANORAMA -->
+    <div data-pano onMouseDown="{{ onPanoDown }}" onMouseMove="{{ onPanoMove }}" onMouseUp="{{ onPanoEnd }}" onMouseLeave="{{ onPanoEnd }}" onTouchStart="{{ onPanoDown }}" onTouchMove="{{ onPanoMove }}" onTouchEnd="{{ onPanoEnd }}" style="position:relative;height:clamp(320px,42vw,460px);border-radius:22px;overflow:hidden;cursor:grab;border:1px solid #E6DDCE;box-shadow:0 30px 70px -34px rgba(42,38,32,0.5);user-select:none;">
+      <img data-pano-inner ref="{{ innerRef }}" src="assets/tour/panorama.png" draggable="false" style="position:absolute;top:0;left:0;height:100%;width:170%;object-fit:cover;object-position:center 42%;transform:translateX(0);will-change:transform;display:block;user-select:none;pointer-events:none;" />
+      <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top, rgba(8,28,18,0.6), transparent 44%), linear-gradient(105deg, rgba(8,28,18,0.3), transparent 36%);"></div>
+
+      <!-- label -->
+      <div style="position:absolute;left:18px;bottom:16px;pointer-events:none;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.8);margin-bottom:5px;">MAKKAH &amp; MADINAH · 360° VIEW</div>
+        <div style="font-family:'IBM Plex Serif',serif;font-size:clamp(20px,2.6vw,26px);font-weight:600;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,0.5);">{{ station.title }}</div>
+      </div>
+      <!-- drag hint -->
+      <div style="position:absolute;left:50%;bottom:16px;transform:translateX(-50%);display:inline-flex;align-items:center;gap:8px;background:rgba(6,36,24,0.55);backdrop-filter:blur(6px);color:#EFF6F1;font-size:12.5px;font-weight:500;padding:7px 14px;border-radius:999px;pointer-events:none;">
+        <span style="display:inline-block;animation:auj-dhint 2.4s ease-in-out infinite;">↔</span> Drag to look around
+      </div>
+      <!-- step pill -->
+      <div style="position:absolute;right:16px;top:16px;background:rgba(255,255,255,0.92);color:#0F5132;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;padding:6px 12px;border-radius:999px;pointer-events:none;">{{ stepLabel }}</div>
+    </div>
+
+    <!-- NUMBERED STEPPER -->
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:22px 0 24px;">
+      <sc-for list="{{ dots }}" as="d" hint-placeholder-count="15">
+        <button onClick="{{ d.onClick }}" title="{{ d.label }}" style="cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;width:34px;height:34px;border-radius:50%;background:{{ d.bg }};color:{{ d.fg }};border:2px solid {{ d.border }};display:flex;align-items:center;justify-content:center;transition:all .18s;" style-hover="border-color:#2A9468;">{{ d.mark }}</button>
+      </sc-for>
+    </div>
+
+    <!-- STEP VIEWER -->
+    <div data-detail>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px;">
+        <div style="width:54px;height:54px;border-radius:14px;background:#0F5132;color:#fff;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:23px;font-weight:600;flex-shrink:0;box-shadow:0 10px 24px -10px rgba(15,81,50,0.5);">{{ station.num }}</div>
+        <div style="flex:1;min-width:180px;">
+          <h2 style="font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(21px,2.8vw,29px);letter-spacing:-0.02em;line-height:1.1;margin:0;color:#2A2620;">{{ station.title }}</h2>
+          <div style="font-size:14.5px;color:#B5791E;font-weight:600;margin-top:3px;">{{ station.subtitle }}</div>
+        </div>
+        <div style="display:flex;gap:9px;">
+          <button onClick="{{ onListen }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:8px;background:{{ listenBg }};color:{{ listenFg }};border:1.5px solid {{ listenBorder }};border-radius:11px;font-family:inherit;font-size:13.5px;font-weight:600;padding:10px 15px;transition:all .15s;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="{{ listenFg }}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 6a8 8 0 0 1 0 12"/></svg>{{ listenLabel }}
+          </button>
+          <button onClick="{{ toggleDua }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:8px;background:{{ duaBg }};color:{{ duaFg }};border:1.5px solid {{ duaBorder }};border-radius:11px;font-family:inherit;font-size:13.5px;font-weight:600;padding:10px 15px;transition:all .15s;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="{{ duaFg }}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4c2.4-1.9 6-1.4 6 1.6 0 2.2-2.6 3.9-6 5.9-3.4-2-6-3.7-6-5.9 0-3 3.6-3.5 6-1.6z"/><path d="M12 13v7M9 17h6"/></svg>Du‘a
+          </button>
+        </div>
+      </div>
+
+      <img ref="{{ imgRef }}" alt="{{ station.title }}" style="width:100%;height:auto;display:block;border-radius:18px;border:1px solid #E6DDCE;box-shadow:0 26px 60px -30px rgba(42,38,32,0.5);background:#ECE7DD;min-height:140px;" />
+
+      <sc-if value="{{ showDua }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:18px;background:linear-gradient(135deg,#0A3D26,#06251A);border:1px solid #0F5132;border-radius:18px;padding:clamp(20px,3vw,28px);color:#EFF6F1;position:relative;overflow:hidden;">
+          <div style="position:absolute;top:-40px;right:-30px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle, rgba(200,162,74,0.18), transparent 70%);"></div>
+          <div style="position:relative;">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#E8C36A;">DU‘A FOR THIS STEP</div>
+              <button onClick="{{ onPlayDua }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.22);color:#fff;border-radius:999px;font-family:inherit;font-size:12.5px;font-weight:600;padding:7px 13px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff" stroke="none"><path d="M8 5v14l11-7z"/></svg>Play meaning</button>
+            </div>
+            <sc-if value="{{ hasDua }}" hint-placeholder-val="{{ true }}">
+              <div dir="rtl" style="font-family:'IBM Plex Serif',serif;font-size:clamp(22px,3vw,30px);line-height:1.75;margin-bottom:14px;color:#fff;">{{ dua.ar }}</div>
+              <div style="font-size:14.5px;font-style:italic;color:#BFE0CD;margin-bottom:8px;">{{ dua.tr }}</div>
+              <div style="font-size:14.5px;line-height:1.6;color:#EFF6F1;">{{ dua.en }}</div>
+            </sc-if>
+            <sc-if value="{{ noDua }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:15px;line-height:1.65;color:#C6DDCF;">There is no fixed du‘a for this step — make your own heartfelt supplication and dhikr, and send blessings upon the Prophet ﷺ.</div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:22px;">
+        <button onClick="{{ prev }}" style="cursor:{{ prevCursor }};background:#fff;border:1.5px solid #C9BCA6;border-radius:12px;font-family:inherit;font-size:14px;font-weight:600;color:{{ prevColor }};padding:13px 20px;display:inline-flex;align-items:center;gap:7px;transition:all .15s;">‹ {{ prevLabel }}</button>
+        <button onClick="{{ next }}" style="cursor:{{ nextCursor }};background:#0F5132;border:none;border-radius:12px;font-family:inherit;font-size:14.5px;font-weight:600;color:#fff;padding:13px 24px;display:inline-flex;align-items:center;gap:8px;box-shadow:0 8px 18px rgba(15,81,50,0.26);transition:all .15s;opacity:{{ nextOpacity }};" style-hover="background:#156440;">{{ nextLabel }} <span>→</span></button>
+      </div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1000,&quot;height&quot;:860}}">
+class Component extends DCLogic {
+  state = { i: 0, showDua: false };
+
+  animDetail() {
+    requestAnimationFrame(() => {
+      var el = document.querySelector('[data-detail]');
+      if (!el) return;
+      el.style.animation = 'none'; void el.offsetHeight;
+      el.style.animation = 'auj-detin .45s cubic-bezier(.2,.7,.2,1)';
+      var clear = function(){ el.style.animation = ''; };
+      el.addEventListener('animationend', clear, { once: true });
+      setTimeout(clear, 600);
+    });
+  }
+  go(n) { const t = this.stations().length; this.stopVoice(); this.setState({ i: Math.max(0, Math.min(t - 1, n)) }); this.animDetail(); }
+
+  stations() {
+    return [
+      { label: 'Ihram', img: 'assets/tour/s1.png', kicker: '01 · INTENTION & IHRAM', title: 'Niyyah & Ihram', subtitle: 'Enter the sacred state at the Miqat',
+        body: 'At the Miqat you make your intention and enter Ihram \u2014 the white garments and the inward state of devotion that begin your Umrah.',
+        tips: [{ title: 'Make your Niyyah', body: 'Form a sincere intention for Umrah before crossing the Miqat.' }, { title: 'Don Ihram & pray', body: 'Two white cloths (men) or modest dress (women); pray two rak\u2018ahs.' }, { title: 'Begin the Talbiyah', body: '\u201CLabbayk Allahumma labbayk\u201D \u2014 recited often from here on.' }] },
+      { label: 'Talbiyah', img: 'assets/tour/s2.png', kicker: '02 · ANSWER THE CALL', title: 'The Talbiyah', subtitle: 'Proclaim your response to Allah',
+        body: 'From the Miqat onward, recite the Talbiyah often as you travel toward Makkah \u2014 men aloud, women softly.',
+        tips: [{ title: 'Keep your heart present', body: 'Let each Talbiyah renew your intention and humility.' }, { title: 'Recite often', body: 'Especially when ascending, descending or meeting others.' }, { title: 'The words', body: '\u201CHere I am, O Allah, here I am. You have no partner\u2026\u201D' }] },
+      { label: 'Enter Haram', img: 'assets/tour/s3.png', kicker: '03 · ARRIVING', title: 'Enter Masjid al-Haram', subtitle: 'Step into the Sacred Mosque',
+        body: 'Approach the gates of the Sacred Mosque in Makkah and enter with calm, humility and presence.',
+        tips: [{ title: 'Right foot first', body: 'Enter leading with the right foot, unhurried.' }, { title: 'Du\u2018a on entering', body: 'Recite the supplication for entering a mosque.' }, { title: 'Note your gate', body: 'Remember your gate number to regroup easily after.' }] },
+      { label: 'See the Kaaba', img: 'assets/tour/s4.png', kicker: '04 · FIRST SIGHT', title: 'First sight of the Kaaba', subtitle: 'Raise your hands and make du\u2018a',
+        body: 'On first seeing the Kaaba, pause \u2014 this is a moment in which du\u2018a is answered. Speak from the heart.',
+        tips: [{ title: 'Be present', body: 'Let the moment settle before moving on.' }, { title: 'Make du\u2018a', body: 'Ask for whatever you wish, for this life and the next.' }, { title: 'Send salah', body: 'Send blessings upon the Prophet \uFDFA.' }] },
+      { label: 'Prepare', img: 'assets/tour/s5.png', kicker: '05 · BEFORE TAWAF', title: 'Prepare for Tawaf', subtitle: 'Idtiba & facing the Black Stone',
+        body: 'Men uncover the right shoulder (Idtiba). Stop the Talbiyah and move toward the Black Stone to begin.',
+        tips: [{ title: 'Idtiba', body: 'Men pass the Ihram under the right arm, baring the shoulder.' }, { title: 'Stop the Talbiyah', body: 'It ends as Tawaf begins.' }, { title: 'Face the Black Stone', body: 'Align with the Hajar al-Aswad corner to start.' }] },
+      { label: 'Tawaf', img: 'assets/tour/s6.png', kicker: '06 · TAWAF', title: 'Tawaf \u2014 start your 7 circles', subtitle: 'Walk around the Kaaba seven times',
+        body: 'Begin at the Black Stone and circle the Kaaba anticlockwise, keeping it on your left. This is the central rite of Umrah.',
+        tips: [{ title: 'Start at the Black Stone', body: 'Face it and say \u201CBismillah, Allahu Akbar.\u201D' }, { title: 'Kaaba on your left', body: 'Men do Raml (brisk pace) in the first three rounds.' }, { title: 'Pray freely', body: 'There is no fixed du\u2018a \u2014 speak in your own words.' }] },
+      { label: '7 Rounds', img: 'assets/tour/s7.png', kicker: '07 · TAWAF', title: 'Complete 7 rounds', subtitle: 'Finish all seven circuits',
+        body: 'Continue around the Kaaba until you have completed seven full rounds, each beginning and ending at the Black Stone.',
+        tips: [{ title: 'Pass the Black Stone', body: 'Gesture toward it at the start of each round.' }, { title: 'Normal pace', body: 'Do not push or harm other pilgrims.' }, { title: 'Stay focused', body: 'Recite Qur\u2019an, make dhikr and du\u2018a.' }] },
+      { label: '2 Rak\u2018ahs', img: 'assets/tour/s8.png', kicker: '08 · AFTER TAWAF', title: 'Pray 2 Rak\u2018ahs', subtitle: 'Behind Maqam Ibrahim, if possible',
+        body: 'After Tawaf, pray two rak\u2018ahs near the Station of Ibrahim \u2014 or anywhere in the mosque if it is crowded.',
+        tips: [{ title: 'Intention', body: 'Intend two voluntary rak\u2018ahs.' }, { title: 'Recite', body: 'al-Fatiha, then al-Kafirun (1st) and al-Ikhlas (2nd).' }, { title: 'Du\u2018a in Sujood', body: 'The closest position to Allah \u2014 ask sincerely.' }] },
+      { label: 'Zamzam', img: 'assets/tour/s9.png', kicker: '09 · BLESSED WATER', title: 'Drink Zamzam', subtitle: 'Drink of the blessed well',
+        body: 'Drink your fill of Zamzam, facing the Qibla, and make du\u2018a \u2014 it is \u201Cfor whatever it is drunk for.\u201D',
+        tips: [{ title: 'Face the Qibla', body: 'Drink in three breaths where possible.' }, { title: 'Drink to your fill', body: 'It is sunnah to drink generously.' }, { title: 'Ask as you drink', body: 'Make your most heartfelt du\u2018a.' }] },
+      { label: 'Sa\u2018i', img: 'assets/tour/s10.png', kicker: '10 · SA\u2018I', title: 'Sa\u2018i \u2014 Safa & Marwa', subtitle: 'Seven circuits between the hills',
+        body: 'Walk seven times between Safa and Marwa, starting at Safa and ending at Marwa, recalling Hajar\u2019s search for water.',
+        tips: [{ title: 'Begin at Safa', body: 'Face the Kaaba and make du\u2018a before each trip.' }, { title: 'Seven trips', body: 'Safa\u2192Marwa is one; men jog between the green markers.' }, { title: 'Remember Hajar', body: 'Reflect on her trust and patience.' }] },
+      { label: 'Complete Sa\u2018i', img: 'assets/tour/s11.png', kicker: '11 · SA\u2018I DONE', title: 'Complete your Sa\u2018i', subtitle: 'End at Marwa',
+        body: 'On reaching Marwa the seventh time, your Sa\u2018i is complete. Ask Allah to accept it from you.',
+        tips: [{ title: 'Count carefully', body: 'Safa\u2192Marwa counts as one circuit.' }, { title: 'Stay patient', body: 'Sa\u2018i is an act of worship \u2014 keep it sincere.' }, { title: 'Du\u2018a of acceptance', body: 'Ask Allah to accept your effort.' }] },
+      { label: 'Halq / Taqsir', img: 'assets/tour/s12.png', kicker: '12 · CUT HAIR', title: 'Trim or shave', subtitle: 'Halq or Taqsir',
+        body: 'Men shave (Halq) or trim (Taqsir) their hair; women trim a fingertip\u2019s length. With this the rites are complete.',
+        tips: [{ title: 'Shave or trim', body: 'Halq carries greater reward for men; trimming is valid.' }, { title: 'Women trim', body: 'A fingertip\u2019s length from the hair.' }, { title: 'Gratitude', body: 'Thank Allah for what you have completed.' }] },
+      { label: 'Umrah done', img: 'assets/tour/s13.png', kicker: '13 · COMPLETE', title: 'Umrah complete', subtitle: 'Ihram restrictions are lifted',
+        body: 'With the haircut your Umrah is complete and the restrictions of Ihram are lifted. You may return to normal dress.',
+        tips: [{ title: 'Ihram lifted', body: 'Its restrictions now end.' }, { title: 'Give thanks', body: 'Praise Allah for completing your Umrah in peace.' }, { title: 'Keep the state', body: 'Carry the calm and sincerity forward.' }] },
+      { label: 'Madinah', img: 'assets/tour/s14.png', kicker: '14 · OPTIONAL VISIT', title: 'Ziyarat \u2014 Madinah', subtitle: 'Visiting the Prophet\u2019s Mosque',
+        body: 'Many pilgrims travel on to Madinah to pray in Masjid an-Nabawi and send greetings upon the Prophet \uFDFA.',
+        tips: [{ title: 'Pray in the mosque', body: 'A prayer here carries immense reward.' }, { title: 'Send your Salam', body: 'Greet the Prophet \uFDFA and his companions Abu Bakr and Umar.' }, { title: 'Unhurried days', body: 'Madinah is calm \u2014 give it time and a soft heart.' }] },
+      { label: 'Rawdah', img: 'assets/tour/s15.png', kicker: '15 · MADINAH', title: 'The Rawdah & farewell', subtitle: 'A garden of Paradise',
+        body: 'If granted access, pray in the Rawdah \u2014 the blessed garden \u2014 then carry its peace home with you.',
+        tips: [{ title: 'The Rawdah', body: 'Pray between the pulpit and the chamber if you can reach it.' }, { title: 'Be patient', body: 'Access is scheduled \u2014 follow the guidance calmly.' }, { title: 'Carry it home', body: 'Keep the softness of heart you found here.' }] }
+    ];
+  }
+
+  ptrX(e) { return (e.touches && e.touches[0]) ? e.touches[0].clientX : e.clientX; }
+
+  duas() {
+    return [
+      { ar: 'اللَّهُمَّ إِنِّي أُرِيدُ الْعُمْرَةَ فَيَسِّرْهَا لِي وَتَقَبَّلْهَا مِنِّي', tr: 'Allahumma inni uridu\u2019l-\u2018umrata fa-yassirha li wa taqabbalha minni', en: 'O Allah, I intend Umrah, so make it easy for me and accept it from me.' },
+      { ar: 'لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ', tr: 'Labbayka-llahumma labbayk, labbayka la sharika laka labbayk', en: 'Here I am, O Allah, here I am. You have no partner, here I am.' },
+      { ar: 'اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ', tr: 'Allahumma-ftah li abwaba rahmatik', en: 'O Allah, open for me the gates of Your mercy.' },
+      { ar: 'اللَّهُمَّ أَنْتَ السَّلَامُ وَمِنْكَ السَّلَامُ', tr: 'Allahumma anta as-salamu wa minka as-salam', en: 'O Allah, You are Peace and from You comes peace.' },
+      null,
+      { ar: 'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ', tr: 'Rabbana atina fi\u2019d-dunya hasanah wa fi\u2019l-akhirati hasanah wa qina \u2018adhaban-nar', en: 'Our Lord, give us good in this world and the Hereafter, and protect us from the Fire.' },
+      null,
+      { ar: 'سُبْحَانَ رَبِّيَ الْأَعْلَى', tr: 'Subhana Rabbiya\u2019l-A\u2018la', en: 'Glory to my Lord, the Most High.' },
+      { ar: 'اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا وَرِزْقًا وَاسِعًا وَشِفَاءً مِنْ كُلِّ دَاءٍ', tr: 'Allahumma inni as\u2019aluka \u2018ilman nafi\u2018an wa rizqan wasi\u2018an wa shifa\u2019an min kulli da\u2019', en: 'O Allah, I ask You for beneficial knowledge, abundant provision, and healing from every illness.' },
+      { ar: 'إِنَّ الصَّفَا وَالْمَرْوَةَ مِنْ شَعَائِرِ اللَّهِ', tr: 'Inna\u2019s-Safa wa\u2019l-Marwata min sha\u2018a\u2019irillah', en: 'Indeed, Safa and Marwa are among the symbols of Allah.' },
+      { ar: 'رَبِّ اغْفِرْ وَارْحَمْ إِنَّكَ أَنْتَ الْأَعَزُّ الْأَكْرَمُ', tr: 'Rabbi-ghfir warham innaka anta\u2019l-a\u2018azzu\u2019l-akram', en: 'My Lord, forgive and have mercy; You are the Most Mighty, Most Generous.' },
+      null,
+      null,
+      { ar: 'اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّد', tr: 'Allahumma salli wa sallim \u2018ala nabiyyina Muhammad', en: 'O Allah, send blessings and peace upon our Prophet Muhammad \uFDFA.' },
+      { ar: 'اللَّهُمَّ ارْزُقْنِي الصَّلَاةَ فِي الرَّوْضَةِ وَتَقَبَّلْ مِنِّي', tr: 'Allahumma-rzuqni\u2019s-salata fi\u2019r-rawdati wa taqabbal minni', en: 'O Allah, grant me prayer in the Rawdah and accept it from me.' }
+    ];
+  }
+
+  speak(text, lang) {
+    try {
+      const s = window.speechSynthesis; if (!s) return;
+      s.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      if (lang) { u.lang = lang; }
+      u.rate = 0.9;
+      this._speaking = true;
+      u.onend = () => { this._speaking = false; this.forceUpdate(); };
+      u.onerror = () => { this._speaking = false; this.forceUpdate(); };
+      s.speak(u);
+      this.forceUpdate();
+    } catch (e) {}
+  }
+  stopVoice() { try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) {} this._speaking = false; this.forceUpdate(); }
+
+  renderVals() {
+    const st = this.stations();
+    const i = this.state.i;
+    const innerRef = (el) => { this._inner = el; };
+    const onPanoDown = (e) => { this._dragging = true; this._startX = this.ptrX(e) - (this._cur || 0); };
+    const onPanoMove = (e) => {
+      if (!this._dragging || !this._inner) return;
+      const p = this._inner.parentElement;
+      const min = Math.min(0, p.clientWidth - this._inner.scrollWidth);
+      const x = Math.max(min, Math.min(0, this.ptrX(e) - this._startX));
+      this._cur = x;
+      this._inner.style.transform = 'translateX(' + x + 'px)';
+    };
+    const onPanoEnd = () => { this._dragging = false; };
+    const last = st.length - 1;
+    const dots = st.map((s, idx) => {
+      const done = idx < i, active = idx === i;
+      return {
+        mark: done ? '\u2713' : String(idx + 1),
+        label: s.label,
+        bg: active ? '#0F5132' : (done ? '#DCEDE4' : '#fff'),
+        fg: active ? '#fff' : (done ? '#0F5132' : '#7A7263'),
+        border: active ? '#0F5132' : (done ? '#9FCBB1' : '#C9BCA6'),
+        onClick: () => this.go(idx)
+      };
+    });
+    const station = Object.assign({}, st[i], { num: ('0' + (i + 1)).slice(-2) });
+    const dua = this.duas()[i];
+    const speaking = !!this._speaking;
+    const showDua = this.state.showDua;
+    const guidance = station.title + '. ' + station.subtitle + '. ' + station.body + ' ' +
+      st[i].tips.map((t) => t.title + ': ' + t.body).join('. ');
+    return {
+      innerRef, onPanoDown, onPanoMove, onPanoEnd,
+      imgRef: (el) => { this._img = el; if (el && el.getAttribute('src') !== station.img) { el.src = station.img; } },
+      dots,
+      station,
+      stepLabel: (i + 1) + ' / ' + st.length,
+      onListen: () => { if (this._speaking) { this.stopVoice(); } else { this.speak(guidance); } },
+      listenLabel: speaking ? 'Stop' : 'Listen',
+      listenBg: speaking ? '#0F5132' : '#fff',
+      listenFg: speaking ? '#fff' : '#156440',
+      listenBorder: speaking ? '#0F5132' : '#C9BCA6',
+      toggleDua: () => this.setState({ showDua: !this.state.showDua }),
+      showDua,
+      hasDua: !!dua,
+      noDua: !dua,
+      dua: dua || { ar: '', tr: '', en: '' },
+      onPlayDua: () => { if (dua) { this.speak(dua.tr + '. ' + dua.en); } },
+      duaBg: showDua ? '#0F5132' : '#fff',
+      duaFg: showDua ? '#fff' : '#156440',
+      duaBorder: showDua ? '#0F5132' : '#C9BCA6',
+      prev: () => { if (i > 0) this.go(i - 1); },
+      next: () => { if (i < last) this.go(i + 1); },
+      prevLabel: i > 0 ? ('Step ' + i) : 'Start',
+      prevColor: i > 0 ? '#156440' : '#C9BCA6',
+      prevCursor: i > 0 ? 'pointer' : 'default',
+      nextCursor: i < last ? 'pointer' : 'default',
+      nextOpacity: i < last ? '1' : '0.45',
+      nextLabel: i < last ? 'Next step' : 'Tour complete'
+    };
+  }
+}
+</script>
+</body>
+</html>

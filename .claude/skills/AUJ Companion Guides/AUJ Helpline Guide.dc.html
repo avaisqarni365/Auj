@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;}
+  ::selection{background:#C8A24A;color:#07301E;}
+  .hw-list::-webkit-scrollbar{width:8px;}
+  .hw-list::-webkit-scrollbar-thumb{background:#E0D6C4;border-radius:8px;}
+  @media (max-width:840px){ .hw-body{flex-direction:column!important;} .hw-stage{min-height:200px!important;} .hw-list{max-height:none!important;} }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:radial-gradient(120% 90% at 50% 0%, #FFFDF8 0%, #F3EEE4 100%);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:clamp(20px,4vw,48px) clamp(14px,4vw,32px);display:flex;flex-direction:column;align-items:center;">
+
+  <div style="width:100%;max-width:1040px;background:#fff;border:1px solid #E6DDCE;border-radius:24px;overflow:hidden;box-shadow:0 40px 90px -40px rgba(42,38,32,0.5), 0 2px 6px rgba(42,38,32,0.04);">
+
+    <!-- HEADER -->
+    <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:15px 20px;background:radial-gradient(130% 230% at 88% -70%, #1C7A4F 0%, #0A3D26 56%, #06251A 100%);overflow:hidden;">
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 11px);pointer-events:none;"></div>
+      <div style="position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,162,74,0.6),transparent);"></div>
+      <div style="position:relative;display:flex;align-items:center;gap:12px;">
+        <span style="display:inline-flex;align-items:center;background:#FFFDF8;border:1px solid rgba(255,255,255,0.55);border-radius:9px;padding:5px 10px;box-shadow:0 10px 26px -8px rgba(0,0,0,0.45);"><img src="assets/auj-logo-trim.png" alt="AUJ" style="height:clamp(42px,6vw,58px);width:auto;display:block;" /></span>
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.1em;color:#E8C36A;">HELPLINE &amp; SOS</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#BFE0CD;margin-top:2px;">NUMBERS · REGISTER · EMBASSY</div>
+        </div>
+      </div>
+      <div style="position:relative;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <div style="display:flex;gap:5px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);padding:4px;border-radius:11px;">
+          <sc-for list="{{ cityButtons }}" as="c" hint-placeholder-count="2">
+            <button onClick="{{ c.onClick }}" style="cursor:pointer;font-family:inherit;font-size:12.5px;font-weight:600;padding:6px 14px;border-radius:8px;background:{{ c.bg }};color:{{ c.fg }};border:1px solid {{ c.border }};transition:all .15s;">{{ c.label }}</button>
+          </sc-for>
+        </div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#fff;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);padding:6px 11px;border-radius:999px;">{{ counter }}</span>
+      </div>
+    </div>
+
+    <!-- CATEGORY RAIL -->
+    <div style="position:relative;padding:18px 22px;border-bottom:1px solid #F1EADD;overflow-x:auto;background:#FCFAF5;">
+      <div style="position:relative;display:flex;gap:4px;min-width:660px;">
+        <div style="position:absolute;left:14px;right:14px;top:14px;height:2px;background:#EADFCE;"></div>
+        <sc-for list="{{ rail }}" as="s" hint-placeholder-count="6">
+          <button onClick="{{ s.onClick }}" style="position:relative;flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;background:none;border:none;font-family:inherit;padding:0;">
+            <div style="width:30px;height:30px;border-radius:50%;background:{{ s.dotBg }};border:2px solid {{ s.dotBorder }};color:{{ s.dotFg }};display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;transition:all .2s;">{{ s.num }}</div>
+            <span style="font-size:10px;font-weight:600;color:{{ s.labelColor }};text-align:center;line-height:1.2;max-width:80px;">{{ s.short }}</span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="hw-body" style="display:flex;flex-wrap:wrap;">
+
+      <!-- CATEGORY PANEL -->
+      <div class="hw-stage" style="position:relative;flex:1 1 300px;min-height:300px;background:radial-gradient(120% 130% at 75% 12%, #156440 0%, #0A3D26 52%, #06251A 100%);overflow:hidden;color:#EFF6F1;padding:clamp(22px,2.6vw,30px);display:flex;flex-direction:column;justify-content:space-between;">
+        <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 12px);pointer-events:none;"></div>
+        <div style="position:absolute;top:-50px;right:-44px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle, rgba(200,162,74,0.22), transparent 70%);pointer-events:none;"></div>
+        <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:#9CC6AE;">{{ cityLabel }} · HELP</div>
+        <div style="position:relative;">
+          <div style="width:54px;height:54px;border-radius:15px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:16px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#E8C36A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l1.5 4-2 1.5a11 11 0 0 0 5 5l1.5-2 4 1.5v4a1.5 1.5 0 0 1-1.6 1.5C9 24 0 15 0 6.6A1.5 1.5 0 0 1 1.5 5z" transform="scale(0.82) translate(2 1)"/></svg></div>
+          <div style="font-family:'IBM Plex Serif',serif;font-size:clamp(26px,3.4vw,38px);font-weight:600;line-height:1.1;">{{ catName }}</div>
+          <div style="font-size:14px;color:#C6DDCF;margin-top:12px;line-height:1.55;">{{ desc }}</div>
+        </div>
+        <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#BFE0CD;">{{ count }} {{ countNoun }}</div>
+      </div>
+
+      <!-- LIST -->
+      <div style="flex:1 1 360px;padding:clamp(20px,2.4vw,26px);display:flex;flex-direction:column;min-width:0;">
+        <div style="margin-bottom:14px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.08em;color:#2F6F8F;">{{ cityLabel }} · {{ catUpper }}</span></div>
+        <div class="hw-list" style="display:flex;flex-direction:column;gap:9px;max-height:330px;overflow-y:auto;padding-right:4px;">
+          <sc-for list="{{ items }}" as="h" hint-placeholder-count="5">
+            <div style="display:flex;align-items:center;gap:12px;padding:11px 13px;border:1px solid #F1EADD;border-radius:12px;background:#FFFDFA;">
+              <div style="width:44px;height:44px;border-radius:11px;background:{{ h.badgeBg }};color:{{ h.badgeFg }};display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;flex-shrink:0;">{{ h.mark }}</div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:14px;font-weight:600;color:#2A2620;line-height:1.25;">{{ h.name }}</div>
+                <div style="font-size:12px;color:#7A7263;margin-top:1px;">{{ h.note }}</div>
+              </div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#156440;white-space:nowrap;flex-shrink:0;background:#F0F6F2;border:1px solid #DCEDE4;border-radius:7px;padding:4px 8px;">{{ h.tag }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+          <button onClick="{{ prev }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:7px;background:{{ prevBg }};color:{{ prevColor }};border:1.5px solid {{ prevBorder }};border-radius:11px;font-family:inherit;font-size:14px;font-weight:600;padding:11px 16px;transition:all .15s;"><span>←</span> Back</button>
+          <div style="display:flex;align-items:center;gap:7px;">
+            <sc-for list="{{ dots }}" as="d" hint-placeholder-count="6">
+              <button onClick="{{ d.onClick }}" style="cursor:pointer;border:none;height:9px;width:{{ d.w }};border-radius:999px;background:{{ d.bg }};transition:all .2s;padding:0;"></button>
+            </sc-for>
+          </div>
+          <button onClick="{{ next }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:7px;background:#0F5132;color:#fff;border:none;border-radius:11px;font-family:inherit;font-size:14px;font-weight:600;padding:11px 18px;box-shadow:0 8px 18px rgba(15,81,50,0.26);transition:background .15s;" style-hover="background:#156440;">{{ nextLabel }} <span>→</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:18px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center;">
+    <a href="AUJ Landing Cinematic.dc.html" style="text-decoration:none;font-size:13.5px;color:#7A7263;display:inline-flex;align-items:center;gap:6px;">← Back to AUJ home</a>
+    <a href="AUJ Food Guide.dc.html" style="text-decoration:none;font-size:13.5px;font-weight:600;color:#156440;display:inline-flex;align-items:center;gap:6px;">Food &amp; dining <span>→</span></a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1080,&quot;height&quot;:760}}">
+class Component extends DCLogic {
+  state = { i: 0, city: 'makkah' };
+
+  data() {
+    const em = (mark) => ({ badgeBg: '#FBF1EF', badgeFg: '#B23A2E', mark });
+    const mk = (mark) => ({ badgeBg: '#E2EEF3', badgeFg: '#235B73', mark });
+    const emergency = { short: 'Emergency', name: 'Emergency & numbers', desc: 'Save these before you travel. Ambulance and emergency care are free for pilgrims.', noun: 'numbers', items: [
+      { name: 'Red Crescent Ambulance', note: 'Emergency medical · free', tag: '997', ...em('+') },
+      { name: 'Unified Emergency', note: 'All services', tag: '911', ...em('!') },
+      { name: 'Police', note: 'General emergencies', tag: '999', ...em('!') },
+      { name: 'MoH Hajj & Umrah Care', note: 'Ministry of Health help line', tag: '937', ...em('+') },
+      { name: 'Traffic (Najm)', note: 'Road accidents', tag: '993', ...em('!') }
+    ] };
+    return {
+      makkah: [
+        emergency,
+        { short: 'Register', name: 'Official apps to register', desc: 'Set these up on your phone before and during your trip — your visa, permits and ID live here.', noun: 'apps', items: [
+          { name: 'Nusuk', note: 'Permits, Rawdah booking, services', tag: 'App', ...mk('NU') },
+          { name: 'Tawakkalna', note: 'Digital ID & health status', tag: 'App', ...mk('TW') },
+          { name: 'Absher', note: 'Government services & ID', tag: 'App', ...mk('AB') },
+          { name: 'Asefny', note: 'Red Crescent emergency app', tag: 'SOS', ...mk('AS') }
+        ] },
+        { short: 'Embassy', name: 'Embassy & registration', desc: 'Register with your country before you fly, and keep consulate numbers saved.', noun: 'options', items: [
+          { name: 'Register with your embassy', note: 'Before travel · online', tag: 'Do first', ...mk('EM') },
+          { name: 'Consulates in Jeddah', note: 'Most consulates are in Jeddah', tag: 'JED', ...mk('CJ') },
+          { name: 'Carry passport copies', note: 'Paper + photo on phone', tag: 'Docs', ...mk('DC') },
+          { name: 'Group / agent contact', note: 'Save your AUJ rep number', tag: 'AUJ', ...mk('AJ') }
+        ] },
+        { short: 'Lost & found', name: 'Lost or separated', desc: 'If you lose your way or your group near Masjid al-Haram.', noun: 'options', items: [
+          { name: 'Show your Nusuk / hotel card', note: 'Has your address in Arabic', tag: 'Tip', ...mk('CD') },
+          { name: 'Haram lost & found', note: 'Ask any guard or service point', tag: 'Haram', ...mk('LF') },
+          { name: 'Nearest police / 911', note: 'Officers help reunite groups', tag: '911', ...mk('PL') },
+          { name: 'Wait at a fixed gate', note: 'Agree a meeting gate in advance', tag: 'Plan', ...mk('GT') }
+        ] }
+      ],
+      madinah: [
+        emergency,
+        { short: 'Register', name: 'Official apps to register', desc: 'Set these up on your phone — your visa, permits and Rawdah booking live here.', noun: 'apps', items: [
+          { name: 'Nusuk', note: 'Permits, Rawdah booking, services', tag: 'App', ...mk('NU') },
+          { name: 'Tawakkalna', note: 'Digital ID & health status', tag: 'App', ...mk('TW') },
+          { name: 'Absher', note: 'Government services & ID', tag: 'App', ...mk('AB') },
+          { name: 'Asefny', note: 'Red Crescent emergency app', tag: 'SOS', ...mk('AS') }
+        ] },
+        { short: 'Embassy', name: 'Embassy & registration', desc: 'Register with your country before you fly, and keep consulate numbers saved.', noun: 'options', items: [
+          { name: 'Register with your embassy', note: 'Before travel · online', tag: 'Do first', ...mk('EM') },
+          { name: 'Consulates in Jeddah', note: 'Most consulates are in Jeddah', tag: 'JED', ...mk('CJ') },
+          { name: 'Carry passport copies', note: 'Paper + photo on phone', tag: 'Docs', ...mk('DC') },
+          { name: 'Group / agent contact', note: 'Save your AUJ rep number', tag: 'AUJ', ...mk('AJ') }
+        ] },
+        { short: 'Lost & found', name: 'Lost or separated', desc: 'If you lose your way or your group near Masjid an-Nabawi.', noun: 'options', items: [
+          { name: 'Show your Nusuk / hotel card', note: 'Has your address in Arabic', tag: 'Tip', ...mk('CD') },
+          { name: 'Mosque lost & found', note: 'Ask any guard or service point', tag: 'Mosque', ...mk('LF') },
+          { name: 'Nearest police / 911', note: 'Officers help reunite groups', tag: '911', ...mk('PL') },
+          { name: 'Wait at a fixed gate', note: 'Agree a meeting gate in advance', tag: 'Plan', ...mk('GT') }
+        ] }
+      ]
+    };
+  }
+
+  renderVals() {
+    const all = this.data();
+    const city = this.state.city;
+    const S = all[city];
+    const total = S.length;
+    const i = Math.max(0, Math.min(this.state.i, total - 1));
+    const cat = S[i];
+    const pad2 = (n) => ('0' + n).slice(-2);
+
+    const cityButtons = [['makkah', 'Makkah'], ['madinah', 'Madinah']].map(([key, label]) => ({
+      label, onClick: () => this.setState({ city: key }),
+      bg: city === key ? 'rgba(255,255,255,0.18)' : 'transparent',
+      fg: city === key ? '#fff' : '#BFE0CD',
+      border: city === key ? 'rgba(255,255,255,0.32)' : 'transparent'
+    }));
+
+    const rail = S.map((s, k) => ({
+      num: pad2(k + 1), short: s.short,
+      onClick: () => this.setState({ i: k }),
+      dotBg: k === i ? '#0F5132' : (k < i ? '#DCEDE4' : '#fff'),
+      dotBorder: k === i ? '#0F5132' : (k < i ? '#9CC6AE' : '#E6DDCE'),
+      dotFg: k === i ? '#fff' : (k < i ? '#0F5132' : '#9A9183'),
+      labelColor: k === i ? '#0F5132' : '#9A9183'
+    }));
+    const dots = S.map((_, k) => ({
+      onClick: () => this.setState({ i: k }),
+      bg: k === i ? '#0F5132' : (k < i ? '#9CC6AE' : '#E6DDCE'),
+      w: k === i ? '26px' : '9px'
+    }));
+
+    return {
+      counter: pad2(i + 1) + ' / ' + pad2(total),
+      cityLabel: city === 'makkah' ? 'MAKKAH' : 'MADINAH',
+      catName: cat.name, catUpper: cat.short.toUpperCase(), desc: cat.desc,
+      count: cat.items.length, countNoun: cat.noun.toUpperCase(), items: cat.items,
+      rail, dots, cityButtons,
+      prev: () => this.setState({ i: Math.max(0, i - 1) }),
+      next: () => this.setState({ i: Math.min(total - 1, i + 1) }),
+      prevBg: i === 0 ? '#F4EEE3' : '#fff',
+      prevColor: i === 0 ? '#B8AE9C' : '#156440',
+      prevBorder: i === 0 ? '#EADFCE' : '#C9BCA6',
+      nextLabel: i === total - 1 ? 'Done' : 'Next'
+    };
+  }
+}
+</script>
+</body>
+</html>
