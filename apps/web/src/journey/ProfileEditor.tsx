@@ -16,6 +16,7 @@ const TOOLS: ReadonlyArray<[string, string, string]> = [
   ['/companion', '🧭', 'Companion'],
   ['/bookings', '📄', 'My bookings'],
   ['/plan', '📝', 'Smart planner'],
+  ['/journey/wizards', '🎥', 'My wizards & videos'],
 ];
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
