@@ -12,6 +12,7 @@ import { HeroBackdrop } from './HeroBackdrop';
 import { Scene } from './components/Scene';
 import { SiteHeader } from './components/SiteHeader';
 import { SiteFooter } from './components/SiteFooter';
+import { ScreenFrame } from './components/ScreenFrame';
 import { SmartVisitWizard } from './leads/SmartVisitWizard';
 import {
   DEALS,
@@ -152,9 +153,66 @@ export default function Landing({ user, deals, content = {} }: { user?: PublicUs
         </div>
       </div>
 
-      {/* search card — direct booking, below the planner */}
-      <div id="search" className="relative z-10 mx-auto mt-12 max-w-5xl px-[clamp(16px,4vw,32px)]">
-        <div className="animate-rise rounded-[22px] border border-sand-200 bg-white p-[clamp(18px,2.4vw,24px)] shadow-[0_24px_60px_-24px_rgba(42,38,32,0.34)]">
+      {/* FRAME 02 · VIRTUAL TOUR — cinematic two-panel card (prototype frame 02) */}
+      <div id="tour" className="relative z-10 mt-12 scroll-mt-24">
+        <ScreenFrame label="FRAME 02 · VIRTUAL TOUR" tag="15 guided steps" maxWidth="max-w-5xl" bodyClassName="p-0">
+          <div className="flex flex-wrap">
+            {/* preview side */}
+            <Link
+              href="/guide/tour"
+              aria-label="Open the virtual tour"
+              className="group relative flex min-h-[300px] flex-1 basis-[340px] items-center justify-center overflow-hidden bg-gradient-to-br from-green-700 via-green-900 to-green-950"
+            >
+              <span aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_100%_at_70%_20%,rgba(42,148,104,0.55),transparent_60%)]" />
+              <span aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-[46%] bg-gradient-to-t from-green-950/70 to-transparent" />
+              <span className="absolute left-3.5 top-3.5 inline-flex items-center gap-1.5 rounded-full bg-green-950/55 px-3 py-1.5 font-mono text-[10.5px] tracking-[0.1em] text-green-50 backdrop-blur">VIDEO · 01 / 15</span>
+              <span className="relative grid h-[78px] w-[78px] place-items-center rounded-full bg-green-800/95 shadow-[0_14px_34px_rgba(0,0,0,0.4)] transition-transform duration-fast group-hover:scale-105 group-active:scale-95">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="#fff" aria-hidden><path d="M8 5v14l11-7z" /></svg>
+              </span>
+              <span className="absolute bottom-3.5 left-4 font-mono text-[11px] text-white/75">Tap to walk through each rite</span>
+            </Link>
+            {/* content side */}
+            <div className="flex flex-1 basis-[320px] flex-col gap-3.5 p-[clamp(20px,2.4vw,28px)]">
+              <div className="flex items-center gap-3">
+                <div className="grid h-[42px] w-[42px] shrink-0 place-items-center rounded-xl bg-green-800 font-mono text-[17px] font-semibold text-white">01</div>
+                <div>
+                  <div className="font-mono text-[10.5px] tracking-[0.1em] text-accent-600">STEP 1 OF 15</div>
+                  <div className="mt-px font-serif text-[19px] font-semibold text-sand-ink">Enter the state of Ihram</div>
+                </div>
+              </div>
+              <div dir="rtl" className="rounded-[13px] border border-sand-200 bg-sand-50 px-4 py-3">
+                <div className="mb-1.5 flex items-center justify-between gap-2">
+                  <span className="text-[12.5px] font-semibold text-gold">الميقات · النية</span>
+                  <span className="rounded-md bg-accent-100 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-green-800">AR</span>
+                </div>
+                <div className="text-[17px] leading-[1.7] text-sand-ink">ابدأ رحلتك بالنية والتلبية عند الميقات قبل دخول مكة المكرمة.</div>
+              </div>
+              <div className="rounded-[13px] border border-sand-200 bg-sand-50 px-4 py-3">
+                <div className="mb-1.5 flex items-center justify-between gap-2">
+                  <span className="text-[12px] font-semibold text-gold">Miqat · Intention</span>
+                  <span className="rounded-md bg-accent-100 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-green-800">EN</span>
+                </div>
+                <div className="text-[14.5px] leading-relaxed text-sand-700">Begin with the intention and Talbiyah at the Miqat, before entering Makkah.</div>
+              </div>
+              <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-1">
+                <span className="font-mono text-[12px] text-sand-500">EN · العربية · اردو · DE</span>
+                <Link href="/guide/tour" className="inline-flex items-center gap-1.5 text-sm font-semibold text-green-700 transition-colors duration-fast hover:text-green-800">
+                  Open virtual tour <span aria-hidden>→</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </ScreenFrame>
+      </div>
+
+      {/* FRAME 03 · SEARCH — direct booking inside the cinematic frame chrome (prototype frame 03) */}
+      <div id="search" className="relative z-10 scroll-mt-24">
+        <ScreenFrame
+          label="FRAME 03 · SEARCH"
+          tag="FX today · 1 € = ₨310.8 · charged in EUR"
+          maxWidth="max-w-5xl"
+          bodyClassName="p-[clamp(18px,2.4vw,24px)]"
+        >
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap gap-1 rounded-xl bg-sand-100 p-1">
               {SEARCH_TABS.map((tb) => (
@@ -168,7 +226,7 @@ export default function Landing({ user, deals, content = {} }: { user?: PublicUs
                 </button>
               ))}
             </div>
-            <span className="text-[13px] text-sand-500">FX today · 1 € = ₨310.8 · charged in EUR</span>
+            <span className="text-[13px] text-sand-500">Search the verified catalogue</span>
           </div>
 
           {/* city order + nights in each holy city (dynamic packaging) */}
@@ -220,7 +278,7 @@ export default function Landing({ user, deals, content = {} }: { user?: PublicUs
               <span key={m} className="inline-flex items-center gap-1.5"><span className="text-success">✓</span> {m}</span>
             ))}
           </div>
-        </div>
+        </ScreenFrame>
       </div>
 
       {/* trust strip */}
@@ -266,7 +324,8 @@ export default function Landing({ user, deals, content = {} }: { user?: PublicUs
       {/* cinematic frames — every migrated tool as a framed feature card, frame by frame (frames 02–18) */}
       <Section id="tools" title="Everything for your journey, frame by frame" sub="Free planning tools and on-the-ground guides — most need no login.">
         <div className="flex flex-col gap-[clamp(20px,3vw,32px)]">
-          {LANDING_FRAMES.map((f) => (
+          {/* frames 02 (tour) & 03 (search) render as rich cards above; list the rest here */}
+          {LANDING_FRAMES.filter((f) => String(f.n) !== '02' && String(f.n) !== '2' && String(f.n) !== '03' && String(f.n) !== '3').map((f) => (
             <FrameCard key={f.n} frame={f} />
           ))}
         </div>
