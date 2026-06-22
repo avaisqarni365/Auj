@@ -10,11 +10,16 @@ const citiesOf = (slug: GuideSlug): GuideCity[] => Object.keys(GUIDES[slug].citi
 
 export interface GuideStore {
   getGuide(slug: GuideSlug): Promise<GuideCities>;
+  setGuide(slug: GuideSlug, cities: GuideCities): Promise<void>;
 }
 
 class InMemoryGuides implements GuideStore {
+  private readonly edited = new Map<GuideSlug, GuideCities>();
   async getGuide(slug: GuideSlug): Promise<GuideCities> {
-    return GUIDES[slug].cities;
+    return this.edited.get(slug) ?? GUIDES[slug].cities;
+  }
+  async setGuide(slug: GuideSlug, cities: GuideCities): Promise<void> {
+    this.edited.set(slug, cities);
   }
 }
 
@@ -41,6 +46,24 @@ class PostgresGuides implements GuideStore {
         .filter((cat) => cat.items.length > 0);
     }
     return out;
+  }
+  async setGuide(slug: GuideSlug, cities: GuideCities): Promise<void> {
+    // Replace this guide's item rows (category structure/headings stay seed-defined; items are editable).
+    await this.pool.query('DELETE FROM guide_entries WHERE guide = $1', [slug]);
+    for (const city of Object.keys(cities) as GuideCity[]) {
+      const cats = cities[city] ?? [];
+      for (let ci = 0; ci < cats.length; ci++) {
+        const cat = cats[ci]!;
+        for (let ii = 0; ii < cat.items.length; ii++) {
+          const it = cat.items[ii]!;
+          await this.pool.query(
+            `INSERT INTO guide_entries (guide, city, category, name, note, tag, mark, sort, locale)
+             VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'en')`,
+            [slug, city, cat.key, it.name, it.note, it.tag, it.mark, ci * 100 + ii],
+          );
+        }
+      }
+    }
   }
 }
 

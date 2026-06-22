@@ -115,6 +115,7 @@ export function AdminConsole() {
           <Link href="/admin/finance" className="hidden whitespace-nowrap rounded-[10px] border-[1.5px] border-sand-200 bg-white px-3.5 py-2.5 text-sm font-semibold text-green-800 hover:bg-sand-50 lg:inline">📊 Assess</Link>
           <Link href="/admin/umrah-content" className="hidden whitespace-nowrap rounded-[10px] border-[1.5px] border-sand-200 bg-white px-3.5 py-2.5 text-sm font-semibold text-green-800 hover:bg-sand-50 sm:inline">📖 Content</Link>
           <Link href="/admin/wizards" className="hidden whitespace-nowrap rounded-[10px] border-[1.5px] border-sand-200 bg-white px-3.5 py-2.5 text-sm font-semibold text-green-800 hover:bg-sand-50 sm:inline">🧭 Wizards</Link>
+          <Link href="/admin/guides" className="hidden whitespace-nowrap rounded-[10px] border-[1.5px] border-sand-200 bg-white px-3.5 py-2.5 text-sm font-semibold text-green-800 hover:bg-sand-50 lg:inline">📚 Guides</Link>
           <Link href="/admin/visa" className="hidden whitespace-nowrap rounded-[10px] border-[1.5px] border-sand-200 bg-white px-3.5 py-2.5 text-sm font-semibold text-green-800 hover:bg-sand-50 lg:inline">🛂 Visa</Link>
           <button type="button" className="relative h-10 w-10 rounded-[10px] border-[1.5px] border-sand-200 bg-white">🔔<span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-danger" /></button>
           <button type="button" className="whitespace-nowrap rounded-[10px] bg-green-800 px-4 py-2.5 text-sm font-semibold text-white">{t('newBooking')}</button>
