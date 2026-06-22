@@ -1,42 +1,24 @@
-/* AUJ service worker — offline support WITHOUT ever showing stale content online.
- * Strategy: network-first for everything. When online you always get the freshest build; the cache
- * is only a fallback when the network fails (offline). Bumping CACHE evicts everything on next load. */
-const CACHE = 'auj-v4';
-const OFFLINE_URL = '/offline.html';
-
-self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(CACHE).then((c) => c.add(OFFLINE_URL)).then(() => self.skipWaiting()));
-});
+/* AUJ service worker — RETIRED kill-switch.
+ * The PWA cache caused stale pages to be served after deploys. This worker now unregisters
+ * itself, deletes every cache, and reloads any window it controls — so older clients that
+ * still have an old service worker installed self-heal to plain network (always-fresh) on
+ * their next visit. No HTML is ever served from cache again. */
+self.addEventListener('install', () => self.skipWaiting());
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches
-      .keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
-      .then(() => self.clients.claim()),
+    (async () => {
+      // Drop all caches from the old SW versions (auj-v2/v3/v4).
+      const keys = await caches.keys();
+      await Promise.all(keys.map((k) => caches.delete(k)));
+      // Remove this service worker entirely.
+      await self.registration.unregister();
+      // Reload every controlled window so it re-fetches from the network (no SW in the way).
+      const clients = await self.clients.matchAll({ type: 'window' });
+      for (const client of clients) {
+        if ('navigate' in client) client.navigate(client.url);
+      }
+    })(),
   );
 });
-
-self.addEventListener('fetch', (event) => {
-  const { request } = event;
-  if (request.method !== 'GET') return;
-  const url = new URL(request.url);
-  if (url.origin !== self.location.origin) return; // never touch third-party / API origins
-
-  // Page navigations (HTML): network-ONLY — never serve a cached document, so the app shell can
-  // never go stale online. Offline → the offline page. Static assets: network-first with cache
-  // fallback (content-hashed, so safe to cache).
-  if (request.mode === 'navigate') {
-    event.respondWith(fetch(request).catch(() => caches.match(OFFLINE_URL)));
-    return;
-  }
-  event.respondWith(
-    fetch(request)
-      .then((res) => {
-        const copy = res.clone();
-        caches.open(CACHE).then((c) => c.put(request, copy));
-        return res;
-      })
-      .catch(() => caches.match(request)),
-  );
-});
+// No fetch handler — the SW never intercepts requests; the network is the source of truth.
