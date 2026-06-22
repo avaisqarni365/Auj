@@ -70,6 +70,8 @@ export function SiteFooter() {
           </div>
 
           <Col title={t('quickLinks')}>
+            <FLink href="/guide">Umrah Guide</FLink>
+            <FLink href="/guide/tour">Virtual tour</FLink>
             <FLink href="/companion">{t('companion')}</FLink>
             <FLink href="/#why">{t('about')}</FLink>
             <FLink href="/support">{t('contact')}</FLink>

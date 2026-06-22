@@ -274,35 +274,6 @@ export default function Landing({ user, deals, content = {} }: { user?: PublicUs
         </div>
       </div>
 
-      {/* Umrah Guide — step-by-step ritual companion (distinct from the Smart Visit planner) */}
-      <section id="guide-entry" className="mx-auto max-w-6xl scroll-mt-24 px-[clamp(16px,4vw,32px)] py-4">
-        <div className="flex flex-col items-start gap-4 overflow-hidden rounded-[20px] border border-green-100 bg-gradient-to-br from-green-50 to-sand-50 p-[clamp(20px,3vw,30px)] sm:flex-row sm:items-center">
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-green-800 text-3xl">🕋</div>
-          <div className="flex-1">
-            <div className="font-serif text-[clamp(1.25rem,2.4vw,1.6rem)] font-semibold leading-tight text-sand-ink">
-              Performing Umrah? Follow our free step-by-step guide
-            </div>
-            <p className="mt-1 max-w-[60ch] text-[14.5px] leading-relaxed text-sand-600">
-              15 steps with duas, Tawaf &amp; Sa‘i counters, a timer, personal du‘as and voice notes — plus a virtual tour. No login needed.
-            </p>
-          </div>
-          <div className="flex shrink-0 flex-wrap gap-2">
-            <Link
-              href="/guide"
-              className="inline-flex items-center gap-2 rounded-xl bg-green-800 px-5 py-3 text-[14.5px] font-semibold text-white transition-[transform,background-color] duration-fast hover:bg-green-700 active:scale-[0.98]"
-            >
-              Open the guide →
-            </Link>
-            <Link
-              href="/guide/tour"
-              className="inline-flex items-center gap-2 rounded-xl border border-green-700/30 bg-white px-5 py-3 text-[14.5px] font-semibold text-green-800 transition-colors duration-fast hover:bg-green-50"
-            >
-              🧭 Virtual tour
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* cinematic frames — every migrated tool as a framed feature card, frame by frame (frames 02–18) */}
       <Section id="tools" title="Everything for your journey, frame by frame" sub="Free planning tools and on-the-ground guides — most need no login." maxWidth="max-w-[1080px]">
         <div className="flex flex-col gap-[clamp(20px,3vw,32px)]">
