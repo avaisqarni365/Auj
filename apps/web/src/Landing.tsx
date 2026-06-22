@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { routeFor } from '@auj/visa-router';
-import { Logo } from '@auj/ui';
+import { BrandMark } from './components/BrandMark';
 import type { PublicUser } from '@auj/auth';
 import { formatMoney, pkrIndicative } from './currency';
 import { landingCopy, type LandingOverrides } from './landing-content';
@@ -13,7 +13,6 @@ import { Scene } from './components/Scene';
 import { SiteHeader } from './components/SiteHeader';
 import { SiteFooter } from './components/SiteFooter';
 import { ScreenFrame } from './components/ScreenFrame';
-import { SmartPlanner } from './components/SmartPlanner';
 import {
   DEALS,
   type Deal,
@@ -110,7 +109,7 @@ export default function Landing({ user, deals, content = {} }: { user?: PublicUs
               {copy('hero.subtitle', t('heroSubtitle'))}
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a href="#plan" className="relative inline-flex items-center gap-2 overflow-hidden rounded-xl bg-green-800 px-6 py-3.5 text-[15.5px] font-semibold text-white shadow-[0_10px_28px_rgba(15,81,50,0.26)] transition-[transform,background-color] duration-fast hover:bg-green-700 active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">
+              <a href="/plan" className="relative inline-flex items-center gap-2 overflow-hidden rounded-xl bg-green-800 px-6 py-3.5 text-[15.5px] font-semibold text-white shadow-[0_10px_28px_rgba(15,81,50,0.26)] transition-[transform,background-color] duration-fast hover:bg-green-700 active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">
                 <span aria-hidden className="animate-sheen pointer-events-none absolute inset-y-0 left-0 w-2/5 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
                 <span className="relative">{t('planPilgrimage')}</span>
               </a>
@@ -135,11 +134,6 @@ export default function Landing({ user, deals, content = {} }: { user?: PublicUs
           </div>
         </div>
       </section>
-
-      {/* FRAME 01 (full) — Smart Visit planner, the split-panel configurator (hero CTA scrolls here) */}
-      <div id="plan" className="relative z-20 mt-[clamp(28px,5vw,52px)] scroll-mt-24 px-[clamp(16px,4vw,32px)]">
-        <SmartPlanner />
-      </div>
 
       {/* FRAME 02 · VIRTUAL TOUR — cinematic two-panel card (prototype frame 02) */}
       <div id="tour" className="relative z-10 mt-12 scroll-mt-24">
@@ -646,7 +640,7 @@ export default function Landing({ user, deals, content = {} }: { user?: PublicUs
             <p className="mt-1 text-green-100/80">Plan a pilgrimage, or open a trade account for your agency.</p>
           </div>
           <div className="relative flex flex-wrap gap-3">
-            <a href="#plan" className="rounded-xl bg-sand-50 px-6 py-3 text-sm font-semibold text-green-900 transition-[transform,background-color] duration-fast hover:bg-white active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">Plan my pilgrimage</a>
+            <a href="/plan" className="rounded-xl bg-sand-50 px-6 py-3 text-sm font-semibold text-green-900 transition-[transform,background-color] duration-fast hover:bg-white active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">Plan my pilgrimage</a>
             <Link href="/agent" className="rounded-xl border border-white/25 bg-white/10 px-6 py-3 text-sm font-semibold transition-[transform,background-color] duration-fast hover:bg-white/15 active:scale-[0.98] focus-visible:outline-none focus-visible:shadow-focus">For travel agents</Link>
           </div>
         </div>
@@ -772,7 +766,7 @@ function HeroPlannerCard() {
         <span aria-hidden className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
         <div className="flex items-center gap-2.5">
           <span className="grid place-items-center rounded-lg bg-sand-50 px-2 py-1 shadow-sm">
-            <Logo size={20} />
+            <BrandMark height={20} />
           </span>
           <span className="font-mono text-[11.5px] tracking-[0.08em] text-green-100/80">FRAME 01 · SMART PLANNER</span>
         </div>
@@ -799,7 +793,7 @@ function HeroPlannerCard() {
           <div className="h-full rounded-full bg-gradient-to-r from-green-500 to-green-800" style={{ width: '43%' }} />
         </div>
         <div className="mt-5 flex flex-wrap gap-2.5">
-          <a href="#plan" className="inline-flex items-center gap-2 rounded-xl bg-green-800 px-5 py-3 text-[14px] font-semibold text-white shadow-[0_8px_18px_rgba(15,81,50,0.26)] transition-[transform,background-color] duration-fast hover:bg-green-700 active:scale-[0.98]">
+          <a href="/plan" className="inline-flex items-center gap-2 rounded-xl bg-green-800 px-5 py-3 text-[14px] font-semibold text-white shadow-[0_8px_18px_rgba(15,81,50,0.26)] transition-[transform,background-color] duration-fast hover:bg-green-700 active:scale-[0.98]">
             Continue in Smart Planner <span aria-hidden>→</span>
           </a>
           <a href="#search" className="inline-flex items-center gap-2 rounded-xl border border-sand-300 bg-white px-5 py-3 text-[14px] font-semibold text-green-800 transition-colors duration-fast hover:bg-sand-50">
@@ -829,7 +823,7 @@ function FrameCard({ frame }: { frame: LandingFrame }) {
           <span aria-hidden className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
           <div className="relative flex items-center gap-2.5">
             <span className="grid place-items-center rounded-lg bg-sand-50 px-2 py-1 shadow-sm">
-              <Logo size={18} />
+              <BrandMark height={18} />
             </span>
             <span className="font-mono text-[11.5px] tracking-[0.08em] text-green-100/80">
               FRAME {frame.n} · {frame.name}

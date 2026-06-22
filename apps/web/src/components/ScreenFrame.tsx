@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Logo } from '@auj/ui';
+import { BrandMark } from './BrandMark';
 
 // Shared cinematic screen chrome from the prototypes: a white rounded card on the warm canvas with
 // a dark-green gradient header bar — logo chip + mono section label + optional tag pill + gold
@@ -32,7 +32,7 @@ export function ScreenFrame({
           <span aria-hidden className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
           <div className="relative flex items-center gap-3">
             <span className="grid place-items-center rounded-lg bg-sand-50 px-2 py-1 shadow-sm">
-              <Logo size={22} />
+              <BrandMark height={22} />
             </span>
             <span className="font-mono text-[11.5px] uppercase tracking-[0.1em] text-green-100/80">{label}</span>
           </div>

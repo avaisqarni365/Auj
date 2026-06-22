@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { Logo } from '@auj/ui';
+import { BrandMark } from './BrandMark';
 
 // Smart Visit planner — split-panel configurator from AUJ Smart Planner.dc.html.
 // Dark-green aside (logo + title + 7-step rail + skyline) and a form panel
@@ -173,7 +173,7 @@ export function SmartPlanner() {
 
           <div className="relative z-10">
             <span className="inline-flex items-center rounded-[13px] bg-sand-50 px-3 py-2 shadow-[0_8px_22px_rgba(0,0,0,0.28)]">
-              <Logo size={44} />
+              <BrandMark height={44} />
             </span>
             <h2 className="mt-5 font-serif text-2xl font-semibold tracking-[-0.01em] text-green-50">Smart Visit planner</h2>
             <p className="mt-1.5 text-[13px] leading-relaxed text-green-100/80">Seven calm steps to a complete, visa-ready pilgrimage.</p>
