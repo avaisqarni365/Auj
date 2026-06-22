@@ -9,7 +9,7 @@ import type { JournalEntry } from '@auj/payments';
 // node:crypto — the screens barrel re-exports MarkupConfig -> markup -> ids (crypto).
 import { AgentDashboard } from './screens/AgentDashboard';
 import { MultiPaxBooking } from './screens/MultiPaxBooking';
-import { WalletView } from './screens/WalletView';
+import { LedgerView } from './screens/LedgerView';
 import { QuotesPanel } from './screens/QuotesPanel';
 import { MarkupsPanel } from './screens/MarkupsPanel';
 import { Shell } from './screens/Shell';
@@ -100,7 +100,7 @@ export function AgentPortal() {
 
         <section>
           <div className="mb-3 flex items-center justify-between gap-3">
-            <h3 className="font-serif text-lg font-semibold text-sand-ink">{t('walletCreditHeading')}</h3>
+            <h3 className="font-serif text-lg font-semibold text-sand-ink">Payments &amp; ledger</h3>
             <button
               type="button"
               onClick={() => void downloadStatement()}
@@ -109,7 +109,7 @@ export function AgentPortal() {
               ↓ Statement (CSV)
             </button>
           </div>
-          <WalletView balance={eur(balance)} creditLimit={creditLimit} account={`wallet:${agent.id}`} entries={entries} />
+          <LedgerView agencyName={agent.agencyName} balance={balance} creditLimit={creditLimit} account={`wallet:${agent.id}`} entries={entries} />
         </section>
 
         <section>
