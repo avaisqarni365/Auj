@@ -2,7 +2,8 @@ import { notFound } from 'next/navigation';
 import { getCurrentUser } from '../../../src/auth/session';
 import { SitePage } from '../../../src/components/SitePage';
 import { DepartureHub } from '../../../src/depart/DepartureHub';
-import { DEPART_CODES, departAirport } from '../../../src/depart/airport-content';
+import { DEPART_CODES } from '../../../src/depart/airport-content';
+import { getAirportStore } from '../../../src/depart/airport-store';
 
 // Public — the dynamic per-airport departure hub: walkthrough, easy check-in, and live-if-API
 // flights to/from Makkah & Madinah from this city.
@@ -11,7 +12,7 @@ export function generateStaticParams() {
 }
 
 export default async function DeparturePage({ params }: { params: { code: string } }) {
-  const airport = departAirport(params.code.toUpperCase());
+  const airport = await (await getAirportStore()).getAirport(params.code.toUpperCase());
   if (!airport) notFound();
   const user = await getCurrentUser();
   return (

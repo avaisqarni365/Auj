@@ -17,7 +17,8 @@ the `/book` funnel.
 ## Where the logic lives (one shared component)
 - **Route:** `apps/web/app/hotels/[city]/page.tsx` → city ∈ makkah · madinah (`generateStaticParams`; `notFound()` otherwise)
 - **Component:** `apps/web/src/hotels/HotelsBrowser.tsx` (shared by both cities)
-- **Data:** `apps/web/src/hotels/hotels-data.ts` — `HOTEL_CITIES`, `hotelsForCity`, `isHotelCity`; ~50 named hotels across 5 distance bands per city (server-side reference data, no pg)
+- **Data:** `apps/web/src/hotels/hotels-data.ts` — `HOTEL_CITIES`, `hotelsForCity`, `isHotelCity`; ~50 named hotels across 5 distance bands per city (pure/client-safe seed, no pg)
+- **Admin CRUD (DB-backed):** `apps/web/src/hotels/hotels-store.ts` (Postgres `hotel_cities` jsonb-per-slug + in-memory fallback, seeded from `hotels-data.ts`), `apps/web/src/hotels/hotels-admin-actions.ts` (ADMIN-gated get/save/list), UI `apps/web/src/admin/HotelsAdmin.tsx`, route `apps/web/app/admin/hotels/page.tsx`. The public `/hotels/[city]` page reads from `getHotelsStore()`. Editable: city title/mosque, bands (short/dist/walk/area/name) and the hotels within each band (name/stars/note/dist) — add/edit/delete/reorder.
 - **Hand-off:** "Book in this band" → `/book?city=MAKKAH|MADINAH`
 - Surfaced from the landing frames 08/09 (`src/content.ts` → `/hotels/makkah`, `/hotels/madinah`)
 

@@ -3,7 +3,7 @@
 import { useEffect, useState, useTransition } from 'react';
 import Link from 'next/link';
 import { ScreenFrame } from '../../components/ScreenFrame';
-import { tourChrome, tourScenes } from './scenes';
+import { resolveScenes, tourChrome, type SceneDef } from './scenes';
 import { RITUAL_LOCALES, isRtlLang, ui } from '../i18n';
 import { useRitualLang } from '../useRitualLang';
 import { ListenButton } from '../ListenButton';
@@ -28,13 +28,13 @@ function embed(url: string): { kind: 'iframe' | 'video'; url: string } {
   return { kind: 'video', url };
 }
 
-export function VirtualTour({ overrides = {}, signedIn = false, initialVideos = {} }: { overrides?: ContentOverrides; signedIn?: boolean; initialVideos?: Record<string, string> }) {
+export function VirtualTour({ overrides = {}, signedIn = false, initialVideos = {}, sceneDefs = [] }: { overrides?: ContentOverrides; signedIn?: boolean; initialVideos?: Record<string, string>; sceneDefs?: SceneDef[] }) {
   const [lang, setLang] = useRitualLang();
   const rtl = isRtlLang(lang);
   const chrome = tourChrome(lang);
   const L = vl(lang);
   const localize = (l: string) =>
-    tourScenes(l).map((s) => {
+    resolveScenes(sceneDefs, l).map((s) => {
       const o = overrides[`tour:${s.id}`]?.[l] ?? {};
       return { ...s, title: o.title?.trim() || s.title, subtitle: o.subtitle?.trim() || s.subtitle, desc: o.intro?.trim() || s.desc };
     });

@@ -8,8 +8,8 @@
 const BASE = (process.env.NEXT_PUBLIC_IMG_BASE ?? '').replace(/\/$/, '');
 const FALLBACK = `${BASE}/img/scenes/makkah-madinah.webp`;
 
-type L = Record<string, string>;
-interface SceneDef {
+export type L = Record<string, string>;
+export interface SceneDef {
   id: string;
   file: string;
   title: L;
@@ -68,6 +68,10 @@ const SCENES: SceneDef[] = [
   },
 ];
 
+/** The bundled seed — used to populate the DB-backed scene store on first run, and as the
+ *  client-safe fallback when no DATABASE_URL is configured. */
+export const SCENE_SEED: SceneDef[] = SCENES;
+
 const pick = (m: L, lang: string): string => m[lang] ?? m.en ?? '';
 
 export interface TourScene {
@@ -82,8 +86,10 @@ export interface TourScene {
   narrationSrc: string;
 }
 
-export function tourScenes(lang: string): TourScene[] {
-  return SCENES.map((s) => ({
+/** Resolve an arbitrary ordered list of scene defs (e.g. DB-backed) into localized TourScenes,
+ *  building the image / video / narration src exactly as before. */
+export function resolveScenes(defs: SceneDef[], lang: string): TourScene[] {
+  return defs.map((s) => ({
     id: s.id,
     title: pick(s.title, lang),
     subtitle: pick(s.subtitle, lang),
@@ -93,6 +99,10 @@ export function tourScenes(lang: string): TourScene[] {
     videoSrc: `${BASE}/video/ritual/tour/${s.id}.mp4`,
     narrationSrc: `${BASE}/audio/ritual/tour/${s.id}.${lang}.mp3`,
   }));
+}
+
+export function tourScenes(lang: string): TourScene[] {
+  return resolveScenes(SCENE_SEED, lang);
 }
 
 // Tour chrome strings (selected-language).

@@ -23,10 +23,11 @@ per-step localStorage clip cache is replaced by a DB-backed per-user store.
 ## Route & files
 - Route: `apps/web/app/guide/tour/page.tsx` (public; loads content overrides + per-user videos).
 - Component: `apps/web/src/ritual/tour/VirtualTour.tsx` (client).
-- Scenes: `apps/web/src/ritual/tour/scenes.ts` (`tourScenes(lang)` + `tourChrome(lang)`; EN/AR/UR/TR/DE).
+- Scenes: `apps/web/src/ritual/tour/scenes.ts` (`SCENE_SEED`, `resolveScenes(defs,lang)`, `tourScenes(lang)`, `tourChrome(lang)`; EN/AR/UR/TR/DE).
 - Panorama: `apps/web/src/ritual/tour/PanoramaViewer.tsx`; narration: `ritual/ListenButton.tsx`.
 - Store/actions: `tour/tour-video-store.ts` + `tour/tour-video-actions.ts`.
-- Admin copy overrides: `ritual/content-store.ts` via `tour:<sceneId>` keys.
+- **Scene CRUD (DB-backed, multilingual):** `apps/web/src/ritual/tour/tour-scene-store.ts` (Postgres `tour_scenes` jsonb-per-id + in-memory fallback, seeded from `SCENE_SEED`), `tour/tour-scene-admin-actions.ts` (ADMIN-gated list/save), UI `apps/web/src/admin/TourScenesAdmin.tsx`, route `apps/web/app/admin/tour/page.tsx`. The public page now passes `sceneDefs` (from `getTourSceneStore()`) into `VirtualTour`, which builds scenes via `resolveScenes`. Admin edits scene id/image + title/subtitle/desc per language (EN/AR/UR/TR/DE), add/delete/reorder.
+- Admin copy overrides (ritual step text, separate concern): `ritual/content-store.ts` via `tour:<sceneId>` keys.
 
 ## Design
 Cinematic `ScreenFrame` from `@auj/ui` with green/sand/accent tokens — no raw hex. Blurred panorama

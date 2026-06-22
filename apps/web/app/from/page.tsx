@@ -2,12 +2,14 @@ import Link from 'next/link';
 import { getCurrentUser } from '../../src/auth/session';
 import { SitePage } from '../../src/components/SitePage';
 import { ScreenFrame } from '../../src/components/ScreenFrame';
-import { DEPART_AIRPORTS, DEPART_REGIONS } from '../../src/depart/airport-content';
+import { DEPART_REGIONS } from '../../src/depart/airport-content';
+import { getAirportStore } from '../../src/depart/airport-store';
 
 // Public — "Departing from your city": the European departure airports, grouped by region,
 // each linking to its dynamic per-airport hub.
 export default async function FromIndexPage() {
   const user = await getCurrentUser();
+  const airports = await (await getAirportStore()).listAirports();
   return (
     <SitePage user={user}>
       <div className="py-[clamp(18px,3.5vw,36px)]">
@@ -18,7 +20,7 @@ export default async function FromIndexPage() {
               <section key={region}>
                 <h2 className="mb-2.5 font-mono text-[11px] uppercase tracking-[0.1em] text-accent-600">{region}</h2>
                 <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
-                  {DEPART_AIRPORTS.filter((a) => a.region === region).map((a) => (
+                  {airports.filter((a) => a.region === region).map((a) => (
                     <Link
                       key={a.code}
                       href={`/from/${a.code}`}
