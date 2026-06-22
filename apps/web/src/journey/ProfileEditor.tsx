@@ -5,7 +5,7 @@ import Link from 'next/link';
 import type { PublicUser } from '@auj/auth';
 import { formatMoney, pkrIndicative } from '../currency';
 import { saveProfileAction } from './profile-actions';
-import { TIERS, type PilgrimProfile } from './profile-types';
+import { PREFERENCE_OPTIONS, TIERS, type JourneyHistory, type PilgrimProfile } from './profile-types';
 
 const INPUT = 'w-full rounded-lg border-[1.5px] border-sand-300 bg-white px-3 py-2 text-[14px] focus:border-green-700 focus:outline-none';
 const STAGES = ['Registered', 'Passport', 'Deposit', 'Visa started', 'Info sent'];
@@ -34,15 +34,27 @@ export function ProfileEditor({ user, profile }: { user: PublicUser; profile: Pi
   const [phone, setPhone] = useState(profile?.phone ?? '');
   const [languages, setLanguages] = useState((profile?.languages ?? []).join(', '));
   const [tier, setTier] = useState(profile?.tier ?? 'Standard');
+  const [preferences, setPreferences] = useState<string[]>(profile?.preferences ?? []);
   const [savedMsg, setSavedMsg] = useState('');
   const [pending, start] = useTransition();
 
   const initials = user.displayName.split(/\s+/).map((s) => s[0]).slice(0, 2).join('').toUpperCase();
   const deposit = { amount: 248000, currency: 'EUR' as const };
+  const history: JourneyHistory[] = profile?.history ?? [];
+  const togglePref = (p: string): void => setPreferences((cur) => (cur.includes(p) ? cur.filter((x) => x !== p) : [...cur, p]));
 
   const save = (): void =>
     start(async () => {
-      await saveProfileAction({ city, country, email, phone, languages: languages.split(',').map((s) => s.trim()).filter(Boolean), tier });
+      await saveProfileAction({
+        city,
+        country,
+        email,
+        phone,
+        languages: languages.split(',').map((s) => s.trim()).filter(Boolean),
+        tier,
+        preferences,
+        history,
+      });
       setSavedMsg('Saved to your profile.');
     });
 
@@ -55,7 +67,13 @@ export function ProfileEditor({ user, profile }: { user: PublicUser; profile: Pi
           <div className="font-serif text-2xl font-semibold text-white">{user.displayName}</div>
           <div className="text-[13px] text-green-100/80">{[city, country].filter(Boolean).join(', ') || 'Add your city & country below'}</div>
         </div>
-        <span className="rounded-full bg-[#F7EBD3]/20 px-3 py-1 text-[12.5px] font-semibold text-[#F0D9A4]">{tier} tier</span>
+        <div className="flex items-center gap-2.5">
+          <span className="rounded-2xl border border-white/15 bg-white/[0.08] px-4 py-2.5 text-center">
+            <span className="block font-mono text-xl font-semibold text-white">{history.length}</span>
+            <span className="block text-[11px] text-green-100/70">Journeys</span>
+          </span>
+          <span className="rounded-full bg-[#F7EBD3]/20 px-3 py-1 text-[12.5px] font-semibold text-[#F0D9A4]">{tier} tier</span>
+        </div>
       </div>
 
       {/* progress */}
@@ -97,6 +115,63 @@ export function ProfileEditor({ user, profile }: { user: PublicUser; profile: Pi
           <p className="mt-2 text-[11.5px] text-sand-400">Charged in EUR; PKR shown at today’s rate.</p>
           <Link href="/book" className="mt-3 block rounded-xl bg-green-800 py-2.5 text-center text-sm font-semibold text-white hover:bg-green-700">Pay / book</Link>
         </div>
+      </div>
+
+      {/* preferences */}
+      <div className="mt-6 rounded-2xl border border-sand-200 bg-white p-5">
+        <div className="mb-1 text-[13px] font-bold text-sand-ink">Preferences &amp; profile</div>
+        <p className="mb-3 text-[12px] text-sand-500">Tap to set how you like to travel — saved to your profile and shared with our reps.</p>
+        <div className="flex flex-wrap gap-2">
+          {PREFERENCE_OPTIONS.map((p) => {
+            const on = preferences.includes(p);
+            return (
+              <button
+                key={p}
+                type="button"
+                aria-pressed={on}
+                onClick={() => togglePref(p)}
+                className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-2 text-[13px] font-medium transition-colors duration-fast ${
+                  on ? 'border-green-600 bg-green-50 text-green-800' : 'border-sand-200 bg-white text-sand-600 hover:border-green-500'
+                }`}
+              >
+                <span className={`h-[7px] w-[7px] rounded-full ${on ? 'bg-green-600' : 'bg-sand-300'}`} /> {p}
+              </button>
+            );
+          })}
+        </div>
+        <p className="mt-3 text-[11.5px] text-sand-400">Remember to press “Save profile” above to keep your changes.</p>
+      </div>
+
+      {/* pilgrimage history */}
+      <div className="mt-6 rounded-2xl border border-sand-200 bg-white p-5">
+        <div className="mb-4 text-[13px] font-bold text-sand-ink">Pilgrimage history</div>
+        {history.length === 0 ? (
+          <div className="rounded-xl border border-dashed border-sand-200 bg-sand-50/50 px-4 py-8 text-center">
+            <div className="text-2xl">🕋</div>
+            <p className="mt-2 text-sm font-semibold text-sand-700">No completed journeys yet</p>
+            <p className="mt-1 text-[12.5px] text-sand-500">Each pilgrimage you complete with AUJ will appear here as a timeline.</p>
+            <Link href="/book" className="mt-3 inline-block rounded-xl bg-green-800 px-4 py-2 text-[13px] font-semibold text-white hover:bg-green-700">Plan your first journey</Link>
+          </div>
+        ) : (
+          <div className="flex flex-col">
+            {history.map((h, i) => (
+              <div key={`${h.title}-${h.year}`} className="flex gap-3.5">
+                <div className="flex shrink-0 flex-col items-center">
+                  <span className="mt-1 h-3 w-3 rounded-full bg-green-600 ring-2 ring-green-600/30" />
+                  {i < history.length - 1 && <span className="w-0.5 flex-1 bg-sand-200" />}
+                </div>
+                <div className="min-w-0 flex-1 pb-4">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="text-[14.5px] font-semibold text-sand-ink">{h.title}</span>
+                    <span className="font-mono text-[12px] text-green-700">{h.year}</span>
+                  </div>
+                  <div className="mt-0.5 text-[12.5px] text-sand-500">{h.detail}</div>
+                  <div className="mt-0.5 text-[12px] text-gold">{h.stars}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* tool grid */}
