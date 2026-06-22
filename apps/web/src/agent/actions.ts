@@ -88,6 +88,25 @@ export async function bookGroupAction(input: {
   return { booking, balance: snapshot.balanceMinor, entries: toJournalEntries(agency.id, legs, w.currency) };
 }
 
+/** Top up the agency wallet (records a SEPA credit) and return the refreshed balance + ledger. */
+export async function topUpWalletAction(amountMinor: number): Promise<{ balance: number; entries: JournalEntry[] }> {
+  const agency = await requireAgency();
+  const amount = Math.round(Number(amountMinor));
+  if (!Number.isFinite(amount) || amount < 100) throw new Error('Enter a top-up amount of at least €1.');
+  const capped = Math.min(amount, 100_000_000); // cap at €1,000,000 per top-up
+  const db = await getAgentDb();
+  const w = await db.wallet(agency.id);
+  const snapshot = await db.append(agency.id, {
+    ref: `TOP-${uuidv7().slice(0, 8).toUpperCase()}`,
+    kind: 'TOPUP',
+    memo: 'Wallet top-up · SEPA',
+    debitMinor: 0,
+    creditMinor: capped,
+  });
+  const legs = await db.ledger(agency.id);
+  return { balance: snapshot.balanceMinor, entries: toJournalEntries(agency.id, legs, w.currency) };
+}
+
 /** Build + persist a shareable quote, scoped to the agency. markupPct is whole-number percent. */
 export async function saveQuoteAction(input: { lines: QuoteLine[]; markupPct: number }): Promise<QuoteRecord> {
   const agency = await requireAgency();

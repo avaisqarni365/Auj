@@ -18,7 +18,7 @@ import { buildStatement } from './statements';
 import { MAX_PAX } from './multipax';
 import { formatMoney } from './money';
 import type { Agent } from './domain';
-import { bookGroupAction, setupAgentAction, statementCsvAction } from './actions';
+import { bookGroupAction, setupAgentAction, statementCsvAction, topUpWalletAction } from './actions';
 
 const PER_PAX_EUR = 100_000;
 
@@ -32,6 +32,8 @@ export function AgentPortal() {
   const [booking, setBooking] = useState<Booking>();
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string>();
+  const [topUpEur, setTopUpEur] = useState('1000');
+  const [toppingUp, setToppingUp] = useState(false);
 
   useEffect(() => {
     void setupAgentAction().then((r) => {
@@ -55,6 +57,25 @@ export function AgentPortal() {
       setErr(e instanceof Error ? e.message : 'Booking failed');
     } finally {
       setBusy(false);
+    }
+  };
+
+  const topUp = async (): Promise<void> => {
+    const eur = Number(topUpEur);
+    if (!Number.isFinite(eur) || eur < 1) {
+      setErr('Enter a top-up amount of at least €1.');
+      return;
+    }
+    setToppingUp(true);
+    setErr(undefined);
+    try {
+      const r = await topUpWalletAction(Math.round(eur * 100));
+      setBalance(r.balance);
+      setEntries(r.entries);
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : 'Top-up failed');
+    } finally {
+      setToppingUp(false);
     }
   };
 
@@ -101,7 +122,29 @@ export function AgentPortal() {
         </section>
 
         <section>
-          <h3 className="mb-3 font-serif text-lg font-semibold text-sand-ink">Payments &amp; ledger</h3>
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+            <h3 className="font-serif text-lg font-semibold text-sand-ink">Payments &amp; ledger</h3>
+            <div className="flex items-center gap-2">
+              <span className="text-[12.5px] font-semibold text-sand-500">Top up €</span>
+              <input
+                type="number"
+                min={1}
+                step={50}
+                value={topUpEur}
+                onChange={(e) => setTopUpEur(e.target.value)}
+                aria-label="Top-up amount in EUR"
+                className="w-24 rounded-[10px] border-[1.5px] border-sand-300 bg-white px-2.5 py-1.5 text-[13px] font-mono text-sand-ink focus:border-green-700 focus:outline-none"
+              />
+              <button
+                type="button"
+                onClick={() => void topUp()}
+                disabled={toppingUp}
+                className="rounded-[10px] bg-green-800 px-3.5 py-1.5 text-[12.5px] font-semibold text-white transition-[transform,background-color] duration-fast hover:bg-green-700 active:scale-[0.98] disabled:opacity-50"
+              >
+                {toppingUp ? 'Topping up…' : '+ Top up'}
+              </button>
+            </div>
+          </div>
           <LedgerView agencyName={agent.agencyName} balance={balance} creditLimit={creditLimit} account={`wallet:${agent.id}`} entries={entries} />
         </section>
 
