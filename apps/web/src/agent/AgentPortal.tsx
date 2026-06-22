@@ -10,9 +10,11 @@ import type { JournalEntry } from '@auj/payments';
 import { AgentDashboard } from './screens/AgentDashboard';
 import { MultiPaxBooking } from './screens/MultiPaxBooking';
 import { LedgerView } from './screens/LedgerView';
+import { Statements } from './screens/Statements';
 import { QuotesPanel } from './screens/QuotesPanel';
 import { MarkupsPanel } from './screens/MarkupsPanel';
 import { Shell } from './screens/Shell';
+import { buildStatement } from './statements';
 import { MAX_PAX } from './multipax';
 import { formatMoney } from './money';
 import type { Agent } from './domain';
@@ -99,16 +101,7 @@ export function AgentPortal() {
         </section>
 
         <section>
-          <div className="mb-3 flex items-center justify-between gap-3">
-            <h3 className="font-serif text-lg font-semibold text-sand-ink">Payments &amp; ledger</h3>
-            <button
-              type="button"
-              onClick={() => void downloadStatement()}
-              className="rounded-lg border border-sand-300 bg-white px-3 py-1.5 text-[12.5px] font-semibold text-green-800 transition-transform duration-fast active:scale-[0.98]"
-            >
-              ↓ Statement (CSV)
-            </button>
-          </div>
+          <h3 className="mb-3 font-serif text-lg font-semibold text-sand-ink">Payments &amp; ledger</h3>
           <LedgerView agencyName={agent.agencyName} balance={balance} creditLimit={creditLimit} account={`wallet:${agent.id}`} entries={entries} />
         </section>
 
@@ -120,6 +113,11 @@ export function AgentPortal() {
         <section>
           <h3 className="mb-3 font-serif text-lg font-semibold text-sand-ink">Quotation builder</h3>
           <QuotesPanel />
+        </section>
+
+        <section>
+          <h3 className="mb-3 font-serif text-lg font-semibold text-sand-ink">Statements</h3>
+          <Statements statement={buildStatement(entries, `wallet:${agent.id}`, 'EUR')} onExportCSV={() => void downloadStatement()} />
         </section>
       </div>
     </Shell>
