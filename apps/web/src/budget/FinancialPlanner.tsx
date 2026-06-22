@@ -8,31 +8,39 @@ import { displayFromEur } from '../currency';
 // AUJ package (one confirmed price) split from private spending, with an estimated per-pilgrim
 // total in EUR + indicative PKR. Amounts are EUR minor units (cents).
 
-type Line = { label: string; note: (days: number) => string; kind: 'nightly' | 'perDay' | 'fixed'; cents: number };
+// Serializable cost line: `note` is a template string that may contain the placeholder `{days}`
+// (only the hotel line needs it). All other notes are static text.
+export type FinanceLine = { label: string; note: string; kind: 'nightly' | 'perDay' | 'fixed'; cents: number };
 
-const PACKAGE: Line[] = [
-  { label: 'Hotel near the Haram', note: (d) => `${d} nights · twin-share`, kind: 'nightly', cents: 11_000 },
-  { label: 'Flights (return)', note: () => 'From your EU city', kind: 'fixed', cents: 48_000 },
-  { label: 'Ground transfers & ziyarat', note: () => 'Airport, Haram, sites', kind: 'fixed', cents: 18_000 },
-  { label: 'Visa & services', note: () => 'e-Visa, SIM, Ihram kit', kind: 'fixed', cents: 15_000 },
+const noteText = (note: string, days: number): string => note.replace('{days}', String(days));
+
+const PACKAGE: FinanceLine[] = [
+  { label: 'Hotel near the Haram', note: '{days} nights · twin-share', kind: 'nightly', cents: 11_000 },
+  { label: 'Flights (return)', note: 'From your EU city', kind: 'fixed', cents: 48_000 },
+  { label: 'Ground transfers & ziyarat', note: 'Airport, Haram, sites', kind: 'fixed', cents: 18_000 },
+  { label: 'Visa & services', note: 'e-Visa, SIM, Ihram kit', kind: 'fixed', cents: 15_000 },
 ];
 
-const PRIVATE: Line[] = [
-  { label: 'Food & dining', note: () => '~€18 / day', kind: 'perDay', cents: 1_800 },
-  { label: 'Local transport', note: () => 'Taxis, ride-hailing ~€6 / day', kind: 'perDay', cents: 600 },
-  { label: 'Laundry', note: () => 'Wash & iron for the trip', kind: 'fixed', cents: 2_500 },
-  { label: 'Clothes & ihram', note: () => 'Ihram, abaya, basics', kind: 'fixed', cents: 6_000 },
-  { label: 'Gifts, dates & Zamzam', note: () => 'To carry home', kind: 'fixed', cents: 9_000 },
-  { label: 'SIM & data', note: () => 'Local number + bundle', kind: 'fixed', cents: 2_000 },
+const PRIVATE: FinanceLine[] = [
+  { label: 'Food & dining', note: '~€18 / day', kind: 'perDay', cents: 1_800 },
+  { label: 'Local transport', note: 'Taxis, ride-hailing ~€6 / day', kind: 'perDay', cents: 600 },
+  { label: 'Laundry', note: 'Wash & iron for the trip', kind: 'fixed', cents: 2_500 },
+  { label: 'Clothes & ihram', note: 'Ihram, abaya, basics', kind: 'fixed', cents: 6_000 },
+  { label: 'Gifts, dates & Zamzam', note: 'To carry home', kind: 'fixed', cents: 9_000 },
+  { label: 'SIM & data', note: 'Local number + bundle', kind: 'fixed', cents: 2_000 },
 ];
 
-const amount = (l: Line, days: number): number => (l.kind === 'fixed' ? l.cents : l.cents * days);
-const sum = (ls: Line[], days: number): number => ls.reduce((a, l) => a + amount(l, days), 0);
+// Client-safe seed shared with the store (no pg in this file).
+export const FINANCE_SEED: { package: FinanceLine[]; private: FinanceLine[] } = { package: PACKAGE, private: PRIVATE };
+export type FinanceLines = typeof FINANCE_SEED;
 
-export function FinancialPlanner() {
+const amount = (l: FinanceLine, days: number): number => (l.kind === 'fixed' ? l.cents : l.cents * days);
+const sum = (ls: FinanceLine[], days: number): number => ls.reduce((a, l) => a + amount(l, days), 0);
+
+export function FinancialPlanner({ lines = FINANCE_SEED }: { lines?: FinanceLines }) {
   const [days, setDays] = useState<10 | 15>(10);
-  const pkgSum = sum(PACKAGE, days);
-  const privSum = sum(PRIVATE, days);
+  const pkgSum = sum(lines.package, days);
+  const privSum = sum(lines.private, days);
   const grand = pkgSum + privSum;
 
   const dayBtn = (n: 10 | 15) => (
@@ -81,27 +89,27 @@ export function FinancialPlanner() {
 
         {/* breakdown */}
         <div className="flex flex-1 basis-[360px] flex-col gap-[18px] p-[clamp(20px,2.4vw,26px)]">
-          <Group title="AUJ PACKAGE · INCLUDED IN ONE PRICE" titleClass="text-green-800" lines={PACKAGE} days={days} accent="green" />
-          <Group title="PRIVATE SPENDING · YOUR OWN BUDGET" titleClass="text-warning" lines={PRIVATE} days={days} accent="warning" />
+          <Group title="AUJ PACKAGE · INCLUDED IN ONE PRICE" titleClass="text-green-800" lines={lines.package} days={days} accent="green" />
+          <Group title="PRIVATE SPENDING · YOUR OWN BUDGET" titleClass="text-warning" lines={lines.private} days={days} accent="warning" />
         </div>
       </div>
     </ScreenFrame>
   );
 }
 
-function Group({ title, titleClass, lines, days, accent }: { title: string; titleClass: string; lines: Line[]; days: number; accent: 'green' | 'warning' }) {
+function Group({ title, titleClass, lines, days, accent }: { title: string; titleClass: string; lines: FinanceLine[]; days: number; accent: 'green' | 'warning' }) {
   return (
     <div>
       <div className={`mb-2.5 font-mono text-[10.5px] tracking-[0.08em] ${titleClass}`}>{title}</div>
       <div className="flex flex-col gap-2">
-        {lines.map((l) => (
+        {lines.map((l, i) => (
           <div
-            key={l.label}
+            key={`${l.label}-${i}`}
             className={`flex items-center gap-3 rounded-xl border border-sand-100 bg-sand-50/40 px-3.5 py-3 ${accent === 'green' ? 'border-l-[3px] border-l-green-600' : 'border-l-[3px] border-l-warning'}`}
           >
             <div className="min-w-0 flex-1">
               <div className="text-sm font-semibold text-sand-ink">{l.label}</div>
-              <div className="text-xs text-sand-500">{l.note(days)}</div>
+              <div className="text-xs text-sand-500">{noteText(l.note, days)}</div>
             </div>
             <div className={`whitespace-nowrap font-mono text-sm font-semibold ${accent === 'green' ? 'text-green-800' : 'text-warning'}`}>
               {displayFromEur(amount(l, days), 'EUR')}

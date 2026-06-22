@@ -4,13 +4,13 @@ export type PackingProfile = 'Men' | 'Women' | 'Kids' | 'Family' | 'Diabetic';
 export const PACKING_PROFILES: PackingProfile[] = ['Men', 'Women', 'Kids', 'Family', 'Diabetic'];
 export const PACKING_DAYS = [11, 21, 30] as const;
 
-interface Def {
+export interface Def {
   id: string;
   label: string;
   per?: number; // days-per-unit → qty = ceil(days / per)
   profiles?: PackingProfile[]; // restrict to these profiles
 }
-interface SectionDef {
+export interface SectionDef {
   title: string;
   items: Def[];
 }
@@ -73,6 +73,9 @@ const SECTIONS: SectionDef[] = [
   },
 ];
 
+// The shared default template seed. DB-backed + admin-editable; this is the fallback.
+export const PACKING_TEMPLATE_SEED: SectionDef[] = SECTIONS;
+
 export interface PackItem {
   id: string;
   label: string;
@@ -83,14 +86,18 @@ export interface PackSection {
   items: PackItem[];
 }
 
-export function build(profile: PackingProfile, days: number): PackSection[] {
+export function buildFrom(sections: SectionDef[], profile: PackingProfile, days: number): PackSection[] {
   const d = Math.max(1, Math.trunc(days) || 1);
-  return SECTIONS.map((s) => ({
+  return sections.map((s) => ({
     title: s.title,
     items: s.items
       .filter((it) => !it.profiles || it.profiles.includes(profile))
       .map((it) => ({ id: it.id, label: it.label, qty: it.per ? Math.max(1, Math.ceil(d / it.per)) : undefined })),
   })).filter((s) => s.items.length > 0);
+}
+
+export function build(profile: PackingProfile, days: number): PackSection[] {
+  return buildFrom(PACKING_TEMPLATE_SEED, profile, days);
 }
 
 export function totalItems(sections: PackSection[]): number {

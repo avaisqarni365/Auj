@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import Link from 'next/link';
 import { ScreenFrame } from '../components/ScreenFrame';
-import { build, PACKING_DAYS, PACKING_PROFILES, totalItems, type PackingProfile } from './packing';
+import { buildFrom, PACKING_DAYS, PACKING_PROFILES, PACKING_TEMPLATE_SEED, totalItems, type PackingProfile, type SectionDef } from './packing';
 import { getPackingAction, savePackingAction } from './packing-actions';
 import type { PackingState } from './packing-types';
 
@@ -19,10 +19,12 @@ export function PackingOrganizer({
   signedIn,
   initialProfile = 'Family',
   initialState = null,
+  template = PACKING_TEMPLATE_SEED,
 }: {
   signedIn: boolean;
   initialProfile?: PackingProfile;
   initialState?: PackingState | null;
+  template?: SectionDef[];
 }) {
   const [profile, setProfile] = useState<PackingProfile>(initialProfile);
   const [days, setDays] = useState<number>(initialState?.days ?? 11);
@@ -30,7 +32,7 @@ export function PackingOrganizer({
   const [loading, startLoad] = useTransition();
   const loadedOnce = useRef(false);
 
-  const sections = useMemo(() => build(profile, days), [profile, days]);
+  const sections = useMemo(() => buildFrom(template, profile, days), [template, profile, days]);
   const total = useMemo(() => totalItems(sections), [sections]);
   const done = useMemo(
     () => sections.reduce((n, s) => n + s.items.filter((i) => checked[i.id]).length, 0),
