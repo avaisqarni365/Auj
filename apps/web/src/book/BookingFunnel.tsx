@@ -15,6 +15,8 @@ import { finalizeBookingAction, pollVisaAction, searchAddonsAction, searchHotels
 import { clearBookingDraftAction, saveBookingDraftAction } from './booking-draft-actions';
 import type { BookingDraft } from './booking-draft-types';
 import { ScreenFrame } from '../components/ScreenFrame';
+import { SendInquiryPanel, type InquiryContact } from '../components/SendInquiryPanel';
+import type { InquiryInput } from '../leads/inquiry';
 
 const STEP_LABEL: Record<FunnelState['step'], string> = {
   SEARCH: 'Search',
@@ -179,6 +181,52 @@ export function BookingFunnel({
   const addPilgrim = (): void => setPilgrims((cur) => [...cur, blankPilgrim()]);
   const removePilgrim = (index: number): void => setPilgrims((cur) => (cur.length > 1 ? cur.filter((_, i) => i !== index) : cur));
 
+  // Enquiry alternative to paying now: summarise the booking and let the team follow up.
+  const nights = (() => {
+    const { checkIn, checkOut } = state.criteria;
+    if (!checkIn || !checkOut) return 0;
+    const diff = (new Date(checkOut).getTime() - new Date(checkIn).getTime()) / 86_400_000;
+    return Number.isFinite(diff) && diff > 0 ? Math.round(diff) : 0;
+  })();
+  const bookingSummary: { label: string; value: string }[] = [
+    { label: 'Destination', value: state.criteria.city },
+    { label: 'Dates', value: state.criteria.checkIn && state.criteria.checkOut ? `${state.criteria.checkIn} → ${state.criteria.checkOut}` : 'Flexible' },
+    { label: 'Pilgrims', value: String(state.criteria.pax) },
+    { label: 'Package', value: state.mode },
+    { label: 'Insurance', value: state.readiness.insurance },
+    { label: 'Total (indicative)', value: formatMoney(SELL_PRICE) },
+  ];
+  const buildBookingInquiry = (c: InquiryContact, consent: boolean): InquiryInput => ({
+    country: pilgrims[0]?.residenceCountry || pilgrims[0]?.nationality || '',
+    city: c.address,
+    departureAirport: '',
+    adults: state.criteria.pax,
+    children: 0,
+    infants: 0,
+    partyKind: state.criteria.pax > 1 ? 'FAMILY' : 'SOLO',
+    makkahNights: state.criteria.city === 'MAKKAH' ? nights : 0,
+    makkahHotelBand: 'any',
+    makkahZiyarah: [],
+    transferMode: 'FLEXIBLE',
+    transferPrivate: false,
+    transferTime: 'FLEXIBLE',
+    madinahNights: state.criteria.city === 'MADINAH' ? nights : 0,
+    madinahHotelBand: 'any',
+    rawdah: state.rawdahRequested,
+    madinahZiyarah: [],
+    dining: 'NO_PREF',
+    returnFrom: 'MADINAH',
+    returnMode: 'FLEXIBLE',
+    jeddahStopover: false,
+    trackerOptIn: true,
+    name: c.name,
+    email: c.email,
+    phone: c.phone,
+    channel: 'WHATSAPP',
+    lang: 'en',
+    consent,
+  });
+
   // Results is a multi-column grid on desktop; the other steps read best as a centered column.
   const wide = state.step === 'RESULTS';
   return (
@@ -239,20 +287,34 @@ export function BookingFunnel({
       )}
 
       {state.step === 'CHECKOUT' && (
-        <Checkout
-          locale={bookLocale}
-          currency={state.currency}
-          totalEur={SELL_PRICE}
-          onCurrency={(currency) => dispatch({ type: 'SET_CURRENCY', currency })}
-          onPay={pay}
-          paying={pending}
-          onBack={back('READINESS')}
-          gift={state.gift}
-          onGift={(patch) => dispatch({ type: 'SET_GIFT', gift: patch })}
-          requests={state.requests}
-          onToggleRequest={(category) => dispatch({ type: 'TOGGLE_REQUEST', category })}
-          onRequestNote={(note) => dispatch({ type: 'SET_REQUEST_NOTE', note })}
-        />
+        <>
+          <Checkout
+            locale={bookLocale}
+            currency={state.currency}
+            totalEur={SELL_PRICE}
+            onCurrency={(currency) => dispatch({ type: 'SET_CURRENCY', currency })}
+            onPay={pay}
+            paying={pending}
+            onBack={back('READINESS')}
+            gift={state.gift}
+            onGift={(patch) => dispatch({ type: 'SET_GIFT', gift: patch })}
+            requests={state.requests}
+            onToggleRequest={(category) => dispatch({ type: 'TOGGLE_REQUEST', category })}
+            onRequestNote={(note) => dispatch({ type: 'SET_REQUEST_NOTE', note })}
+          />
+          <div className="mx-auto max-w-3xl px-4 pb-8">
+            <div className="mb-3 flex items-center gap-3 text-[12.5px] font-semibold uppercase tracking-wider text-sand-400">
+              <span className="h-px flex-1 bg-sand-200" /> or enquire first <span className="h-px flex-1 bg-sand-200" />
+            </div>
+            <SendInquiryPanel
+              subject="AUJ booking inquiry"
+              subtitle="Not ready to pay? Send your booking details and we’ll prepare a tailored quote — by WhatsApp, email, or a direct inquiry."
+              summary={bookingSummary}
+              buildInquiry={buildBookingInquiry}
+              successTitle="Your inquiry is on its way to AUJ"
+            />
+          </div>
+        </>
       )}
 
       {state.step === 'CARD' && card && (
