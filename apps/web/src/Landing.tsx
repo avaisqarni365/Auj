@@ -72,15 +72,15 @@ export default function Landing({ user, deals, content = {} }: { user?: PublicUs
 
   return (
     <div className="overflow-x-hidden bg-sand-50 text-sand-ink">
-      {/* announcement */}
-      <div className="bg-green-950 text-[13px] text-green-100">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-[clamp(16px,4vw,32px)] py-2.5">
+      {/* announcement — white line, text aligned to the top-right */}
+      <div className="border-b border-sand-200 bg-white text-[13px] text-sand-700">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-end gap-x-4 gap-y-1 px-[clamp(16px,4vw,32px)] py-2">
           <span className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-gold" />
             {tl('announce')}
           </span>
-          <span className="flex items-center gap-4 text-green-100/80">
-            <a href="#agents" className="font-medium hover:text-green-50">{tl('forAgents')}</a>
+          <span className="flex items-center gap-4 text-sand-500">
+            <a href="#agents" className="font-medium hover:text-green-800">{tl('forAgents')}</a>
             <span>🌐 EN · LT · UR · AR</span>
           </span>
         </div>
