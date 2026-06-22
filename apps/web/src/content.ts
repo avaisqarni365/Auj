@@ -96,6 +96,7 @@ export const DEPARTURES_GRID: Array<{ cities: string[] }> = [
   { cities: ['Vilnius', 'Riga', 'Tallinn', 'Kaunas'] },
   { cities: ['Warsaw', 'Berlin', 'Vienna', 'Prague'] },
   { cities: ['Dublin', 'Amsterdam', 'Brussels', 'Paris'] },
+  { cities: ['Karachi', 'Lahore', 'Islamabad', 'Peshawar', 'Multan', 'Sialkot'] },
 ];
 
 // Support channels — channel name localised (landing.support[].channel); detail is data.

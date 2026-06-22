@@ -7,7 +7,7 @@ description: "The dynamic per-airport 'Departing from your city' hub — for eac
 
 ## What it is
 A fully dynamic hub per European departure airport. From the "Departing from your city" directory
-(Baltics / Central / Western Europe) a pilgrim opens **`/from/<IATA>`** and sees, for THAT airport:
+(Baltics / Central / Western Europe) a pilgrim opens **`/from/<IATA>`** and sees, for THAT airport (Europe **and Pakistan**):
 an airport walkthrough + helper media, **easy check-in** steps, **flights to Makkah (JED) and Madinah
 (MED)** with the airlines/route/frequency per city, **return flights** (coming home), and a hand-off
 to booking. Free, no-login, mobile-first.
@@ -21,7 +21,7 @@ when a GDS is configured (see below).
 - **Index route:** `apps/web/app/from/page.tsx` — region-grouped airport directory → `/from/<code>`
 - **Hub route:** `apps/web/app/from/[code]/page.tsx` (`generateStaticParams` over DEPART_CODES; `notFound()` otherwise) → `DepartureHub`
 - **Component:** `apps/web/src/depart/DepartureHub.tsx` (client) — hero, walkthrough/media, check-in steps (+ link to the full Airport wizard `/guide/airport`), Makkah/Madinah flight tabs, return flights, airline/route cards, CTA → `/book?from=<code>`
-- **Per-airport content:** `apps/web/src/depart/airport-content.ts` — `DEPART_AIRPORTS` (12: Baltics VNO/RIX/TLL/KUN · Central WAW/BER/VIE/PRG · Western DUB/AMS/BRU/CDG); each has region, blurb, `checkInSteps`, `toMakkah`/`toMadinah` routes (airlines · via · frequency · duration), `arrivalsNote`
+- **Per-airport content:** `apps/web/src/depart/airport-content.ts` — `DEPART_AIRPORTS` (18: Baltics VNO/RIX/TLL/KUN · Central WAW/BER/VIE/PRG · Western DUB/AMS/BRU/CDG · Pakistan KHI/LHE/ISB/PEW/MUX/SKT — Pakistan routes are mostly **direct** to JED/MED on PIA/Saudia/flynas/Airblue/AirSial); each has region, blurb, `checkInSteps`, `toMakkah`/`toMadinah` routes (airlines · via · frequency · duration), `arrivalsNote`
 - **Flights (live-if-API):** `apps/web/src/depart/departure-flights-actions.ts` → `getDepartureFlightsAction(from, hub, date)` calls **`selectTravelSupplier().searchFlights`** through the connector seam — real Amadeus/Sabre when `SUPPLIER=live`, the mock otherwise (offers tagged "Live availability" vs "Sample schedule")
 - **Landing link-up:** `apps/web/src/Landing.tsx` departures section maps each `DEPARTURES_GRID` city → `/from/<code>` via `DEPART_AIRPORTS`
 
@@ -36,7 +36,7 @@ Makkah/Madinah tabs, route cards with frequency pills, a green walkthrough media
 motion ≤300ms, focus rings, 44px targets; RTL-safe.
 
 ## Acceptance criteria
-- [ ] `/from` lists all 12 airports by region; each links to `/from/<code>`.
+- [ ] `/from` lists all 18 airports by region (incl. Pakistan); each links to `/from/<code>`.
 - [ ] `/from/<code>` shows blurb + walkthrough/media + 5 check-in steps + Makkah/Madinah routes (airlines/via/frequency) + return note + booking CTA.
 - [ ] "Show flights" calls the supplier seam and lists offers (carrier · times · EUR), tagged live vs sample; graceful empty state.
 - [ ] Unknown code → 404; ScreenFrame + tokens; no localStorage; flights via the interface only.
