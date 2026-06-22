@@ -143,7 +143,7 @@ export default function Landing({ user, deals, content = {} }: { user?: PublicUs
 
       {/* FRAME 02 · VIRTUAL TOUR — cinematic two-panel card (prototype frame 02) */}
       <div id="tour" className="relative z-10 mt-12 scroll-mt-24">
-        <ScreenFrame label="FRAME 02 · VIRTUAL TOUR" tag="15 guided steps" maxWidth="max-w-5xl" bodyClassName="p-0">
+        <ScreenFrame label="FRAME 02 · VIRTUAL TOUR" tag="15 guided steps" maxWidth="max-w-[1080px]" bodyClassName="p-0">
           <div className="flex flex-wrap">
             {/* preview side */}
             <Link
@@ -198,7 +198,7 @@ export default function Landing({ user, deals, content = {} }: { user?: PublicUs
         <ScreenFrame
           label="FRAME 03 · SEARCH"
           tag="FX today · 1 € = ₨310.8 · charged in EUR"
-          maxWidth="max-w-5xl"
+          maxWidth="max-w-[1080px]"
           bodyClassName="p-[clamp(18px,2.4vw,24px)]"
         >
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
@@ -310,7 +310,7 @@ export default function Landing({ user, deals, content = {} }: { user?: PublicUs
       </section>
 
       {/* cinematic frames — every migrated tool as a framed feature card, frame by frame (frames 02–18) */}
-      <Section id="tools" title="Everything for your journey, frame by frame" sub="Free planning tools and on-the-ground guides — most need no login.">
+      <Section id="tools" title="Everything for your journey, frame by frame" sub="Free planning tools and on-the-ground guides — most need no login." maxWidth="max-w-[1080px]">
         <div className="flex flex-col gap-[clamp(20px,3vw,32px)]">
           {/* frames 02 (tour) & 03 (search) render as rich cards above; list the rest here */}
           {LANDING_FRAMES.filter((f) => String(f.n) !== '02' && String(f.n) !== '2' && String(f.n) !== '03' && String(f.n) !== '3').map((f) => (
@@ -751,9 +751,9 @@ function Reveal({ children }: { children: ReactNode }) {
   );
 }
 
-function Section({ id, title, sub, children }: { id?: string; title: string; sub?: string; children: ReactNode }) {
+function Section({ id, title, sub, maxWidth = 'max-w-6xl', children }: { id?: string; title: string; sub?: string; maxWidth?: string; children: ReactNode }) {
   return (
-    <section id={id} className="mx-auto max-w-6xl px-[clamp(16px,4vw,32px)] py-12">
+    <section id={id} className={`mx-auto ${maxWidth} px-[clamp(16px,4vw,32px)] py-12`}>
       <Reveal>
         <h2 className="font-serif text-[clamp(1.5rem,3vw,2.25rem)] font-semibold tracking-[-0.01em]">{title}</h2>
         {sub ? <p className="mt-2 max-w-[60ch] text-sand-500">{sub}</p> : null}

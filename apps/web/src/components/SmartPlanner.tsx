@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { Logo } from '@auj/ui';
 
 // Smart Visit planner — split-panel configurator from AUJ Smart Planner.dc.html.
@@ -90,7 +89,6 @@ function airportCode(airport: string): string {
 }
 
 export function SmartPlanner() {
-  const router = useRouter();
   const [step, setStep] = useState(0);
   const [d, setD] = useState<PlanData>(INITIAL);
   const set = (patch: Partial<PlanData>): void => setD((s) => ({ ...s, ...patch }));
@@ -132,7 +130,7 @@ export function SmartPlanner() {
     { label: 'Visa route', value: route.title },
   ];
 
-  const seePackages = (): void => {
+  const bookHref = useMemo(() => {
     const params = new URLSearchParams({
       city: 'MAKKAH',
       journey: d.journey,
@@ -142,13 +140,13 @@ export function SmartPlanner() {
       from: airportCode(d.airport),
       stars: d.stars.replace('★', ''),
     });
-    router.push(`/book?${params.toString()}`);
-  };
+    return `/book?${params.toString()}`;
+  }, [d]);
 
   const progressPct = Math.round(((step + 1) / STEPS.length) * 100);
 
   return (
-    <div className="mx-auto w-full max-w-[1000px]">
+    <div className="mx-auto w-full max-w-[1080px]">
       {/* tabs */}
       <div className="mb-[clamp(16px,3vw,28px)] flex flex-wrap gap-2.5">
         <span className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-green-800 shadow-[0_6px_16px_rgba(15,81,50,0.12)]">
@@ -361,13 +359,12 @@ export function SmartPlanner() {
                 Next <span aria-hidden>→</span>
               </button>
             ) : (
-              <button
-                type="button"
-                onClick={seePackages}
+              <Link
+                href={bookHref}
                 className="inline-flex items-center gap-2 rounded-xl bg-green-800 px-6 py-3 text-[15px] font-semibold text-white shadow-[0_8px_18px_rgba(15,81,50,0.26)] transition-[transform,background-color] duration-fast hover:bg-green-700 active:scale-[0.98]"
               >
                 See {matchCount} packages <span aria-hidden>→</span>
-              </button>
+              </Link>
             )}
           </div>
         </section>

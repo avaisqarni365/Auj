@@ -124,11 +124,14 @@ describe('Landing — navigation (logged out)', () => {
     expect(href(screen.getByRole('link', { name: /Redeem a gift/ }))).toBe('/redeem');
   });
 
-  it('renders the primary nav links', () => {
+  it('renders the primary nav links (Packages dropdown + Umrah + Ziyarat)', () => {
     renderLanding();
-    for (const label of ['Umrah', 'Hajj', 'Ziyarat', 'Packages', 'Track booking']) {
-      expect(screen.getByRole('link', { name: label })).toBeTruthy();
+    for (const label of ['Packages', 'Umrah', 'Ziyarat']) {
+      expect(screen.getAllByRole('link', { name: label }).length).toBeGreaterThan(0);
     }
+    // Packages dropdown items
+    expect(href(screen.getByRole('link', { name: 'For agents' }))).toBe('/agent');
+    expect(href(screen.getByRole('link', { name: 'How it works' }))).toBe('/#how');
   });
 });
 
