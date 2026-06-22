@@ -6,11 +6,16 @@ import type { LocalizedText, WizardSlug, WizItem, WizStep } from './wizard-steps
 
 export interface WizardStore {
   getWizard(slug: WizardSlug): Promise<WizStep[]>;
+  setWizard(slug: WizardSlug, steps: WizStep[]): Promise<void>;
 }
 
 class InMemoryWizards implements WizardStore {
+  private readonly edited = new Map<WizardSlug, WizStep[]>();
   async getWizard(slug: WizardSlug): Promise<WizStep[]> {
-    return WIZARDS[slug].steps;
+    return this.edited.get(slug) ?? WIZARDS[slug].steps;
+  }
+  async setWizard(slug: WizardSlug, steps: WizStep[]): Promise<void> {
+    this.edited.set(slug, steps);
   }
 }
 
@@ -37,6 +42,18 @@ class PostgresWizards implements WizardStore {
       ...(row.tip ? { tip: row.tip } : {}),
       ...(row.video_url ? { videoUrl: row.video_url } : {}),
     }));
+  }
+  async setWizard(slug: WizardSlug, steps: WizStep[]): Promise<void> {
+    // Replace the wizard's steps wholesale (the admin edits the full ordered list).
+    await this.pool.query('DELETE FROM ritual_steps WHERE wizard = $1', [slug]);
+    for (let i = 0; i < steps.length; i++) {
+      const s = steps[i]!;
+      await this.pool.query(
+        `INSERT INTO ritual_steps (wizard, idx, short, label, text, items, tip, video_url, sort)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+        [slug, i, s.short, s.label, JSON.stringify(s.text), JSON.stringify(s.items), s.tip ?? null, s.videoUrl ?? null, i],
+      );
+    }
   }
 }
 
