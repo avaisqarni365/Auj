@@ -202,6 +202,24 @@ Optional dua audio: `apps/web/public/audio/ritual/<key>.mp3` (e.g. `talbiyah.mp3
 - [ ] Disclaimer present; ritual content flagged for scholarly review in `/docs/assumptions.md`.
 - [ ] EN/LT/UR/AR parity; RTL correct; design-taste checklist passes; typecheck/lint/unit/e2e-mock green.
 
+## Virtual Tour (`/guide/tour`) — shared by default, personal when signed in
+Source of truth: `migration/Files/AUJ Virtual Tour.dc.html`. A calm scene-by-scene walk-through
+(panorama photo + walkthrough video + localized title/subtitle/description + a Listen/narration
+button + scene selector), EN/AR/UR/TR/DE with RTL. Component `apps/web/src/ritual/tour/VirtualTour.tsx`;
+scenes in `tour/scenes.ts`; admin copy overrides via the content store (`tour:<id>` keys).
+
+Two surfaces, one component (matches the prototype's per-step video):
+- **Public / anonymous** — the tour is **identical for everyone**: shared photo + walkthrough video.
+  A "Sign in to add your own video" hint links to `/login?next=/guide/tour`.
+- **Signed-in pilgrim** — the tour becomes **personal**: per-scene they can paste a video link
+  (YouTube / Vimeo / MP4) which **plays in the main frame in place of the shared walkthrough**, with
+  Replace / Remove. Clips are **DB-backed per user** (`tour_videos(user_id, scene_id, url)` — Postgres
+  with in-memory fallback) via `tour-video-store.ts` + `tour-video-actions.ts` (sign-in enforced; **no
+  localStorage**). Each pilgrim sees only their own clips.
+
+(The prototype's voice-recorder is a separate, later add-on — use the DB-backed `recordings-store`/
+`RecordingPanel`, never localStorage.)
+
 ## Out of scope
 Issuing Rawdah/Hajj permits (Nusuk does that — we only guide), payments, Hajj rites (Mina/Arafat/
 Muzdalifah/Jamarat as a *performed* flow — list under Ziyarat only for now), real-time crowd data.
