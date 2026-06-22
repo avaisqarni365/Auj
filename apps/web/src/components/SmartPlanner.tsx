@@ -5,12 +5,19 @@ import Link from 'next/link';
 import { BrandMark } from './BrandMark';
 import { Combobox, type ComboOption } from './Combobox';
 import { SendInquiryPanel, type InquiryContact } from './SendInquiryPanel';
-import { AIRPORT_COMBO_OPTIONS, COUNTRIES, anyAirport, countryForAirport } from '../geo/airports';
+import { COUNTRIES, airportLabel, airportsFor, anyAirport } from '../geo/airports';
 import type { InquiryInput } from '../leads/inquiry';
 
-// Searchable option lists (Europe + UK + Pakistan) for the airline-style pickers.
+// Searchable country list (Europe + UK + Pakistan) for the airline-style picker.
 const COUNTRY_OPTIONS: ComboOption[] = COUNTRIES.map((c) => ({ value: c, label: c }));
-const AIRPORT_OPTIONS: ComboOption[] = AIRPORT_COMBO_OPTIONS;
+
+// Airports for the currently-selected country: an "Any airport" option then that country's airports.
+function airportOptionsFor(country: string): ComboOption[] {
+  return [
+    { value: anyAirport(country), label: 'Any airport', hint: 'ANY', search: `any all ${country}` },
+    ...airportsFor(country).map((a) => ({ value: airportLabel(a), label: a.city, hint: a.code, search: `${a.city} ${a.code}` })),
+  ];
+}
 
 // Smart Visit planner — split-panel configurator from AUJ Smart Planner.dc.html.
 // Dark-green aside (logo + title + 7-step rail + skyline) and a form panel
@@ -292,9 +299,9 @@ export function SmartPlanner() {
                   <Combobox
                     ariaLabel="Nearest airport"
                     value={d.airport}
-                    placeholder="Search city or airport code"
-                    options={AIRPORT_OPTIONS}
-                    onChange={(airport) => set({ airport, country: countryForAirport(airport) ?? d.country })}
+                    placeholder={`Search airports in ${d.country}`}
+                    options={airportOptionsFor(d.country)}
+                    onChange={(airport) => set({ airport })}
                   />
                 </FieldLabel>
               </div>
