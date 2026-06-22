@@ -9,7 +9,19 @@ function sumByCurrency(amounts: Money[]): Money[] {
   return [...totals.entries()].map(([currency, amount]) => ({ amount, currency }));
 }
 
-export type FunnelStep = 'SEARCH' | 'RESULTS' | 'BUILDER' | 'PILGRIMS' | 'CHECKOUT' | 'CARD' | 'CONFIRMED';
+export type FunnelStep = 'SEARCH' | 'RESULTS' | 'BUILDER' | 'PILGRIMS' | 'READINESS' | 'CHECKOUT' | 'CARD' | 'CONFIRMED';
+
+/** Pre-payment readiness choices (insurance, luggage, planning session, niyyah) — from the prototype. */
+export interface Readiness {
+  insurance: 'std' | 'prem' | 'fam';
+  luggage: 'std' | 'extra' | 'light';
+  planning: 'video' | 'inperson' | 'self';
+  niyyah: boolean;
+}
+
+export function defaultReadiness(): Readiness {
+  return { insurance: 'std', luggage: 'std', planning: 'self', niyyah: false };
+}
 
 export interface PilgrimDraft {
   firstName: string;
@@ -33,6 +45,8 @@ export interface FunnelState {
   gift: { enabled: boolean; recipientName: string; recipientEmail: string; message: string };
   /** Personalization: selected special-request categories + a free-text note. */
   requests: { categories: SpecialRequestCategory[]; note: string };
+  /** Pre-payment readiness: insurance, luggage, planning session, renewed niyyah. */
+  readiness: Readiness;
   criteria: SearchCriteria;
   cart: PackageItem[];
   pilgrims: PilgrimDraft[];
@@ -48,6 +62,7 @@ export type FunnelAction =
   | { type: 'SET_GIFT'; gift: Partial<FunnelState['gift']> }
   | { type: 'TOGGLE_REQUEST'; category: SpecialRequestCategory }
   | { type: 'SET_REQUEST_NOTE'; note: string }
+  | { type: 'SET_READINESS'; readiness: Partial<Readiness> }
   | { type: 'ADD_ITEM'; item: PackageItem }
   | { type: 'REMOVE_ITEM'; offerId: string }
   | { type: 'SET_PILGRIMS'; pilgrims: PilgrimDraft[] }
@@ -63,6 +78,7 @@ export function initialFunnel(): FunnelState {
     rawdahRequested: false,
     gift: { enabled: false, recipientName: '', recipientEmail: '', message: '' },
     requests: { categories: [], note: '' },
+    readiness: defaultReadiness(),
     criteria: { city: 'MAKKAH', checkIn: '', checkOut: '', pax: 1 },
     cart: [],
     pilgrims: [],
@@ -94,6 +110,8 @@ export function funnelReducer(state: FunnelState, action: FunnelAction): FunnelS
       };
     case 'SET_REQUEST_NOTE':
       return { ...state, requests: { ...state.requests, note: action.note } };
+    case 'SET_READINESS':
+      return { ...state, readiness: { ...state.readiness, ...action.readiness } };
     case 'ADD_ITEM':
       if (state.cart.some((i) => i.offerId === action.item.offerId)) return state;
       return { ...state, cart: [...state.cart, action.item] };
@@ -107,7 +125,12 @@ export function funnelReducer(state: FunnelState, action: FunnelAction): FunnelS
       return { ...state, bookingId: action.bookingId, step: 'CONFIRMED' };
     case 'RESTORE':
       // Restore a saved draft; RESULTS needs re-fetched offers, so land on SEARCH there.
-      return { ...action.state, step: action.state.step === 'RESULTS' ? 'SEARCH' : action.state.step };
+      // Merge readiness defaults so older drafts (saved before this field existed) stay valid.
+      return {
+        ...action.state,
+        readiness: { ...defaultReadiness(), ...action.state.readiness },
+        step: action.state.step === 'RESULTS' ? 'SEARCH' : action.state.step,
+      };
     default:
       return state;
   }

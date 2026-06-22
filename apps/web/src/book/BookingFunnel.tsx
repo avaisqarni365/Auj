@@ -6,7 +6,7 @@ import type { CateringOffer, GroundOffer, HotelOffer, SearchCriteria } from '@au
 import type { Booking, PackageItem, VisaCase } from '@auj/core-booking';
 // Import from specific modules (not the barrel) so the client bundle never pulls
 // in the in-process backend, which depends on node:crypto via core-booking.
-import { Checkout, HomeSearch, MyBooking, PackageBuilder, PilgrimCapture, Results, StripePaymentForm } from './screens';
+import { Checkout, HomeSearch, MyBooking, PackageBuilder, PilgrimCapture, ReadinessStep, Results, StripePaymentForm } from './screens';
 import { cartTotals, funnelReducer, initialFunnel, type FunnelState, type PilgrimDraft } from './funnel';
 import { formatMoney } from './fx';
 import { LOCALES as BOOK_LOCALES, type Locale as BookLocale } from './i18n';
@@ -21,6 +21,7 @@ const STEP_LABEL: Record<FunnelState['step'], string> = {
   RESULTS: 'Choose a hotel',
   BUILDER: 'Build package',
   PILGRIMS: 'Pilgrims',
+  READINESS: 'Readiness',
   CHECKOUT: 'Checkout',
   CARD: 'Payment',
   CONFIRMED: 'Confirmed',
@@ -158,7 +159,7 @@ export function BookingFunnel({
       if (booking) setVisaCase(await pollVisaAction(booking.id));
     });
 
-  const back = (step: 'SEARCH' | 'RESULTS' | 'BUILDER' | 'PILGRIMS' | 'CHECKOUT'): (() => void) => () =>
+  const back = (step: 'SEARCH' | 'RESULTS' | 'BUILDER' | 'PILGRIMS' | 'READINESS' | 'CHECKOUT'): (() => void) => () =>
     dispatch({ type: 'GO', step });
 
   const blankPilgrim = (): PilgrimDraft => ({ firstName: '', lastName: '', passportNumber: '', nationality: 'PK', dob: '1990-01-01', gender: 'M' });
@@ -223,8 +224,17 @@ export function BookingFunnel({
           onField={setPilgrimField}
           onAdd={addPilgrim}
           onRemove={removePilgrim}
-          onContinue={() => dispatch({ type: 'GO', step: 'CHECKOUT' })}
+          onContinue={() => dispatch({ type: 'GO', step: 'READINESS' })}
           onBack={back('BUILDER')}
+        />
+      )}
+
+      {state.step === 'READINESS' && (
+        <ReadinessStep
+          readiness={state.readiness}
+          onChange={(readiness) => dispatch({ type: 'SET_READINESS', readiness })}
+          onBack={back('PILGRIMS')}
+          onContinue={() => dispatch({ type: 'GO', step: 'CHECKOUT' })}
         />
       )}
 
@@ -236,7 +246,7 @@ export function BookingFunnel({
           onCurrency={(currency) => dispatch({ type: 'SET_CURRENCY', currency })}
           onPay={pay}
           paying={pending}
-          onBack={back('PILGRIMS')}
+          onBack={back('READINESS')}
           gift={state.gift}
           onGift={(patch) => dispatch({ type: 'SET_GIFT', gift: patch })}
           requests={state.requests}
