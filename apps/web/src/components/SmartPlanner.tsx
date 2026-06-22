@@ -3,6 +3,18 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { BrandMark } from './BrandMark';
+import { Combobox, type ComboOption } from './Combobox';
+import { AIRPORTS, COUNTRIES, airportLabel, airportsFor, countryForAirport } from '../geo/airports';
+
+// Searchable option lists (Europe + UK + Pakistan) for the airline-style pickers.
+const COUNTRY_OPTIONS: ComboOption[] = COUNTRIES.map((c) => ({ value: c, label: c }));
+const AIRPORT_OPTIONS: ComboOption[] = AIRPORTS.map((a) => ({
+  value: airportLabel(a),
+  label: a.city,
+  hint: a.code,
+  group: a.country,
+  search: `${a.city} ${a.code} ${a.country}`,
+}));
 
 // Smart Visit planner — split-panel configurator from AUJ Smart Planner.dc.html.
 // Dark-green aside (logo + title + 7-step rail + skyline) and a form panel
@@ -236,11 +248,31 @@ export function SmartPlanner() {
             {/* STEP 0 — ORIGIN */}
             {step === 0 && (
               <div className="flex max-w-[480px] flex-col gap-5">
-                <SelectField label="Country" value={d.country} onChange={(v) => set({ country: v })} options={['Lithuania', 'Latvia', 'Estonia', 'Poland', 'Germany', 'United Kingdom', 'Other']} />
+                <FieldLabel label="Country">
+                  <Combobox
+                    ariaLabel="Country"
+                    value={d.country}
+                    placeholder="Search your country"
+                    options={COUNTRY_OPTIONS}
+                    onChange={(country) => {
+                      const aps = airportsFor(country);
+                      const first = aps[0];
+                      set(first ? { country, airport: airportLabel(first) } : { country });
+                    }}
+                  />
+                </FieldLabel>
                 <FieldLabel label="City" optional>
                   <input value={d.city} onChange={(e) => set({ city: e.target.value })} placeholder="e.g. Vilnius" className={INPUT} />
                 </FieldLabel>
-                <SelectField label="Nearest airport" value={d.airport} onChange={(v) => set({ airport: v })} options={['Vilnius (VNO)', 'Kaunas (KUN)', 'Riga (RIX)', 'Warsaw (WAW)', 'Other']} />
+                <FieldLabel label="Nearest airport">
+                  <Combobox
+                    ariaLabel="Nearest airport"
+                    value={d.airport}
+                    placeholder="Search city or airport code"
+                    options={AIRPORT_OPTIONS}
+                    onChange={(airport) => set({ airport, country: countryForAirport(airport) ?? d.country })}
+                  />
+                </FieldLabel>
               </div>
             )}
 
