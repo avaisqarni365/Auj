@@ -2,6 +2,7 @@
 
 import type { ReactNode } from 'react';
 import type { PublicUser } from '@auj/auth';
+import { AnnouncementBar } from './AnnouncementBar';
 import { SiteHeader } from './SiteHeader';
 import { SiteFooter } from './SiteFooter';
 
@@ -19,6 +20,7 @@ export function SitePage({
 }) {
   return (
     <div className="flex min-h-screen flex-col bg-sand-50">
+      <AnnouncementBar />
       <SiteHeader user={user} />
       <main className={`flex-1 ${center ? 'grid place-items-center' : ''}`}>{children}</main>
       <SiteFooter />
