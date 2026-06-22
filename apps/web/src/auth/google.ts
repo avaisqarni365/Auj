@@ -7,6 +7,16 @@ import { createHmac } from 'node:crypto';
 
 export const googleEnabled = (): boolean => Boolean(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
 
+/** Public-facing origin (behind nginx the request URL is the internal host, so prefer forwarded
+ *  headers / an explicit PUBLIC_BASE_URL — otherwise OAuth redirects would point at localhost). */
+export function publicOrigin(req: Request): string {
+  const env = process.env.PUBLIC_BASE_URL ?? process.env.NEXT_PUBLIC_SITE_URL;
+  if (env) return env.replace(/\/+$/, '');
+  const host = req.headers.get('x-forwarded-host') ?? req.headers.get('host');
+  if (host) return `${req.headers.get('x-forwarded-proto') ?? 'https'}://${host}`;
+  return new URL(req.url).origin;
+}
+
 export function googleAuthUrl(redirectUri: string, state: string): string {
   const params = new URLSearchParams({
     client_id: process.env.GOOGLE_CLIENT_ID ?? '',

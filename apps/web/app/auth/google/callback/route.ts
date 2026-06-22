@@ -1,20 +1,21 @@
 import { NextResponse } from 'next/server';
 import { SESSION_COOKIE, type Session } from '@auj/auth';
 import { getAuth } from '../../../../src/auth/backend';
-import { derivedPassword, exchangeCodeForProfile, googleEnabled } from '../../../../src/auth/google';
+import { derivedPassword, exchangeCodeForProfile, googleEnabled, publicOrigin } from '../../../../src/auth/google';
 
 // Google OAuth callback: exchange the code, find-or-create the local account for that Google
 // identity, and set the session cookie. New Google users are provisioned as PILGRIM.
 export async function GET(req: Request): Promise<NextResponse> {
   const url = new URL(req.url);
+  const origin = publicOrigin(req);
   const code = url.searchParams.get('code');
   const rawNext = decodeURIComponent(url.searchParams.get('state') || '/');
   const dest = rawNext.startsWith('/') && !rawNext.startsWith('//') ? rawNext : '/';
 
-  if (!googleEnabled() || !code) return NextResponse.redirect(new URL('/login?m=google-soon', url.origin));
+  if (!googleEnabled() || !code) return NextResponse.redirect(`${origin}/login?m=google-soon`);
 
-  const profile = await exchangeCodeForProfile(code, `${url.origin}/auth/google/callback`);
-  if (!profile) return NextResponse.redirect(new URL('/login?m=google-failed', url.origin));
+  const profile = await exchangeCodeForProfile(code, `${origin}/auth/google/callback`);
+  if (!profile) return NextResponse.redirect(`${origin}/login?m=google-failed`);
 
   const auth = await getAuth();
   const password = derivedPassword(profile.email);
@@ -26,7 +27,7 @@ export async function GET(req: Request): Promise<NextResponse> {
     session = (await auth.login({ email: profile.email, password })).session;
   }
 
-  const res = NextResponse.redirect(new URL(dest, url.origin));
+  const res = NextResponse.redirect(`${origin}${dest}`);
   res.cookies.set(SESSION_COOKIE, session.token, {
     httpOnly: true,
     sameSite: 'lax',
