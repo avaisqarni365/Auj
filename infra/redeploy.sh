@@ -38,6 +38,21 @@ if [ ! -f infra/.postgres-ready ]; then
   if bash infra/setup-postgres.sh; then touch infra/.postgres-ready; else echo "!! postgres setup failed — app continues in-memory; will retry next deploy"; fi
 fi
 
+# Upsert a key into infra/.env (the systemd EnvironmentFile the `auj` service loads at runtime).
+upsert_env() { # $1=key $2=value
+  [ -f infra/.env ] || cp infra/.env.example infra/.env 2>/dev/null || touch infra/.env
+  grep -v "^$1=" infra/.env > infra/.env.tmp 2>/dev/null || true
+  printf '%s=%s\n' "$1" "$2" >> infra/.env.tmp
+  mv infra/.env.tmp infra/.env
+}
+
+# Public base URL so Google OAuth redirects use the real domain (not the internal nginx upstream).
+upsert_env PUBLIC_BASE_URL "https://${DOMAIN:-auj.codes-ai.uk}"
+# Google OAuth secrets (forwarded from the deploy as AUJ_*) — only written when provided.
+[ -n "${AUJ_GOOGLE_CLIENT_ID:-}" ] && { upsert_env GOOGLE_CLIENT_ID "${AUJ_GOOGLE_CLIENT_ID}"; echo "==> Google OAuth: credentials set"; }
+[ -n "${AUJ_GOOGLE_CLIENT_SECRET:-}" ] && upsert_env GOOGLE_CLIENT_SECRET "${AUJ_GOOGLE_CLIENT_SECRET}"
+[ -n "${AUJ_GOOGLE_OAUTH_PEPPER:-}" ] && upsert_env GOOGLE_OAUTH_PEPPER "${AUJ_GOOGLE_OAUTH_PEPPER}"
+
 echo "==> 2/3 Build (workspace deps first, then the app)"
 pnpm install --prod=false --frozen-lockfile || pnpm install --prod=false
 pnpm --filter "@auj/web..." build

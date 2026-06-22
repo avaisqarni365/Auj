@@ -48,13 +48,17 @@ jobs:
         env:
           SSHPASS: ${{ secrets.DEPLOY_PASSWORD }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          # Google OAuth (optional) — set these repo secrets to enable "Continue with Google".
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_OAUTH_PEPPER: ${{ secrets.GOOGLE_OAUTH_PEPPER }}
         run: |
           set -e
           HOST="${{ secrets.DEPLOY_USER || 'root' }}@${{ secrets.DEPLOY_HOST }}"
           # LOGIN shell (bash -lc) so the server PATH (node/pnpm/corepack) loads. Pull FIRST so
-          # infra/redeploy.sh exists even on an older clone, then run it. A remote DATABASE_URL secret
-          # (if set) is forwarded as AUJ_DATABASE_URL; empty → redeploy.sh falls back to local Postgres.
-          CMD="AUJ_DATABASE_URL='${DATABASE_URL}' bash -lc 'cd ${{ secrets.DEPLOY_PATH || '/root/auj' }} && git fetch origin --quiet && git reset --hard --quiet origin/main && bash infra/redeploy.sh'"
+          # infra/redeploy.sh exists even on an older clone, then run it. Remote secrets (if set) are
+          # forwarded as AUJ_* and written into infra/.env by redeploy.sh; empty ones are left as-is.
+          CMD="AUJ_DATABASE_URL='${DATABASE_URL}' AUJ_GOOGLE_CLIENT_ID='${GOOGLE_CLIENT_ID}' AUJ_GOOGLE_CLIENT_SECRET='${GOOGLE_CLIENT_SECRET}' AUJ_GOOGLE_OAUTH_PEPPER='${GOOGLE_OAUTH_PEPPER}' bash -lc 'cd ${{ secrets.DEPLOY_PATH || '/root/auj' }} && git fetch origin --quiet && git reset --hard --quiet origin/main && bash infra/redeploy.sh'"
           mkdir -p ~/.ssh
           ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
           if [ -n "${{ secrets.DEPLOY_SSH_KEY }}" ]; then
