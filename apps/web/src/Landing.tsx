@@ -11,6 +11,7 @@ import { landingCopy, type LandingOverrides } from './landing-content';
 import { HeroBackdrop } from './HeroBackdrop';
 import { Scene } from './components/Scene';
 import { AnnouncementBar } from './components/AnnouncementBar';
+import { DEPART_AIRPORTS } from './depart/airport-content';
 import { SiteHeader } from './components/SiteHeader';
 import { SiteFooter } from './components/SiteFooter';
 import { ScreenFrame } from './components/ScreenFrame';
@@ -458,14 +459,17 @@ export default function Landing({ user, deals, content = {} }: { user?: PublicUs
             <div key={gi} className="rounded-2xl border border-sand-200 bg-white p-5 shadow-sm">
               <div className="mb-3 text-[13px] font-bold text-sand-ink">{departureRegions[gi] ?? `Region ${gi + 1}`}</div>
               <ul className="grid gap-2">
-                {group.cities.map((city) => (
-                  <li key={city}>
-                    <a href="#search" className="flex items-center justify-between rounded-lg px-2 py-1.5 text-[13.5px] text-sand-700 hover:bg-sand-50 hover:text-green-800">
-                      <span>✈️ {city}</span>
-                      <span className="text-sand-300">→</span>
-                    </a>
-                  </li>
-                ))}
+                {group.cities.map((city) => {
+                  const code = DEPART_AIRPORTS.find((a) => a.city === city)?.code;
+                  return (
+                    <li key={city}>
+                      <Link href={code ? `/from/${code}` : '/from'} className="flex items-center justify-between rounded-lg px-2 py-1.5 text-[13.5px] text-sand-700 hover:bg-sand-50 hover:text-green-800">
+                        <span>✈️ {city}</span>
+                        <span className="text-sand-300">→</span>
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}
