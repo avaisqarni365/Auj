@@ -13,7 +13,7 @@ import { Scene } from './components/Scene';
 import { SiteHeader } from './components/SiteHeader';
 import { SiteFooter } from './components/SiteFooter';
 import { ScreenFrame } from './components/ScreenFrame';
-import { SmartVisitWizard } from './leads/SmartVisitWizard';
+import { SmartPlanner } from './components/SmartPlanner';
 import {
   DEALS,
   type Deal,
@@ -136,21 +136,9 @@ export default function Landing({ user, deals, content = {} }: { user?: PublicUs
         </div>
       </section>
 
-      {/* second frame — quick launcher for every planning tool */}
-      <div className="mx-auto mt-7 max-w-3xl px-[clamp(16px,4vw,32px)]">
-        <div className="flex flex-wrap justify-center gap-2">
-          <a href="#plan" className="rounded-full border border-sand-200 bg-white px-4 py-2 text-[13px] font-semibold text-green-800 shadow-sm transition-colors duration-fast hover:bg-sand-50">📝 Smart planner</a>
-          <a href="#search" className="rounded-full border border-sand-200 bg-white px-4 py-2 text-[13px] font-semibold text-green-800 shadow-sm transition-colors duration-fast hover:bg-sand-50">🔎 Search packages</a>
-          <a href="#guide-entry" className="rounded-full border border-sand-200 bg-white px-4 py-2 text-[13px] font-semibold text-green-800 shadow-sm transition-colors duration-fast hover:bg-sand-50">🕋 Umrah Guide</a>
-          <Link href="/guide/tour" className="rounded-full border border-sand-200 bg-white px-4 py-2 text-[13px] font-semibold text-green-800 shadow-sm transition-colors duration-fast hover:bg-sand-50">🧭 Virtual tour</Link>
-        </div>
-      </div>
-
-      {/* Smart Visit planner — primary widget, overlaps the hero (hero CTA scrolls here) */}
-      <div id="plan" className="relative z-20 mx-auto mt-4 max-w-2xl scroll-mt-24 px-[clamp(16px,4vw,32px)]">
-        <div className="animate-rise rounded-[22px] border border-sand-200 bg-white px-[clamp(6px,1.4vw,16px)] shadow-[0_24px_60px_-24px_rgba(42,38,32,0.34)]">
-          <SmartVisitWizard />
-        </div>
+      {/* FRAME 01 (full) — Smart Visit planner, the split-panel configurator (hero CTA scrolls here) */}
+      <div id="plan" className="relative z-20 mt-[clamp(28px,5vw,52px)] scroll-mt-24 px-[clamp(16px,4vw,32px)]">
+        <SmartPlanner />
       </div>
 
       {/* FRAME 02 · VIRTUAL TOUR — cinematic two-panel card (prototype frame 02) */}

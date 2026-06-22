@@ -1,14 +1,16 @@
 import { getCurrentUser } from '../../src/auth/session';
 import { SitePage } from '../../src/components/SitePage';
-import { SmartVisitWizard } from '../../src/leads/SmartVisitWizard';
+import { SmartPlanner } from '../../src/components/SmartPlanner';
 
-// Public — the Smart Visit planner. Anyone can express intent in <2 min; no login required.
-// AUJ's team follows up with a real package. Also reachable from the pilgrim account.
+// Public — the Smart Visit planner (split-panel configurator). Anyone can shape a complete,
+// visa-ready plan in seven calm steps; no login required. The final step opens matching packages.
 export default async function PlanPage() {
   const user = await getCurrentUser();
   return (
     <SitePage user={user}>
-      <SmartVisitWizard />
+      <div className="py-[clamp(18px,3.5vw,36px)]">
+        <SmartPlanner />
+      </div>
     </SitePage>
   );
 }
