@@ -42,15 +42,15 @@ export function SiteHeader({ user }: { user?: PublicUser }) {
           href="/"
           aria-label="AUJ Travelers — home"
           className="relative inline-flex items-center rounded-lg focus-visible:outline-none focus-visible:shadow-focus"
-          style={{ height: 'clamp(46px,6vw,58px)' }}
+          style={{ height: 'clamp(54px,7vw,70px)' }}
         >
           <img
             src="/img/brand/auj-logo-simple.webp"
             alt="AUJ Travelers"
-            width={120}
-            height={120}
+            width={240}
+            height={240}
             className="w-auto object-contain"
-            style={{ height: 'clamp(82px,11vw,116px)', margin: 'clamp(-32px,-4.2vw,-30px) 0', filter: 'drop-shadow(0 6px 14px rgba(42,38,32,0.18))' }}
+            style={{ height: 'clamp(164px,22vw,232px)', margin: 'clamp(-84px,-10.5vw,-62px) 0', filter: 'drop-shadow(0 6px 14px rgba(42,38,32,0.18))' }}
           />
         </Link>
         <nav className="hidden flex-wrap items-center gap-0.5 md:flex">
