@@ -27,3 +27,11 @@ Shared `Money` type from contracts. Booking calls payments; payments never calls
 
 ## Out of scope
 Booking state, markups display (B2B), connector logic.
+
+## Status
+Complete and fully tested (29 tests). Double-entry `Ledger` (balanced/unbalanced/integer/per-currency
+isolation), `WalletService` (top-up/hold/**credit-limit enforcement**/settle/release/currency-mismatch),
+`PaymentsService` (route-by-currency, two-phase authorize→capture, full/partial refund, idempotent
+webhook reconciliation), and `ProviderRouter` over Stripe-EUR + PKR adapters (sandbox + env-gated live).
+Minor units throughout; no PANs (gateway tokenization); idempotency keys on capture. Golden rule holds —
+payments never imports/calls a connector.
