@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useLocale, useTranslations } from 'next-intl';
 import { BrandMark } from './BrandMark';
 import { Combobox, type ComboOption } from './Combobox';
 import { SendInquiryPanel, type InquiryContact } from './SendInquiryPanel';
@@ -10,14 +11,6 @@ import type { InquiryInput } from '../leads/inquiry';
 
 // Searchable country list (Europe + UK + Pakistan) for the airline-style picker.
 const COUNTRY_OPTIONS: ComboOption[] = COUNTRIES.map((c) => ({ value: c, label: c }));
-
-// Airports for the currently-selected country: an "Any airport" option then that country's airports.
-function airportOptionsFor(country: string): ComboOption[] {
-  return [
-    { value: anyAirport(country), label: 'Any airport', hint: 'ANY', search: `any all ${country}` },
-    ...airportsFor(country).map((a) => ({ value: airportLabel(a), label: a.city, hint: a.code, search: `${a.city} ${a.code}` })),
-  ];
-}
 
 // Smart Visit planner — split-panel configurator from AUJ Smart Planner.dc.html.
 // Dark-green aside (logo + title + 7-step rail + skyline) and a form panel
@@ -58,35 +51,29 @@ const INITIAL: PlanData = {
   nationality: 'Mixed (EU + Pakistani)',
 };
 
-const STEPS: { label: string; q: string; sub: string }[] = [
-  { label: 'Origin', q: 'Where do you start from?', sub: 'Tell us your departure point so we can price flights and routings from your city.' },
-  { label: 'Journey', q: 'Which journey are you planning?', sub: 'Choose the pilgrimage you have in mind — you can refine everything later.' },
-  { label: 'Dates', q: 'When would you like to travel?', sub: 'Pick a month and length of stay. Flexible dates unlock better fares.' },
-  { label: 'Travellers', q: 'Who is travelling?', sub: 'Add everyone in your group, including children, and how many rooms you need.' },
-  { label: 'Stay', q: 'Where would you like to stay?', sub: 'Set your preference for proximity to the Haram, hotel class and board.' },
-  { label: 'Visa', q: 'Passports & visa route', sub: 'We read your group’s passports and set the right path automatically.' },
-  { label: 'Review', q: 'Review your plan', sub: 'Here’s everything so far. Confirm to see the packages that match.' },
-];
+// Step identity keys — labels/questions/subs are translated; the index drives RAIL_ICON.
+const STEP_KEYS = ['origin', 'journey', 'dates', 'travellers', 'stay', 'visa', 'review'] as const;
+const STEP_COUNT = STEP_KEYS.length;
 
 const COUNTS: Record<Journey, number> = { Umrah: 38, Hajj: 6, Ziyarat: 14 };
 
-const JOURNEY_META: Record<Journey, { blurb: string; tag: string; icon: JSX.Element }> = {
-  Umrah: {
-    blurb: 'The lesser pilgrimage, any time of year.',
-    tag: 'Year-round · from €1,180',
-    icon: <path d="M12 3l7 4v10l-7 4-7-4V7z M5 7l7 4 7-4M12 11v10" />,
-  },
-  Hajj: {
-    blurb: 'The fifth pillar, fully organised.',
-    tag: 'Dhul-Hijjah · from €6,400',
-    icon: <path d="M7 21V4 M7 5h10l-2.5 3.5L17 12H7" />,
-  },
-  Ziyarat: {
-    blurb: 'Sacred sites of Madinah & beyond.',
-    tag: 'Seasonal · from €980',
-    icon: <path d="M4 20v-7M20 20v-7M4 13h16 M12 3c2.5 2 4 4.2 4 7H8c0-2.8 1.5-5 4-7z M3 20h18" />,
-  },
+// Journey icons (blurb/tag/name come from i18n).
+const JOURNEY_ICONS: Record<Journey, JSX.Element> = {
+  Umrah: <path d="M12 3l7 4v10l-7 4-7-4V7z M5 7l7 4 7-4M12 11v10" />,
+  Hajj: <path d="M7 21V4 M7 5h10l-2.5 3.5L17 12H7" />,
+  Ziyarat: <path d="M4 20v-7M20 20v-7M4 13h16 M12 3c2.5 2 4 4.2 4 7H8c0-2.8 1.5-5 4-7z M3 20h18" />,
 };
+
+// Canonical option values kept in state (so all logic/derived/inquiry stay stable); only the
+// DISPLAY label is translated, via these value→message-key maps.
+const MONTH_KEY: Record<string, string> = { 'September 2026': 'sep26', 'October 2026': 'oct26', 'November 2026': 'nov26', 'December 2026': 'dec26', 'Ramadan 2027': 'ram27', "I'm flexible": 'flex' };
+const DISTANCE_KEY: Record<string, string> = { 'Near (≤300m)': 'near', 'Walking (≤800m)': 'walking', 'Any distance': 'any' };
+const BOARD_KEY: Record<string, string> = { 'Room only': 'room', Breakfast: 'breakfast', 'Half board': 'half', 'Full board': 'full' };
+const NAT_KEY: Record<string, string> = { 'All EU / EEA passports': 'eu', 'All Pakistani passports': 'pk', 'Mixed (EU + Pakistani)': 'mixed', 'Other nationality': 'other' };
+const MONTH_VALUES = Object.keys(MONTH_KEY);
+const DISTANCE_VALUES = Object.keys(DISTANCE_KEY);
+const BOARD_VALUES = Object.keys(BOARD_KEY);
+const NAT_VALUES = Object.keys(NAT_KEY);
 
 const RAIL_ICON = [
   'M10 2.5a4.5 4.5 0 0 1 4.5 4.5c0 3.2-4.5 9-4.5 9S5.5 10.2 5.5 7A4.5 4.5 0 0 1 10 2.5z M10 5.4a1.6 1.6 0 1 1 0 3.2 1.6 1.6 0 0 1 0-3.2z',
@@ -104,45 +91,62 @@ function airportCode(airport: string): string {
 }
 
 export function SmartPlanner() {
+  const t = useTranslations('smartPlanner');
+  const locale = useLocale();
   const [step, setStep] = useState(0);
   const [d, setD] = useState<PlanData>(INITIAL);
   const set = (patch: Partial<PlanData>): void => setD((s) => ({ ...s, ...patch }));
-  const go = (i: number): void => setStep(Math.max(0, Math.min(STEPS.length - 1, i)));
+  const go = (i: number): void => setStep(Math.max(0, Math.min(STEP_COUNT - 1, i)));
 
   const matchCount = COUNTS[d.journey];
 
+  // Translate canonical option values + proper nouns for display only.
+  const tMonth = (v: string): string => (MONTH_KEY[v] ? t(`months.${MONTH_KEY[v]}`) : v);
+  const tDistance = (v: string): string => (DISTANCE_KEY[v] ? t(`distances.${DISTANCE_KEY[v]}`) : v);
+  const tBoard = (v: string): string => (BOARD_KEY[v] ? t(`boards.${BOARD_KEY[v]}`) : v);
+  const tNat = (v: string): string => (NAT_KEY[v] ? t(`nationalities.${NAT_KEY[v]}`) : v);
+  const journeyName = (k: Journey): string => t(`journeys.${k}.name`);
+
+  // Airports for the selected country: a translated "Any airport" option, then that country's airports.
+  const airportOptionsFor = (country: string): ComboOption[] => [
+    { value: anyAirport(country), label: t('anyAirport'), hint: 'ANY', search: `any all ${country}` },
+    ...airportsFor(country).map((a) => ({ value: airportLabel(a), label: a.city, hint: a.code, search: `${a.city} ${a.code}` })),
+  ];
+
+  // Visa route is computed from the canonical nationality value; copy is translated.
   const route = useMemo(() => {
     const n = d.nationality;
     const eu = n.includes('EU');
     const pk = n.includes('Pakistani');
-    if (eu && pk)
-      return { kind: 'info' as const, title: 'Two routes — handled together', tag: 'Mixed group', body: 'EU/EEA pilgrims get the online e-Visa; Pakistani pilgrims go through our licensed agent channel. Both are tracked under one booking reference.' };
-    if (eu)
-      return { kind: 'success' as const, title: 'e-Visa route', tag: 'Fast · online', body: 'Submitted online to MOFA and typically issued in 2–3 days. We guide every field and track it live.' };
-    return { kind: 'info' as const, title: 'Licensed agent channel', tag: 'Fully supported', body: 'Handled by our licensed partners with full document support, from collection to issued visa.' };
+    if (eu && pk) return { kind: 'info' as const, key: 'mixed' as const };
+    if (eu) return { kind: 'success' as const, key: 'evisa' as const };
+    return { kind: 'info' as const, key: 'agent' as const };
   }, [d.nationality]);
+  const routeTitle = t(`routes.${route.key}.title`);
+  const routeTag = t(`routes.${route.key}.tag`);
+  const routeBody = t(`routes.${route.key}.body`);
 
   const subFor = (i: number): string => {
     switch (i) {
       case 0: return d.city ? `${d.city} · ${d.airport}` : d.airport;
-      case 1: return d.journey;
-      case 2: return `${d.nights} nts · ${d.month.replace(/ 202\d/, '')}`;
-      case 3: return `${d.pilgrims} pilgrims · ${d.rooms} rooms`;
-      case 4: return `${d.stars} · ${d.distance.split(' ')[0]}`;
-      case 5: return route.title === 'e-Visa route' ? 'e-Visa' : route.title.includes('Two') ? 'Mixed routes' : 'Agent channel';
-      default: return `${matchCount} matches`;
+      case 1: return journeyName(d.journey);
+      case 2: return t('railValues.nightsMonth', { nights: d.nights, month: tMonth(d.month) });
+      case 3: return t('railValues.paxRooms', { pax: d.pilgrims, rooms: d.rooms });
+      case 4: return t('railValues.starsDist', { stars: d.stars, dist: tDistance(d.distance) });
+      case 5: return t(`railValues.${route.key}`);
+      default: return t('railValues.matches', { n: matchCount });
     }
   };
 
   const summary: { label: string; value: string }[] = [
-    { label: 'From', value: `${d.city ? `${d.city}, ` : ''}${d.country}` },
-    { label: 'Airport', value: d.airport },
-    { label: 'Journey', value: d.journey },
-    { label: 'When', value: `${d.nights} nights · ${d.month}` },
-    { label: 'Travellers', value: `${d.pilgrims} pilgrims · ${d.rooms} rooms` },
-    { label: 'Hotel', value: `${d.stars} · ${d.distance}` },
-    { label: 'Board', value: d.board },
-    { label: 'Visa route', value: route.title },
+    { label: t('summary.from'), value: `${d.city ? `${d.city}, ` : ''}${d.country}` },
+    { label: t('summary.airport'), value: d.airport },
+    { label: t('summary.journey'), value: journeyName(d.journey) },
+    { label: t('summary.when'), value: `${d.nights} ${t('units.nights')} · ${tMonth(d.month)}` },
+    { label: t('summary.travellers'), value: t('railValues.paxRooms', { pax: d.pilgrims, rooms: d.rooms }) },
+    { label: t('summary.hotel'), value: `${d.stars} · ${tDistance(d.distance)}` },
+    { label: t('summary.board'), value: tBoard(d.board) },
+    { label: t('summary.visaRoute'), value: routeTitle },
   ];
 
   const bookHref = useMemo(() => {
@@ -158,7 +162,7 @@ export function SmartPlanner() {
     return `/book?${params.toString()}`;
   }, [d]);
 
-  const progressPct = Math.round(((step + 1) / STEPS.length) * 100);
+  const progressPct = Math.round(((step + 1) / STEP_COUNT) * 100);
 
   // Map the plan + captured contact into a lead the AUJ team can follow up.
   const buildInquiry = (c: InquiryContact, consent: boolean): InquiryInput => ({
@@ -188,7 +192,7 @@ export function SmartPlanner() {
     email: c.email,
     phone: c.phone,
     channel: 'WHATSAPP',
-    lang: 'en',
+    lang: locale,
     consent,
   });
 
@@ -197,11 +201,11 @@ export function SmartPlanner() {
       {/* tabs */}
       <div className="mb-[clamp(16px,3vw,28px)] flex flex-wrap gap-2.5">
         <span className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-green-800 shadow-[0_6px_16px_rgba(15,81,50,0.12)]">
-          <PlannerTabIcon /> Smart planner
+          <PlannerTabIcon /> {t('tabs.current')}
         </span>
-        <TabLink href="/#search">Search packages</TabLink>
-        <TabLink href="/guide">Umrah Guide</TabLink>
-        <TabLink href="/guide/tour">Virtual tour</TabLink>
+        <TabLink href="/#search">{t('tabs.search')}</TabLink>
+        <TabLink href="/guide">{t('tabs.guide')}</TabLink>
+        <TabLink href="/guide/tour">{t('tabs.tour')}</TabLink>
       </div>
 
       {/* card */}
@@ -222,17 +226,17 @@ export function SmartPlanner() {
             <span className="inline-flex items-center rounded-[13px] bg-sand-50 px-3 py-2 shadow-[0_8px_22px_rgba(0,0,0,0.28)]">
               <BrandMark height={44} />
             </span>
-            <h2 className="mt-5 font-serif text-2xl font-semibold tracking-[-0.01em] text-green-50">Smart Visit planner</h2>
-            <p className="mt-1.5 text-[13px] leading-relaxed text-green-100/80">Seven calm steps to a complete, visa-ready pilgrimage.</p>
+            <h2 className="mt-5 font-serif text-2xl font-semibold tracking-[-0.01em] text-green-50">{t('asideTitle')}</h2>
+            <p className="mt-1.5 text-[13px] leading-relaxed text-green-100/80">{t('asideSub')}</p>
           </div>
 
           {/* RAIL (md+) */}
           <div className="relative z-10 mt-7 hidden flex-col md:flex">
-            {STEPS.map((s, i) => {
+            {STEP_KEYS.map((key, i) => {
               const done = i < step;
               const active = i === step;
               return (
-                <button key={s.label} type="button" onClick={() => go(i)} className="flex items-start gap-3.5 rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60">
+                <button key={key} type="button" onClick={() => go(i)} className="flex items-start gap-3.5 rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60">
                   <span className="flex shrink-0 flex-col items-center">
                     <span
                       className={`grid h-[30px] w-[30px] place-items-center rounded-full border-2 transition-colors duration-200 ${
@@ -247,10 +251,10 @@ export function SmartPlanner() {
                         </svg>
                       )}
                     </span>
-                    {i < STEPS.length - 1 && <span className={`my-[3px] h-[18px] w-0.5 ${done ? 'bg-gold' : 'bg-white/15'}`} />}
+                    {i < STEP_COUNT - 1 && <span className={`my-[3px] h-[18px] w-0.5 ${done ? 'bg-gold' : 'bg-white/15'}`} />}
                   </span>
                   <span className="pt-[5px]">
-                    <span className={`block text-[13.5px] font-semibold transition-colors ${active ? 'text-white' : done ? 'text-green-50' : 'text-green-100/60'}`}>{s.label}</span>
+                    <span className={`block text-[13.5px] font-semibold transition-colors ${active ? 'text-white' : done ? 'text-green-50' : 'text-green-100/60'}`}>{t(`steps.${key}.label`)}</span>
                     <span className={`mt-px block text-[11.5px] ${active ? 'text-gold' : 'text-green-100/45'}`}>{i <= step ? subFor(i) : '—'}</span>
                   </span>
                 </button>
@@ -276,30 +280,30 @@ export function SmartPlanner() {
           </div>
 
           <div key={step} className="flex-1 animate-rise">
-            <div className="mb-2.5 font-mono text-xs tracking-[0.08em] text-accent-600">STEP {step + 1} OF {STEPS.length}</div>
-            <h3 className="mb-2 font-serif text-[clamp(24px,3vw,33px)] font-semibold leading-[1.12] tracking-[-0.02em] text-sand-ink">{STEPS[step]!.q}</h3>
-            <p className="mb-7 max-w-[480px] text-[14.5px] leading-relaxed text-sand-500">{STEPS[step]!.sub}</p>
+            <div className="mb-2.5 font-mono text-xs uppercase tracking-[0.08em] text-accent-600">{t('stepN', { n: step + 1, total: STEP_COUNT })}</div>
+            <h3 className="mb-2 font-serif text-[clamp(24px,3vw,33px)] font-semibold leading-[1.12] tracking-[-0.02em] text-sand-ink">{t(`steps.${STEP_KEYS[step]}.q`)}</h3>
+            <p className="mb-7 max-w-[480px] text-[14.5px] leading-relaxed text-sand-500">{t(`steps.${STEP_KEYS[step]}.sub`)}</p>
 
             {/* STEP 0 — ORIGIN */}
             {step === 0 && (
               <div className="flex max-w-[480px] flex-col gap-5">
-                <FieldLabel label="Country">
+                <FieldLabel label={t('fields.country')}>
                   <Combobox
-                    ariaLabel="Country"
+                    ariaLabel={t('fields.country')}
                     value={d.country}
-                    placeholder="Search your country"
+                    placeholder={t('fields.countryPlaceholder')}
                     options={COUNTRY_OPTIONS}
                     onChange={(country) => set({ country, airport: anyAirport(country) })}
                   />
                 </FieldLabel>
-                <FieldLabel label="City" optional>
-                  <input value={d.city} onChange={(e) => set({ city: e.target.value })} placeholder="e.g. Vilnius" className={INPUT} />
+                <FieldLabel label={t('fields.city')} optionalLabel={t('optional')}>
+                  <input value={d.city} onChange={(e) => set({ city: e.target.value })} placeholder={t('fields.cityPlaceholder')} className={INPUT} />
                 </FieldLabel>
-                <FieldLabel label="Nearest airport">
+                <FieldLabel label={t('fields.nearestAirport')}>
                   <Combobox
-                    ariaLabel="Nearest airport"
+                    ariaLabel={t('fields.nearestAirport')}
                     value={d.airport}
-                    placeholder={`Search airports in ${d.country}`}
+                    placeholder={t('fields.airportPlaceholder', { country: d.country })}
                     options={airportOptionsFor(d.country)}
                     onChange={(airport) => set({ airport })}
                   />
@@ -310,7 +314,7 @@ export function SmartPlanner() {
             {/* STEP 1 — JOURNEY */}
             {step === 1 && (
               <div className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
-                {(Object.keys(JOURNEY_META) as Journey[]).map((k) => {
+                {(Object.keys(JOURNEY_ICONS) as Journey[]).map((k) => {
                   const sel = d.journey === k;
                   return (
                     <button
@@ -320,11 +324,11 @@ export function SmartPlanner() {
                       className={`rounded-2xl border-2 p-5 text-left transition-colors duration-200 ${sel ? 'border-green-500 bg-green-50/60' : 'border-sand-200 bg-white hover:border-green-500'}`}
                     >
                       <span className={`mb-3.5 grid h-[42px] w-[42px] place-items-center rounded-xl ${sel ? 'bg-green-100 text-green-800' : 'bg-sand-100 text-sand-500'}`}>
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden>{JOURNEY_META[k].icon}</svg>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden>{JOURNEY_ICONS[k]}</svg>
                       </span>
-                      <span className="mb-1 block font-serif text-xl font-semibold text-sand-ink">{k}</span>
-                      <span className="block text-[13px] leading-relaxed text-sand-500">{JOURNEY_META[k].blurb}</span>
-                      <span className={`mt-3 block text-xs font-semibold ${sel ? 'text-green-800' : 'text-sand-300'}`}>{JOURNEY_META[k].tag}</span>
+                      <span className="mb-1 block font-serif text-xl font-semibold text-sand-ink">{journeyName(k)}</span>
+                      <span className="block text-[13px] leading-relaxed text-sand-500">{t(`journeys.${k}.blurb`)}</span>
+                      <span className={`mt-3 block text-xs font-semibold ${sel ? 'text-green-800' : 'text-sand-300'}`}>{t(`journeys.${k}.tag`)}</span>
                     </button>
                   );
                 })}
@@ -334,13 +338,13 @@ export function SmartPlanner() {
             {/* STEP 2 — DATES */}
             {step === 2 && (
               <div className="flex max-w-[480px] flex-col gap-5">
-                <SelectField label="Travel month" value={d.month} onChange={(v) => set({ month: v })} options={['September 2026', 'October 2026', 'November 2026', 'December 2026', 'Ramadan 2027', "I'm flexible"]} />
-                <Stepper label="Length of stay" unit="nights" value={d.nights} min={5} max={30} onChange={(v) => set({ nights: v })} />
+                <SelectField label={t('fields.travelMonth')} value={d.month} onChange={(v) => set({ month: v })} options={MONTH_VALUES.map((v) => ({ value: v, label: tMonth(v) }))} />
+                <Stepper label={t('fields.lengthOfStay')} unit={t('units.nights')} value={d.nights} min={5} max={30} onChange={(v) => set({ nights: v })} />
                 <Switch
                   on={d.flexible}
                   onToggle={() => set({ flexible: !d.flexible })}
-                  title="Flexible by ± a few days"
-                  hint="We’ll find the best fares around your dates."
+                  title={t('flexible.title')}
+                  hint={t('flexible.hint')}
                 />
               </div>
             )}
@@ -348,35 +352,35 @@ export function SmartPlanner() {
             {/* STEP 3 — TRAVELLERS */}
             {step === 3 && (
               <div className="flex max-w-[480px] flex-col gap-5">
-                <Stepper label="Pilgrims" unit="travelling" value={d.pilgrims} min={1} max={49} onChange={(v) => set({ pilgrims: v })} />
-                <Stepper label="Hotel rooms" unit="rooms" value={d.rooms} min={1} max={20} onChange={(v) => set({ rooms: v })} />
+                <Stepper label={t('fields.pilgrims')} unit={t('units.travelling')} value={d.pilgrims} min={1} max={49} onChange={(v) => set({ pilgrims: v })} />
+                <Stepper label={t('fields.rooms')} unit={t('units.rooms')} value={d.rooms} min={1} max={20} onChange={(v) => set({ rooms: v })} />
               </div>
             )}
 
             {/* STEP 4 — STAY */}
             {step === 4 && (
               <div className="flex max-w-[520px] flex-col gap-[22px]">
-                <ChipGroup label="Distance to the Haram" value={d.distance} options={['Near (≤300m)', 'Walking (≤800m)', 'Any distance']} onChange={(v) => set({ distance: v })} />
-                <ChipGroup label="Hotel class" value={d.stars} options={['3★', '4★', '5★']} onChange={(v) => set({ stars: v })} />
-                <SelectField label="Board" value={d.board} onChange={(v) => set({ board: v })} options={['Room only', 'Breakfast', 'Half board', 'Full board']} />
+                <ChipGroup label={t('fields.distance')} value={d.distance} options={DISTANCE_VALUES.map((v) => ({ value: v, label: tDistance(v) }))} onChange={(v) => set({ distance: v })} />
+                <ChipGroup label={t('fields.hotelClass')} value={d.stars} options={['3★', '4★', '5★'].map((v) => ({ value: v, label: v }))} onChange={(v) => set({ stars: v })} />
+                <SelectField label={t('fields.board')} value={d.board} onChange={(v) => set({ board: v })} options={BOARD_VALUES.map((v) => ({ value: v, label: tBoard(v) }))} />
               </div>
             )}
 
             {/* STEP 5 — VISA */}
             {step === 5 && (
               <div className="flex max-w-[520px] flex-col gap-5">
-                <SelectField label="Passports in your group" value={d.nationality} onChange={(v) => set({ nationality: v })} options={['All EU / EEA passports', 'All Pakistani passports', 'Mixed (EU + Pakistani)', 'Other nationality']} />
+                <SelectField label={t('fields.passports')} value={d.nationality} onChange={(v) => set({ nationality: v })} options={NAT_VALUES.map((v) => ({ value: v, label: tNat(v) }))} />
                 <div className={`rounded-2xl border p-5 ${route.kind === 'success' ? 'border-green-100 bg-green-50' : 'border-accent-100 bg-accent-100/40'}`}>
                   <div className="mb-2.5 flex items-center gap-3">
                     <span className={`grid h-[42px] w-[42px] shrink-0 place-items-center rounded-xl ${route.kind === 'success' ? 'bg-green-100 text-green-800' : 'bg-accent-100 text-accent-700'}`}>
                       <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden><rect x="5" y="3" width="14" height="18" rx="2" /><circle cx="12" cy="10" r="3" /><path d="M9 16h6" /></svg>
                     </span>
                     <div>
-                      <div className={`text-base font-bold ${route.kind === 'success' ? 'text-green-800' : 'text-accent-700'}`}>{route.title}</div>
-                      <div className={`text-[12.5px] font-semibold ${route.kind === 'success' ? 'text-green-600' : 'text-accent-600'}`}>{route.tag}</div>
+                      <div className={`text-base font-bold ${route.kind === 'success' ? 'text-green-800' : 'text-accent-700'}`}>{routeTitle}</div>
+                      <div className={`text-[12.5px] font-semibold ${route.kind === 'success' ? 'text-green-600' : 'text-accent-600'}`}>{routeTag}</div>
                     </div>
                   </div>
-                  <p className="text-[13.5px] leading-relaxed text-sand-700">{route.body}</p>
+                  <p className="text-[13.5px] leading-relaxed text-sand-700">{routeBody}</p>
                 </div>
               </div>
             )}
@@ -395,8 +399,8 @@ export function SmartPlanner() {
                 <div className="mt-5 flex items-center gap-3.5 rounded-2xl border border-green-100 bg-green-100/60 px-[18px] py-4">
                   <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-green-800 font-mono text-lg font-semibold text-white">{matchCount}</span>
                   <div>
-                    <div className="text-[15px] font-bold text-green-800">{matchCount} packages match your plan</div>
-                    <div className="text-[13px] text-sand-700">Verified, near-Haram and visa-ready from {d.airport}.</div>
+                    <div className="text-[15px] font-bold text-green-800">{t('review.matchTitle', { n: matchCount })}</div>
+                    <div className="text-[13px] text-sand-700">{t('review.matchSub', { airport: d.airport })}</div>
                   </div>
                 </div>
 
@@ -405,7 +409,7 @@ export function SmartPlanner() {
                   <SendInquiryPanel
                     summary={summary}
                     buildInquiry={buildInquiry}
-                    successCta={<Link href={bookHref} className="inline-block rounded-xl bg-green-800 px-5 py-2.5 text-sm font-semibold text-white hover:bg-green-700">See {matchCount} matching packages →</Link>}
+                    successCta={<Link href={bookHref} className="inline-block rounded-xl bg-green-800 px-5 py-2.5 text-sm font-semibold text-white hover:bg-green-700">{t('seeMatching', { n: matchCount })}</Link>}
                   />
                 </div>
               </div>
@@ -420,22 +424,22 @@ export function SmartPlanner() {
               disabled={step === 0}
               className="inline-flex items-center gap-1.5 rounded-lg px-1 py-2 text-[14.5px] font-semibold text-sand-500 transition-colors disabled:cursor-default disabled:text-sand-300"
             >
-              ‹ Back
+              ‹ {t('back')}
             </button>
-            {step < STEPS.length - 1 ? (
+            {step < STEP_COUNT - 1 ? (
               <button
                 type="button"
                 onClick={() => go(step + 1)}
                 className="inline-flex items-center gap-2 rounded-xl bg-green-800 px-6 py-3 text-[15px] font-semibold text-white shadow-[0_8px_18px_rgba(15,81,50,0.26)] transition-[transform,background-color] duration-fast hover:bg-green-700 active:scale-[0.98]"
               >
-                Next <span aria-hidden>→</span>
+                {t('next')} <span aria-hidden>→</span>
               </button>
             ) : (
               <Link
                 href={bookHref}
                 className="inline-flex items-center gap-2 rounded-xl bg-green-800 px-6 py-3 text-[15px] font-semibold text-white shadow-[0_8px_18px_rgba(15,81,50,0.26)] transition-[transform,background-color] duration-fast hover:bg-green-700 active:scale-[0.98]"
               >
-                See {matchCount} packages <span aria-hidden>→</span>
+                {t('seePackages', { n: matchCount })} <span aria-hidden>→</span>
               </Link>
             )}
           </div>
@@ -469,24 +473,24 @@ function PlannerTabIcon() {
   );
 }
 
-function FieldLabel({ label, optional, children }: { label: string; optional?: boolean; children: React.ReactNode }) {
+function FieldLabel({ label, optionalLabel, children }: { label: string; optionalLabel?: string; children: React.ReactNode }) {
   return (
     <label className="block">
       <span className="mb-[7px] block text-[11.5px] font-semibold uppercase tracking-[0.07em] text-sand-500">
-        {label} {optional && <span className="font-medium normal-case tracking-normal text-sand-300">(optional)</span>}
+        {label} {optionalLabel && <span className="font-medium normal-case tracking-normal text-sand-300">{optionalLabel}</span>}
       </span>
       {children}
     </label>
   );
 }
 
-function SelectField({ label, value, onChange, options }: { label: string; value: string; onChange: (v: string) => void; options: string[] }) {
+function SelectField({ label, value, onChange, options }: { label: string; value: string; onChange: (v: string) => void; options: { value: string; label: string }[] }) {
   return (
     <FieldLabel label={label}>
       <div className="relative">
         <select value={value} onChange={(e) => onChange(e.target.value)} className={`${INPUT} cursor-pointer appearance-none pr-10`}>
           {options.map((o) => (
-            <option key={o} value={o}>{o}</option>
+            <option key={o.value} value={o.value}>{o.label}</option>
           ))}
         </select>
         <span aria-hidden className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-sand-500">▾</span>
@@ -509,20 +513,20 @@ function Stepper({ label, unit, value, min, max, onChange }: { label: string; un
   );
 }
 
-function ChipGroup({ label, value, options, onChange }: { label: string; value: string; options: string[]; onChange: (v: string) => void }) {
+function ChipGroup({ label, value, options, onChange }: { label: string; value: string; options: { value: string; label: string }[]; onChange: (v: string) => void }) {
   return (
     <FieldLabel label={label}>
       <div className="flex flex-wrap gap-2.5">
         {options.map((o) => {
-          const sel = value === o;
+          const sel = value === o.value;
           return (
             <button
-              key={o}
+              key={o.value}
               type="button"
-              onClick={() => onChange(o)}
+              onClick={() => onChange(o.value)}
               className={`rounded-xl border-[1.5px] px-4 py-2.5 text-[13.5px] font-semibold transition-colors duration-fast ${sel ? 'border-green-800 bg-green-800 text-white' : 'border-sand-300 bg-white text-sand-700 hover:border-green-500'}`}
             >
-              {o}
+              {o.label}
             </button>
           );
         })}

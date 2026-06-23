@@ -670,5 +670,166 @@
         "Grįžimas — iš Medinos ar Džidos, namo"
       ]
     }
+  },
+  "smartPlanner": {
+    "tabs": {
+      "current": "Išmanusis planuoklis",
+      "search": "Ieškoti paketų",
+      "guide": "Umros vadovas",
+      "tour": "Virtualus turas"
+    },
+    "asideTitle": "Išmaniojo vizito planuoklis",
+    "asideSub": "Septyni ramūs žingsniai iki pilnos, vizai paruoštos piligrimystės.",
+    "stepN": "Žingsnis {n} iš {total}",
+    "back": "Atgal",
+    "next": "Toliau",
+    "seePackages": "Žiūrėti {n} paketų",
+    "seeMatching": "Žiūrėti {n} tinkančių paketų →",
+    "optional": "(nebūtina)",
+    "anyAirport": "Bet kuris oro uostas",
+    "steps": {
+      "origin": {
+        "label": "Kilmė",
+        "q": "Iš kur keliaujate?",
+        "sub": "Nurodykite išvykimo vietą, kad galėtume įkainoti skrydžius ir maršrutus iš jūsų miesto."
+      },
+      "journey": {
+        "label": "Kelionė",
+        "q": "Kokią kelionę planuojate?",
+        "sub": "Pasirinkite piligrimystę — visa kita galėsite patikslinti vėliau."
+      },
+      "dates": {
+        "label": "Datos",
+        "q": "Kada norėtumėte keliauti?",
+        "sub": "Pasirinkite mėnesį ir kelionės trukmę. Lanksčios datos atveria geresnes kainas."
+      },
+      "travellers": {
+        "label": "Keliautojai",
+        "q": "Kas keliauja?",
+        "sub": "Pridėkite visus grupės narius, įskaitant vaikus, ir kiek kambarių reikia."
+      },
+      "stay": {
+        "label": "Apgyvendinimas",
+        "q": "Kur norėtumėte apsistoti?",
+        "sub": "Nustatykite pageidavimą dėl atstumo iki Haramo, viešbučio klasės ir maitinimo."
+      },
+      "visa": {
+        "label": "Viza",
+        "q": "Pasai ir vizos kelias",
+        "sub": "Nuskaitome jūsų grupės pasus ir automatiškai parenkame tinkamą kelią."
+      },
+      "review": {
+        "label": "Apžvalga",
+        "q": "Peržiūrėkite savo planą",
+        "sub": "Štai viskas iki šiol. Patvirtinkite ir pamatysite tinkančius paketus."
+      }
+    },
+    "fields": {
+      "country": "Šalis",
+      "city": "Miestas",
+      "cityPlaceholder": "pvz., Vilnius",
+      "countryPlaceholder": "Ieškoti šalies",
+      "nearestAirport": "Artimiausias oro uostas",
+      "airportPlaceholder": "Ieškoti oro uostų: {country}",
+      "travelMonth": "Kelionės mėnuo",
+      "lengthOfStay": "Kelionės trukmė",
+      "pilgrims": "Piligrimai",
+      "rooms": "Viešbučio kambariai",
+      "distance": "Atstumas iki Haramo",
+      "hotelClass": "Viešbučio klasė",
+      "board": "Maitinimas",
+      "passports": "Jūsų grupės pasai"
+    },
+    "units": {
+      "nights": "naktys",
+      "travelling": "keliauja",
+      "rooms": "kambariai"
+    },
+    "journeys": {
+      "Umrah": {
+        "name": "Umra",
+        "blurb": "Mažoji piligrimystė, bet kuriuo metų laiku.",
+        "tag": "Visus metus · nuo €1 180"
+      },
+      "Hajj": {
+        "name": "Hadžas",
+        "blurb": "Penktasis ramstis, visiškai organizuotas.",
+        "tag": "Dhul-Hijjah · nuo €6 400"
+      },
+      "Ziyarat": {
+        "name": "Zijara",
+        "blurb": "Šventos Medinos ir kitos vietos.",
+        "tag": "Sezoninė · nuo €980"
+      }
+    },
+    "flexible": {
+      "title": "Lankstu ± kelios dienos",
+      "hint": "Rasime geriausias kainas aplink jūsų datas."
+    },
+    "months": {
+      "sep26": "2026 m. rugsėjis",
+      "oct26": "2026 m. spalis",
+      "nov26": "2026 m. lapkritis",
+      "dec26": "2026 m. gruodis",
+      "ram27": "Ramadanas 2027",
+      "flex": "Esu lankstus"
+    },
+    "distances": {
+      "near": "Arti (≤300 m)",
+      "walking": "Pėsčiomis (≤800 m)",
+      "any": "Bet koks atstumas"
+    },
+    "boards": {
+      "room": "Tik kambarys",
+      "breakfast": "Pusryčiai",
+      "half": "Pusryčiai ir vakarienė",
+      "full": "Pilnas maitinimas"
+    },
+    "nationalities": {
+      "eu": "Visi ES / EEE pasai",
+      "pk": "Visi Pakistano pasai",
+      "mixed": "Mišri (ES + Pakistano)",
+      "other": "Kita pilietybė"
+    },
+    "summary": {
+      "from": "Iš",
+      "airport": "Oro uostas",
+      "journey": "Kelionė",
+      "when": "Kada",
+      "travellers": "Keliautojai",
+      "hotel": "Viešbutis",
+      "board": "Maitinimas",
+      "visaRoute": "Vizos kelias"
+    },
+    "review": {
+      "matchTitle": "{n} paketų atitinka jūsų planą",
+      "matchSub": "Patikrinti, šalia Haramo ir paruošti vizai iš {airport}."
+    },
+    "routes": {
+      "mixed": {
+        "title": "Du keliai — tvarkomi kartu",
+        "tag": "Mišri grupė",
+        "body": "ES/EEE piligrimai gauna internetinę e. vizą; Pakistano piligrimai keliauja per mūsų licencijuotą agentų kanalą. Abu sekami pagal vieną užsakymo numerį."
+      },
+      "evisa": {
+        "title": "E. vizos kelias",
+        "tag": "Greita · internetu",
+        "body": "Pateikiama internetu MOFA ir paprastai išduodama per 2–3 dienas. Padedame užpildyti kiekvieną laukelį ir sekame gyvai."
+      },
+      "agent": {
+        "title": "Licencijuotas agentų kanalas",
+        "tag": "Visiškai palaikoma",
+        "body": "Tvarko mūsų licencijuoti partneriai su visapusišku dokumentų palaikymu nuo surinkimo iki išduotos vizos."
+      }
+    },
+    "railValues": {
+      "nightsMonth": "{nights} n. · {month}",
+      "paxRooms": "{pax} pilig. · {rooms} kamb.",
+      "starsDist": "{stars} · {dist}",
+      "matches": "{n} atitikmenų",
+      "evisa": "E. viza",
+      "mixed": "Mišrūs keliai",
+      "agent": "Agentų kanalas"
+    }
   }
 }

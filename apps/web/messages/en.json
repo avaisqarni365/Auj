@@ -670,5 +670,166 @@
         "Return — from Madinah or Jeddah, then home"
       ]
     }
+  },
+  "smartPlanner": {
+    "tabs": {
+      "current": "Smart planner",
+      "search": "Search packages",
+      "guide": "Umrah Guide",
+      "tour": "Virtual tour"
+    },
+    "asideTitle": "Smart Visit planner",
+    "asideSub": "Seven calm steps to a complete, visa-ready pilgrimage.",
+    "stepN": "Step {n} of {total}",
+    "back": "Back",
+    "next": "Next",
+    "seePackages": "See {n} packages",
+    "seeMatching": "See {n} matching packages →",
+    "optional": "(optional)",
+    "anyAirport": "Any airport",
+    "steps": {
+      "origin": {
+        "label": "Origin",
+        "q": "Where do you start from?",
+        "sub": "Tell us your departure point so we can price flights and routings from your city."
+      },
+      "journey": {
+        "label": "Journey",
+        "q": "Which journey are you planning?",
+        "sub": "Choose the pilgrimage you have in mind — you can refine everything later."
+      },
+      "dates": {
+        "label": "Dates",
+        "q": "When would you like to travel?",
+        "sub": "Pick a month and length of stay. Flexible dates unlock better fares."
+      },
+      "travellers": {
+        "label": "Travellers",
+        "q": "Who is travelling?",
+        "sub": "Add everyone in your group, including children, and how many rooms you need."
+      },
+      "stay": {
+        "label": "Stay",
+        "q": "Where would you like to stay?",
+        "sub": "Set your preference for proximity to the Haram, hotel class and board."
+      },
+      "visa": {
+        "label": "Visa",
+        "q": "Passports & visa route",
+        "sub": "We read your group’s passports and set the right path automatically."
+      },
+      "review": {
+        "label": "Review",
+        "q": "Review your plan",
+        "sub": "Here’s everything so far. Confirm to see the packages that match."
+      }
+    },
+    "fields": {
+      "country": "Country",
+      "city": "City",
+      "cityPlaceholder": "e.g. Vilnius",
+      "countryPlaceholder": "Search your country",
+      "nearestAirport": "Nearest airport",
+      "airportPlaceholder": "Search airports in {country}",
+      "travelMonth": "Travel month",
+      "lengthOfStay": "Length of stay",
+      "pilgrims": "Pilgrims",
+      "rooms": "Hotel rooms",
+      "distance": "Distance to the Haram",
+      "hotelClass": "Hotel class",
+      "board": "Board",
+      "passports": "Passports in your group"
+    },
+    "units": {
+      "nights": "nights",
+      "travelling": "travelling",
+      "rooms": "rooms"
+    },
+    "journeys": {
+      "Umrah": {
+        "name": "Umrah",
+        "blurb": "The lesser pilgrimage, any time of year.",
+        "tag": "Year-round · from €1,180"
+      },
+      "Hajj": {
+        "name": "Hajj",
+        "blurb": "The fifth pillar, fully organised.",
+        "tag": "Dhul-Hijjah · from €6,400"
+      },
+      "Ziyarat": {
+        "name": "Ziyarat",
+        "blurb": "Sacred sites of Madinah & beyond.",
+        "tag": "Seasonal · from €980"
+      }
+    },
+    "flexible": {
+      "title": "Flexible by ± a few days",
+      "hint": "We’ll find the best fares around your dates."
+    },
+    "months": {
+      "sep26": "September 2026",
+      "oct26": "October 2026",
+      "nov26": "November 2026",
+      "dec26": "December 2026",
+      "ram27": "Ramadan 2027",
+      "flex": "I'm flexible"
+    },
+    "distances": {
+      "near": "Near (≤300m)",
+      "walking": "Walking (≤800m)",
+      "any": "Any distance"
+    },
+    "boards": {
+      "room": "Room only",
+      "breakfast": "Breakfast",
+      "half": "Half board",
+      "full": "Full board"
+    },
+    "nationalities": {
+      "eu": "All EU / EEA passports",
+      "pk": "All Pakistani passports",
+      "mixed": "Mixed (EU + Pakistani)",
+      "other": "Other nationality"
+    },
+    "summary": {
+      "from": "From",
+      "airport": "Airport",
+      "journey": "Journey",
+      "when": "When",
+      "travellers": "Travellers",
+      "hotel": "Hotel",
+      "board": "Board",
+      "visaRoute": "Visa route"
+    },
+    "review": {
+      "matchTitle": "{n} packages match your plan",
+      "matchSub": "Verified, near-Haram and visa-ready from {airport}."
+    },
+    "routes": {
+      "mixed": {
+        "title": "Two routes — handled together",
+        "tag": "Mixed group",
+        "body": "EU/EEA pilgrims get the online e-Visa; Pakistani pilgrims go through our licensed agent channel. Both are tracked under one booking reference."
+      },
+      "evisa": {
+        "title": "e-Visa route",
+        "tag": "Fast · online",
+        "body": "Submitted online to MOFA and typically issued in 2–3 days. We guide every field and track it live."
+      },
+      "agent": {
+        "title": "Licensed agent channel",
+        "tag": "Fully supported",
+        "body": "Handled by our licensed partners with full document support, from collection to issued visa."
+      }
+    },
+    "railValues": {
+      "nightsMonth": "{nights} nts · {month}",
+      "paxRooms": "{pax} pilgrims · {rooms} rooms",
+      "starsDist": "{stars} · {dist}",
+      "matches": "{n} matches",
+      "evisa": "e-Visa",
+      "mixed": "Mixed routes",
+      "agent": "Agent channel"
+    }
   }
 }

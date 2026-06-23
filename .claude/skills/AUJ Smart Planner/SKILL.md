@@ -51,4 +51,9 @@ dark-green rail aside, progress bar, per-step inputs and Review→packages hando
 `SmartPlanner.tsx`. It is integrated beyond the static prototype — real country/airport data, the
 visa-route preview and a DB-backed inquiry hand-off. No structural redesign needed; the prototype's
 top-level tab bar (Smart planner / Search / Umrah Guide / Virtual tour) lives at the landing/nav
-level here rather than inside this component. Confirm motion timing matches taste (≤300ms) and i18n parity.
+level here rather than inside this component.
+
+i18n: `SmartPlanner.tsx` is wired to next-intl (`useTranslations('smartPlanner')`) with EN/LT/UR/AR
+catalogs in `messages/*.json`; RTL is inherited from the locale-driven `<html dir>`. Canonical option
+values stay English in state (so visa-route logic, summary and the `/book` hand-off are stable) and
+only the display is translated. LT/UR/AR are machine-drafted pending native review (see assumptions A12).
