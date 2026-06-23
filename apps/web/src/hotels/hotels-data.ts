@@ -135,3 +135,35 @@ const CITIES: Record<HotelCity, CityHotels> = { makkah: MAKKAH, madinah: MADINAH
 export function hotelsForCity(city: HotelCity): CityHotels {
   return CITIES[city];
 }
+
+// ---- admin-input sanitizers (pure; used by hotels-admin-actions, exported for tests) ----
+const cap = (x: unknown, n: number): string => String(x ?? '').slice(0, n);
+
+export function cleanHotel(h: unknown): Hotel {
+  const o = (h ?? {}) as Partial<Hotel>;
+  return { name: cap(o.name, 200), stars: cap(o.stars, 12), note: cap(o.note, 200), dist: cap(o.dist, 60) };
+}
+
+export function cleanBand(b: unknown): HotelBand {
+  const o = (b ?? {}) as Partial<HotelBand>;
+  return {
+    short: cap(o.short, 40),
+    dist: cap(o.dist, 60),
+    walk: cap(o.walk, 80),
+    area: cap(o.area, 200),
+    name: cap(o.name, 80),
+    hotels: (Array.isArray(o.hotels) ? o.hotels : []).slice(0, 30).map(cleanHotel),
+  };
+}
+
+/** Sanitize an admin-supplied city directory. `slug` is canonical — the client-supplied slug on
+ *  the body is ignored, so a city's data can never be saved under another (or unknown) slug. */
+export function cleanCity(slug: HotelCity, data: unknown): CityHotels {
+  const d = (data ?? {}) as Partial<CityHotels>;
+  return {
+    slug,
+    title: cap(d.title, 120),
+    mosque: cap(d.mosque, 120),
+    bands: (Array.isArray(d.bands) ? d.bands : []).slice(0, 12).map(cleanBand),
+  };
+}

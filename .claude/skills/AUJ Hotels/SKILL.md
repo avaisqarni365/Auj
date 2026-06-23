@@ -36,5 +36,7 @@ server-side source, no localStorage. Pricing/availability deliberately deferred 
 - [ ] Band rail + list + prev/next; hands off to `/book`; ScreenFrame + tokens; RTL.
 
 ## Status
-Live and matching the prototypes. Cosmetic deviation: the band rail renders vertically in the green
-stage rather than the prototype's top horizontal rail (not a blocker).
+Live and matching the prototypes; both cities DB-backed + admin-editable. Content invariants and the
+admin sanitizer (`cleanCity` — canonical-slug enforcement + caps) are covered by `hotels-data.test.ts`.
+Cosmetic deviation: the band rail renders vertically in the green stage rather than the prototype's top
+horizontal rail (not a blocker).
