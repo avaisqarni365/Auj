@@ -37,3 +37,11 @@ export interface FlightOffer { id: string; carrier: string; depart: string; arri
 
 ## Out of scope
 Markups (B2B layer), payment capture (payments module), Saudi/Maqam supply.
+
+## Status
+Complete and tested. `TravelSupplier` lives in `packages/contracts`; `packages/connector-travel`
+implements it via `bedbank.ts` (hotels) + `flights.ts` (Amadeus-style) composed by `travel-connector.ts`
+(8 tests incl. a sandbox search→book→cancel: CONFIRMED, `TRV-` ref, BRNs, refund). `MockTravelSupplier`
+mirrors it and both run the shared `runTravelSupplierContractTests` suite, so the real adapter is a
+drop-in. Net rates only; currencies normalized to `Money`. Selected via the `SUPPLIER=live` env seam —
+no product module imports a concrete connector.
