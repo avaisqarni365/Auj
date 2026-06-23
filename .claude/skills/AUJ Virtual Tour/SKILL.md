@@ -64,6 +64,8 @@ SKILL's Virtual Tour section.)
 Live and matches the prototype's intent. The route, scene-by-scene viewer, EN/AR/UR/TR/DE localization
 + RTL, Listen/narration, Du'a panel, admin copy overrides, and the shared-vs-personal video model
 (DB-backed per user) all ship. Improvement over the prototype: personal clips are account-scoped in
-Postgres rather than localStorage, and copy is admin-editable. Left: real panorama photos + walkthrough
-videos per scene to be supplied (placeholders/fallbacks until then); the prototype's voice-recorder is a
-separate later add-on using the DB-backed `recordings-store`/`RecordingPanel`, not localStorage.
+Postgres rather than localStorage, and copy is admin-editable. Tested: scene localization + EN-fallback
++ src/narration paths (`scenes.test.ts`) and per-user clip scoping (`tour-video-store.test.ts` — no
+cross-account leak). Left: real panorama photos + walkthrough videos per scene to be supplied
+(placeholders/fallbacks until then); the prototype's voice-recorder is a separate later add-on using the
+DB-backed `recordings-store`/`RecordingPanel`, not localStorage.
