@@ -63,3 +63,6 @@ run the design-taste checklist before finishing.
 ## Status
 **Live** at `/` — `Landing.tsx` with all sections wired to connector deals + the DB CMS and
 multilingual via `next-intl`. It is the in-production design source of truth; matches the prototype.
+Tested: nav/search/scenes (`Landing.test.tsx`), the CMS override→EN→fallback chain + store
+(`landing-content-store.test.ts`), and the connector-seam deal builder (`landing-data.test.ts` —
+`pairDeals` pricing/cheapest-first + static fallback, and `buildDeals` against the mock seam).
