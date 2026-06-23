@@ -23,7 +23,9 @@ tiles, a ledger-health "=" card, and a filtered transactions list with per-row i
   (`requireRole(['AGENT','SUB_AGENT','ADMIN'])`; agent must be `agentStatus === 'ACTIVE'`). Rendered as a
   screen inside `apps/web/src/agent/AgentPortal.tsx`.
 - Component: `apps/web/src/agent/screens/LedgerView.tsx` (client) — props
-  `{ agencyName, balance, creditLimit, entries: JournalEntry[], account }`.
+  `{ agencyName, balance, creditLimit, entries: JournalEntry[], account }`. Money derivations
+  (`availableToBook`, `usedOf`, `ledgerHealth`, `walletRows`, `filterRows`) live in the pure
+  `agent/screens/ledger-derive.ts` (+ `ledger-derive.test.ts`).
 - Domain/types: `@auj/payments` (`JournalEntry`, postings with `direction`/`account`/`amount`).
 - Wiring/data: `apps/web/src/agent/actions.ts`, `agent-db.ts`, `backend/in-process.ts`, `statements.ts`.
 - Currency display: `apps/web/src/currency.ts` (`displayFromEur`).
@@ -56,4 +58,7 @@ contrast. Apply the design-taste checklist.
 ## Status
 Live: `LedgerView` exists and is wired into `AgentPortal` at `/agent` over `@auj/payments` journal
 entries. **Matches** the prototype (wallet, double-entry health, filtered transactions, EUR/PKR toggle).
-Note: it is an **agent-portal** screen, not an admin screen — no role redesign needed.
+The money derivations are extracted to a pure module and unit-tested (available=credit−used,
+Σdebit=Σcredit health, signed per-row amounts, refund classification, All/Payments/Refunds filter);
+the `@auj/payments` domain has its own ledger/wallet/service tests. Note: it is an **agent-portal**
+screen, not an admin screen — no role redesign needed.

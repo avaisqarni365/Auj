@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import type { JournalEntry } from '@auj/payments';
 import { displayFromEur } from '../../currency';
+import { availableToBook, filterRows, ledgerHealth, usedOf, walletRows, type TxFilter } from './ledger-derive';
 
 // Payments & Ledger (AUJ Payments Ledger.dc.html): cinematic wallet + double-entry health +
 // filtered transactions, driven by the agency's real wallet balance/credit and ledger entries.
@@ -15,44 +16,19 @@ export interface LedgerViewProps {
   account: string; // wallet account id, e.g. wallet:<agentId>
 }
 
-type Row = { label: string; ref: string; kind: string; amount: number; refund: boolean };
-
 export function LedgerView({ agencyName, balance, creditLimit, entries, account }: LedgerViewProps) {
   const [cur, setCur] = useState<'EUR' | 'PKR'>('EUR');
-  const [filter, setFilter] = useState<'all' | 'payments' | 'refunds'>('all');
+  const [filter, setFilter] = useState<TxFilter>('all');
   const f = (eurMinor: number): string => displayFromEur(eurMinor, cur);
 
-  const used = balance < 0 ? -balance : 0;
-  const available = creditLimit - used;
+  const used = usedOf(balance);
+  const available = availableToBook(balance, creditLimit);
 
-  // Double-entry health: sum every posting by direction — a balanced ledger has Σdebit = Σcredit.
-  const { debitSum, creditSum } = useMemo(() => {
-    let d = 0;
-    let c = 0;
-    for (const e of entries) {
-      for (const p of e.postings) {
-        if (p.direction === 'DEBIT') d += p.amount;
-        else c += p.amount;
-      }
-    }
-    return { debitSum: d, creditSum: c };
-  }, [entries]);
-  const balanced = debitSum === creditSum;
+  // Double-entry health: Σ debit = Σ credit across every posting (pure helper).
+  const { debitSum, creditSum, balanced } = useMemo(() => ledgerHealth(entries), [entries]);
 
-  const rows: Row[] = useMemo(() => {
-    const out: Row[] = [];
-    for (const e of entries) {
-      const p = e.postings.find((x) => x.account === account);
-      if (!p) continue;
-      const refund = /refund|ref-/i.test(`${e.memo ?? ''} ${e.ref}`);
-      // wallet CREDIT increases funds (top-up/settle), DEBIT decreases (capture)
-      const amount = p.direction === 'CREDIT' ? p.amount : -p.amount;
-      out.push({ label: e.memo || e.ref, ref: e.ref, kind: refund ? 'refund' : p.direction === 'CREDIT' ? 'top-up' : 'capture', amount, refund });
-    }
-    return out;
-  }, [entries, account]);
-
-  const shown = rows.filter((r) => filter === 'all' || (filter === 'refunds' ? r.refund : !r.refund));
+  const rows = useMemo(() => walletRows(entries, account), [entries, account]);
+  const shown = filterRows(rows, filter);
 
   const curBtn = (c: 'EUR' | 'PKR') => (
     <button
