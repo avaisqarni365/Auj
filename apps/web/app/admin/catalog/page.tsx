@@ -60,8 +60,8 @@ const GROUPS: Group[] = [
     entries: [
       { icon: '🧳', name: 'Packing organizer', editable: 'Default list: sections, items, profiles', href: '/admin/packing', view: '/companion/packing', crud: 'full' },
       { icon: '💶', name: 'Financial planner', editable: 'Cost presets (package & private), in EUR', href: '/admin/budget', view: '/plan/budget', crud: 'full' },
-      { icon: '🕌', name: 'Day planner', editable: 'Driven by jamaat times — pilgrim-personal, no shared content', view: '/plan/day', crud: 'peruser' },
-      { icon: '📿', name: 'Personal diary', editable: "Quran, nafl, du'a & notes — private to each pilgrim", view: '/companion/diary', crud: 'peruser' },
+      { icon: '🕌', name: 'Day planner', editable: 'Default daily schedule (jamaat blocks) per city', href: '/admin/day-planner', view: '/plan/day', crud: 'full' },
+      { icon: '📿', name: 'Personal diary', editable: "Default Quran target, nafl list & du'a checklist", href: '/admin/diary', view: '/companion/diary', crud: 'full' },
     ],
   },
   {
@@ -91,8 +91,8 @@ export default async function AdminCatalogPage() {
           <h1 className="font-serif text-[clamp(1.5rem,3vw,1.875rem)] font-semibold tracking-[-0.02em] text-sand-ink">Manage every wizard</h1>
           <p className="mt-1.5 max-w-[60ch] text-[14px] text-sand-500">
             Every pilgrim-facing wizard, guide, directory and tool — and where to manage it.
-            <strong className="text-sand-700"> {managed} surfaces</strong> are admin-editable; the day planner and
-            personal diary hold each pilgrim&apos;s private data, so there is no shared content to edit.
+            All <strong className="text-sand-700">{managed} surfaces</strong> are admin-editable; the day planner and
+            diary now expose their shared defaults too (each pilgrim&apos;s own entries stay private).
           </p>
         </div>
 

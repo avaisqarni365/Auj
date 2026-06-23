@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ScreenFrame } from '../components/ScreenFrame';
-import { dayPlan, SHIFT_MAX, SHIFT_STEP, type PlannerCity, type SlotKind } from './planner';
+import { dayPlanFrom, DAY_PLAN_SEED, SHIFT_MAX, SHIFT_STEP, type BaseSlot, type PlannerCity, type SlotKind } from './planner';
 import { saveDayPlanAction } from './day-plan-actions';
 import type { DayPlanPref } from './day-plan-types';
 
@@ -20,10 +20,18 @@ const TAG: Record<SlotKind, string> = {
   rest: 'bg-sand-100 text-sand-600',
 };
 
-export function DayPlanner({ signedIn, initialPref = null }: { signedIn: boolean; initialPref?: DayPlanPref | null }) {
+export function DayPlanner({
+  signedIn,
+  initialPref = null,
+  template = DAY_PLAN_SEED,
+}: {
+  signedIn: boolean;
+  initialPref?: DayPlanPref | null;
+  template?: Record<PlannerCity, BaseSlot[]>;
+}) {
   const [city, setCity] = useState<PlannerCity>(initialPref?.city ?? 'makkah');
   const [shift, setShift] = useState<number>(initialPref?.shiftMin ?? 0);
-  const view = useMemo(() => dayPlan(city, shift), [city, shift]);
+  const view = useMemo(() => dayPlanFrom(template, city, shift), [template, city, shift]);
 
   const saveTimer = useRef<ReturnType<typeof setTimeout>>();
   useEffect(() => () => saveTimer.current && clearTimeout(saveTimer.current), []);

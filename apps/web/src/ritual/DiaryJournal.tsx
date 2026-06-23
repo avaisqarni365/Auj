@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ScreenFrame } from '../components/ScreenFrame';
-import { DUAS, NAFL, duaDone, emptyEntry, naflTotal, quranPct, type DiaryEntry } from './diary';
+import { DIARY_DEFAULTS_SEED, duaDone, emptyEntry, naflTotal, quranPct, type DiaryDefaults, type DiaryEntry } from './diary';
 import { saveDiaryAction } from './diary-actions';
 
 function Stepper({ value, onDec, onInc }: { value: string; onDec: () => void; onInc: () => void }) {
@@ -28,8 +28,18 @@ function Stepper({ value, onDec, onInc }: { value: string; onDec: () => void; on
   );
 }
 
-export function DiaryJournal({ signedIn, date, initialEntry = null }: { signedIn: boolean; date: string; initialEntry?: DiaryEntry | null }) {
-  const [entry, setEntry] = useState<DiaryEntry>(initialEntry ?? emptyEntry(date));
+export function DiaryJournal({
+  signedIn,
+  date,
+  initialEntry = null,
+  defaults = DIARY_DEFAULTS_SEED,
+}: {
+  signedIn: boolean;
+  date: string;
+  initialEntry?: DiaryEntry | null;
+  defaults?: DiaryDefaults;
+}) {
+  const [entry, setEntry] = useState<DiaryEntry>(initialEntry ?? emptyEntry(date, defaults.quranTarget));
 
   const saveTimer = useRef<ReturnType<typeof setTimeout>>();
   useEffect(() => () => saveTimer.current && clearTimeout(saveTimer.current), []);
@@ -45,8 +55,8 @@ export function DiaryJournal({ signedIn, date, initialEntry = null }: { signedIn
   };
 
   const bar = quranPct(entry);
-  const nafl = naflTotal(entry);
-  const duas = duaDone(entry);
+  const nafl = naflTotal(entry, defaults.nafl);
+  const duas = duaDone(entry, defaults.duas);
 
   const setNafl = (k: string, delta: number): void =>
     update({ nafl: { ...entry.nafl, [k]: Math.max(0, (entry.nafl[k] || 0) + delta) } });
@@ -131,7 +141,7 @@ export function DiaryJournal({ signedIn, date, initialEntry = null }: { signedIn
       <section className="mt-4 rounded-2xl border border-sand-200 bg-white p-4 shadow-sm">
         <div className="text-[15px] font-semibold text-sand-800">Nafl &amp; Sunnah prayers</div>
         <div className="mt-3 grid gap-2">
-          {NAFL.map((n) => (
+          {defaults.nafl.map((n) => (
             <div key={n.key} className="flex items-center gap-3">
               <div className="min-w-0 flex-1">
                 <div className="text-[14px] font-semibold text-sand-800">{n.label}</div>
@@ -147,7 +157,7 @@ export function DiaryJournal({ signedIn, date, initialEntry = null }: { signedIn
       <section className="mt-4 rounded-2xl border border-sand-200 bg-white p-4 shadow-sm">
         <div className="text-[15px] font-semibold text-sand-800">Dua list — tap when made</div>
         <div className="mt-3 flex flex-wrap gap-2">
-          {DUAS.map((d) => {
+          {defaults.duas.map((d) => {
             const on = !!entry.duas[d.key];
             return (
               <button

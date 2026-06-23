@@ -2,6 +2,7 @@ import { getCurrentUser } from '../../../src/auth/session';
 import { SitePage } from '../../../src/components/SitePage';
 import { DiaryJournal } from '../../../src/ritual/DiaryJournal';
 import { getDiaryStore } from '../../../src/ritual/diary-store';
+import { getDiaryDefaultsStore } from '../../../src/ritual/diary-defaults-store';
 
 // Personal diary — Quran/nafl/dua/reflection journal, one entry per pilgrim per day (DB-backed).
 // Public + useful to anyone; persists to the account when signed in.
@@ -15,9 +16,10 @@ export default async function DiaryPage() {
   const user = await getCurrentUser();
   const date = todayInKsa();
   const initialEntry = user ? ((await (await getDiaryStore()).get(user.id, date)) ?? null) : null;
+  const defaults = await (await getDiaryDefaultsStore()).getDefaults();
   return (
     <SitePage user={user}>
-      <DiaryJournal signedIn={!!user} date={date} initialEntry={initialEntry} />
+      <DiaryJournal signedIn={!!user} date={date} initialEntry={initialEntry} defaults={defaults} />
     </SitePage>
   );
 }

@@ -5,7 +5,7 @@
 export type PlannerCity = 'makkah' | 'madinah';
 export type SlotKind = 'prayer' | 'meal' | 'activity' | 'rest';
 
-interface BaseSlot {
+export interface BaseSlot {
   h: number;
   m: number;
   title: string;
@@ -49,6 +49,9 @@ const SCHEDULE: Record<PlannerCity, BaseSlot[]> = {
   ],
 };
 
+// The editable daily template, seeded into the day_plan_template store and admin-editable.
+export const DAY_PLAN_SEED: Record<PlannerCity, BaseSlot[]> = SCHEDULE;
+
 // Typical hot-season hourly temperature for Makkah (°C); Madinah runs ~2° cooler.
 const TEMP_MAKKAH: Record<number, number> = {
   0: 32, 1: 31, 2: 30, 3: 30, 4: 29, 5: 29, 6: 30, 7: 33, 8: 36, 9: 39, 10: 41, 11: 43,
@@ -88,9 +91,13 @@ export interface DayPlanView {
   shiftLabel: string;
 }
 
-export function dayPlan(city: PlannerCity, shiftMin: number): DayPlanView {
+export function dayPlanFrom(
+  schedule: Record<PlannerCity, BaseSlot[]>,
+  city: PlannerCity,
+  shiftMin: number,
+): DayPlanView {
   const shift = clampShift(shiftMin);
-  const sched = SCHEDULE[city];
+  const sched = schedule[city] ?? [];
   const tOff = city === 'madinah' ? -2 : 0;
   const slots: DaySlot[] = sched.map((s) => ({
     time: fmt(s.h * 60 + s.m + shift),
@@ -109,4 +116,8 @@ export function dayPlan(city: PlannerCity, shiftMin: number): DayPlanView {
     tempRange: { min: Math.min(...temps), max: Math.max(...temps) },
     shiftLabel: shift === 0 ? 'On schedule' : shift > 0 ? `+${shift} min` : `${shift} min`,
   };
+}
+
+export function dayPlan(city: PlannerCity, shiftMin: number): DayPlanView {
+  return dayPlanFrom(DAY_PLAN_SEED, city, shiftMin);
 }

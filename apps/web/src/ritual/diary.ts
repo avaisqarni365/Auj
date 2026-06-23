@@ -10,7 +10,11 @@ export interface DiaryEntry {
   note: string;
 }
 
-export const NAFL: Array<{ key: string; label: string; note: string }> = [
+export type NaflDef = { key: string; label: string; note: string };
+export type DuaDef = { key: string; label: string };
+export type DiaryDefaults = { quranTarget: number; nafl: NaflDef[]; duas: DuaDef[] };
+
+export const NAFL: NaflDef[] = [
   { key: 'tahajjud', label: 'Tahajjud', note: 'Night prayer' },
   { key: 'duha', label: 'Duha (Chasht)', note: 'Forenoon prayer' },
   { key: 'witr', label: 'Witr', note: 'After Isha' },
@@ -18,7 +22,7 @@ export const NAFL: Array<{ key: string; label: string; note: string }> = [
   { key: 'extra', label: 'Extra nafl', note: 'Voluntary rakʿah' },
 ];
 
-export const DUAS: Array<{ key: string; label: string }> = [
+export const DUAS: DuaDef[] = [
   { key: 'forgive', label: 'Forgiveness' },
   { key: 'parents', label: 'For my parents' },
   { key: 'health', label: 'Health & shifa' },
@@ -28,16 +32,19 @@ export const DUAS: Array<{ key: string; label: string }> = [
   { key: 'accept', label: 'Acceptance of Umrah' },
 ];
 
-export function emptyEntry(date: string): DiaryEntry {
-  return { date, quranTarget: 1, quranDone: 0, nafl: {}, duas: {}, note: '' };
+// Default Quran target / nafl list / dua checklist — the seed an admin can override (migration 10).
+export const DIARY_DEFAULTS_SEED: DiaryDefaults = { quranTarget: 1, nafl: NAFL, duas: DUAS };
+
+export function emptyEntry(date: string, quranTarget = 1): DiaryEntry {
+  return { date, quranTarget, quranDone: 0, nafl: {}, duas: {}, note: '' };
 }
 
-export function naflTotal(e: DiaryEntry): number {
-  return NAFL.reduce((a, n) => a + (e.nafl[n.key] || 0), 0);
+export function naflTotal(e: DiaryEntry, nafl: NaflDef[] = NAFL): number {
+  return nafl.reduce((a, n) => a + (e.nafl[n.key] || 0), 0);
 }
 
-export function duaDone(e: DiaryEntry): number {
-  return DUAS.reduce((a, d) => a + (e.duas[d.key] ? 1 : 0), 0);
+export function duaDone(e: DiaryEntry, duas: DuaDef[] = DUAS): number {
+  return duas.reduce((a, d) => a + (e.duas[d.key] ? 1 : 0), 0);
 }
 
 export function quranPct(e: DiaryEntry): number {
