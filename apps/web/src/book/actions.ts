@@ -6,9 +6,11 @@
 import type { CateringOffer, GroundOffer, Money, PackageMode, SearchCriteria } from '@auj/contracts';
 import type { PackageItem, SpecialRequestCategory, VisaCase } from '@auj/core-booking';
 import { bookingConfirmation } from '@auj/notifications';
+import { headers } from 'next/headers';
 import { confirmHeldBooking, createHeldBooking, pollVisaUntilIssued, type PlacedBooking } from './usecases';
 import type { PilgrimDraft } from './funnel';
 import { getCurrentUser } from '../auth/session';
+import { issuePackageCompliance } from '../admin/compliance-store';
 import { getBookingBackend as getBackend } from './backend/singleton';
 import type { Backend } from './ports';
 import { putPending, takePending } from './backend/pending';
@@ -76,6 +78,24 @@ function customerFor(user: { displayName?: string; email: string } | null | unde
   };
 }
 
+// EU Package Travel Directive: on every confirmed package booking, issue the insolvency
+// certificate, record pre-contract consent and open the 6-month refund window. Best-effort —
+// a compliance-store hiccup must not fail an already-paid booking (the admin console can re-issue).
+async function recordCompliance(placed: PlacedBooking, customerName: string, eurMinor: number): Promise<void> {
+  try {
+    const ip = headers().get('x-forwarded-for')?.split(',')[0]?.trim() || '0.0.0.0';
+    await issuePackageCompliance({
+      bookingRef: placed.booking.bookingRef ?? placed.booking.id,
+      customerId: placed.booking.customerId,
+      customerName,
+      eurMinor,
+      ip,
+    });
+  } catch {
+    /* swallow — never fail a paid booking on a compliance-record error */
+  }
+}
+
 /**
  * Start checkout: create + hold the booking, then authorize the payment. When the gateway
  * has a browser step (live Stripe) we return its clientSecret + publishable key and leave
@@ -101,6 +121,7 @@ export async function startCheckoutAction(input: PlaceBookingInput): Promise<Che
       intentId,
       currency: input.total.currency as 'EUR' | 'PKR',
       ...(input.rawdahDate ? { rawdahDate: input.rawdahDate } : {}),
+      ...(input.total.currency === 'EUR' ? { amountMinor: input.total.amount } : {}),
     });
     return { status: 'requires_card', bookingId, clientSecret, publishableKey };
   }
@@ -117,6 +138,7 @@ export async function startCheckoutAction(input: PlaceBookingInput): Promise<Che
     paymentRef,
     ...(input.rawdahDate ? { rawdahDate: input.rawdahDate } : {}),
   });
+  await recordCompliance(placed, customer.fullName, input.total.currency === 'EUR' ? input.total.amount : 0);
   await sendConfirmation(customer.email, placed);
   return { status: 'done', placed };
 }
@@ -148,6 +170,7 @@ export async function finalizeBookingAction(bookingId: string): Promise<PlacedBo
     paymentRef,
     ...(pending.rawdahDate ? { rawdahDate: pending.rawdahDate } : {}),
   });
+  await recordCompliance(placed, user?.displayName ?? 'Guest', pending.amountMinor ?? 0);
   await sendConfirmation(email, placed);
   return placed;
 }

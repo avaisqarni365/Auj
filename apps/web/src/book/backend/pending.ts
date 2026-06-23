@@ -14,6 +14,8 @@ export interface PendingPayment {
   /** Carried so confirm can still book the requested Rawdah slot after capture. */
   rawdahDate?: string;
   mode?: PackageMode;
+  /** Booking value in EUR minor units (when charged in EUR) — used to pick the compliance tier. */
+  amountMinor?: number;
 }
 
 const KEY = Symbol.for('auj.book.pendingPayments');

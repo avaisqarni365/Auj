@@ -39,7 +39,12 @@ origin-aware; respects `prefers-reduced-motion`; 44px targets; AA contrast. Appl
 - Postgres when `DATABASE_URL` is set, in-memory fallback otherwise — **no localStorage**. Tables:
   `security_certificates`, `precontract_consents`, `refund_windows`, `gdpr_requests` (migration 14).
 - `onPackageBooking` atomically records consent (before charge), issues + delivers the certificate
-  (rendered text + PDF key in the DocumentStore), and opens the 6-month refund window.
+  (rendered text + PDF key in the DocumentStore), and opens the 6-month refund window. It is wired into
+  the **real booking confirm** via `issuePackageCompliance(...)` (compliance-store) — called from
+  `apps/web/src/book/actions.ts` after both confirm paths (no-card capture + Stripe card finalize),
+  best-effort so a store hiccup never fails a paid booking. `tierForEur(eurMinor)` picks the guarantee
+  tier whose cover meets/exceeds the booking value. (The admin `simulateBookingAction` uses the same
+  path for demos. B2B agent bulk bookings are out of consumer-PTD scope.)
 - Money in **integer minor units** (`coverageMinor`); coverage from `GUARANTEE_TIERS`.
 - GDPR export returns the customer's certificates/consents; delete erases PII (`customerName`/proof →
   `[erased]`, consents removed). Real credentials/guarantee filing are out of scope (vault / VVTAT).
@@ -54,6 +59,8 @@ origin-aware; respects `prefers-reduced-motion`; 44px targets; AA contrast. Appl
 - [ ] Disclaimer present ("encodes obligations, not legal advice"); typecheck/lint/unit green.
 
 ## Status
-Live page exists at `/admin/compliance` with `ComplianceConsole` + Postgres store. **Matches** the
-prototype; confirm the console renders all four prototype blocks (certificate, pre-contract, refund,
-GDPR) and the tier picker before declaring done.
+Live at `/admin/compliance` with `ComplianceConsole` + Postgres store; renders all four prototype
+blocks (certificate, pre-contract, refund, GDPR) + the tier picker. **Issuance is now wired to real
+package bookings** (booking confirm → `issuePackageCompliance`), not only the admin simulate button —
+so every confirmed package gets its insolvency certificate, recorded consent and 6-month refund window.
+Covered by tests (`compliance-store.test.ts`). Real guarantor credentials + VVTAT filing remain out of scope.

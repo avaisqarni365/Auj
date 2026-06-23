@@ -3,6 +3,7 @@
 import type { GuaranteeTier } from '@auj/compliance';
 import { requireRole } from '../auth/session';
 import {
+  PRECONTRACT_INFO,
   getComplianceStore,
   type CertificateRecord,
   type ConsentRecord,
@@ -10,16 +11,6 @@ import {
   type GdprRequest,
   type RefundWindow,
 } from './compliance-store';
-
-// Mandated pre-contractual information shown (and consented to) before any charge.
-const PRECONTRACT_INFO = [
-  'Total price incl. taxes & fees',
-  'Insolvency protection & guarantor',
-  'Main characteristics of the travel services',
-  '6-month PTD insolvency refund window',
-  'Right of withdrawal & cancellation terms',
-  'Data processing (GDPR) notice',
-];
 
 export interface ComplianceSnapshot {
   certificates: CertificateRecord[];

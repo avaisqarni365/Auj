@@ -237,3 +237,43 @@ async function init(): Promise<ComplianceStore> {
 export function getComplianceStore(): Promise<ComplianceStore> {
   return (g[KEY] ??= init());
 }
+
+// ---- shared issuance helper (used by both the admin simulate action and the real booking flow) ----
+
+/** Mandated pre-contractual information shown (and consented to) before any charge. */
+export const PRECONTRACT_INFO = [
+  'Total price incl. taxes & fees',
+  'Insolvency protection & guarantor',
+  'Main characteristics of the travel services',
+  '6-month PTD insolvency refund window',
+  'Right of withdrawal & cancellation terms',
+  'Data processing (GDPR) notice',
+];
+
+/** Pick the guarantee tier whose cover meets/exceeds the booking value (EUR minor units). */
+export function tierForEur(eurMinor: number): GuaranteeTier {
+  if (eurMinor > GUARANTEE_TIERS.T50K.coverage.amount) return 'T200K';
+  if (eurMinor > GUARANTEE_TIERS.T20K.coverage.amount) return 'T50K';
+  return 'T20K';
+}
+
+/** Issue the PTD compliance records for a confirmed package booking: timestamped consent,
+ *  security/insolvency certificate (+ PDF) and the 6-month refund window. Called once per
+ *  booking, at confirm (a booking takes either the no-card or the card-finalize path, not both). */
+export async function issuePackageCompliance(input: {
+  bookingRef: string;
+  customerId: string;
+  customerName: string;
+  eurMinor: number;
+  ip?: string;
+}): Promise<void> {
+  const store = await getComplianceStore();
+  await store.onPackageBooking({
+    bookingRef: input.bookingRef,
+    customerId: input.customerId,
+    customerName: input.customerName || 'Guest',
+    tier: tierForEur(input.eurMinor),
+    shown: PRECONTRACT_INFO,
+    ip: input.ip || '0.0.0.0',
+  });
+}
