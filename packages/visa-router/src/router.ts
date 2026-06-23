@@ -10,9 +10,18 @@ export interface RouteOptions {
   config?: VisaConfig;
 }
 
+/** One readable line of the decision trace — `pass` = this condition contributed to the route. */
+export interface TraceStep {
+  check: 'nationality' | 'residence' | 'seasonal';
+  pass: boolean;
+  detail: string;
+}
+
 export interface VisaRouting {
   route: VisaRoute;
   warnings: string[];
+  /** Deterministic, human-readable explanation of how the route was decided. */
+  trace: TraceStep[];
 }
 
 const norm = (s: string | undefined): string => (s ?? '').trim().toUpperCase();
@@ -50,30 +59,56 @@ export function routeFor(pilgrim: Pilgrim, opts: RouteOptions = {}): VisaRouting
 
   if (nationalities.length === 0) {
     warnings.push('Missing nationality — defaulted to AGENT_CHANNEL.');
-    return { route: 'AGENT_CHANNEL', warnings };
+    return {
+      route: 'AGENT_CHANNEL',
+      warnings,
+      trace: [{ check: 'nationality', pass: false, detail: 'No nationality provided — defaulted to the agent channel.' }],
+    };
   }
 
   const eligibleByNationality = nationalities.some((n) =>
     config.evisaEligibleNationalities.has(n),
   );
+  const residenceCountry = norm(pilgrim.residenceCountry);
   const eligibleByResidence =
-    pilgrim.residencePermit === true &&
-    config.residenceQualifiers.has(norm(pilgrim.residenceCountry));
+    pilgrim.residencePermit === true && config.residenceQualifiers.has(residenceCountry);
 
   const route: VisaRoute =
     eligibleByNationality || eligibleByResidence ? 'EVISA_DIRECT' : 'AGENT_CHANNEL';
 
   const today = opts.today ?? new Date().toISOString().slice(0, 10);
+  let suspended = false;
   for (const n of nationalities) {
     const suspension = activeSuspension(config, n, today);
     if (suspension) {
+      suspended = true;
       warnings.push(
         `Seasonal suspension for ${n} (${suspension.from} to ${suspension.to}): ${suspension.reason}`,
       );
     }
   }
 
-  return { route, warnings };
+  const trace: TraceStep[] = [
+    {
+      check: 'nationality',
+      pass: eligibleByNationality,
+      detail: `Passport ${nationalities.join(', ')} ${eligibleByNationality ? 'is on' : 'is not on'} the e-Visa list.`,
+    },
+    {
+      check: 'residence',
+      pass: eligibleByResidence,
+      detail: residenceCountry
+        ? `Residence in ${residenceCountry}${pilgrim.residencePermit ? '' : ' (no permit held)'} ${eligibleByResidence ? 'qualifies' : 'does not qualify'}.`
+        : 'No residence qualifier provided.',
+    },
+    {
+      check: 'seasonal',
+      pass: suspended,
+      detail: suspended ? 'Seasonal suspension warning applies (route unchanged).' : 'No seasonal suspension active.',
+    },
+  ];
+
+  return { route, warnings, trace };
 }
 
 /** Route a whole group, preserving per-pilgrim results (mixed groups are normal). */

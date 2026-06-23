@@ -25,7 +25,9 @@ submitting is the connector's job.
 ## Route & files
 - Engine: `packages/visa-router/src` — `routeFor()` and `routeForGroup()` in `router.ts`,
   `DEFAULT_VISA_CONFIG` in `config.ts`, unit tests in `router.test.ts`. Exported from `index.ts`.
-- Types: `packages/contracts` (`Pilgrim`); result `VisaRouting` (`route`, `warnings`, trace).
+- Types: `packages/contracts` (`Pilgrim`); result `VisaRouting` = `{ route, warnings, trace }` where
+  `trace: TraceStep[]` (`check: 'nationality'|'residence'|'seasonal'`, `pass`, `detail`) is produced by
+  the PURE engine and rendered verbatim by the demo (no UI recomputation). Trace is unit-tested.
 - Admin QA/demo route: `/admin/visa` (ADMIN only via `requireRole(['ADMIN'])`, in `SitePage`).
 - Demo page: `apps/web/app/admin/visa/page.tsx`.
 - Demo component: `apps/web/src/admin/VisaRouterDemo.tsx` (calls `routeFor` live, uses `ScreenFrame`

@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { DEFAULT_VISA_CONFIG, routeFor } from '@auj/visa-router';
+import { routeFor } from '@auj/visa-router';
 import type { Pilgrim } from '@auj/contracts';
 import { StatusPill } from '@auj/ui';
 import { ScreenFrame } from '../components/ScreenFrame';
@@ -18,8 +18,6 @@ const RESIDENCES: ReadonlyArray<[string, string]> = [
   ['AE', 'UAE (GCC)'], ['SA', 'Saudi Arabia (GCC)'], ['PK', 'Pakistan (non-qualifying)'],
 ];
 
-const name = (list: ReadonlyArray<[string, string]>, code: string): string =>
-  list.find(([c]) => c === code)?.[1] ?? code;
 
 function demoPilgrim(nationality: string, residenceCountry: string, residencePermit: boolean): Pilgrim {
   return {
@@ -52,8 +50,6 @@ export function VisaRouterDemo() {
   const [permit, setPermit] = useState(false);
 
   const result = useMemo(() => routeFor(demoPilgrim(nat, res, permit)), [nat, res, permit]);
-  const evisaByNat = DEFAULT_VISA_CONFIG.evisaEligibleNationalities.has(nat);
-  const evisaByRes = permit && !!res && DEFAULT_VISA_CONFIG.residenceQualifiers.has(res);
   const evisa = result.route === 'EVISA_DIRECT';
   const SELECT = 'w-full rounded-lg border-[1.5px] border-sand-300 bg-white px-3 py-2 text-[14px] focus:border-green-700 focus:outline-none';
 
@@ -99,16 +95,14 @@ export function VisaRouterDemo() {
         </div>
       </div>
 
-      {/* decision trace */}
+      {/* decision trace — straight from the pure engine (no recomputation here) */}
       <div className="mt-6 rounded-2xl border border-sand-200 bg-white p-5">
         <div className="mb-2 text-[13px] font-bold text-sand-ink">Decision trace</div>
-        <TraceRow ok={evisaByNat}>Passport <strong>{name(NATIONS, nat)}</strong> {evisaByNat ? 'is on the e‑Visa list' : 'is not on the e‑Visa list'}.</TraceRow>
-        <TraceRow ok={evisaByRes}>
-          {res ? <>Residence in <strong>{name(RESIDENCES, res)}</strong> {permit ? '' : '(no permit held) '}{evisaByRes ? 'qualifies' : 'does not qualify'}.</> : 'No residence qualifier provided.'}
-        </TraceRow>
-        <TraceRow ok={result.warnings.length > 0}>{result.warnings.length > 0 ? 'Seasonal suspension warning applies (route unchanged).' : 'No seasonal suspension active.'}</TraceRow>
+        {result.trace.map((t, i) => (
+          <TraceRow key={`${t.check}-${i}`} ok={t.pass}>{t.detail}</TraceRow>
+        ))}
         <div className="mt-2 border-t border-sand-100 pt-2 text-[13.5px] font-semibold text-sand-ink">
-          → {evisa ? 'EVISA_DIRECT' : 'AGENT_CHANNEL'}
+          → {result.route}
         </div>
       </div>
     </ScreenFrame>

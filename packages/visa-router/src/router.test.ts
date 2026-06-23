@@ -133,9 +133,43 @@ describe('routeForGroup', () => {
       pilgrim({ id: 'a', nationality: 'PK' }),
       pilgrim({ id: 'b', nationality: 'LT' }),
     ]);
-    expect(results).toEqual([
+    expect(results.map((r) => ({ pilgrimId: r.pilgrimId, route: r.route, warnings: r.warnings }))).toEqual([
       { pilgrimId: 'a', route: 'AGENT_CHANNEL', warnings: [] },
       { pilgrimId: 'b', route: 'EVISA_DIRECT', warnings: [] },
     ]);
+    expect(results.every((r) => r.trace.length === 3)).toBe(true); // each carries its trace
+  });
+});
+
+describe('routeFor — decision trace', () => {
+  it('emits nationality/residence/seasonal steps with correct pass flags', () => {
+    const r = routeFor(pilgrim({ nationality: 'LT' }));
+    expect(r.trace.map((t) => t.check)).toEqual(['nationality', 'residence', 'seasonal']);
+    expect(r.trace.find((t) => t.check === 'nationality')?.pass).toBe(true); // LT is e-visa eligible
+    expect(r.trace.find((t) => t.check === 'residence')?.pass).toBe(false);
+    expect(r.trace.find((t) => t.check === 'seasonal')?.pass).toBe(false);
+  });
+
+  it('residence step passes when a qualifying permit is held', () => {
+    const r = routeFor(pilgrim({ nationality: 'PK', residenceCountry: 'DE', residencePermit: true }));
+    expect(r.trace.find((t) => t.check === 'residence')?.pass).toBe(true);
+    expect(r.trace.find((t) => t.check === 'nationality')?.pass).toBe(false);
+  });
+
+  it('missing nationality yields a single failed-nationality trace step', () => {
+    const r = routeFor(pilgrim({ nationality: '' }));
+    expect(r.route).toBe('AGENT_CHANNEL');
+    expect(r.trace).toEqual([{ check: 'nationality', pass: false, detail: expect.stringContaining('No nationality') }]);
+  });
+
+  it('seasonal step passes (warns) inside a suspension window, route unchanged', () => {
+    const config = {
+      evisaEligibleNationalities: new Set(['LT']),
+      residenceQualifiers: new Set<string>(),
+      seasonalSuspensions: [{ nationalities: ['LT'], from: '2026-01-01', to: '2026-12-31', reason: 'test' }],
+    };
+    const r = routeFor(pilgrim({ nationality: 'LT' }), { config, today: '2026-06-01' });
+    expect(r.route).toBe('EVISA_DIRECT'); // unchanged
+    expect(r.trace.find((t) => t.check === 'seasonal')?.pass).toBe(true);
   });
 });

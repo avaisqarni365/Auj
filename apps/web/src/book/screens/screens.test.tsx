@@ -30,7 +30,7 @@ describe('B2C screens', () => {
       <PilgrimCapture
         locale="en"
         pilgrims={[{ firstName: 'Greta', lastName: 'K', passportNumber: 'LT9', nationality: 'LT', dob: '1990-01-01', gender: 'F' }]}
-        routes={[{ route: 'EVISA_DIRECT', warnings: [] }]}
+        routes={[{ route: 'EVISA_DIRECT', warnings: [], trace: [] }]}
         onField={noop} onContinue={noop}
       />,
     );
@@ -46,7 +46,7 @@ describe('B2C screens', () => {
           { firstName: 'Imran', lastName: 'Ali', passportNumber: 'PK1', nationality: 'PK', dob: '1985-01-01', gender: 'M' },
           { firstName: 'Sara', lastName: 'Ali', passportNumber: 'PK2', nationality: 'PK', dob: '1990-01-01', gender: 'F' },
         ]}
-        routes={[{ route: 'AGENT_CHANNEL', warnings: [] }, { route: 'AGENT_CHANNEL', warnings: [] }]}
+        routes={[{ route: 'AGENT_CHANNEL', warnings: [], trace: [] }, { route: 'AGENT_CHANNEL', warnings: [], trace: [] }]}
         onField={noop} onAdd={noop} onRemove={noop} onContinue={noop}
       />,
     );
