@@ -19,15 +19,38 @@ import { EMPTY_PASSPORT, type PassportFields, type PassportScan } from './dashbo
 
 const STAGES = ['Registered', 'Passport', 'Deposit', 'Visa started', 'Info sent'] as const;
 const CURRENCIES: DisplayCurrency[] = ['EUR', 'USD', 'SAR', 'PKR'];
-const TOOLS = [
-  { href: '/book', icon: '🔎', label: 'Search & book' },
-  { href: '/plan/day', icon: '🕌', label: 'Day planner' },
-  { href: '/companion/packing', icon: '🧳', label: 'Packing' },
-  { href: '/companion/diary', icon: '📿', label: 'Diary' },
-  { href: '/guide', icon: '🕋', label: 'Ritual guide' },
-  { href: '/guide/airport', icon: '✈️', label: 'Airport wizard' },
-  { href: '/companion', icon: '🧭', label: 'Companion' },
-  { href: '/journey', icon: '📋', label: 'My journey' },
+
+// Themed icon palette — green (booking/ritual), teal (logistics), gold (money/shopping), rose (care).
+type Theme = 'green' | 'teal' | 'gold' | 'rose';
+const ICON_THEME: Record<Theme, string> = {
+  green: 'bg-green-100 text-green-800',
+  teal: 'bg-info-bg text-info-fg',
+  gold: 'bg-accent-100 text-accent-700',
+  rose: 'bg-danger-bg text-danger-fg',
+};
+
+// The full pilgrim toolbox — every trip tool, linked to its live route (parity with the prototype).
+const TOOLS: Array<{ href: string; code: string; label: string; note: string; theme: Theme }> = [
+  { href: '/book', code: 'BK', label: 'Booking process', note: 'Start & confirm', theme: 'green' },
+  { href: '/plan', code: 'SP', label: 'Smart planner', note: '7-step planner', theme: 'green' },
+  { href: '/plan/budget', code: 'FN', label: 'Financial planner', note: 'Package + private', theme: 'gold' },
+  { href: '/companion/packing', code: 'PK', label: 'Packing organizer', note: 'Checklist by stay', theme: 'green' },
+  { href: '/plan/day', code: 'DP', label: 'Day planner', note: 'Jamaat + weather', theme: 'teal' },
+  { href: '/companion/diary', code: 'DR', label: 'Personal diary', note: 'Quran · nafl · dua', theme: 'green' },
+  { href: '/guide/tour', code: 'VT', label: 'Virtual tour', note: '15 guided steps', theme: 'teal' },
+  { href: '/guide/airport', code: 'AP', label: 'Airport wizard', note: 'Check-in to hotel', theme: 'teal' },
+  { href: '/guide/luggage', code: 'LG', label: 'Luggage rules', note: 'Saudi customs', theme: 'gold' },
+  { href: '/guide/makkah-ziyarat', code: 'MZ', label: 'Makka ziyarat', note: '16 sacred sites', theme: 'green' },
+  { href: '/guide/madina-ziyarat', code: 'MD', label: 'Madina ziyarat', note: '14 sacred sites', theme: 'green' },
+  { href: '/hotels/makkah', code: 'HM', label: 'Makkah hotels', note: 'By distance', theme: 'gold' },
+  { href: '/hotels/madinah', code: 'HN', label: 'Madinah hotels', note: 'By distance', theme: 'gold' },
+  { href: '/guide/food', code: 'FD', label: 'Food & dining', note: 'Eats + delivery', theme: 'gold' },
+  { href: '/guide/transport', code: 'TR', label: 'Transport', note: 'Fares + companies', theme: 'teal' },
+  { href: '/guide/connectivity', code: 'CN', label: 'Connectivity', note: 'SIM + location', theme: 'teal' },
+  { href: '/guide/gifts', code: 'GF', label: 'Gifts & shopping', note: 'Dates · Zamzam', theme: 'gold' },
+  { href: '/guide/laundry', code: 'LD', label: 'Laundry', note: 'Wash & iron', theme: 'teal' },
+  { href: '/guide/hospitals', code: 'HP', label: 'Hospitals & care', note: 'Clinics + pharmacy', theme: 'rose' },
+  { href: '/guide/helpline', code: 'SO', label: 'Helpline & SOS', note: '997 · register', theme: 'rose' },
 ];
 
 const FIELD_LABELS: Array<[keyof PassportFields, string]> = [
@@ -114,6 +137,12 @@ export function PilgrimDashboard({ initial }: { initial: DashboardData }) {
   const visa = fields.nationality.trim() ? routeFor({ nationality: fields.nationality.trim() } as Parameters<typeof routeFor>[0]) : null;
   const depositMinor = Math.round((parseFloat(depositEur) || 0) * 100);
 
+  // Deposit-card money context — package total, amount already paid, and remaining balance (EUR minor).
+  const packageTotalMinor = data.packageTotalMinor;
+  const paidMinor = data.depositPaidMinor + (pay === 'paid' && !data.depositPaid ? depositMinor : 0);
+  const balanceMinor = Math.max(0, packageTotalMinor - paidMinor);
+  const payPct = packageTotalMinor > 0 ? Math.min(100, Math.round((paidMinor / packageTotalMinor) * 100)) : 0;
+
   const payDeposit = (): void => {
     setPayErr(undefined);
     start(async () => {
@@ -143,9 +172,15 @@ export function PilgrimDashboard({ initial }: { initial: DashboardData }) {
     });
   };
 
+  const ppStatus = passportConfirmed ? 'COMPLETE' : scan?.imageKey ? 'CHECK FIELDS' : 'NOT SCANNED';
+  const ppStatusClass = passportConfirmed ? 'bg-success-bg text-success-fg' : scan?.imageKey ? 'bg-accent-100 text-accent-700' : 'bg-sand-100 text-sand-500';
+
   return (
-    <ScreenFrame label="📋 Pilgrim dashboard">
-      <p className="max-w-[60ch] text-sand-500">Manage passports, deposits and your journey progress — for yourself, family or your group.</p>
+    <ScreenFrame label="📋 Pilgrim dashboard" tag={data.bookingRef}>
+      <h1 className="font-serif text-2xl font-semibold text-sand-800">
+        Assalamu alaikum{data.greetName ? `, ${data.greetName}` : ''}
+      </h1>
+      <p className="mt-1 max-w-[60ch] text-sand-500">Manage passports, deposits and your journey progress — for yourself, family or your group.</p>
 
       {/* member switcher */}
       <div className="mt-6 flex flex-wrap items-center gap-2">
@@ -217,11 +252,14 @@ export function PilgrimDashboard({ initial }: { initial: DashboardData }) {
         <section className="rounded-2xl border border-sand-200 bg-white p-5 shadow-sm">
           <div className="flex items-center justify-between gap-2">
             <h2 className="font-serif text-lg font-semibold text-sand-800">Passport scan</h2>
-            {visa ? (
-              <span className={`rounded-md px-2 py-1 text-[11px] font-semibold ${visa.route === 'EVISA_DIRECT' ? 'bg-success-bg text-success-fg' : 'bg-info-bg text-info-fg'}`}>
-                {visa.route === 'EVISA_DIRECT' ? 'e-Visa' : 'Agent channel'}
-              </span>
-            ) : null}
+            <div className="flex items-center gap-1.5">
+              <span className={`rounded-md px-2 py-1 font-mono text-[10.5px] font-semibold ${ppStatusClass}`}>{ppStatus}</span>
+              {visa ? (
+                <span className={`rounded-md px-2 py-1 text-[11px] font-semibold ${visa.route === 'EVISA_DIRECT' ? 'bg-success-bg text-success-fg' : 'bg-info-bg text-info-fg'}`}>
+                  {visa.route === 'EVISA_DIRECT' ? 'e-Visa' : 'Agent channel'}
+                </span>
+              ) : null}
+            </div>
           </div>
 
           {scan?.imageKey ? (
@@ -301,8 +339,17 @@ export function PilgrimDashboard({ initial }: { initial: DashboardData }) {
           <div className="mt-3 rounded-xl bg-sand-50 p-4">
             <div className="font-mono text-2xl font-semibold text-green-800">{displayFromEur(depositMinor, currency)}</div>
             <div className="mt-1 text-[12px] text-sand-500">
-              {currency === 'EUR' ? 'Charged in EUR.' : `Indicative — charged in EUR (${displayFromEur(depositMinor, 'EUR')}).`}
+              {packageTotalMinor > 0
+                ? `deposit now · ${displayFromEur(balanceMinor, currency)} balance before travel`
+                : currency === 'EUR'
+                  ? 'Charged in EUR.'
+                  : `Indicative — charged in EUR (${displayFromEur(depositMinor, 'EUR')}).`}
             </div>
+            {packageTotalMinor > 0 ? (
+              <div className="mt-3 h-2 overflow-hidden rounded-full bg-sand-200" title={`${displayFromEur(paidMinor, currency)} of ${displayFromEur(packageTotalMinor, currency)} paid`}>
+                <div className="h-full rounded-full bg-gradient-to-r from-green-600 to-accent-500 transition-[width] duration-300 ease-out-soft" style={{ width: `${payPct}%` }} />
+              </div>
+            ) : null}
           </div>
 
           {pay === 'paid' ? (
@@ -338,18 +385,25 @@ export function PilgrimDashboard({ initial }: { initial: DashboardData }) {
         </section>
       </div>
 
-      {/* tool grid */}
-      <section className="mt-5">
-        <h2 className="mb-3 font-serif text-lg font-semibold text-sand-800">Your tools</h2>
-        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+      {/* tool grid — the full pilgrim toolbox */}
+      <section className="mt-6">
+        <div className="mb-3 flex items-center gap-3">
+          <span className="whitespace-nowrap font-mono text-[12px] uppercase tracking-[0.12em] text-info-fg">Your trip · all tools</span>
+          <span className="h-px flex-1 bg-sand-200" />
+        </div>
+        <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
           {TOOLS.map((t) => (
             <Link
               key={t.href}
               href={t.href}
-              className="flex items-center gap-2.5 rounded-xl border border-sand-200 bg-white p-3.5 text-[13.5px] font-semibold text-sand-700 transition-[transform,border-color,color] duration-fast hover:border-green-700 hover:text-green-800 active:scale-[0.98]"
+              className="group flex items-center gap-3 rounded-xl border border-sand-200 bg-white p-3.5 transition-[transform,border-color,box-shadow] duration-fast hover:-translate-y-0.5 hover:border-green-700/40 hover:shadow-md active:scale-[0.98]"
             >
-              <span className="text-lg" aria-hidden>{t.icon}</span>
-              {t.label}
+              <span className={`grid h-9 w-9 flex-shrink-0 place-items-center rounded-xl font-mono text-[12px] font-bold ${ICON_THEME[t.theme]}`}>{t.code}</span>
+              <span className="min-w-0 flex-1">
+                <span className="block text-[13.5px] font-semibold leading-tight text-sand-800">{t.label}</span>
+                <span className="block text-[11.5px] text-sand-500">{t.note}</span>
+              </span>
+              <span className="text-green-700 transition-transform duration-fast group-hover:translate-x-0.5" aria-hidden>→</span>
             </Link>
           ))}
         </div>

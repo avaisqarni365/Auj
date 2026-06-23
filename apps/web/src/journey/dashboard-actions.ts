@@ -3,6 +3,7 @@
 import { getCurrentUser } from '../auth/session';
 import { getBookingDraftStore } from '../book/booking-draft-store';
 import { getObjectStore } from '../storage/document-store';
+import { bookingRef, greetNameOf } from './dashboard-derive';
 import { getDashboardStore } from './dashboard-store';
 import { getDepositStore } from './deposit-store';
 import { parseMrz } from './passport-mrz';
@@ -17,6 +18,12 @@ export interface DashboardData {
   passports: Record<string, PassportScan>;
   bookingStep: string | null;
   depositPaid: boolean;
+  /** Greeting + a stable, human booking reference (BRN) derived from the account. */
+  greetName: string;
+  bookingRef: string;
+  /** Money context for the deposit card (integer minor units, EUR). */
+  packageTotalMinor: number;
+  depositPaidMinor: number;
 }
 
 // MRZ OCR via the configured provider (OCR_* in the registry); parses the recognised MRZ into
@@ -39,7 +46,22 @@ export async function getDashboardAction(): Promise<DashboardData | null> {
   }
   const draft = await (await getBookingDraftStore()).get(user.id);
   const deposits = await (await getDepositStore()).listByPilgrim(user.id);
-  return { members, passports, bookingStep: draft?.state.step ?? null, depositPaid: deposits.some((d) => d.status === 'paid') };
+
+  // Package total = EUR subtotal of the current cart; deposit paid = sum of paid EUR deposits.
+  const cart = draft?.state.cart ?? [];
+  const packageTotalMinor = cart.reduce((s, i) => (i.net.currency === 'EUR' ? s + i.net.amount : s), 0);
+  const depositPaidMinor = deposits.reduce((s, d) => (d.status === 'paid' && d.currency === 'EUR' ? s + d.amountMinor : s), 0);
+
+  return {
+    members,
+    passports,
+    bookingStep: draft?.state.step ?? null,
+    depositPaid: deposits.some((d) => d.status === 'paid'),
+    greetName: greetNameOf(user.displayName),
+    bookingRef: bookingRef(user.id, user.createdAt),
+    packageTotalMinor,
+    depositPaidMinor,
+  };
 }
 
 export async function addMemberAction(name: string, relation: string): Promise<void> {
