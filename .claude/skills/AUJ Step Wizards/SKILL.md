@@ -38,5 +38,8 @@ identical for everyone. No localStorage.
 - [ ] Admin can CRUD steps at `/admin/wizards`; multilingual + RTL; ScreenFrame + tokens only.
 
 ## Status
-Live and matching the prototypes. Gaps: Ziyarat bodies are EN/AR-first (UR/DE pending for some sites);
-real per-step videos are placeholders until clips are added.
+Live and matching the prototypes. Tested: step seed/items (`wizard-steps.test.ts`), embed-URL parsing
+(`parse-embed.test.ts`), the LT/TR overlay (`guide-i18n.test.ts`), and per-pilgrim clip scoping
+(`step-video-store.test.ts` — clips never leak across accounts/wizards). Content gaps (not code): Ziyarat
+bodies are EN/AR-first (UR/DE drafts pending native review, assumptions A11); real per-step videos are
+placeholders until clips are added.
