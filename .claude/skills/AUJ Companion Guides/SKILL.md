@@ -21,7 +21,7 @@ how to get around, and how to stay connected. Free, no-login, mobile-first, mult
 - **Seed content + types:** `apps/web/src/companion/guide-data.ts` (`GUIDES`, `GUIDE_SLUGS`, `GuideCity` makkah/madinah/jeddah)
 - **Store:** `apps/web/src/companion/guide-store.ts` — `guide_entries` (Postgres + in-memory), seeded idempotently per (guide, city); `getGuide` / `setGuide`
 - **Admin CRUD:** `/admin/guides` → `src/admin/GuidesAdmin.tsx` + `src/companion/guide-admin-actions.ts` (item add/edit/reorder/delete per city→category)
-- **i18n overlay:** `apps/web/src/companion/guide-i18n.ts` (LT/TR)
+- **i18n overlay:** `apps/web/src/companion/guide-i18n.ts` (LT/UR/AR — the app's non-EN locales; the wizard follows the app locale, RTL via global `<html dir>`; UR/AR item-notes fall back to EN — see assumptions A13)
 
 ## Design
 Cinematic `ScreenFrame` chrome (`@auj/ui` green/sand/accent/gold tokens, serif/mono), a city toggle,
@@ -39,5 +39,7 @@ everyone.
 - [ ] Admin can add/edit/reorder/delete items at `/admin/guides`; persists to `guide_entries`.
 
 ## Status
-Live and matching the prototypes; DB-backed and admin-editable (beyond the static prototypes). Minor:
-the live language overlay is EN/LT/TR (not the EN/LT/UR/AR set named elsewhere) — extend if needed.
+Live and matching the prototypes; DB-backed and admin-editable (beyond the static prototypes). The
+language overlay now mirrors the app's locales (EN base + LT/UR/AR; the dead `tr` overlay was removed)
+and the wizard follows the app's selected locale with RTL for UR/AR. UR/AR category copy is
+machine-drafted pending native review; UR/AR item-notes still fall back to EN (assumptions A13).

@@ -4,10 +4,10 @@ import { GUIDE_I18N } from './guide-i18n';
 import { WIZARDS, WIZARD_SLUGS } from '../ritual/wizard-steps';
 import { WIZARD_I18N } from '../ritual/wizard-steps-i18n';
 
-describe('LT/TR localisation overlays', () => {
-  it('every guide has lt + tr overlays covering its category keys', () => {
+describe('localisation overlays', () => {
+  it('every guide has lt + ur + ar overlays covering its category keys (app locales)', () => {
     for (const slug of GUIDE_SLUGS) {
-      for (const loc of ['lt', 'tr'] as const) {
+      for (const loc of ['lt', 'ur', 'ar'] as const) {
         const tx = GUIDE_I18N[slug]?.[loc];
         expect(tx, `${slug}.${loc}`).toBeTruthy();
         // every category key present across either city has a translated name

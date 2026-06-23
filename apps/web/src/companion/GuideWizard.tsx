@@ -1,15 +1,20 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { useLocale } from 'next-intl';
 import { ScreenFrame } from '../components/ScreenFrame';
 import type { GuideCategory, GuideCity, GuideSlug } from './guide-data';
 import { GUIDE_I18N, type GuideLocale } from './guide-i18n';
 
+// The guide overlay locales mirror the app's non-English locales (en/lt/ur/ar).
 const LANGS: Array<{ code: 'en' | GuideLocale; label: string }> = [
   { code: 'en', label: 'EN' },
   { code: 'lt', label: 'LT' },
-  { code: 'tr', label: 'TR' },
+  { code: 'ur', label: 'اردو' },
+  { code: 'ar', label: 'العربية' },
 ];
+const OVERLAY_LOCALES: GuideLocale[] = ['lt', 'ur', 'ar'];
+const isOverlayLocale = (l: string): l is GuideLocale => (OVERLAY_LOCALES as string[]).includes(l);
 
 const pad2 = (n: number): string => `0${n}`.slice(-2);
 
@@ -28,11 +33,14 @@ export function GuideWizard({
 }) {
   const availableCities = (Object.keys(cities) as GuideCity[]).filter((c) => (cities[c]?.length ?? 0) > 0);
   const [city, setCity] = useState<GuideCity>(availableCities[0] ?? 'makkah');
-  const [lang, setLang] = useState<'en' | GuideLocale>('en');
+  // Follow the app's selected locale by default (RTL is handled by the global <html dir>); the
+  // in-page toggle still lets a visitor switch the guide's language.
+  const appLocale = useLocale();
+  const [lang, setLang] = useState<'en' | GuideLocale>(isOverlayLocale(appLocale) ? appLocale : 'en');
   const [i, setI] = useState(0);
 
-  // Apply the LT/TR translation overlay (category name/desc/noun + item note); EN = base; any
-  // missing translation falls back to English.
+  // Apply the LT/UR/AR translation overlay (category name/desc/noun + item note); EN = base; any
+  // missing translation falls back to English (UR/AR item-notes currently fall back — see assumptions A13).
   const localized = useMemo<Partial<Record<GuideCity, GuideCategory[]>>>(() => {
     if (lang === 'en') return cities;
     const tx = GUIDE_I18N[slug]?.[lang];
