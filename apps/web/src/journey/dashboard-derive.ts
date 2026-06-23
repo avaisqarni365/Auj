@@ -18,3 +18,16 @@ export function bookingRef(userId: string, createdAt?: string): string {
 export function greetNameOf(displayName?: string): string {
   return (displayName || '').trim().split(/\s+/)[0]?.replace(/[^\p{L}]/gu, '') ?? '';
 }
+
+/** The five journey stages, shared by the dashboard + profile timelines. */
+export const JOURNEY_STAGES = ['Registered', 'Passport', 'Deposit', 'Visa started', 'Info sent'] as const;
+
+/** Which journey stages a pilgrim has reached, derived from real booking signals (not a placeholder).
+ *  Registered is always true; the rest come from a passport scan, a paid deposit, and a booking step. */
+export function reachedStages(dash: { passports?: Record<string, unknown>; depositPaid?: boolean; bookingStep?: string | null } | null | undefined): string[] {
+  const reached = ['Registered'];
+  if (dash && Object.keys(dash.passports ?? {}).length > 0) reached.push('Passport');
+  if (dash?.depositPaid) reached.push('Deposit');
+  if (dash?.bookingStep) reached.push('Visa started', 'Info sent');
+  return reached;
+}

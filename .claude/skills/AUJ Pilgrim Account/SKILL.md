@@ -33,4 +33,6 @@ via their interfaces; no direct SaudiConnector. Deposit goes through real Stripe
 
 ## Status
 Live and matching/exceeding the prototypes (DB + real OCR + real Stripe replace the prototypes'
-localStorage/demo). Profile progress stages are partly placeholder until wired to live booking state.
+localStorage/demo). Profile progress stages are now derived from real booking signals via
+`reachedStages(dash)` (passport scan / paid deposit / booking step) — no longer a placeholder.
+Profile store + the derivation are covered by tests (`profile-store.test.ts`, `dashboard-derive.test.ts`).

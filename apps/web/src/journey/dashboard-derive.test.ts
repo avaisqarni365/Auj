@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { bookingRef, greetNameOf, serialFromUserId } from './dashboard-derive';
+import { bookingRef, greetNameOf, reachedStages, serialFromUserId } from './dashboard-derive';
 
 describe('dashboard-derive', () => {
   it('serial is deterministic, stable and 5 digits', () => {
@@ -23,5 +23,15 @@ describe('dashboard-derive', () => {
     expect(greetNameOf('  Yusuf123  ')).toBe('Yusuf');
     expect(greetNameOf('')).toBe('');
     expect(greetNameOf(undefined)).toBe('');
+  });
+
+  it('reachedStages derives the timeline from real booking signals', () => {
+    expect(reachedStages(null)).toEqual(['Registered']);
+    expect(reachedStages({ passports: {}, depositPaid: false, bookingStep: null })).toEqual(['Registered']);
+    expect(reachedStages({ passports: { me: {} } })).toEqual(['Registered', 'Passport']);
+    expect(reachedStages({ depositPaid: true })).toEqual(['Registered', 'Deposit']);
+    expect(reachedStages({ passports: { me: {} }, depositPaid: true, bookingStep: 'CONFIRMED' })).toEqual([
+      'Registered', 'Passport', 'Deposit', 'Visa started', 'Info sent',
+    ]);
   });
 });
