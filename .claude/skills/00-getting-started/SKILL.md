@@ -9,6 +9,11 @@ description: "Use this skill FIRST to scaffold the monorepo so every other skill
 Stand up an empty-but-wired TypeScript monorepo matching `ARCHITECTURE.md` so all other skills can
 fill in their package/app. No business logic here — just structure, tooling, and green CI.
 
+> Layout note (post-scaffold): the three app folders below (`web-b2c`/`web-b2b`/`admin`) were later
+> unified into a single `apps/web` Next.js app (public + `/book` + `/agent` + `/admin`). The
+> scaffold/tooling steps still apply verbatim; only the app folder names changed. See
+> `00-architecture-and-conventions` for the current layout.
+
 ## Build steps
 1. Init workspace:
    ```bash
