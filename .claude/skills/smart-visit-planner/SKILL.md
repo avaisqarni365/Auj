@@ -5,6 +5,14 @@ description: "Build the AUJ 'Smart Visit' planner — a fast, low-friction inqui
 
 # Smart Visit planner (fast inquiry → lead → AUJ sends a package)
 
+> Delivery note (superseded/split): this early skill bundled the inquiry wizard AND a long list of
+> in-trip "companion modules". As built, those were split across focused skills:
+> - the inquiry/lead wizard → `AUJ Smart Planner` (`/plan`, lead capture) and `leads/SmartVisitWizard`;
+> - day/food/mosque planning → `AUJ Pilgrim Tools` (`/plan/day`, `/companion/*`);
+> - transport, restaurants, SIM, safety/emergency, ziyarah → `AUJ Companion Guides` (`/guide/*`) and
+>   `AUJ Step Wizards` (`/guide/makkah-ziyarat`, `/guide/madina-ziyarat`).
+> Use those skills as the source of truth; the 14-step single-wizard design below is historical.
+
 ## The idea (read first)
 A pilgrim should be able to express *exactly* what they want in **under two minutes**, with **no payment
 and no login required to start**. The wizard captures intent as an **Inquiry (lead)**; AUJ's team then

@@ -9,6 +9,10 @@ description: "Use this skill to build the EU compliance features for the Lithuan
 Cross-cutting compliance for the EU entity. Mostly in `core-booking` + a small `compliance` lib.
 Encodes obligations as features, not legal advice — confirm wording with a Lithuanian adviser.
 
+> Status note: delivered. Domain logic lives in `packages/compliance/src` (certificate, refund,
+> gdpr, config) and the ADMIN console at `apps/web/app/admin/compliance` (+ `compliance-store.ts`,
+> Postgres/in-memory). The richer operator-facing surface is documented in the `AUJ EU Compliance` skill.
+
 ## Build steps
 1. Security certificate: on every package booking, generate and deliver the consumer
    insolvency-protection certificate (PDF) referencing the guarantee/insurer; store proof of delivery.

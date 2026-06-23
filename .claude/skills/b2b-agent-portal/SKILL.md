@@ -6,6 +6,10 @@ description: "Use this skill to build the B2B agent portal where sub-agents regi
 # B2B agent portal
 
 ## Scope
+> Path note: `apps/web-b2b` was unified into the single `apps/web` app. The portal now lives at
+> `apps/web/app/agent` with logic in `apps/web/src/agent`. Claims below are unchanged.
+> See `00-architecture-and-conventions`.
+
 In `apps/web-b2b`: the agent-facing portal. Sub-agent onboarding, multi-pax bookings, wallet,
 markups, quotations, statements. Talks only to booking + payments APIs.
 

@@ -6,6 +6,10 @@ description: "Use this skill to build the public customer website where pilgrims
 # B2C website (public)
 
 ## Scope
+> Path note: `apps/web-b2c` was unified into the single `apps/web` app. The customer surfaces now
+> live at `apps/web/app/page.tsx` (landing), `apps/web/app/book` (funnel), `apps/web/app/hotels`;
+> shared logic in `apps/web/src/book`. Claims below are unchanged. See `00-architecture-and-conventions`.
+
 In `apps/web-b2c`: the customer-facing site. Search → package → checkout → manage booking.
 Talks ONLY to the booking + payments + visa-router APIs. No connector imports.
 
