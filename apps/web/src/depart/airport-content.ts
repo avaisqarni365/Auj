@@ -1100,7 +1100,8 @@ export const DEPART_AIRPORTS: DepartAirport[] = [
 export const DEPART_REGIONS: DepartRegion[] = ['Baltics', 'Central Europe', 'Western Europe', 'Pakistan'];
 
 export function departAirport(code: string): DepartAirport | undefined {
-  return DEPART_AIRPORTS.find((a) => a.code === code);
+  const c = code.trim().toUpperCase();
+  return DEPART_AIRPORTS.find((a) => a.code === c);
 }
 
 export const DEPART_CODES = DEPART_AIRPORTS.map((a) => a.code);
