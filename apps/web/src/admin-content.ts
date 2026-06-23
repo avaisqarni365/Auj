@@ -1,5 +1,5 @@
-// Sample data for the Admin console UI. In production this is fed by @auj/admin
-// (bookings/CRM/ledger oversight) via server actions; here it's representative data.
+// Sample data for the Admin console UI. In production this is fed by core-booking /
+// payments (bookings/CRM/ledger oversight) via server actions; here it's representative data.
 import type { Money } from '@auj/contracts';
 
 export const ADMIN_KPIS: Array<{ label: string; value: string; delta: string; icon: string; iconBg: string }> = [
