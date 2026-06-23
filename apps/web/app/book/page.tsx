@@ -13,7 +13,7 @@ function toCity(raw: string | undefined): SearchCriteria['city'] {
 const isDate = (v: string | undefined): v is string => !!v && /^\d{4}-\d{2}-\d{2}$/.test(v);
 
 // Booking funnel — any signed-in user. The booking is attached to their account.
-export default async function BookPage({ searchParams }: { searchParams: { city?: string; pax?: string; checkIn?: string; checkOut?: string } }) {
+export default async function BookPage({ searchParams }: { searchParams: { city?: string; pax?: string; checkIn?: string; checkOut?: string; gift?: string } }) {
   const user = await requireRole(['PILGRIM', 'AGENT', 'SUB_AGENT', 'ADMIN'], '/book');
   const pax = Math.min(49, Math.max(1, Number.parseInt(searchParams.pax ?? '1', 10) || 1));
   const initialDraft = (await (await getBookingDraftStore()).get(user.id)) ?? null;
@@ -25,6 +25,7 @@ export default async function BookPage({ searchParams }: { searchParams: { city?
         initialCheckIn={isDate(searchParams.checkIn) ? searchParams.checkIn : ''}
         initialCheckOut={isDate(searchParams.checkOut) ? searchParams.checkOut : ''}
         initialDraft={initialDraft}
+        initialGift={searchParams.gift === '1'}
       />
     </SitePage>
   );

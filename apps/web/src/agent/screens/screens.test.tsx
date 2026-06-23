@@ -46,12 +46,17 @@ describe('B2B screens', () => {
     expect(html).toContain('€600.00'); // closing
   });
 
-  it('AgentDashboard shows status pill', () => {
+  it('AgentDashboard shows status pill + real ledger-derived activity', () => {
     const agent: Agent = { id: 'a', agencyName: 'Al Noor', email: 'e@x', tier: 'GOLD', status: 'APPROVED', createdAt: 't' };
-    const html = intl(
-      <AgentDashboard agent={agent} walletBalance={{ amount: 100000, currency: 'EUR' }} available={{ amount: 150000, currency: 'EUR' }} bookings={3} />,
-    );
+    const account = 'wallet:a';
+    const entries = [
+      { id: '1', ref: 'TOP-1', memo: 'Wallet top-up · SEPA', createdAt: 't', postings: [{ account, direction: 'CREDIT' as const, amount: 500000, currency: 'EUR' as const }] },
+      { id: '2', ref: 'BK-1', memo: '10 pax · Hotel', createdAt: 't', postings: [{ account, direction: 'DEBIT' as const, amount: 200000, currency: 'EUR' as const }] },
+    ];
+    const html = intl(<AgentDashboard agent={agent} balance={300000} creditLimit={600000} entries={entries} account={account} />);
     expect(html).toContain('Al Noor');
     expect(html).toContain('APPROVED');
+    expect(html).toContain('Account activity');
+    expect(html).toContain('Group bookings'); // one booking derived from the DEBIT entry
   });
 });

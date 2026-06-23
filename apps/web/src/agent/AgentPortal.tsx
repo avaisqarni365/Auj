@@ -101,7 +101,7 @@ export function AgentPortal() {
         <div className="flex items-center justify-between">
           <Link href="/" className="text-[13px] font-semibold text-accent-600">{t('back')}</Link>
         </div>
-        <AgentDashboard agent={agent} walletBalance={eur(balance)} available={eur(balance)} bookings={booking ? 1 : 0} />
+        <AgentDashboard agent={agent} balance={balance} creditLimit={creditLimit} entries={entries} account={`wallet:${agent.id}`} />
 
         <section>
           <h3 className="mb-3 font-serif text-lg font-semibold text-sand-ink">{t('multiPaxHeading', { max: MAX_PAX })}</h3>

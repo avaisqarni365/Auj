@@ -46,19 +46,25 @@ export function BookingFunnel({
   initialCheckIn = '',
   initialCheckOut = '',
   initialDraft = null,
+  initialGift = false,
 }: {
   initialCity: SearchCriteria['city'];
   initialPax: number;
   initialCheckIn?: string;
   initialCheckOut?: string;
   initialDraft?: BookingDraft | null;
+  initialGift?: boolean;
 }) {
   const [state, dispatch] = useReducer(
     funnelReducer,
-    { city: initialCity, pax: initialPax, checkIn: initialCheckIn, checkOut: initialCheckOut },
+    { city: initialCity, pax: initialPax, checkIn: initialCheckIn, checkOut: initialCheckOut, gift: initialGift },
     (init): FunnelState => {
       const base = initialFunnel();
-      return { ...base, criteria: { ...base.criteria, city: init.city, pax: init.pax, checkIn: init.checkIn, checkOut: init.checkOut } };
+      return {
+        ...base,
+        gift: { ...base.gift, enabled: init.gift },
+        criteria: { ...base.criteria, city: init.city, pax: init.pax, checkIn: init.checkIn, checkOut: init.checkOut },
+      };
     },
   );
   const [offers, setOffers] = useState<HotelOffer[]>([]);

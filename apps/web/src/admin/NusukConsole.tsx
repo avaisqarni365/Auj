@@ -6,6 +6,7 @@
 // drives an interactive package builder client-side: package mode, a Rawdah slot picker with a
 // confirmation message, toggleable add-ons with a running EUR total (+ indicative PKR), a
 // "Send a gift Umrah" CTA and the e-services grid — matching the cinematic prototype.
+import Link from 'next/link';
 import { useEffect, useMemo, useState, useTransition } from 'react';
 import type { CateringOffer, GroundOffer, Money, SearchCriteria } from '@auj/contracts';
 import { displayFromEur, formatMoney } from '../currency';
@@ -239,12 +240,12 @@ export function NusukConsole() {
             <p className="mt-2.5 text-[13.5px] leading-relaxed text-green-100/90">
               Book and pay a package on behalf of another person — enter the recipient&rsquo;s details and we issue a gift voucher with their booking reference.
             </p>
-            <button
-              type="button"
+            <Link
+              href="/book?gift=1"
               className={`mt-4 inline-flex min-h-[44px] items-center rounded-xl bg-gold px-4 py-3 text-[14px] font-semibold text-green-950 transition-transform duration-fast ease-out-soft active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-green-900`}
             >
               Send a gift Umrah →
-            </button>
+            </Link>
           </section>
 
           {/* E-SERVICES */}
