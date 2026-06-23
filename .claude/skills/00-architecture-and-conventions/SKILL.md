@@ -18,27 +18,37 @@ Product modules import the **interface**, never a concrete integration. This let
 - swap a bought Saudi connector for our own certified one later, with no product changes.
 
 ## Repo layout (monorepo)
+The product surfaces (public site, agent portal, admin back office) were unified into a single
+Next.js app — `apps/web` — sharing one auth/session, design system and connector seam. The old
+`web-b2c` / `web-b2b` apps were removed; `apps/admin` is a legacy framework-light package
+(superseded by `apps/web/app/admin`). The connector rule and all conventions below are unchanged.
 ```
 /packages
-  contracts/            # shared TS types + interfaces (SaudiConnector, TravelSupplier, domain models)
-  connector-mock/       # in-memory implementation of the contracts (dev + tests)
-  connector-saudi/      # real Maqam/Nusuk adapter (gated; later)
-  connector-travel/     # bedbank + flight GDS adapters
-  core-booking/         # booking, CRM, documents, visa-router (domain services + API)
-  payments/             # gateways (EUR, PKR), wallet, ledger
+  contracts/            # shared TS types + interfaces (SaudiConnector, TravelSupplier, domain, Money/Currency)
+  connector-mock/       # in-memory implementation of the contracts (dev + tests; the default)
+  connector-saudi/      # real Maqam/Nusuk adapter (gated; CONNECTOR=saudi)
+  connector-travel/     # bedbank + flight GDS adapters (SUPPLIER=live)
+  core-booking/         # booking, CRM, documents (domain services + API)
+  visa-router/          # pure eligibility engine (routeFor) — consumed by booking + apps
+  payments/             # gateways (EUR, PKR), wallet, double-entry ledger
+  auth/                 # password auth, sessions, roles
+  compliance/           # EU PTD / GDPR domain logic
+  notifications/        # WhatsApp + email senders
+  ui/                   # shared design system (@auj/ui tokens, ScreenFrame)
+  support/              # shared helpers
 /apps
-  web-b2c/              # public website
-  web-b2b/              # agent portal
-  admin/               # back office
-/infra                  # IaC, CI, env
+  web/                  # THE unified app: public (/) + booking (/book) + agent (/agent) + admin (/admin)
+  admin/                # legacy framework-light package (not the live admin)
+/infra                  # deploy scripts, CI, env
 ```
 
 ## Conventions
 - Language: TypeScript, strict. Validation with Zod at every boundary.
 - IDs: UUID v7. Money is always `{ amount: integer_minor_units, currency: 'EUR'|'PKR'|'SAR' }`.
 - All dates ISO-8601 UTC. Never store amounts as floats.
-- Every service exposes a typed API (tRPC or OpenAPI) consumed by the apps.
-- Feature flags gate anything touching the real Saudi connector.
+- Domain packages expose typed service APIs; `apps/web` consumes them through typed Next.js
+  Server Actions (end-to-end TS types, no separate tRPC/OpenAPI layer in the unified app).
+- Feature flags gate anything touching the real Saudi connector (`CONNECTOR=saudi`, `SUPPLIER=live`).
 - Tests: each module ships unit tests + a contract test proving it works against `connector-mock`.
 
 ## Definition of "done" for any module
