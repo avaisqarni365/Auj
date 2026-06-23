@@ -2,7 +2,7 @@
 // One row (id = 1) holds the two line groups ({package, private}) as jsonb; seeded from FINANCE_SEED
 // on first init, editable later via the Admin CRUD. Server-only (imports pg).
 import { createPool, type DbPool } from '@auj/core-booking/postgres';
-import { FINANCE_SEED, type FinanceLines } from './FinancialPlanner';
+import { FINANCE_SEED, type FinanceLines } from './finance-data';
 
 export interface FinanceStore {
   getLines(): Promise<FinanceLines>;

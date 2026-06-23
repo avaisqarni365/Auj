@@ -18,7 +18,7 @@ estimator. Mobile-first; the persisted ones save per signed-in pilgrim (no local
 - **Day Planner** → route `/plan/day` · `apps/web/src/ritual/DayPlanner.tsx` + schedule data `ritual/planner.ts` · store `ritual/day-plan-store.ts` (`day_plans`, Postgres+in-memory) + `day-plan-actions.ts` (city + ±15-min shift persist per pilgrim)
 - **Packing Organizer** → route `/companion/packing` · `apps/web/src/companion/PackingOrganizer.tsx` + `packing.ts` (build by profile/days) · store `companion/packing-store.ts` (`packing_lists`) + `packing-actions.ts`
 - **Personal Diary** → route `/companion/diary` · `apps/web/src/ritual/DiaryJournal.tsx` · store `ritual/diary-store.ts` (`diary_entries`, one row per pilgrim+date) + `saveDiaryAction`
-- **Financial Planner** → route `/plan/budget` · `apps/web/src/budget/FinancialPlanner.tsx` (client estimator; amounts in EUR minor units via `src/currency.ts` `displayFromEur`)
+- **Financial Planner** → route `/plan/budget` · `apps/web/src/budget/FinancialPlanner.tsx` (client estimator; amounts in EUR minor units via `src/currency.ts` `displayFromEur`). Data + math + sanitizer live in the pure `budget/finance-data.ts` (`FINANCE_SEED`, `budgetTotals`, `cleanFinanceLines`); cost presets are admin-editable + DB-backed via `budget/finance-store.ts` (`finance_lines`) + `finance-admin-actions.ts` + `src/admin/FinanceLinesAdmin.tsx` at `/admin/budget`.
 
 ## Design
 Cinematic `ScreenFrame`; `@auj/ui` tokens; mono numerals for counters/totals; steppers/toggles/chips;

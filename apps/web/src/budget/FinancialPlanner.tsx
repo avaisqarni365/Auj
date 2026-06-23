@@ -3,45 +3,15 @@
 import { useState } from 'react';
 import { ScreenFrame } from '../components/ScreenFrame';
 import { displayFromEur } from '../currency';
+import { FINANCE_SEED, budgetTotals, lineAmount, noteText, type FinanceLine, type FinanceLines } from './finance-data';
 
 // Pilgrim-facing budget estimator from AUJ Financial Planner.dc.html: a 10/15-day toggle, the
 // AUJ package (one confirmed price) split from private spending, with an estimated per-pilgrim
-// total in EUR + indicative PKR. Amounts are EUR minor units (cents).
-
-// Serializable cost line: `note` is a template string that may contain the placeholder `{days}`
-// (only the hotel line needs it). All other notes are static text.
-export type FinanceLine = { label: string; note: string; kind: 'nightly' | 'perDay' | 'fixed'; cents: number };
-
-const noteText = (note: string, days: number): string => note.replace('{days}', String(days));
-
-const PACKAGE: FinanceLine[] = [
-  { label: 'Hotel near the Haram', note: '{days} nights · twin-share', kind: 'nightly', cents: 11_000 },
-  { label: 'Flights (return)', note: 'From your EU city', kind: 'fixed', cents: 48_000 },
-  { label: 'Ground transfers & ziyarat', note: 'Airport, Haram, sites', kind: 'fixed', cents: 18_000 },
-  { label: 'Visa & services', note: 'e-Visa, SIM, Ihram kit', kind: 'fixed', cents: 15_000 },
-];
-
-const PRIVATE: FinanceLine[] = [
-  { label: 'Food & dining', note: '~€18 / day', kind: 'perDay', cents: 1_800 },
-  { label: 'Local transport', note: 'Taxis, ride-hailing ~€6 / day', kind: 'perDay', cents: 600 },
-  { label: 'Laundry', note: 'Wash & iron for the trip', kind: 'fixed', cents: 2_500 },
-  { label: 'Clothes & ihram', note: 'Ihram, abaya, basics', kind: 'fixed', cents: 6_000 },
-  { label: 'Gifts, dates & Zamzam', note: 'To carry home', kind: 'fixed', cents: 9_000 },
-  { label: 'SIM & data', note: 'Local number + bundle', kind: 'fixed', cents: 2_000 },
-];
-
-// Client-safe seed shared with the store (no pg in this file).
-export const FINANCE_SEED: { package: FinanceLine[]; private: FinanceLine[] } = { package: PACKAGE, private: PRIVATE };
-export type FinanceLines = typeof FINANCE_SEED;
-
-const amount = (l: FinanceLine, days: number): number => (l.kind === 'fixed' ? l.cents : l.cents * days);
-const sum = (ls: FinanceLine[], days: number): number => ls.reduce((a, l) => a + amount(l, days), 0);
+// total in EUR + indicative PKR. Amounts are EUR minor units (cents). Data/math live in finance-data.
 
 export function FinancialPlanner({ lines = FINANCE_SEED }: { lines?: FinanceLines }) {
   const [days, setDays] = useState<10 | 15>(10);
-  const pkgSum = sum(lines.package, days);
-  const privSum = sum(lines.private, days);
-  const grand = pkgSum + privSum;
+  const { packageCents: pkgSum, privateCents: privSum, grandCents: grand } = budgetTotals(lines, days);
 
   const dayBtn = (n: 10 | 15) => (
     <button
@@ -112,7 +82,7 @@ function Group({ title, titleClass, lines, days, accent }: { title: string; titl
               <div className="text-xs text-sand-500">{noteText(l.note, days)}</div>
             </div>
             <div className={`whitespace-nowrap font-mono text-sm font-semibold ${accent === 'green' ? 'text-green-800' : 'text-warning'}`}>
-              {displayFromEur(amount(l, days), 'EUR')}
+              {displayFromEur(lineAmount(l, days), 'EUR')}
             </div>
           </div>
         ))}

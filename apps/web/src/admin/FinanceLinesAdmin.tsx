@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react';
 import { ScreenFrame } from '../components/ScreenFrame';
 import { saveLinesAction } from '../budget/finance-admin-actions';
-import type { FinanceLine, FinanceLines } from '../budget/FinancialPlanner';
+import type { FinanceLine, FinanceLines } from '../budget/finance-data';
 
 const INPUT = 'w-full rounded-[10px] border-[1.5px] border-sand-300 bg-white px-3 py-2 text-[13.5px] text-sand-ink focus:border-green-700 focus:outline-none';
 const KINDS: FinanceLine['kind'][] = ['nightly', 'perDay', 'fixed'];
