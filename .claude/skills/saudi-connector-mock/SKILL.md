@@ -34,3 +34,9 @@ and test environments.
 
 ## Out of scope
 Real Maqam payloads, real pricing, persistence.
+
+## Status
+Complete — `MockSaudiConnector` implements 100% of the interface (incl. the Nusuk-parity additions
+`searchZiyarah`/`searchCatering`/`searchRawdahSlots`/`bookRawdah`) and passes the shared
+`runSaudiConnectorContractTests` (17 tests). Env toggles `AUJ_MOCK_SOLD_OUT` / `AUJ_MOCK_HOLD_EXPIRY` /
+`AUJ_MOCK_REJECT_VISA` simulate edge cases. Default connector in all dev/test (`CONNECTOR=mock`).

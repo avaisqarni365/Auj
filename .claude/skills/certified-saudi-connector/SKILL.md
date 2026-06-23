@@ -32,3 +32,11 @@ modules on this. The interface + mock let everything else ship first.
 
 ## Out of scope
 Any product/UI logic. Eligibility decisions (those live in `visa-router`).
+
+## Status
+Built ahead of live access against a deterministic offline **sandbox** stand-in (vendor payload shapes
+mapped → our types; real Maqam/Nusuk credentials still gated — assumptions A1). `SaudiPartnerConnector`
+implements the full interface, keeps BRNs verbatim, enforces the 2025 Nusuk-approved-hotel rule
+(`NusukApprovalError` when a visa flow has no approved hotel), and **passes the same shared
+`runSaudiConnectorContractTests`** as the mock (13 tests). Selected by `CONNECTOR=saudi` — a drop-in,
+no product edits. Live credentials + real-sandbox retest remain the gated, non-coding prerequisite.

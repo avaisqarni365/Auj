@@ -68,3 +68,10 @@ export interface SaudiConnector {
 
 ## Out of scope
 Any vendor/Maqam payload shapes (they live in `connector-saudi`, mapped INTO these types).
+
+## Status
+Built in `packages/contracts` (`ports.ts` interface + `domain.ts` Zod schemas + `contract-tests.ts`).
+Both `connector-mock` and `connector-saudi` run the shared `runSaudiConnectorContractTests` suite (green),
+so the real adapter is a drop-in. The interface has since GROWN with Nusuk-parity methods beyond the
+reference block above — also `searchZiyarah`, `searchCatering`, `searchRawdahSlots`, `bookRawdah`
+(see the `nusuk-umrah-services` skill); the contract suite + both implementations cover them.
