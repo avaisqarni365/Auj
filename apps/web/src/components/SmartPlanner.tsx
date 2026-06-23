@@ -7,6 +7,7 @@ import { BrandMark } from './BrandMark';
 import { Combobox, type ComboOption } from './Combobox';
 import { SendInquiryPanel, type InquiryContact } from './SendInquiryPanel';
 import { COUNTRIES, airportLabel, airportsFor, anyAirport } from '../geo/airports';
+import { airportCode, bookHref as buildBookHref, visaRoute } from './smart-planner-derive';
 import type { InquiryInput } from '../leads/inquiry';
 
 // Searchable country list (Europe + UK + Pakistan) for the airline-style picker.
@@ -85,11 +86,6 @@ const RAIL_ICON = [
   'M5.5 4.5h9a2 2 0 0 1 2 2v8.5a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2V6.5a2 2 0 0 1 2-2z M7.5 4.5V3.5h5v1 M7.6 11l1.7 1.7L13 9',
 ];
 
-function airportCode(airport: string): string {
-  const m = airport.match(/\(([^)]+)\)/);
-  return m ? m[1]! : airport;
-}
-
 export function SmartPlanner() {
   const t = useTranslations('smartPlanner');
   const locale = useLocale();
@@ -114,14 +110,7 @@ export function SmartPlanner() {
   ];
 
   // Visa route is computed from the canonical nationality value; copy is translated.
-  const route = useMemo(() => {
-    const n = d.nationality;
-    const eu = n.includes('EU');
-    const pk = n.includes('Pakistani');
-    if (eu && pk) return { kind: 'info' as const, key: 'mixed' as const };
-    if (eu) return { kind: 'success' as const, key: 'evisa' as const };
-    return { kind: 'info' as const, key: 'agent' as const };
-  }, [d.nationality]);
+  const route = useMemo(() => visaRoute(d.nationality), [d.nationality]);
   const routeTitle = t(`routes.${route.key}.title`);
   const routeTag = t(`routes.${route.key}.tag`);
   const routeBody = t(`routes.${route.key}.body`);
@@ -149,18 +138,10 @@ export function SmartPlanner() {
     { label: t('summary.visaRoute'), value: routeTitle },
   ];
 
-  const bookHref = useMemo(() => {
-    const params = new URLSearchParams({
-      city: 'MAKKAH',
-      journey: d.journey,
-      pax: String(d.pilgrims),
-      rooms: String(d.rooms),
-      nights: String(d.nights),
-      from: airportCode(d.airport),
-      stars: d.stars.replace('★', ''),
-    });
-    return `/book?${params.toString()}`;
-  }, [d]);
+  const bookHref = useMemo(
+    () => buildBookHref({ journey: d.journey, pilgrims: d.pilgrims, rooms: d.rooms, nights: d.nights, airport: d.airport, stars: d.stars }),
+    [d],
+  );
 
   const progressPct = Math.round(((step + 1) / STEP_COUNT) * 100);
 

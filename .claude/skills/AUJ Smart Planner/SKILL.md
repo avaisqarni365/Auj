@@ -18,7 +18,7 @@ intent capture, NOT a paid booking. No login required.
 
 ## Route & files
 - Route: `/plan` (public) — `apps/web/app/plan/page.tsx` (also surfaced from the landing "Continue in Smart Planner" CTA)
-- Component: `apps/web/src/components/SmartPlanner.tsx` (client)
+- Component: `apps/web/src/components/SmartPlanner.tsx` (client); pure derivations (IATA code, visa-route preview, `/book` href) in `components/smart-planner-derive.ts` (+ tests)
 - Supporting: `apps/web/src/components/Combobox.tsx`, `SendInquiryPanel.tsx`, `BrandMark.tsx`; geo in `apps/web/src/geo/airports.ts`; lead types in `apps/web/src/leads/inquiry.ts`
 - Lead store/actions: `apps/web/src/leads/store.ts` · `actions.ts` (used when an inquiry is sent)
 
