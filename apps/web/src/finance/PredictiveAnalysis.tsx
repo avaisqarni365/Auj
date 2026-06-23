@@ -38,7 +38,7 @@ interface Step {
 const STEPS: Step[] = [
   { key: 'flights', short: 'Flights', kind: 'AIR', title: 'Flights', desc: 'Return airfare per pilgrim from your departure city — scaled by the season scenario.', lineKeys: ['flights'] },
   { key: 'hotels', short: 'Hotels', kind: 'STAY', title: 'Hotels', desc: 'Nightly room rate × nights, divided by occupancy — the biggest lever in the group cost.', lineKeys: ['hotels'] },
-  { key: 'transport', short: 'Transport', kind: 'GROUND', title: 'Transport', desc: 'Coaches, airport transfers and intercity Makkah↔Madinah — a fixed group charter cost.', lineKeys: ['transport'] },
+  { key: 'transport', short: 'Transport', kind: 'GROUND', title: 'Transport', desc: 'Coaches, airport transfers and intercity Makkah↔Madinah — a group charter cost that scales with the season scenario.', lineKeys: ['transport'] },
   { key: 'visa', short: 'Visa', kind: 'PERMIT', title: 'Visa & services', desc: 'Visa, insurance, SIM and Ihram kit — typically a flat per-pilgrim figure.', lineKeys: ['visa'] },
   { key: 'ground', short: 'Ziyarat & food', kind: 'LAND', title: 'Ziyarat, guide & food', desc: 'Guided ziyarat plus daily food — food scales with the number of nights.', lineKeys: ['ziyarat', 'food'] },
   { key: 'summary', short: 'Forecast', kind: 'RESULT', title: 'Forecast & margin', desc: 'Full predicted cost for the group plus buffer, with a suggested selling price and projected profit.', lineKeys: [] },

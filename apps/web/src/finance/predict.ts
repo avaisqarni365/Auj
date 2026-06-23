@@ -40,7 +40,9 @@ export interface ForecastDials {
 const r = (n: number): number => Math.round(n);
 export const clampPax = (n: number): number => Math.min(500, Math.max(1, Math.trunc(n) || 1));
 
-/** Forecast a group's cost. The season scenario scales HOTELS and FLIGHTS only. */
+/** Forecast a group's cost. The season scenario scales the supply-driven lines — FLIGHTS, HOTELS
+ *  and TRANSPORT (charter rates rise in peak/Ramadan) — but not the flat per-pilgrim figures
+ *  (visa, ziyarat, food). */
 export function forecast(i: ForecastInput, pax: number, scen: Scenario, dials: ForecastDials): Forecast {
   const p = clampPax(pax);
   const f = SCEN_FACTOR[scen];
@@ -50,7 +52,7 @@ export function forecast(i: ForecastInput, pax: number, scen: Scenario, dials: F
   const lines: ForecastLine[] = [
     mk('flights', 'Flights', r(i.flightEachCents * f) * p),
     mk('hotels', 'Hotels', r(i.hotelNightCents * f) * Math.max(0, i.nights) * rooms),
-    mk('transport', 'Transport', i.transportCents),
+    mk('transport', 'Transport', r(i.transportCents * f)),
     mk('visa', 'Visa', i.visaEachCents * p),
     mk('ziyarat', 'Ziyarat', i.ziyaratEachCents * p),
     mk('food', 'Food', i.foodDayCents * Math.max(0, i.nights) * p),

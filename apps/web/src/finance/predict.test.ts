@@ -21,13 +21,14 @@ describe('predictive forecast', () => {
     expect(f.perPaxCents).toBe(Math.round(f.grandCents / 80));
   });
 
-  it('scenario scales flights & hotels only (transport/visa/food unchanged)', () => {
+  it('scenario scales supply lines (flights, hotels, transport); flat per-pax (visa/food) unchanged', () => {
     const base = forecast(input, 80, 'normal', dials);
     const ram = forecast(input, 80, 'ramadan', dials);
     const g = (f: typeof base, k: string): number => f.lines.find((l) => l.key === k)!.groupCents;
     expect(g(ram, 'flights')).toBeGreaterThan(g(base, 'flights'));
     expect(g(ram, 'hotels')).toBeGreaterThan(g(base, 'hotels'));
-    expect(g(ram, 'transport')).toBe(g(base, 'transport'));
+    expect(g(ram, 'transport')).toBeGreaterThan(g(base, 'transport'));
+    expect(g(ram, 'transport')).toBe(Math.round(g(base, 'transport') * 1.55));
     expect(g(ram, 'visa')).toBe(g(base, 'visa'));
     expect(g(ram, 'food')).toBe(g(base, 'food'));
   });

@@ -70,6 +70,13 @@ export function FinanceSelfAssessment({ deals: initialDeals }: { deals: Deal[] }
     [costs, bufferPct, markupPct, feePct, commissionPct, channel, pax],
   );
 
+  // Deal-bar metadata (cosmetic, matches the prototype): a stable DEAL-YY-NNN reference, the
+  // IND/GRP type chip and a "ref · pax · channel" subline.
+  const dealSeq = currentId ? deals.findIndex((x) => x.id === currentId) + 1 : deals.length + 1;
+  const dealYear = (currentId ? deals.find((x) => x.id === currentId)?.createdAt : undefined)?.slice(2, 4) || '26';
+  const dealRef = `DEAL-${dealYear}-${String(Math.max(1, dealSeq)).padStart(3, '0')}`;
+  const kind = dealKind(pax);
+
   const pick = (id: string): void => {
     const d = deals.find((x) => x.id === id);
     if (!d) return;
@@ -116,7 +123,11 @@ export function FinanceSelfAssessment({ deals: initialDeals }: { deals: Deal[] }
           <option value="">+ New deal</option>
           {deals.map((d) => <option key={d.id} value={d.id}>{d.name} · {dealKind(d.pax)}</option>)}
         </select>
-        <input value={name} onChange={(e) => setName(e.target.value)} className={`${INPUT} flex-1`} placeholder="Deal name" />
+        <span aria-hidden title={kind === 'GRP' ? 'Group deal' : 'Individual deal'} className="grid h-9 w-11 flex-none place-items-center rounded-lg bg-green-100 font-mono text-[11px] font-bold text-green-800">{kind}</span>
+        <div className="flex min-w-[180px] flex-1 flex-col">
+          <input value={name} onChange={(e) => setName(e.target.value)} className={`${INPUT} w-full`} placeholder="Deal name (e.g. Khan family · Ramadan)" />
+          <span className="mt-1 font-mono text-[10.5px] text-sand-400">{dealRef} · {pax} pax · {channel}</span>
+        </div>
         <button type="button" onClick={save} disabled={pending} className="rounded-lg bg-green-800 px-4 py-2 text-[13px] font-semibold text-white hover:bg-green-700 active:scale-[0.98] disabled:opacity-50">{pending ? 'Saving…' : 'Save'}</button>
         <button type="button" onClick={reset} className="rounded-lg border border-sand-300 bg-white px-3 py-2 text-[13px] font-semibold text-sand-600 hover:bg-sand-50">New</button>
         {currentId ? <button type="button" onClick={remove} className="rounded-lg px-3 py-2 text-[13px] font-semibold text-danger-fg hover:bg-danger-bg">Delete</button> : null}
