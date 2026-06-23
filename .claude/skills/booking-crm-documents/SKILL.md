@@ -28,8 +28,16 @@ On confirm, persist BRNs returned by the connector; on visa flow, call visa-rout
 2. Implement booking services that call connectors via injected interfaces.
 3. Wire visa-router into the booking flow; create a VisaCase per booking when required.
 4. Document service: upload, store (S3-compatible), validate, attach to pilgrim; optional OCR hook.
-5. Expose a typed API (tRPC/OpenAPI) for the apps.
+5. Expose a typed API for the apps. (As built: `createCoreBooking()` returns typed TS service classes
+   — `bookings` / `crm` / `documents` — consumed by `apps/web` through its in-process backend + Next
+   Server Actions; no separate tRPC/OpenAPI layer in the unified app.)
 6. Tests run against `connector-mock` end-to-end.
+
+## Status
+Complete and exemplary — the golden rule holds (no concrete connector import; DI via ports), the full
+lifecycle + visa-case + BRN capture + document/OCR are implemented and covered by 29 tests
+(`booking-lifecycle` / `state-machine` / `crm` / `document-service` / `package-builder` + postgres
+mappers/pg-mem; the real-DB integration test is gated on `TEST_DATABASE_URL`).
 
 ## Acceptance criteria
 - Full lifecycle works offline against mocks, including BRN capture and visa-case creation.
