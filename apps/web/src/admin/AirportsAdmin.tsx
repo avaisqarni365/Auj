@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useRef, useState, useTransition } from 'react';
 import { ScreenFrame } from '../components/ScreenFrame';
-import { deleteAirportAction, listAirportsAction, saveAirportAction } from '../depart/airport-admin-actions';
-import { DEPART_REGIONS, type DepartAirport, type DepartRoute } from '../depart/airport-content';
+import { deleteAirportAction, listAirportsAction, saveAirportAction, uploadAirportMediaAction } from '../depart/airport-admin-actions';
+import { DEPART_REGIONS, type DepartAirport, type DepartMedia, type DepartRoute } from '../depart/airport-content';
 
 const INPUT =
   'w-full rounded-[10px] border-[1.5px] border-sand-300 bg-white px-3 py-2 text-[13.5px] text-sand-ink focus:border-green-700 focus:outline-none focus-visible:shadow-focus';
@@ -90,6 +90,35 @@ export function AirportsAdmin({ initial }: { initial: DepartAirport[] }) {
   const delRoute = (dest: 'Makkah' | 'Madinah', i: number): void => {
     const key = routesKey(dest);
     patch({ [key]: (draft?.[key] ?? []).filter((_, k) => k !== i) } as Partial<DepartAirport>);
+  };
+
+  // ---- media (videos/photos: uploaded or linked from the airport website) ----
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const addMedia = (m: DepartMedia): void => patch({ media: [...(draft?.media ?? []), m] });
+  const setMedia = (i: number, p: Partial<DepartMedia>): void =>
+    patch({ media: (draft?.media ?? []).map((m, k) => (k === i ? { ...m, ...p } : m)) });
+  const delMedia = (i: number): void => patch({ media: (draft?.media ?? []).filter((_, k) => k !== i) });
+  const addLink = (): void => addMedia({ type: 'video', source: 'link', url: '' });
+  const upload = (file: File): void => {
+    if (!draft?.code) {
+      setErr('Set the airport code before uploading.');
+      return;
+    }
+    setErr('');
+    setUploading(true);
+    const form = new FormData();
+    form.set('file', file);
+    form.set('code', draft.code);
+    start(async () => {
+      try {
+        const r = await uploadAirportMediaAction(form);
+        if (!r.ok || !r.media) setErr(r.error ?? 'Upload failed.');
+        else addMedia(r.media);
+      } finally {
+        setUploading(false);
+      }
+    });
   };
 
   const save = (): void => {
@@ -292,6 +321,45 @@ export function AirportsAdmin({ initial }: { initial: DepartAirport[] }) {
                 </div>
               );
             })}
+
+            {/* walkthrough media — upload a clip/photo or link the airport's own website video */}
+            <div className="rounded-2xl border border-sand-200 bg-white p-4">
+              <div className="mb-1 text-[14px] font-bold text-sand-ink">Walkthrough media</div>
+              <p className="mb-2.5 text-[12px] text-sand-500">Upload a video/photo, or paste a link from the airport&rsquo;s website. Shown on the public hub; falls back to the Airport guide when empty.</p>
+              <div className="grid gap-2.5">
+                {(draft.media ?? []).map((m, i) => (
+                  <div key={i} className="rounded-xl border border-sand-100 bg-sand-50/40 p-2.5">
+                    <div className="mb-2 flex items-center justify-between gap-2">
+                      <span className="font-mono text-[11px] text-sand-400">#{i + 1} · {m.source === 'upload' ? 'uploaded' : 'link'}</span>
+                      <button type="button" onClick={() => delMedia(i)} className="rounded-md border border-danger/30 px-2 py-0.5 text-[12px] font-semibold text-danger-fg transition-transform duration-fast active:scale-[0.98] hover:bg-danger-bg min-h-[28px]">✕</button>
+                    </div>
+                    <div className="grid gap-2 sm:grid-cols-[110px_1fr]">
+                      <select value={m.type} onChange={(e) => setMedia(i, { type: e.target.value as DepartMedia['type'] })} className={INPUT}>
+                        <option value="video">Video</option>
+                        <option value="image">Image</option>
+                      </select>
+                      <input
+                        value={m.url}
+                        onChange={(e) => setMedia(i, { url: e.target.value })}
+                        readOnly={m.source === 'upload'}
+                        placeholder="https://airport.example/walkthrough.mp4"
+                        className={`${INPUT} font-mono text-[12px] ${m.source === 'upload' ? 'text-sand-400' : ''}`}
+                      />
+                      <input value={m.title ?? ''} onChange={(e) => setMedia(i, { title: e.target.value })} placeholder="Caption (optional)" className={`${INPUT} sm:col-span-2`} />
+                    </div>
+                  </div>
+                ))}
+                <div className="flex flex-wrap items-center gap-2">
+                  <button type="button" onClick={addLink} disabled={(draft.media?.length ?? 0) >= 12} className="rounded-lg border border-dashed border-sand-300 px-3 py-1.5 text-[12.5px] font-semibold text-green-800 transition-transform duration-fast active:scale-[0.98] hover:bg-sand-50 disabled:opacity-40 min-h-[40px]">
+                    + Add link
+                  </button>
+                  <button type="button" onClick={() => fileRef.current?.click()} disabled={uploading || (draft.media?.length ?? 0) >= 12} className="rounded-lg border border-dashed border-sand-300 px-3 py-1.5 text-[12.5px] font-semibold text-green-800 transition-transform duration-fast active:scale-[0.98] hover:bg-sand-50 disabled:opacity-40 min-h-[40px]">
+                    {uploading ? 'Uploading…' : '⬆ Upload video / photo'}
+                  </button>
+                  <input ref={fileRef} type="file" accept="video/mp4,video/webm,video/quicktime,image/png,image/jpeg,image/webp" hidden onChange={(e) => e.target.files?.[0] && upload(e.target.files[0])} />
+                </div>
+              </div>
+            </div>
 
             <div className="flex flex-wrap items-center gap-3 border-t border-sand-100 pt-5">
               <button type="button" onClick={save} disabled={pending} className="rounded-xl bg-green-800 px-6 py-2.5 text-sm font-semibold text-white shadow-[0_8px_18px_rgba(15,81,50,0.26)] transition-[transform,background-color] duration-fast hover:bg-green-700 active:scale-[0.98] disabled:opacity-50 min-h-[44px]">

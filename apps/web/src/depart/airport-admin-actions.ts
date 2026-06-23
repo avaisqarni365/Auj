@@ -1,8 +1,9 @@
 'use server';
 
 import { requireRole } from '../auth/session';
+import { getObjectStore } from '../storage/document-store';
 import { getAirportStore } from './airport-store';
-import { DEPART_REGIONS, type DepartAirport, type DepartRegion, type DepartRoute } from './airport-content';
+import { DEPART_REGIONS, cleanMedia, type DepartAirport, type DepartMedia, type DepartRegion, type DepartRoute } from './airport-content';
 
 const str = (x: unknown, n: number): string => String(x ?? '').slice(0, n);
 
@@ -42,7 +43,35 @@ function clean(a: DepartAirport): DepartAirport {
     toMakkah: cleanRoutes(a.toMakkah, 'Makkah'),
     toMadinah: cleanRoutes(a.toMadinah, 'Madinah'),
     arrivalsNote: str(a.arrivalsNote, 400),
+    ...(a.media && a.media.length ? { media: cleanMedia(a.media) } : {}),
   };
+}
+
+// Uploaded airport walkthrough media is PUBLIC content, stored under `depart/<code>/...` and
+// served by the public /api/airport-media route (not the owner-scoped /api/doc).
+const MEDIA_MAX = 64 * 1024 * 1024; // 64 MB
+const MEDIA_EXT: Record<string, string> = {
+  'video/mp4': 'mp4', 'video/webm': 'webm', 'video/quicktime': 'mov',
+  'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp',
+};
+
+/** Admin — upload a walkthrough clip/photo for an airport; returns its public URL + media item. */
+export async function uploadAirportMediaAction(form: FormData): Promise<{ ok: boolean; error?: string; media?: DepartMedia }> {
+  await requireRole(['ADMIN'], '/admin/airports');
+  const code = str(form.get('code'), 4).toUpperCase().replace(/[^A-Z]/g, '');
+  if (!code) return { ok: false, error: 'Select an airport first' };
+  const file = form.get('file');
+  if (!(file instanceof File)) return { ok: false, error: 'No file' };
+  if (file.size > MEDIA_MAX) return { ok: false, error: 'File too large (max 64 MB)' };
+  const ct = (file.type || '').toLowerCase();
+  const ext = MEDIA_EXT[ct];
+  if (!ext) return { ok: false, error: 'Use MP4/WebM/MOV video or PNG/JPG/WebP image' };
+
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  const id = (globalThis.crypto?.randomUUID?.() ?? `${Date.now()}`).slice(0, 36);
+  const key = `depart/${code}/${id}.${ext}`;
+  await (await getObjectStore()).put(key, bytes, ct);
+  return { ok: true, media: { type: ct.startsWith('image/') ? 'image' : 'video', source: 'upload', url: `/api/airport-media/${key}` } };
 }
 
 /** Admin — every departure airport, in display order. */

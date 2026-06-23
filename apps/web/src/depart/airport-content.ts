@@ -13,6 +13,16 @@ export interface DepartRoute {
   durationText: string; // e.g. '~7h 30m incl. layover'
 }
 
+/** A walkthrough/helper media item for an airport: an uploaded clip/photo or a link to the
+ *  airport's own website video. `source: 'upload'` → url is our public /api/airport-media path;
+ *  `source: 'link'` → url is the external airport-website URL. */
+export interface DepartMedia {
+  type: 'video' | 'image';
+  source: 'upload' | 'link';
+  url: string;
+  title?: string;
+}
+
 export interface DepartAirport {
   code: string;       // IATA
   city: string;
@@ -23,6 +33,8 @@ export interface DepartAirport {
   toMakkah: DepartRoute[];  // routings to JED (1-3 options)
   toMadinah: DepartRoute[]; // routings to MED (1-3 options)
   arrivalsNote: string;     // one line about return flights ARRIVING from Jeddah/Madinah back to this city
+  /** Optional bespoke walkthrough media (uploaded clips/photos or links to the airport's site). */
+  media?: DepartMedia[];
 }
 
 export const DEPART_AIRPORTS: DepartAirport[] = [
@@ -1105,3 +1117,33 @@ export function departAirport(code: string): DepartAirport | undefined {
 }
 
 export const DEPART_CODES = DEPART_AIRPORTS.map((a) => a.code);
+
+/** Accept only http(s) links or our own public media path — reject javascript:/data: etc. */
+export function safeMediaUrl(x: unknown): string {
+  const s = String(x ?? '').trim().slice(0, 600);
+  if (s.startsWith('/api/airport-media/')) return s;
+  try {
+    const u = new URL(s);
+    return u.protocol === 'https:' || u.protocol === 'http:' ? s : '';
+  } catch {
+    return '';
+  }
+}
+
+/** Sanitize an admin-supplied media list: clamp count, validate type/source/url, drop empties. */
+export function cleanMedia(raw: unknown): DepartMedia[] {
+  const arr = Array.isArray(raw) ? raw : [];
+  return arr
+    .slice(0, 12)
+    .map((m): DepartMedia => {
+      const o = (m ?? {}) as Partial<DepartMedia>;
+      const title = String(o.title ?? '').slice(0, 120);
+      return {
+        type: o.type === 'image' ? 'image' : 'video',
+        source: o.source === 'upload' ? 'upload' : 'link',
+        url: safeMediaUrl(o.url),
+        ...(title ? { title } : {}),
+      };
+    })
+    .filter((m) => m.url.length > 0);
+}

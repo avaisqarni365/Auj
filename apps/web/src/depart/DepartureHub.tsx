@@ -35,19 +35,39 @@ export function DepartureHub({ airport }: { airport: DepartAirport }) {
     <ScreenFrame label={`DEPARTING · ${airport.city.toUpperCase()} (${airport.code})`} tag={airport.region}>
       <p className="mb-4 max-w-[60ch] text-[14.5px] leading-relaxed text-sand-600">{airport.blurb}</p>
 
-      {/* media: walkthrough video + helper image */}
-      <div className="mb-5 grid gap-3 md:grid-cols-2">
-        <Link href="/guide/airport" className="group relative flex h-44 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-green-700 via-green-900 to-green-950">
-          <span aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_100%_at_70%_20%,rgba(42,148,104,0.5),transparent_60%)]" />
-          <span className="relative grid h-16 w-16 place-items-center rounded-full bg-green-800/95 shadow-lg transition-transform duration-fast group-hover:scale-105"><svg width="28" height="28" viewBox="0 0 24 24" fill="#fff" aria-hidden><path d="M8 5v14l11-7z" /></svg></span>
-          <span className="absolute bottom-3 left-4 font-mono text-[11px] tracking-[0.1em] text-green-50/90">AIRPORT WALKTHROUGH · {airport.code}</span>
-        </Link>
-        <div className="relative h-44 overflow-hidden rounded-2xl">
-          <img src="/img/scenes/makkah-madinah.webp" alt="Makkah & Madinah" className="h-full w-full object-cover" loading="lazy" />
-          <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-green-950/60 to-transparent" />
-          <span className="absolute bottom-3 left-4 font-mono text-[11px] tracking-[0.1em] text-white/90">{airport.city} → MAKKAH · MADINAH</span>
+      {/* media: bespoke walkthrough clips/photos (uploaded or linked from the airport site) when
+          present; otherwise the Airport-guide walkthrough tile + a helper image. */}
+      {airport.media && airport.media.length > 0 ? (
+        <div className="mb-5 grid gap-3 md:grid-cols-2">
+          {airport.media.map((m, i) => (
+            <figure key={i} className="relative overflow-hidden rounded-2xl border border-sand-200 bg-green-950">
+              {m.type === 'image' ? (
+                <img src={m.url} alt={m.title ?? `${airport.city} airport`} className="h-44 w-full object-cover" loading="lazy" />
+              ) : m.source === 'upload' ? (
+                <video src={m.url} controls preload="metadata" className="h-44 w-full bg-black object-contain" />
+              ) : (
+                <a href={m.url} target="_blank" rel="noopener noreferrer" className="group flex h-44 items-center justify-center bg-gradient-to-br from-green-700 via-green-900 to-green-950">
+                  <span className="relative grid h-16 w-16 place-items-center rounded-full bg-green-800/95 shadow-lg transition-transform duration-fast group-hover:scale-105"><svg width="28" height="28" viewBox="0 0 24 24" fill="#fff" aria-hidden><path d="M8 5v14l11-7z" /></svg></span>
+                </a>
+              )}
+              {m.title ? <figcaption className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-green-950/80 to-transparent px-4 py-2 font-mono text-[11px] tracking-[0.08em] text-green-50/95">{m.title}</figcaption> : null}
+            </figure>
+          ))}
         </div>
-      </div>
+      ) : (
+        <div className="mb-5 grid gap-3 md:grid-cols-2">
+          <Link href="/guide/airport" className="group relative flex h-44 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-green-700 via-green-900 to-green-950">
+            <span aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_100%_at_70%_20%,rgba(42,148,104,0.5),transparent_60%)]" />
+            <span className="relative grid h-16 w-16 place-items-center rounded-full bg-green-800/95 shadow-lg transition-transform duration-fast group-hover:scale-105"><svg width="28" height="28" viewBox="0 0 24 24" fill="#fff" aria-hidden><path d="M8 5v14l11-7z" /></svg></span>
+            <span className="absolute bottom-3 left-4 font-mono text-[11px] tracking-[0.1em] text-green-50/90">AIRPORT WALKTHROUGH · {airport.code}</span>
+          </Link>
+          <div className="relative h-44 overflow-hidden rounded-2xl">
+            <img src="/img/scenes/makkah-madinah.webp" alt="Makkah & Madinah" className="h-full w-full object-cover" loading="lazy" />
+            <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-green-950/60 to-transparent" />
+            <span className="absolute bottom-3 left-4 font-mono text-[11px] tracking-[0.1em] text-white/90">{airport.city} → MAKKAH · MADINAH</span>
+          </div>
+        </div>
+      )}
 
       {/* check-in guide */}
       <section className="mb-5 rounded-2xl border border-sand-200 bg-white p-5">
